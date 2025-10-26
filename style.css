@@ -101,9 +101,12 @@ header .title {
         justify-content: space-between;
         padding-left: 16px;
         padding-right: 16px;
+        align-items: center;
+        gap: 12px;
     }
 
-    /* place the title inline on the left, with spacing to match the toggle */
+    /* place the title inline on the left, with spacing to match the toggle
+       and prevent overlap by constraining its max width and truncating */
     header .title {
         position: static;
         left: auto;
@@ -112,18 +115,24 @@ header .title {
         margin: 0;
         font-size: 1.05rem;
         color: var(--text-primary);
-        /* align visually with the toggle: small left padding */
-        padding-left: 8px;
+        padding-left: 0;
+        flex: 1 1 auto;
+        max-width: calc(100% - 72px); /* leave room for the toggle + some gap */
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
     }
 
-    /* ensure theme-toggle stays at the right edge */
+    /* ensure theme-toggle stays visually on the right and doesn't grow */
     .theme-toggle {
-        margin-left: auto;
+        flex: 0 0 auto;
+        margin-left: 12px;
     }
 
     /* if you use a mobile menu button, ensure ordering works */
     .mobile-menu-toggle {
         margin-right: 8px;
+        flex: 0 0 auto;
     }
 }
 
