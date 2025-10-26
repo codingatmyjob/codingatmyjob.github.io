@@ -3,137 +3,134 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Your Name - Portfolio</title>
+    <title>Connor - Portfolio</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
         <header>
-            <div class="logo">YourName</div>
             <button class="theme-toggle" onclick="toggleTheme()">
                 <div class="switch"></div>
                 <span id="theme-icon">Light Mode</span>
             </button>
         </header>
 
-        <section class="profile-section">
-            <div class="profile-image">YN</div>
-            <div class="profile-content">
-                <h1>Your Name</h1>
-                <div class="title">Software Engineer & Creative Thinker</div>
+        <div class="main-content">
+            <aside class="sidebar">
+                <img src="images/profile.jpg" alt="Connor" class="profile-photo">
+                <h1>Connor</h1>
+                <div class="title">Cybersecurity Analyst & Junior Penetration Tester</div>
+
                 <p class="bio">
-                    Passionate about building elegant solutions to complex problems. Experienced in full-stack development, 
-                    machine learning, and creating intuitive user experiences. Always learning, always building.
+                    Passionate about offensive security, vulnerability assessment, and ethical hacking. 
+                    I enjoy exploring complex systems, solving challenges on Hack The Box, and continuously 
+                    learning to strengthen my skills in cybersecurity.
                 </p>
+
                 <div class="social-links">
-                    <a href="https://github.com/yourusername">GitHub</a>
-                    <a href="https://linkedin.com/in/yourusername">LinkedIn</a>
-                    <a href="https://twitter.com/yourusername">Twitter</a>
-                    <a href="mailto:your.email@example.com">Email</a>
+                    <a href="https://github.com/codingatmyjob/">GitHub</a>
+                    <a href="https://app.hackthebox.com/profile/2578864">Hack The Box</a>
+                    <a href="#">Discord</a>
                 </div>
-            </div>
-        </section>
+            </aside>
 
-        <section>
-            <h2 class="section-title">Articles & Projects</h2>
-            <div class="articles-grid">
-                <div class="article-card">
-                    <div class="article-image">01</div>
-                    <div class="article-content">
-                        <div class="article-date">October 2025</div>
-                        <div class="article-title">Building Scalable Web Applications</div>
-                        <div class="article-description">
-                            A deep dive into modern architecture patterns for building applications that scale. 
-                            Covering microservices, containerization, and cloud deployment strategies.
+            <section class="content-area">
+                <h2 class="section-title">Articles & Projects</h2>
+                <div class="articles-grid">
+                    <div class="article-card" onclick="location.href='articles/article1.html'">
+                        <div class="article-image">01</div>
+                        <div class="article-content">
+                            <div class="article-date">October 2025</div>
+                            <div class="article-title">Building Scalable Web Applications</div>
+                            <div class="article-description">
+                                A deep dive into modern architecture patterns for building applications that scale. 
+                                Covering microservices, containerization, and cloud deployment strategies.
+                            </div>
+                            <div class="article-tags">
+                                <span class="tag">Architecture</span>
+                                <span class="tag">DevOps</span>
+                            </div>
                         </div>
-                        <div class="article-tags">
-                            <span class="tag">Architecture</span>
-                            <span class="tag">DevOps</span>
+                    </div>
+
+                    <div class="article-card" onclick="location.href='articles/article2.html'">
+                        <div class="article-image">02</div>
+                        <div class="article-content">
+                            <div class="article-date">September 2025</div>
+                            <div class="article-title">React Performance Tips</div>
+                            <div class="article-description">
+                                Essential techniques for optimizing React applications and improving user experience.
+                            </div>
+                            <div class="article-tags">
+                                <span class="tag">React</span>
+                                <span class="tag">JavaScript</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="article-card" onclick="location.href='articles/article3.html'">
+                        <div class="article-image">03</div>
+                        <div class="article-content">
+                            <div class="article-date">August 2025</div>
+                            <div class="article-title">Machine Learning in Production</div>
+                            <div class="article-description">
+                                Lessons learned from deploying ML models at scale. From training to monitoring and everything in between.
+                            </div>
+                            <div class="article-tags">
+                                <span class="tag">ML</span>
+                                <span class="tag">Python</span>
+                                <span class="tag">Production</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="article-card" onclick="location.href='articles/article4.html'">
+                        <div class="article-image">04</div>
+                        <div class="article-content">
+                            <div class="article-date">July 2025</div>
+                            <div class="article-title">CSS Grid Mastery</div>
+                            <div class="article-description">
+                                Master modern CSS Grid layouts with practical examples and real-world use cases.
+                            </div>
+                            <div class="article-tags">
+                                <span class="tag">CSS</span>
+                                <span class="tag">Design</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="article-card" onclick="location.href='articles/article5.html'">
+                        <div class="article-image">05</div>
+                        <div class="article-content">
+                            <div class="article-date">June 2025</div>
+                            <div class="article-title">API Design Best Practices</div>
+                            <div class="article-description">
+                                Creating RESTful APIs that are intuitive, maintainable, and developer-friendly. 
+                                Exploring versioning, authentication, and documentation strategies.
+                            </div>
+                            <div class="article-tags">
+                                <span class="tag">API</span>
+                                <span class="tag">Backend</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="article-card" onclick="location.href='articles/article6.html'">
+                        <div class="article-image">06</div>
+                        <div class="article-content">
+                            <div class="article-date">May 2025</div>
+                            <div class="article-title">TypeScript Tips</div>
+                            <div class="article-description">
+                                Advanced TypeScript patterns that will make your code more robust and maintainable.
+                            </div>
+                            <div class="article-tags">
+                                <span class="tag">TypeScript</span>
+                            </div>
                         </div>
                     </div>
                 </div>
-
-                <div class="article-card">
-                    <div class="article-image">02</div>
-                    <div class="article-content">
-                        <div class="article-date">September 2025</div>
-                        <div class="article-title">React Performance Tips</div>
-                        <div class="article-description">
-                            Essential techniques for optimizing React applications and improving user experience.
-                        </div>
-                        <div class="article-tags">
-                            <span class="tag">React</span>
-                            <span class="tag">JavaScript</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="article-card">
-                    <div class="article-image">03</div>
-                    <div class="article-content">
-                        <div class="article-date">August 2025</div>
-                        <div class="article-title">Machine Learning in Production</div>
-                        <div class="article-description">
-                            Lessons learned from deploying ML models at scale. From training to monitoring and everything in between.
-                        </div>
-                        <div class="article-tags">
-                            <span class="tag">ML</span>
-                            <span class="tag">Python</span>
-                            <span class="tag">Production</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="article-card">
-                    <div class="article-image">04</div>
-                    <div class="article-content">
-                        <div class="article-date">July 2025</div>
-                        <div class="article-title">CSS Grid Mastery</div>
-                        <div class="article-description">
-                            Master modern CSS Grid layouts with practical examples and real-world use cases.
-                        </div>
-                        <div class="article-tags">
-                            <span class="tag">CSS</span>
-                            <span class="tag">Design</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="article-card">
-                    <div class="article-image">05</div>
-                    <div class="article-content">
-                        <div class="article-date">June 2025</div>
-                        <div class="article-title">API Design Best Practices</div>
-                        <div class="article-description">
-                            Creating RESTful APIs that are intuitive, maintainable, and developer-friendly. 
-                            Exploring versioning, authentication, and documentation strategies.
-                        </div>
-                        <div class="article-tags">
-                            <span class="tag">API</span>
-                            <span class="tag">Backend</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="article-card">
-                    <div class="article-image">06</div>
-                    <div class="article-content">
-                        <div class="article-date">May 2025</div>
-                        <div class="article-title">TypeScript Tips</div>
-                        <div class="article-description">
-                            Advanced TypeScript patterns that will make your code more robust and maintainable.
-                        </div>
-                        <div class="article-tags">
-                            <span class="tag">TypeScript</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <footer>
-            <p>&copy; 2025 Your Name. Built with passion and coffee.</p>
-        </footer>
+            </section>
+        </div>
     </div>
 
     <script src="script.js"></script>
