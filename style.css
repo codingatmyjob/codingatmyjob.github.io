@@ -1,603 +1,247 @@
-.theme-toggle {
-  background: var(--bg-secondary);
-  border: 1px solid var(--border);
-  color: var(--text-primary);
-  padding: 10px 20px;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 14px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  transition: all 0.3s;
+/* =========================
+Variables & Base
+========================= */
+:root{
+--bg-primary:#0a0e0a;
+--bg-secondary:#1a1f1a;
+--text-primary:#00ff41;
+--accent:#00ff41;
+--border:#2a332a;
+--shadow:rgba(0,255,65,0.1);
+--sidebar-width:340px;
+--binary-color:rgba(80,255,140,0.12);
+--sidebar-transition:300ms;
 }
 
-.theme-toggle:hover {
-  background: var(--accent);
-  color: var(--bg-primary);
-  border-color: var(--accent);
+[data-theme="light"]{
+--bg-primary:#ffffff;
+--bg-secondary:#eceeef;
+--text-primary:#2c3e50;
+--accent:#2c3e50; /* dark-grey accent in light mode */
+--border:#cccccc;
+--shadow:rgba(0,0,0,0.1);
+--binary-color:rgba(0,0,0,0.06);
 }
 
-.switch {
-  position: relative;
-  width: 40px;
-  height: 20px;
-  background: var(--border);
-  border-radius: 10px;
-  transition: background 0.3s;
+/* reset / base */
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+font-family:'Fixedsys','Courier New',monospace;
+background:var(--bg-primary);
+color:var(--text-primary);
+transition:background .3s,color .3s;
 }
 
-.switch::before {
-  content: '';
-  position: absolute;
-  width: 16px;
-  height: 16px;
-  border-radius: 50%;
-  background: var(--accent);
-  top: 2px;
-  left: 2px;
-  transition: transform 0.3s;
+/* =========================
+Header
+========================= */
+header{
+position:relative;
+display:flex;
+justify-content:flex-end; /* desktop: toggle on right */
+align-items:center;
+padding:20px 20px 20px 0;
+border-bottom:1px solid var(--border);
+margin-bottom:40px;
 }
 
-[data-theme="light"] .switch::before {
-  transform: translateX(20px);
+/* desktop: centered title across content area (accounts for sidebar) */
+header .title{
+position:absolute;
+left:calc(50% + var(--sidebar-width)/2);
+transform:translateX(-50%);
+margin:0;
+pointer-events:none;
+color:var(--text-primary);
 }
 
-* { margin: 0; padding: 0; box-sizing: border-box; }
+/* theme toggle */
+.theme-toggle{
+background:var(--bg-secondary);
+border:1px solid var(--border);
+color:var(--text-primary);
+padding:10px 20px;
+border-radius:8px;
+cursor:pointer;
+font-size:14px;
+display:flex;
+align-items:center;
+gap:12px;
+transition:all .3s;
+flex:0 0 auto;
+}
+.theme-toggle:hover{
+background:var(--accent);
+color:var(--bg-primary);
+border-color:var(--accent);
+}
+.switch{position:relative;width:40px;height:20px;background:var(--border);border-radius:10px;transition:background .3s}
+.switch::before{content:'';position:absolute;width:16px;height:16px;border-radius:50%;background:var(--accent);top:2px;left:2px;transition:transform .3s}
+[data-theme="light"] .switch::before{transform:translateX(20px)}
 
-:root {
-    --bg-primary: #0a0e0a;
-    --bg-secondary: #1a1f1a;
-    --text-primary: #00ff41;
-    --accent: #00ff41;
-    --border: #2a332a;
-    --shadow: rgba(0, 255, 65, 0.1);
-    --sidebar-width: 340px;
-    --binary-color: rgba(80, 255, 140, 0.12);
-}
-[data-theme="light"] {
-    --bg-primary: #ffffff;
-    --bg-secondary: #eceeef;
-    --text-primary: #2c3e50;
-    /* in light mode use a dark grey accent (no green) */
-    --accent: #2c3e50;
-    --border: #cccccc;
-    --shadow: rgba(0, 0, 0, 0.1);
-    --binary-color: rgba(0,0,0,0.06);
-}
+/* mobile menu toggle (hidden by default) */
+.mobile-menu-toggle{display:none;align-items:center;justify-content:center;width:44px;height:44px;border-radius:8px;border:1px solid var(--border);background:var(--bg-secondary);color:var(--text-primary);font-size:20px;cursor:pointer;margin-right:12px}
 
-body {
-    font-family: 'Fixedsys', 'Courier New', monospace;
-    background: var(--bg-primary);
-    color: var(--text-primary);
-    transition: 0.3s;
-}
+/* =========================
+Layout: Sidebar / Main
+========================= */
+.container, .article-container{position:relative;z-index:2}
 
-header {
-  position: relative;
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  padding: 20px 0;
-  border-bottom: 1px solid var(--border);
-  margin-bottom: 40px;
-  padding-right: 20px;
+.sidebar{
+width:var(--sidebar-width);
+position:fixed;
+left:0;top:0;bottom:0;
+background:var(--bg-secondary);
+padding:40px 20px;
+border-right:1px solid var(--border);
+box-shadow:2px 0 8px var(--shadow);
+text-align:center;
+overflow-y:auto;
 }
+.profile-photo{width:180px;height:180px;border-radius:50%;border:2px solid var(--accent);object-fit:cover;margin-bottom:20px}
+.sidebar h1{font-size:28px;margin-bottom:10px;color:var(--text-primary)}
+.sidebar .title{font-size:16px;color:#b0b0b0;margin-bottom:15px;border-bottom:1px solid var(--border);padding-bottom:15px}
+.sidebar .bio{font-size:14px;color:#909090;text-align:left;margin-bottom:25px;line-height:1.7}
 
-/* center the header title without moving the toggle (desktop) */
-header .title {
-  position: absolute;
-  left: calc(50% + var(--sidebar-width) / 2);
-  margin: 0;
-  pointer-events: none;
-  color: var(--text-primary);
+/* icon links */
+.icon-links{display:flex;justify-content:center;gap:20px}
+.icon-btn{
+width:40px;height:40px;display:flex;align-items:center;justify-content:center;
+color:var(--accent);background:var(--bg-primary);border:1px solid var(--border);border-radius:8px;transition:.3s
 }
+.icon-btn:hover{background:var(--accent);color:var(--bg-primary);transform:translateY(-2px)}
+.icon-btn svg{width:22px;height:22px}
 
-/* fix header title overflowing on small screens */
-@media (max-width: 768px) {
-    header {
-        padding-left: 16px;
-        padding-right: 16px;
-        justify-content: space-between;
-        align-items: center;
-    }
+/* main content */
+.main-content{display:flex;flex-direction:column;align-items:center;margin-left:var(--sidebar-width)}
+.content-area{max-width:1100px;width:100%}
 
-    /* target only the header title (not sidebar .title) */
-    header > .title,
-    header .title {
-        position: static;
-        transform: none;
-        pointer-events: auto;
-        margin: 0;
-        font-size: 1.05rem;
-        color: var(--text-primary);
+/* =========================
+Articles Grid / Cards
+========================= */
+.articles-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+.article-card{
+background:var(--bg-secondary);border-radius:12px;overflow:hidden;
+box-shadow:0 2px 8px var(--shadow);transition:transform .3s,box-shadow .3s;cursor:pointer
+}
+.article-card:hover{transform:translateY(-5px);box-shadow:0 8px 16px var(--shadow)}
 
-        /* prevent pushing layout: limit width and allow ellipsis */
-        display: inline-block;
-        flex: 0 1 auto;
-        max-width: calc(100% - 96px); /* leave room for toggle + margins */
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-    }
+.article-image{height:180px;background:var(--bg-primary);display:flex;align-items:center;justify-content:center;text-align:center;border-radius:8px 8px 0 0;overflow:hidden}
+.article-image img{width:100%;height:100%;object-fit:contain;object-position:center;display:block;border-radius:inherit;background:var(--bg-primary)}
 
-    .theme-toggle {
-        flex: 0 0 auto;
-        margin-left: 8px;
-        white-space: nowrap; /* keep icon+label on one line */
-    }
+.article-content{padding:25px}
+.article-date{font-size:13px;color:#9aa;margin-bottom:8px}
+.article-title{font-size:20px;margin-bottom:12px}
+.article-description{font-size:14px;color:#909090}
+.article-tags{display:flex;gap:8px;flex-wrap:wrap;margin-top:15px}
+.tag{padding:4px 12px;background:var(--bg-primary);border-radius:4px;font-size:12px;color:#a0a0a0}
 
-    /* safe fallback to avoid page-wide horizontal scroll if something else causes overflow */
-    .container {
-        overflow-x: hidden;
-    }
-}
+/* grid responsiveness (kept near other responsive rules) */
+@media (max-width:1100px){.articles-grid{grid-template-columns:repeat(3,1fr)}}
+@media (max-width:900px){.articles-grid{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:768px){.articles-grid{grid-template-columns:1fr}}
 
-/* === RESPONSIVE === */
-@media (max-width: 768px) {
-    /* make header use space-between so title can sit left and toggle stays right */
-    header {
-        justify-content: space-between;
-        padding-left: 16px;
-        padding-right: 16px;
-        align-items: center;
-        gap: 12px;
-    }
+/* =========================
+Article View / Injected Content
+========================= */
+#article-view{position:relative;z-index:2;width:100%;max-width:1200px;margin:0 auto;padding:20px;color:var(--text-primary)}
+/* wrapper neutral so only fetched .article-container styles apply */
+#article-view .article-frame{width:100%;max-width:none;margin:0;padding:0;background:transparent;border:none;box-shadow:none}
+#article-view .article-frame > .back-link{margin-bottom:18px}
 
-    /* place the title inline on the left, with spacing to match the toggle
-       and prevent overlap by constraining its max width and truncating */
-    header .title {
-        position: static;
-        left: auto;
-        transform: none;
-        pointer-events: auto;
-        margin: 0;
-        font-size: 1.05rem;
-        color: var(--text-primary);
-        padding-left: 0;
-        flex: 1 1 auto;
-        max-width: calc(100% - 72px); /* leave room for the toggle + some gap */
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-    }
+/* Article presentation styles (inner .article-container from article files) */
+.article-container{
+max-width:900px;margin:28px auto;padding:28px;background:linear-gradient(180deg,rgba(255,255,255,0.02),rgba(0,0,0,0.02));
+border:1px solid var(--border);border-radius:12px;box-shadow:0 8px 30px rgba(0,0,0,0.25);
+color:var(--text-primary);font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial;line-height:1.75;font-size:17px;z-index:4
+}
+.article-container > .back-link, #article-view .back-link{display:inline-block;margin-bottom:18px;background:transparent;border:1px solid var(--border);color:var(--text-primary);padding:8px 12px;border-radius:8px;cursor:pointer}
+.article-container h1{font-size:32px;margin:6px 0 6px;color:var(--text-primary);letter-spacing:-.2px}
+.article-container .meta{display:flex;gap:12px;align-items:center;margin-bottom:20px;color:#9aa;font-size:13px}
+.article-container .meta .tag{background:var(--bg-primary);color:#cfcfcf;padding:4px 10px;border-radius:6px;font-size:12px}
 
-    /* ensure theme-toggle stays visually on the right and doesn't grow */
-    .theme-toggle {
-        flex: 0 0 auto;
-        margin-left: 12px;
-    }
-
-    /* if you use a mobile menu button, ensure ordering works */
-    .mobile-menu-toggle {
-        margin-right: 8px;
-        flex: 0 0 auto;
-    }
-}
-
-/* === SIDEBAR === */
-.sidebar {
-    width: var(--sidebar-width);
-    position: fixed;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    background: var(--bg-secondary);
-    padding: 40px 20px;
-    border-right: 1px solid var(--border);
-    box-shadow: 2px 0 8px var(--shadow);
-    text-align: center;
-    overflow-y: auto;
-}
-.profile-photo {
-    width: 180px;
-    height: 180px;
-    border-radius: 50%;
-    border: 2px solid var(--accent);
-    object-fit: cover;
-    margin-bottom: 20px;
-}
-.sidebar h1 { font-size: 28px; margin-bottom: 10px; color: var(--text-primary); }
-.sidebar .title {
-    font-size: 16px;
-    color: #b0b0b0;
-    margin-bottom: 15px;
-    border-bottom: 1px solid var(--border);
-    padding-bottom: 15px;
-}
-.sidebar .bio {
-    font-size: 14px;
-    color: #909090;
-    text-align: left;
-    margin-bottom: 25px;
-    line-height: 1.7;
-}
-
-/* === ICON LINKS === */
-.icon-links {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-}
-.icon-btn {
-    width: 40px;
-    height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--accent);
-    background: var(--bg-primary);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    transition: 0.3s;
-}
-.icon-btn:hover {
-    background: var(--accent);
-    color: var(--bg-primary);
-    transform: translateY(-2px);
-}
-.icon-btn svg {
-    width: 22px;
-    height: 22px;
-}
-
-/* === MAIN === */
-.main-content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-left: var(--sidebar-width);
-}
-.content-area {
-    max-width: 1100px;
-    width: 100%;
-}
-.section-title {
-    text-align: center;
-    font-size: 32px;
-    margin-bottom: 40px;
-}
-
-/* === GRID === */
-.articles-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 20px;
-}
-.article-card {
-    background: var(--bg-secondary);
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: 0 2px 8px var(--shadow);
-    transition: 0.3s;
-    cursor: pointer;
-}
-.article-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 16px var(--shadow);
-}
-
-/* article image block: neutral background (matches tag/bg), fixed height, overflow hidden */
-.article-image {
-    height: 180px;
-    background: var(--bg-primary); /* same as tag background */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    border-radius: 8px 8px 0 0;
-    overflow: hidden;
-}
-
-/* make images inside article-image fit entirely (no cropping) */
-.article-image img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;      /* show the whole image, letterboxed if necessary */
-    object-position: center;
-    display: block;
-    border-radius: inherit;   /* keep corners matched to container */
-    background: var(--bg-primary);
-}
-
-/* when an article is loaded into article-view, make sure it sits above layout */
-#article-view {
-    position: relative;
-    z-index: 2;
-    width: 100%;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px;
-    color: var(--text-primary);
-}
-
-/* small tweak: keep .back-link visible and styled */
-.article-container .back-link,
-#article-view .back-link {
-    display: inline-block;
-    margin-bottom: 18px;
-    color: var(--text-primary);
-    background: transparent;
-    border: 1px solid var(--border);
-    padding: 8px 12px;
-    border-radius: 6px;
-    text-decoration: none;
-    cursor: pointer;
-}
-
-.article-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 15px; } 
-.tag { padding: 4px 12px; background: var(--bg-primary); border-radius: 4px; font-size: 12px; color: #a0a0a0; }
-.article-content { padding: 25px; }
-.article-title { font-size: 20px; margin-bottom: 12px; }
-.article-description { font-size: 14px; color: #909090; }
-
-/* === Binary rain background */
-#binary-bg {
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-    z-index: 0;
-    overflow: hidden;
-    mix-blend-mode: screen;
-}
-
-#binary-bg .bit {
-    position: absolute;
-    top: -5%;
-    /* use theme-aware binary color; green in dark mode, subtle/grey in light */
-    color: var(--binary-color);
-    font-family: monospace, monospace;
-    user-select: none;
-    will-change: transform, opacity;
-    text-shadow: 0 0 6px rgba(80,255,140,0.06);
-    z-index: 0;
-    animation-name: binary-fall, binary-fade;
-    animation-timing-function: linear;
-    animation-iteration-count: infinite;
-}
-
-@keyframes binary-fall {
-    0% { transform: translateY(-10vh) }
-    100% { transform: translateY(110vh) }
-}
-@keyframes binary-fade {
-    0% { opacity: 0 }
-    10% { opacity: 0.9 }
-    90% { opacity: 0.4 }
-    100% { opacity: 0 }
-}
-
-/* ensure page content sits above the binary background */
-.container, .article-container {
-    position: relative;
-    z-index: 2;
-}
-
-/* small responsive tweak for bits density if needed */
-@media (max-width: 600px) {
-    #binary-bg .bit { opacity: 0.09; }
-}
-
-/* === RESPONSIVE === */
-@media (max-width: 1100px) { .articles-grid { grid-template-columns: repeat(3, 1fr); } }
-@media (max-width: 900px) { .articles-grid { grid-template-columns: repeat(2, 1fr); } }
-@media (max-width: 768px) {
-    .sidebar { position: static; width: 100%; border-right: none; box-shadow: none; }
-    .main-content { margin-left: 0; }
-    /* on small screens the sidebar stacks, so title should be centered normally */
-    .articles-grid { grid-template-columns: 1fr; }
-}
-
-/* Article presentation (card + readable typography) */
-.article-container {
-    max-width: 900px;
-    margin: 28px auto;
-    padding: 28px;
-    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.02));
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    box-shadow: 0 8px 30px rgba(0,0,0,0.25);
-    color: var(--text-primary);
-    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-    line-height: 1.75;
-    font-size: 17px;
-    z-index: 4;
-}
-
-/* Article header and meta */
-.article-container > .back-link {
-    display: inline-block;
-    margin-bottom: 18px;
-    background: transparent;
-    border: 1px solid var(--border);
-    color: var(--text-primary);
-    padding: 8px 12px;
-    border-radius: 8px;
-    cursor: pointer;
-}
-
-.article-container h1 {
-    font-size: 32px;
-    margin: 6px 0 6px;
-    color: var(--text-primary);
-    letter-spacing: -0.2px;
-}
-
-.article-container .meta {
-    display: flex;
-    gap: 12px;
-    align-items: center;
-    margin-bottom: 20px;
-    color: #9aa;
-    font-size: 13px;
-}
-.article-container .meta .tag {
-    background: var(--bg-primary);
-    color: #cfcfcf;
-    padding: 4px 10px;
-    border-radius: 6px;
-    font-size: 12px;
-}
-
-/* Article body */
-.article-container article {
-    color: var(--text-primary);
-    font-size: 17px;
-}
-
-/* paragraphs / lists */
-.article-container article p {
-    margin: 0 0 16px 0;
-    color: rgba(255,255,255,0.85);
-}
-.article-container article ul,
-.article-container article ol {
-    margin: 0 0 18px 1.15em;
-    color: rgba(255,255,255,0.9);
-}
-
-/* headings inside article */
-.article-container article h2 {
-    font-size: 20px;
-    margin: 22px 0 10px;
-    color: var(--accent);
-}
-.article-container article h3 {
-    font-size: 18px;
-    margin: 18px 0 8px;
-    color: var(--text-primary);
-}
-
-/* images and figures */
-.article-container article img,
-.article-container article figure {
-    max-width: 100%;
-    height: auto;
-    display: block;
-    margin: 18px auto;
-    border-radius: 10px;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.22);
-}
-
-/* blockquote */
-.article-container article blockquote {
-    border-left: 4px solid var(--accent);
-    margin: 16px 0;
-    padding: 10px 14px;
-    background: rgba(0,0,0,0.04);
-    color: rgba(255,255,255,0.9);
-    border-radius: 6px;
-}
-
-/* inline code and code blocks */
-.article-container article code {
-    background: rgba(0,0,0,0.12);
-    color: var(--text-primary);
-    padding: 2px 6px;
-    border-radius: 6px;
-    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", monospace;
-    font-size: 0.92em;
-}
-.article-container article pre {
-    background: rgba(0,0,0,0.12);
-    padding: 14px;
-    border-radius: 10px;
-    overflow: auto;
-    margin: 14px 0;
-    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", monospace;
-    font-size: 0.9em;
-    line-height: 1.45;
-    border: 1px solid rgba(0,0,0,0.15);
-}
-
-/* links */
-.article-container a {
-    color: var(--accent);
-    text-decoration: underline;
-    text-underline-offset: 3px;
-}
+.article-container article{color:var(--text-primary);font-size:17px}
+.article-container article p{margin:0 0 16px 0;color:rgba(255,255,255,0.85)}
+.article-container article ul,.article-container article ol{margin:0 0 18px 1.15em;color:rgba(255,255,255,0.9)}
+.article-container article h2{font-size:20px;margin:22px 0 10px;color:var(--accent)}
+.article-container article h3{font-size:18px;margin:18px 0 8px;color:var(--text-primary)}
+.article-container article img, .article-container article figure{max-width:100%;height:auto;display:block;margin:18px auto;border-radius:10px;box-shadow:0 8px 24px rgba(0,0,0,0.22)}
+.article-container article blockquote{border-left:4px solid var(--accent);margin:16px 0;padding:10px 14px;background:rgba(0,0,0,0.04);color:rgba(255,255,255,0.9);border-radius:6px}
+.article-container article code{background:rgba(0,0,0,0.12);color:var(--text-primary);padding:2px 6px;border-radius:6px;font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,"Roboto Mono",monospace;font-size:.92em}
+.article-container article pre{background:rgba(0,0,0,0.12);padding:14px;border-radius:10px;overflow:auto;margin:14px 0;font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,"Roboto Mono",monospace;font-size:.9em;line-height:1.45;border:1px solid rgba(0,0,0,0.15)}
+.article-container a{color:var(--accent);text-decoration:underline;text-underline-offset:3px}
 
 /* styled resource links inside articles (buttons with hover) */
-.article-container article .article-link {
-    display: inline-block;
-    color: var(--accent);
-    background: rgba(255,255,255,0.02);
-    border: 1px solid transparent;
-    padding: 4px 6px;
-    border-radius: 8px;
-    text-decoration: none;
-    transition: transform 160ms ease, box-shadow 160ms ease, background-color 160ms ease, border-color 160ms ease;
-    font-weight: 600;
+.article-container article .article-link{
+display:inline-block;color:var(--accent);background:rgba(255,255,255,0.02);border:1px solid transparent;padding:6px 10px;border-radius:8px;text-decoration:none;transition:transform .16s,box-shadow .16s,background-color .16s,border-color .16s;font-weight:600;margin:6px 0
+}
+.article-container article .article-link:hover,.article-container article .article-link:focus{transform:translateY(-3px);box-shadow:0 10px 30px rgba(0,0,0,0.18);background:rgba(255,255,255,0.035);border-color:rgba(255,255,255,0.05)}
+[data-theme="light"] .article-container article .article-link{background:rgba(0,0,0,0.03);border-color:rgba(0,0,0,0.04);color:var(--accent)}
+[data-theme="light"] .article-container article .article-link:hover{box-shadow:0 8px 18px rgba(0,0,0,0.06);transform:translateY(-2px)}
+
+/* small adjustments for article container on narrow screens */
+@media (max-width:900px){.article-container{margin:18px 16px;padding:20px}.article-container h1{font-size:26px}}
+
+/* left accent bar for article cards */
+.article-container::before{content:"";position:absolute;left:-8px;top:12px;bottom:12px;width:4px;border-radius:4px;background:linear-gradient(180deg,var(--accent),rgba(0,0,0,0.15));opacity:.9}
+
+/* ensure inner fetched article is positioned properly */
+#article-view .article-container{position:relative}
+
+/* neutral wrapper for injected article */
+#article-view .article-frame{width:100%;max-width:none;margin:0;padding:0;background:transparent;border:none;box-shadow:none}
+
+/* =========================
+Binary background (rain)
+========================= */
+#binary-bg{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden;mix-blend-mode:screen}
+#binary-bg .bit{position:absolute;top:-5%;color:var(--binary-color);font-family:monospace;user-select:none;will-change:transform,opacity;text-shadow:0 0 6px rgba(80,255,140,0.06);z-index:0;animation-name:binary-fall,binary-fade;animation-timing-function:linear;animation-iteration-count:infinite}
+@keyframes binary-fall{0%{transform:translateY(-10vh)}100%{transform:translateY(110vh)}}
+@keyframes binary-fade{0%{opacity:0}10%{opacity:.9}90%{opacity:.4}100%{opacity:0}}
+
+/* =========================
+Utility / Lists
+========================= */
+li{margin:4px 0}
+
+/* =========================
+Responsive: Mobile tweaks
+- Keep desktop centering intact
+- On mobile: left-align title, allow wrapping
+- Sidebar becomes off-canvas / stacked
+========================= */
+@media (max-width:768px){
+/* header: left-align title and allow wrapping (same as before) */
+header{justify-content:space-between;padding-left:16px;padding-right:16px;gap:12px}
+header > .title, header .title{
+position:static;transform:none;pointer-events:auto;margin:0;font-size:1.05rem;color:var(--text-primary);
+display:block;flex:1 1 auto;max-width:calc(100% - 96px);overflow:visible;text-overflow:clip;white-space:normal;word-break:break-word
 }
 
-.article-container article .article-link:hover,
-.article-container article .article-link:focus {
-    transform: translateY(-3px);
-    box-shadow: 0 10px 30px rgba(0,0,0,0.18);
-    background: rgba(255,255,255,0.035);
-    border-color: rgba(255,255,255,0.05);
-    outline: none;
+.theme-toggle{flex:0 0 auto;margin-left:12px;white-space:nowrap}
+
+/* Always show the sidebar stacked above the articles on small screens */
+.mobile-menu-toggle{display:none}               /* hide the button (no toggle) */
+#sidebar-overlay{display:none}                  /* remove overlay use */
+
+.sidebar{
+position:static;       /* flow in document (stacked above content) */
+left:auto; top:auto; bottom:auto;
+width:100%;            /* full width */
+transform:none;
+transition:none;
+border-right:none;
+box-shadow:none;
+padding:20px 16px;
+border-bottom:1px solid var(--border);
+z-index:2;
+}
+.sidebar.open{transform:none}
+
+/* layout shifts */
+.main-content{margin-left:0}
+.container{overflow-x:hidden}
 }
 
-/* light-theme adjustments (uses dark-grey accent already set in :root for light) */
-[data-theme="light"] .article-container article .article-link {
-    background: rgba(0,0,0,0.03);
-    border-color: rgba(0,0,0,0.04);
-    color: var(--accent);
-}
-[data-theme="light"] .article-container article .article-link:hover {
-    box-shadow: 0 8px 18px rgba(0,0,0,0.06);
-    transform: translateY(-2px);
-}
-
-/* responsive */
-@media (max-width: 900px) {
-    .article-container {
-        margin: 18px 16px;
-        padding: 20px;
-    }
-    .article-container h1 { font-size: 26px; }
-}
-
-/* theme-aware tweaks (light theme adjustments) */
-[data-theme="light"] .article-container {
-    background: linear-gradient(180deg, rgba(255,255,255,0.85), rgba(245,245,245,0.9));
-    color: var(--text-primary);
-    box-shadow: 0 8px 24px rgba(0,0,0,0.06);
-}
-[data-theme="light"] .article-container p,
-[data-theme="light"] .article-container ul,
-[data-theme="light"] .article-container ol {
-    color: #324047;
-}
-[data-theme="light"] .article-container code,
-[data-theme="light"] .article-container pre {
-    background: #f4f7fb;
-    color: #1b2430;
-    border: 1px solid #e6ecf2;
-}
-
-/* ensure injected article sits above layout and doesn't get clipped */
-#article-view .article-container {
-    position: relative;
-}
-
-/* neutral outer wrapper for injected article so only the inner .article-container is styled */
-#article-view .article-frame {
-    width: 100%;
-    max-width: none;
-    margin: 0;
-    padding: 0;
-    background: transparent;
-    border: none;
-    box-shadow: none;
-}
-#article-view .article-frame > .back-link {
-    /* the injected Return Home button is still styled by existing rules (#article-view .back-link) */
-    margin-bottom: 18px;
-}
-
-/* add vertical spacing for list items site-wide */
-li {
-    margin: 4px 0;
-}
+/* smaller breakpoints */
+@media (max-width:600px){#binary-bg .bit{opacity:.09}}
