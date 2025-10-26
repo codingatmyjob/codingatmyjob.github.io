@@ -482,3 +482,18 @@ header .title {
 #article-view .article-container {
     position: relative;
 }
+
+/* neutral outer wrapper for injected article so only the inner .article-container is styled */
+#article-view .article-frame {
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    padding: 0;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+}
+#article-view .article-frame > .back-link {
+    /* the injected Return Home button is still styled by existing rules (#article-view .back-link) */
+    margin-bottom: 18px;
+}

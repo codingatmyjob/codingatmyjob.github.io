@@ -109,7 +109,8 @@ async function openArticle(path) {
         const main = doc.querySelector('main.article-container') || doc.querySelector('main') || null;
 
         const wrapper = document.createElement('div');
-        wrapper.className = 'article-container';
+        // don't use .article-container here (inner fetched content already has that)
+        wrapper.className = 'article-frame';
 
         // Return Home button
         const returnBtn = document.createElement('button');
