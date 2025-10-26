@@ -43,12 +43,6 @@
   transform: translateX(20px);
 }
 
-
-@font-face {
-    font-family: 'Fixedsys';
-    src: url('https://cdn.jsdelivr.net/gh/kika/fixedsys@master/Fixedsys.woff2') format('woff2');
-}
-
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
 :root {
@@ -65,7 +59,7 @@
     --bg-secondary: #eceeef;
     --text-primary: #2c3e50;
     --accent: #00ff41;
-    --border: #e1e8ed;
+    --border: #cccccc;
     --shadow: rgba(0, 0, 0, 0.1);
 }
 
