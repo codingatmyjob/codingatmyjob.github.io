@@ -438,17 +438,38 @@ header .title {
     text-underline-offset: 3px;
 }
 
-/* subtle left accent bar (like many blog designs) */
-.article-container::before {
-    content: "";
-    position: absolute;
-    left: -8px;
-    top: 12px;
-    bottom: 12px;
-    width: 4px;
-    border-radius: 4px;
-    background: linear-gradient(180deg, var(--accent), rgba(0,0,0,0.15));
-    opacity: 0.9;
+/* styled resource links inside articles (buttons with hover) */
+.article-container article .article-link {
+    display: inline-block;
+    color: var(--accent);
+    background: rgba(255,255,255,0.02);
+    border: 1px solid transparent;
+    padding: 6px 10px;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: transform 160ms ease, box-shadow 160ms ease, background-color 160ms ease, border-color 160ms ease;
+    font-weight: 600;
+    margin: 6px 0;
+}
+
+.article-container article .article-link:hover,
+.article-container article .article-link:focus {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.18);
+    background: rgba(255,255,255,0.035);
+    border-color: rgba(255,255,255,0.05);
+    outline: none;
+}
+
+/* light-theme adjustments (uses dark-grey accent already set in :root for light) */
+[data-theme="light"] .article-container article .article-link {
+    background: rgba(0,0,0,0.03);
+    border-color: rgba(0,0,0,0.04);
+    color: var(--accent);
+}
+[data-theme="light"] .article-container article .article-link:hover {
+    box-shadow: 0 8px 18px rgba(0,0,0,0.06);
+    transform: translateY(-2px);
 }
 
 /* responsive */
