@@ -117,7 +117,6 @@ async function openArticle(path) {
         returnBtn.className = 'back-link';
         returnBtn.textContent = '← Return Home';
         returnBtn.onclick = closeArticle;
-        wrapper.appendChild(returnBtn);
 
         if (main) {
             const contentClone = main.cloneNode(true);
@@ -133,6 +132,10 @@ async function openArticle(path) {
                     if (v && v.startsWith('../')) el.setAttribute('href', v.replace(/^(\.\.\/)+/, ''));
                 }
             });
+            // insert the Return Home button *inside* the article container so it aligns with the article's left edge
+            // (the CSS .article-container > .back-link will style/position it correctly)
+            contentClone.insertBefore(returnBtn, contentClone.firstChild);
+            
             wrapper.appendChild(contentClone);
         } else {
             // fallback: inject the raw body so you can see what was returned
