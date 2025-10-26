@@ -84,15 +84,47 @@ header {
   padding-right: 20px;
 }
 
-/* center the header title without moving the toggle */
+/* center the header title without moving the toggle (desktop) */
 header .title {
   position: absolute;
-  /* center across the content area (accounts for the fixed sidebar) */
   left: calc(50% + var(--sidebar-width) / 2);
   transform: translateX(-50%);
   margin: 0;
   pointer-events: none;
   color: var(--text-primary);
+}
+
+/* === RESPONSIVE === */
+@media (max-width: 768px) {
+    /* make header use space-between so title can sit left and toggle stays right */
+    header {
+        justify-content: space-between;
+        padding-left: 16px;
+        padding-right: 16px;
+    }
+
+    /* place the title inline on the left, with spacing to match the toggle */
+    header .title {
+        position: static;
+        left: auto;
+        transform: none;
+        pointer-events: auto;
+        margin: 0;
+        font-size: 1.05rem;
+        color: var(--text-primary);
+        /* align visually with the toggle: small left padding */
+        padding-left: 8px;
+    }
+
+    /* ensure theme-toggle stays at the right edge */
+    .theme-toggle {
+        margin-left: auto;
+    }
+
+    /* if you use a mobile menu button, ensure ordering works */
+    .mobile-menu-toggle {
+        margin-right: 8px;
+    }
 }
 
 /* === SIDEBAR === */
