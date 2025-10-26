@@ -80,17 +80,22 @@ async function openArticle(path) {
     const articleView = document.getElementById('article-view');
     if (!articlesView || !articleView) return;
 
-    // fetch article file (must be served over HTTP(S) — see note below)
+    // ensure absolute URL resolution relative to site root
+    const base = new URL('.', location.origin + location.pathname).href;
+    const url = new URL(path, base).href;
+    console.log('openArticle -> fetch', path, 'resolved to', url);
+
     let res;
     try {
-        res = await fetch(path, { cache: 'no-store' });
+        res = await fetch(url, { cache: 'no-store' });
     } catch (err) {
         console.error('fetch failed', err);
-        alert('Unable to load article. If you are opening index.html from the file system, run a local HTTP server (Live Server, python -m http.server, or npx http-server).');
+        alert('Unable to load article. If opening from the filesystem, run a local HTTP server (Live Server, python -m http.server, or npx http-server).');
         return;
     }
+
     if (!res.ok) {
-        console.error('fetch returned not ok', res.status, path);
+        console.error('fetch returned', res.status, res.statusText, url);
         alert('Unable to load article: ' + res.status);
         return;
     }
@@ -100,27 +105,9 @@ async function openArticle(path) {
         const parser = new DOMParser();
         const doc = parser.parseFromString(text, 'text/html');
 
-        // find main content (article pages use <main class="article-container">)
-        const main = doc.querySelector('main.article-container') || doc.querySelector('main') || doc.body;
-        if (!main) throw new Error('Article main not found');
+        // prefer a main.article-container, fall back to entire body
+        const main = doc.querySelector('main.article-container') || doc.querySelector('main') || null;
 
-        // clone and sanitize fetched content
-        const contentClone = main.cloneNode(true);
-        contentClone.querySelectorAll('link, script, header, #binary-bg').forEach(n => n.remove());
-
-        // rewrite relative asset paths (../something -> something) so images/styles referenced in article resolve
-        Array.from(contentClone.querySelectorAll('[src], [href]')).forEach(el => {
-            if (el.hasAttribute('src')) {
-                const v = el.getAttribute('src');
-                if (v && v.startsWith('../')) el.setAttribute('src', v.replace(/^(\.\.\/)+/, ''));
-            }
-            if (el.hasAttribute('href')) {
-                const v = el.getAttribute('href');
-                if (v && v.startsWith('../')) el.setAttribute('href', v.replace(/^(\.\.\/)+/, ''));
-            }
-        });
-
-        // build wrapper with Return Home button
         const wrapper = document.createElement('div');
         wrapper.className = 'article-container';
         const backBtn = document.createElement('button');
@@ -128,22 +115,43 @@ async function openArticle(path) {
         backBtn.textContent = '← Return Home';
         backBtn.onclick = closeArticle;
         wrapper.appendChild(backBtn);
-        wrapper.appendChild(contentClone);
 
-        // inject and toggle views
+        if (main) {
+            const contentClone = main.cloneNode(true);
+            contentClone.querySelectorAll('link, script, header, #binary-bg').forEach(n => n.remove());
+            // fix ../ asset paths
+            Array.from(contentClone.querySelectorAll('[src], [href]')).forEach(el => {
+                if (el.hasAttribute('src')) {
+                    const v = el.getAttribute('src');
+                    if (v && v.startsWith('../')) el.setAttribute('src', v.replace(/^(\.\.\/)+/, ''));
+                }
+                if (el.hasAttribute('href')) {
+                    const v = el.getAttribute('href');
+                    if (v && v.startsWith('../')) el.setAttribute('href', v.replace(/^(\.\.\/)+/, ''));
+                }
+            });
+            wrapper.appendChild(contentClone);
+        } else {
+            // fallback: inject the raw body so you can see what was returned
+            console.warn('main not found in fetched doc, injecting raw response for debugging');
+            const temp = document.createElement('div');
+            temp.innerHTML = text;
+            // remove unsafe elements
+            temp.querySelectorAll('script, link, header, #binary-bg').forEach(n => n.remove());
+            wrapper.appendChild(temp);
+        }
+
         articleView.innerHTML = '';
         articleView.appendChild(wrapper);
         articlesView.style.display = 'none';
         articleView.style.display = 'block';
 
-        // update history so browser back works and direct links are possible
         history.pushState({ article: path }, '', '?article=' + encodeURIComponent(path));
-
-        // scroll to top of content area
         window.scrollTo({ top: 0, behavior: 'instant' });
+
     } catch (err) {
-        console.error(err);
-        alert('Unable to parse article content.');
+        console.error('parse/inject failed', err);
+        alert('Unable to parse article content. See console for details.');
     }
 }
 
