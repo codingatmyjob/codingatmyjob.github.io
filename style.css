@@ -53,14 +53,17 @@
     --border: #2a332a;
     --shadow: rgba(0, 255, 65, 0.1);
     --sidebar-width: 340px;
+    --binary-color: rgba(80, 255, 140, 0.12);
 }
 [data-theme="light"] {
     --bg-primary: #ffffff;
     --bg-secondary: #eceeef;
     --text-primary: #2c3e50;
-    --accent: #00ff41;
+    /* in light mode use a dark grey accent (no green) */
+    --accent: #2c3e50;
     --border: #cccccc;
     --shadow: rgba(0, 0, 0, 0.1);
+    --binary-color: rgba(0,0,0,0.06);
 }
 
 body {
@@ -261,7 +264,8 @@ header .title {
 #binary-bg .bit {
     position: absolute;
     top: -5%;
-    color: rgba(80, 255, 140, 0.12); /* subtle green */
+    /* use theme-aware binary color; green in dark mode, subtle/grey in light */
+    color: var(--binary-color);
     font-family: monospace, monospace;
     user-select: none;
     will-change: transform, opacity;
@@ -303,4 +307,178 @@ header .title {
     /* on small screens the sidebar stacks, so title should be centered normally */
     header .title { left: 50%; transform: translateX(-50%); }
     .articles-grid { grid-template-columns: 1fr; }
+}
+
+/* Article presentation (card + readable typography) */
+.article-container {
+    max-width: 900px;
+    margin: 28px auto;
+    padding: 28px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.02));
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.25);
+    color: var(--text-primary);
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    line-height: 1.75;
+    font-size: 17px;
+    z-index: 4;
+}
+
+/* Article header and meta */
+.article-container > .back-link {
+    display: inline-block;
+    margin-bottom: 18px;
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text-primary);
+    padding: 8px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.article-container h1 {
+    font-size: 32px;
+    margin: 6px 0 6px;
+    color: var(--text-primary);
+    letter-spacing: -0.2px;
+}
+
+.article-container .meta {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    margin-bottom: 20px;
+    color: #9aa;
+    font-size: 13px;
+}
+.article-container .meta .tag {
+    background: var(--bg-primary);
+    color: #cfcfcf;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 12px;
+}
+
+/* Article body */
+.article-container article {
+    color: var(--text-primary);
+    font-size: 17px;
+}
+
+/* paragraphs / lists */
+.article-container article p {
+    margin: 0 0 16px 0;
+    color: rgba(255,255,255,0.85);
+}
+.article-container article ul,
+.article-container article ol {
+    margin: 0 0 18px 1.15em;
+    color: rgba(255,255,255,0.9);
+}
+
+/* headings inside article */
+.article-container article h2 {
+    font-size: 20px;
+    margin: 22px 0 10px;
+    color: var(--accent);
+}
+.article-container article h3 {
+    font-size: 18px;
+    margin: 18px 0 8px;
+    color: var(--text-primary);
+}
+
+/* images and figures */
+.article-container article img,
+.article-container article figure {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 18px auto;
+    border-radius: 10px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.22);
+}
+
+/* blockquote */
+.article-container article blockquote {
+    border-left: 4px solid var(--accent);
+    margin: 16px 0;
+    padding: 10px 14px;
+    background: rgba(0,0,0,0.04);
+    color: rgba(255,255,255,0.9);
+    border-radius: 6px;
+}
+
+/* inline code and code blocks */
+.article-container article code {
+    background: rgba(0,0,0,0.12);
+    color: var(--text-primary);
+    padding: 2px 6px;
+    border-radius: 6px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", monospace;
+    font-size: 0.92em;
+}
+.article-container article pre {
+    background: rgba(0,0,0,0.12);
+    padding: 14px;
+    border-radius: 10px;
+    overflow: auto;
+    margin: 14px 0;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", monospace;
+    font-size: 0.9em;
+    line-height: 1.45;
+    border: 1px solid rgba(0,0,0,0.15);
+}
+
+/* links */
+.article-container a {
+    color: var(--accent);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+/* subtle left accent bar (like many blog designs) */
+.article-container::before {
+    content: "";
+    position: absolute;
+    left: -8px;
+    top: 12px;
+    bottom: 12px;
+    width: 4px;
+    border-radius: 4px;
+    background: linear-gradient(180deg, var(--accent), rgba(0,0,0,0.15));
+    opacity: 0.9;
+}
+
+/* responsive */
+@media (max-width: 900px) {
+    .article-container {
+        margin: 18px 16px;
+        padding: 20px;
+    }
+    .article-container h1 { font-size: 26px; }
+}
+
+/* theme-aware tweaks (light theme adjustments) */
+[data-theme="light"] .article-container {
+    background: linear-gradient(180deg, rgba(255,255,255,0.85), rgba(245,245,245,0.9));
+    color: var(--text-primary);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+}
+[data-theme="light"] .article-container p,
+[data-theme="light"] .article-container ul,
+[data-theme="light"] .article-container ol {
+    color: #324047;
+}
+[data-theme="light"] .article-container code,
+[data-theme="light"] .article-container pre {
+    background: #f4f7fb;
+    color: #1b2430;
+    border: 1px solid #e6ecf2;
+}
+
+/* ensure injected article sits above layout and doesn't get clipped */
+#article-view .article-container {
+    position: relative;
 }

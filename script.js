@@ -110,11 +110,13 @@ async function openArticle(path) {
 
         const wrapper = document.createElement('div');
         wrapper.className = 'article-container';
-        const backBtn = document.createElement('button');
-        backBtn.className = 'back-link';
-        backBtn.textContent = '← Return Home';
-        backBtn.onclick = closeArticle;
-        wrapper.appendChild(backBtn);
+
+        // Return Home button
+        const returnBtn = document.createElement('button');
+        returnBtn.className = 'back-link';
+        returnBtn.textContent = '← Return Home';
+        returnBtn.onclick = closeArticle;
+        wrapper.appendChild(returnBtn);
 
         if (main) {
             const contentClone = main.cloneNode(true);
