@@ -7,8 +7,11 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <div id="binary-bg" aria-hidden="true"></div>
+
     <div class="container">
         <header>
+            <h2 class="title">Articles & Projects</h2>
             <button class="theme-toggle" onclick="toggleTheme()">
                 <div class="switch"></div>
                 <span id="theme-icon">Light Mode</span>
@@ -50,9 +53,33 @@
             </aside>
 
             <section class="content-area">
-                <h2 class="section-title">Articles & Projects</h2>
-                <div class="articles-grid">
-                    <div class="article-card" onclick="location.href='articles/article1.html'">
+                <div id="articles-view">
+                    <div class="articles-grid">
+                    <div class="article-card" onclick="openArticle('articles/how-i-passed-security-plus.html')">
+                        <div class="article-image">
+                            <img src="secplus.png" alt="How I passed CompTIA Security+">
+                        </div>
+                        <div class="article-content">
+                            <div class="article-date">October 26, 2025</div>
+                            <div class="article-title">How I passed CompTIA Security+</div>
+                            <div class="article-description">A practical walkthrough of my study plan, resources used, and exam-day tips that helped me pass Security+.</div>
+                            <div class="article-tags"><span class="tag">Certification</span></div>
+                        </div>
+                    </div>
+
+                    <div class="article-card" onclick="openArticle('articles/how-i-passed-network-plus.html')">
+                        <div class="article-image">
+                            <img src="netplus.png" alt="How I passed CompTIA Network+">
+                        </div>
+                        <div class="article-content">
+                            <div class="article-date">October 26, 2025</div>
+                            <div class="article-title">How I passed CompTIA Network+</div>
+                            <div class="article-description">My study approach for Network+: core networking concepts, hands-on lab practice, and exam strategies that worked.</div>
+                            <div class="article-tags"><span class="tag">Certification</span></div>
+                        </div>
+                    </div>
+                    
+                    <div class="article-card" onclick="openArticle('articles/article1.html')">
                         <div class="article-image">Example 01</div>
                         <div class="article-content">
                             <div class="article-date">October 2025</div>
@@ -68,7 +95,7 @@
                         </div>
                     </div>
 
-                    <div class="article-card" onclick="location.href='articles/article2.html'">
+                    <div class="article-card" onclick="openArticle('articles/article2.html')">
                         <div class="article-image">Example 02</div>
                         <div class="article-content">
                             <div class="article-date">September 2025</div>
@@ -83,7 +110,7 @@
                         </div>
                     </div>
 
-                    <div class="article-card" onclick="location.href='articles/article3.html'">
+                    <div class="article-card" onclick="openArticle('articles/article3.html')">
                         <div class="article-image">Example 03</div>
                         <div class="article-content">
                             <div class="article-date">August 2025</div>
@@ -99,7 +126,7 @@
                         </div>
                     </div>
 
-                    <div class="article-card" onclick="location.href='articles/article4.html'">
+                    <div class="article-card" onclick="openArticle('articles/article4.html')">
                         <div class="article-image">Example 04</div>
                         <div class="article-content">
                             <div class="article-date">July 2025</div>
@@ -114,7 +141,7 @@
                         </div>
                     </div>
 
-                    <div class="article-card" onclick="location.href='articles/article5.html'">
+                    <div class="article-card" onclick="openArticle('articles/article5.html')">
                         <div class="article-image">Example 05</div>
                         <div class="article-content">
                             <div class="article-date">June 2025</div>
@@ -130,7 +157,7 @@
                         </div>
                     </div>
 
-                    <div class="article-card" onclick="location.href='articles/article6.html'">
+                    <div class="article-card" onclick="openArticle('articles/article6.html')">
                         <div class="article-image">Example 06</div>
                         <div class="article-content">
                             <div class="article-date">May 2025</div>
@@ -144,6 +171,9 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- injected article will appear here -->
+                <div id="article-view" style="display:none;"></div>
             </section>
         </div>
     </div>

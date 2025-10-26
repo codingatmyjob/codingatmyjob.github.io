@@ -58,6 +58,7 @@
     --accent: #00ff41;
     --border: #2a332a;
     --shadow: rgba(0, 255, 65, 0.1);
+    --sidebar-width: 340px;
 }
 [data-theme="light"] {
     --bg-primary: #ffffff;
@@ -76,6 +77,7 @@ body {
 }
 
 header {
+  position: relative;
   display: flex;
   justify-content: flex-end;
   align-items: center;
@@ -85,9 +87,20 @@ header {
   padding-right: 20px;
 }
 
+/* center the header title without moving the toggle */
+header .title {
+  position: absolute;
+  /* center across the content area (accounts for the fixed sidebar) */
+  left: calc(50% + var(--sidebar-width) / 2);
+  transform: translateX(-50%);
+  margin: 0;
+  pointer-events: none;
+  color: var(--text-primary);
+}
+
 /* === SIDEBAR === */
 .sidebar {
-    width: 300px;
+    width: var(--sidebar-width);
     position: fixed;
     left: 0;
     top: 0;
@@ -156,7 +169,7 @@ header {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-left: 340px;
+    margin-left: var(--sidebar-width);
 }
 .content-area {
     max-width: 1100px;
@@ -186,21 +199,106 @@ header {
     transform: translateY(-5px);
     box-shadow: 0 8px 16px var(--shadow);
 }
+
+/* article image block: neutral background (matches tag/bg), fixed height, overflow hidden */
 .article-image {
-    height: 200px;
-    background: linear-gradient(135deg, #003d1a, #001a0a);
-    color: var(--accent);
-    font-size: 48px;
+    height: 180px;
+    background: var(--bg-primary); /* same as tag background */
     display: flex;
     align-items: center;
     justify-content: center;
     text-align: center;
+    border-radius: 8px 8px 0 0;
+    overflow: hidden;
 }
+
+/* make images inside article-image fit entirely (no cropping) */
+.article-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;      /* show the whole image, letterboxed if necessary */
+    object-position: center;
+    display: block;
+    border-radius: inherit;   /* keep corners matched to container */
+    background: var(--bg-primary);
+}
+
+/* when an article is loaded into article-view, make sure it sits above layout */
+#article-view {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    color: var(--text-primary);
+}
+
+/* small tweak: keep .back-link visible and styled */
+.article-container .back-link,
+#article-view .back-link {
+    display: inline-block;
+    margin-bottom: 18px;
+    color: var(--text-primary);
+    background: transparent;
+    border: 1px solid var(--border);
+    padding: 8px 12px;
+    border-radius: 6px;
+    text-decoration: none;
+    cursor: pointer;
+}
+
 .article-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 15px; } 
 .tag { padding: 4px 12px; background: var(--bg-primary); border-radius: 4px; font-size: 12px; color: #a0a0a0; }
 .article-content { padding: 25px; }
 .article-title { font-size: 20px; margin-bottom: 12px; }
 .article-description { font-size: 14px; color: #909090; }
+
+/* === Binary rain background */
+#binary-bg {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+    mix-blend-mode: screen;
+}
+
+#binary-bg .bit {
+    position: absolute;
+    top: -5%;
+    color: rgba(80, 255, 140, 0.12); /* subtle green */
+    font-family: monospace, monospace;
+    user-select: none;
+    will-change: transform, opacity;
+    text-shadow: 0 0 6px rgba(80,255,140,0.06);
+    z-index: 0;
+    animation-name: binary-fall, binary-fade;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+}
+
+@keyframes binary-fall {
+    0% { transform: translateY(-10vh) }
+    100% { transform: translateY(110vh) }
+}
+@keyframes binary-fade {
+    0% { opacity: 0 }
+    10% { opacity: 0.9 }
+    90% { opacity: 0.4 }
+    100% { opacity: 0 }
+}
+
+/* ensure page content sits above the binary background */
+.container, .article-container {
+    position: relative;
+    z-index: 2;
+}
+
+/* small responsive tweak for bits density if needed */
+@media (max-width: 600px) {
+    #binary-bg .bit { opacity: 0.09; }
+}
 
 /* === RESPONSIVE === */
 @media (max-width: 1100px) { .articles-grid { grid-template-columns: repeat(3, 1fr); } }
@@ -208,5 +306,7 @@ header {
 @media (max-width: 768px) {
     .sidebar { position: static; width: 100%; border-right: none; box-shadow: none; }
     .main-content { margin-left: 0; }
+    /* on small screens the sidebar stacks, so title should be centered normally */
+    header .title { left: 50%; transform: translateX(-50%); }
     .articles-grid { grid-template-columns: 1fr; }
 }
