@@ -88,7 +88,6 @@ header {
 header .title {
   position: absolute;
   left: calc(50% + var(--sidebar-width) / 2);
-  transform: translateX(-50%);
   margin: 0;
   pointer-events: none;
   color: var(--text-primary);
