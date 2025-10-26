@@ -61,7 +61,7 @@
 }
 [data-theme="light"] {
     --bg-primary: #ffffff;
-    --bg-secondary: #f8f9fa;
+    --bg-secondary: #eceeef;
     --text-primary: #2c3e50;
     --accent: #00ff41;
     --border: #e1e8ed;
@@ -194,7 +194,10 @@ header {
     display: flex;
     align-items: center;
     justify-content: center;
+    text-align: center;
 }
+.article-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 15px; } 
+.tag { padding: 4px 12px; background: var(--bg-primary); border-radius: 4px; font-size: 12px; color: #a0a0a0; }
 .article-content { padding: 25px; }
 .article-title { font-size: 20px; margin-bottom: 12px; }
 .article-description { font-size: 14px; color: #909090; }
