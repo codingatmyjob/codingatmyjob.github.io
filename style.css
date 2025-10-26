@@ -386,7 +386,6 @@ header .title {
     .sidebar { position: static; width: 100%; border-right: none; box-shadow: none; }
     .main-content { margin-left: 0; }
     /* on small screens the sidebar stacks, so title should be centered normally */
-    header .title { left: 50%; transform: translateX(-50%); }
     .articles-grid { grid-template-columns: 1fr; }
 }
 
