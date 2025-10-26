@@ -444,12 +444,11 @@ header .title {
     color: var(--accent);
     background: rgba(255,255,255,0.02);
     border: 1px solid transparent;
-    padding: 6px 10px;
+    padding: 4px 6px;
     border-radius: 8px;
     text-decoration: none;
     transition: transform 160ms ease, box-shadow 160ms ease, background-color 160ms ease, border-color 160ms ease;
     font-weight: 600;
-    margin: 6px 0;
 }
 
 .article-container article .article-link:hover,
@@ -517,4 +516,9 @@ header .title {
 #article-view .article-frame > .back-link {
     /* the injected Return Home button is still styled by existing rules (#article-view .back-link) */
     margin-bottom: 18px;
+}
+
+/* add vertical spacing for list items site-wide */
+li {
+    margin: 4px 0;
 }
