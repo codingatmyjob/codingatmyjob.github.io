@@ -94,6 +94,46 @@ header .title {
   color: var(--text-primary);
 }
 
+/* fix header title overflowing on small screens */
+@media (max-width: 768px) {
+    header {
+        padding-left: 16px;
+        padding-right: 16px;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    /* target only the header title (not sidebar .title) */
+    header > .title,
+    header .title {
+        position: static;
+        transform: none;
+        pointer-events: auto;
+        margin: 0;
+        font-size: 1.05rem;
+        color: var(--text-primary);
+
+        /* prevent pushing layout: limit width and allow ellipsis */
+        display: inline-block;
+        flex: 0 1 auto;
+        max-width: calc(100% - 96px); /* leave room for toggle + margins */
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .theme-toggle {
+        flex: 0 0 auto;
+        margin-left: 8px;
+        white-space: nowrap; /* keep icon+label on one line */
+    }
+
+    /* safe fallback to avoid page-wide horizontal scroll if something else causes overflow */
+    .container {
+        overflow-x: hidden;
+    }
+}
+
 /* === RESPONSIVE === */
 @media (max-width: 768px) {
     /* make header use space-between so title can sit left and toggle stays right */
