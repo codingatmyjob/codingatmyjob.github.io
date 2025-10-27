@@ -235,6 +235,21 @@ Utility / Lists
 ========================= */
 li{margin:4px 0}
 
+/* Light theme: ensure article text uses a readable dark gray (overrides any white/rgba values) */
+[data-theme="light"] .article-container,
+[data-theme="light"] .article-container article,
+[data-theme="light"] .article-container article p,
+[data-theme="light"] .article-container article li,
+[data-theme="light"] .article-container article ul,
+[data-theme="light"] .article-container article ol,
+[data-theme="light"] .article-container article h1,
+[data-theme="light"] .article-container article h2,
+[data-theme="light"] .article-container article h3,
+[data-theme="light"] .article-container article td,
+[data-theme="light"] .article-container article th {
+	color: var(--text-primary) !important;
+}
+
 /* =========================
 Responsive: Mobile tweaks
 - Keep desktop centering intact
