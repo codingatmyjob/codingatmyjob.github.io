@@ -26,7 +26,7 @@ Variables & Base
 /* reset / base */
 *{box-sizing:border-box;margin:0;padding:0}
 body{
-font-family:'Fixedsys','Courier New',monospace;
+font-family:'Courier New',monospace;
 background:var(--bg-primary);
 color:var(--text-primary);
 transition:background .3s,color .3s;
