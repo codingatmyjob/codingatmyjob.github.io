@@ -57,7 +57,7 @@ echo 10.10.11.74 artificial.htb | sudo tee -a /etc/hosts</code></pre>
 
             <img src="/artificial-images/artificial_recon.png" class="article-image-img">
 
-            <p>Summary of interesting results:</p>
+            <p>Things of note:</p>
             <ul>
                 <li>I immediately noticed a webserver running on this IP address with the title "Artificial - AI Solutions".</li>
                 <li>Linked the IP address to the domain "artificial.htb" in our /etc/hosts file.</li>
@@ -101,7 +101,7 @@ script -qc /bin/bash /dev/null</code></pre>
             <p>Notes on foothold:</p>
             <ul>
                 <li>I downloaded the requirements and dockerfile listed on the Artificial website. The requirements file only listed "tensorflow-cpu==2.13.1" which prompted me to start digging for vulnerabilities.</li>
-                <li>After researching, I found this TensorFlow/model evaluation setup was vulnerable to model poisoning/RCE. I can upload a malicious model and gain shell access when the file is run.</li>
+                <li>After some research, I found this model evaluation setup was vulnerable to model poisoning/RCE. I can upload a malicious model and gain shell access when the file is run.</li>
                 <li>Gained access to a shell with limited privileges.</li>
             </ul>
 
@@ -167,7 +167,7 @@ chmod +x rest-server
 mkdir -p /tmp/restic-data
 ./rest-server --path /tmp/restic-data --listen :12345 --no-auth
 
-# On the Restic web server, create a new repo :
+# On the Restic web server, create a new repo:
 # Repository name: repo
 # Repository Url: /opt
 # Password:password

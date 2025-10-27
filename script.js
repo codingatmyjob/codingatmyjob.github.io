@@ -152,6 +152,10 @@ async function openArticle(path) {
         articlesView.style.display = 'none';
         articleView.style.display = 'block';
 
+    // show scroll-to-top button when article is open
+    const st = document.getElementById('scroll-top');
+    if (st) st.style.display = 'flex';
+
         history.pushState({ article: path }, '', '?article=' + encodeURIComponent(path));
         window.scrollTo({ top: 0, behavior: 'instant' });
 
@@ -168,6 +172,9 @@ function closeArticle() {
     articleView.style.display = 'none';
     articleView.innerHTML = '';
     articlesView.style.display = 'block';
+    // hide scroll-to-top when returning to articles list
+    const st = document.getElementById('scroll-top');
+    if (st) st.style.display = 'none';
     history.pushState({}, '', location.pathname); // clear query
     window.scrollTo({ top: 0, behavior: 'instant' });
 }
@@ -192,5 +199,13 @@ window.addEventListener('popstate', (e) => {
 document.addEventListener('DOMContentLoaded', () => {
     const params = new URLSearchParams(location.search);
     const a = params.get('article');
+    // ensure scroll-top is hidden by default
+    const st = document.getElementById('scroll-top');
+    if (st) st.style.display = 'none';
     if (a) openArticle(a);
 });
+
+// smooth scroll helper used by the floating button
+function scrollToTop(){
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
