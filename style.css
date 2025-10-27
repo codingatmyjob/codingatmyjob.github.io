@@ -167,9 +167,40 @@ color:var(--text-primary);font-family:system-ui,-apple-system,"Segoe UI",Roboto,
 .article-container article h3{font-size:18px;margin:18px 0 8px;color:var(--text-primary)}
 .article-container article img, .article-container article figure{max-width:100%;height:auto;display:block;margin:18px auto;border-radius:10px;box-shadow:0 8px 24px rgba(0,0,0,0.22)}
 .article-container article blockquote{border-left:4px solid var(--accent);margin:16px 0;padding:10px 14px;background:rgba(0,0,0,0.04);color:rgba(255,255,255,0.9);border-radius:6px}
-.article-container article code{background:rgba(0,0,0,0.12);color:var(--text-primary);padding:2px 6px;border-radius:6px;font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,"Roboto Mono",monospace;font-size:.92em}
+.article-container article code{background:rgba(0,0,0,0.12);color:var(--text-primary);border-radius:6px;font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,"Roboto Mono",monospace;font-size:.92em}
 .article-container article pre{background:rgba(0,0,0,0.12);padding:14px;border-radius:10px;overflow:auto;margin:14px 0;font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,"Roboto Mono",monospace;font-size:.9em;line-height:1.45;border:1px solid rgba(0,0,0,0.15)}
 .article-container a{color:var(--accent);text-decoration:underline;text-underline-offset:3px}
+
+/* Initial Info table used in HTB writeups */
+.info-table{
+	width:100%;
+	border-collapse:collapse;
+	margin:0 0 16px 0;
+	font-size:15px;
+	color:var(--text-primary);
+}
+.info-table th,
+.info-table td{
+	text-align:left;
+	padding:10px 12px;
+	vertical-align:top;
+}
+.info-table th{
+	width:33.333%;
+	color:rgba(255,255,255,0.8);
+	font-weight:600;
+	background:transparent;
+}
+.info-table td{
+	width:66.666%;
+	color:rgba(255,255,255,0.95);
+}
+.info-table tr + tr th,
+.info-table tr + tr td{
+	border-top:1px solid var(--border);
+}
+[data-theme="light"] .info-table th{color:#55606a}
+[data-theme="light"] .info-table td{color:#2c3e50}
 
 /* styled resource links inside articles (buttons with hover) */
 .article-container article .article-link{
