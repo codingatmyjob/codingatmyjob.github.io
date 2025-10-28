@@ -218,9 +218,9 @@ function scrollToTop(){
 function positionScrollButton(){
     const btn = document.getElementById('scroll-top');
     if (!btn) return;
-    const article = document.querySelector('#article-view .article-container');
+    const article = document.querySelector('#article-view > div > main > article');
     // default fallback: bottom-right 20px
-    const fallbackRight = 20;
+    const fallbackRight = 20;document.querySelector
     // make sure button is visible when computing size
     const wasHidden = btn.style.display === 'none' || getComputedStyle(btn).display === 'none';
     if (wasHidden) btn.style.display = 'flex';
