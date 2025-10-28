@@ -226,8 +226,11 @@ function positionScrollButton(){
     if (wasHidden) btn.style.display = 'flex';
 
     if (article){
-        const rect = article.getBoundingClientRect();
-        const leftPos = Math.round(rect.right + 20); // 20px to the right of article
+        // prefer the inner <article> element if present
+        const inner = article.querySelector('article');
+        const target = inner || article;
+        const rect = target.getBoundingClientRect();
+        const leftPos = Math.round(rect.right + 40); // 40px to the right of the actual <article>
         const btnWidth = btn.offsetWidth || 44;
 
         // if leftPos would put the button off-screen, use fallback right value
