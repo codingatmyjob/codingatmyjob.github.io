@@ -237,7 +237,7 @@ function positionScrollButton(){
     }
 
     const rect = article.getBoundingClientRect();
-    const desiredLeft = Math.round(rect.right + 40); // 40px to the right of the <article>
+    const desiredLeft = Math.round(rect.right + 50); // 50px to the right of the <article> (was 40)
     const btnWidth = btn.offsetWidth || 44;
 
     // if placing at desiredLeft would overflow the viewport, fall back to right offset
