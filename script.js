@@ -214,22 +214,22 @@ function scrollToTop(){
 }
 
 // Position the scroll-top button 20px to the right of the article's right edge.
-// If that would place the button off-screen, fall back to a fixed right offset.
+// Position the scroll-top button 40px to the right of the element at
+// '#article-view > div > main > article'. If that would place the button off-screen,
+// fall back to a fixed right offset.
 function positionScrollButton(){
     const btn = document.getElementById('scroll-top');
     if (!btn) return;
-    const article = document.querySelector('#article-view > div > main > article');
+    const selector = '#article-view > div > main > article';
+    const article = document.querySelector(selector);
     // default fallback: bottom-right 20px
-    const fallbackRight = 20;document.querySelector
+    const fallbackRight = 20;
     // make sure button is visible when computing size
     const wasHidden = btn.style.display === 'none' || getComputedStyle(btn).display === 'none';
     if (wasHidden) btn.style.display = 'flex';
 
     if (article){
-        // prefer the inner <article> element if present
-        const inner = article.querySelector('article');
-        const target = inner || article;
-        const rect = target.getBoundingClientRect();
+        const rect = article.getBoundingClientRect();
         const leftPos = Math.round(rect.right + 40); // 40px to the right of the actual <article>
         const btnWidth = btn.offsetWidth || 44;
 
@@ -242,7 +242,7 @@ function positionScrollButton(){
             btn.style.left = leftPos + 'px';
         }
     } else {
-        // no article container found: use fallback bottom-right
+        // no article element found: use fallback bottom-right
         btn.style.left = 'auto';
         btn.style.right = fallbackRight + 'px';
     }
@@ -254,7 +254,7 @@ function positionScrollButton(){
     }
 }
 
-// Reposition on resize so the button stays 20px to the right of the article
+// Reposition on resize so the button stays 40px to the right of the article
 window.addEventListener('resize', function(){
     // only reposition when article view is open
     const articleView = document.getElementById('article-view');
