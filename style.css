@@ -51,7 +51,8 @@ position:absolute;
 left:calc(50% + var(--sidebar-width)/2);
 transform:translateX(-50%);
 margin:0;
-pointer-events:none;
+pointer-events:auto;
+cursor:pointer;
 color:var(--text-primary);
 }
 
