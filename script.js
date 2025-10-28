@@ -175,6 +175,9 @@ function closeArticle() {
     // hide scroll-to-top when returning to articles list
     const st = document.getElementById('scroll-top');
     if (st) st.style.display = 'none';
+
+        // position the scroll button relative to the article right edge
+        positionScrollButton();
     history.pushState({}, '', location.pathname); // clear query
     window.scrollTo({ top: 0, behavior: 'instant' });
 }
@@ -209,3 +212,48 @@ document.addEventListener('DOMContentLoaded', () => {
 function scrollToTop(){
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
+
+// Position the scroll-top button 20px to the right of the article's right edge.
+// If that would place the button off-screen, fall back to a fixed right offset.
+function positionScrollButton(){
+    const btn = document.getElementById('scroll-top');
+    if (!btn) return;
+    const article = document.querySelector('#article-view .article-container');
+    // default fallback: bottom-right 20px
+    const fallbackRight = 20;
+    // make sure button is visible when computing size
+    const wasHidden = btn.style.display === 'none' || getComputedStyle(btn).display === 'none';
+    if (wasHidden) btn.style.display = 'flex';
+
+    if (article){
+        const rect = article.getBoundingClientRect();
+        const leftPos = Math.round(rect.right + 20); // 20px to the right of article
+        const btnWidth = btn.offsetWidth || 44;
+
+        // if leftPos would put the button off-screen, use fallback right value
+        if (leftPos + btnWidth > window.innerWidth - 8){
+            btn.style.left = 'auto';
+            btn.style.right = fallbackRight + 'px';
+        } else {
+            btn.style.right = 'auto';
+            btn.style.left = leftPos + 'px';
+        }
+    } else {
+        // no article container found: use fallback bottom-right
+        btn.style.left = 'auto';
+        btn.style.right = fallbackRight + 'px';
+    }
+
+    // restore hidden state if it was hidden and article isn't open
+    if (wasHidden){
+        const articleView = document.getElementById('article-view');
+        if (!articleView || articleView.style.display === 'none') btn.style.display = 'none';
+    }
+}
+
+// Reposition on resize so the button stays 20px to the right of the article
+window.addEventListener('resize', function(){
+    // only reposition when article view is open
+    const articleView = document.getElementById('article-view');
+    if (articleView && articleView.style.display !== 'none') positionScrollButton();
+});
