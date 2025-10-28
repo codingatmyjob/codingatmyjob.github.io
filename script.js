@@ -152,9 +152,12 @@ async function openArticle(path) {
         articlesView.style.display = 'none';
         articleView.style.display = 'block';
 
-    // show scroll-to-top button when article is open
+    // show scroll-to-top button when article is open and update CSS placement
     const st = document.getElementById('scroll-top');
-    if (st) st.style.display = 'flex';
+    if (st) {
+        st.style.display = 'flex';
+        positionScrollButton();
+    }
 
         history.pushState({ article: path }, '', '?article=' + encodeURIComponent(path));
         window.scrollTo({ top: 0, behavior: 'instant' });
@@ -175,9 +178,11 @@ function closeArticle() {
     // hide scroll-to-top when returning to articles list
     const st = document.getElementById('scroll-top');
     if (st) st.style.display = 'none';
-
-        // position the scroll button relative to the article right edge
-        positionScrollButton();
+    // clear any CSS variables used for placement
+    if (st) {
+        st.style.removeProperty('--scroll-left');
+        st.style.removeProperty('--scroll-right');
+    }
     history.pushState({}, '', location.pathname); // clear query
     window.scrollTo({ top: 0, behavior: 'instant' });
 }
@@ -222,35 +227,26 @@ function positionScrollButton(){
     if (!btn) return;
     const selector = '#article-view > div > main > article';
     const article = document.querySelector(selector);
-    // default fallback: bottom-right 20px
     const fallbackRight = 20;
-    // make sure button is visible when computing size
-    const wasHidden = btn.style.display === 'none' || getComputedStyle(btn).display === 'none';
-    if (wasHidden) btn.style.display = 'flex';
 
-    if (article){
-        const rect = article.getBoundingClientRect();
-        const leftPos = Math.round(rect.right + 40); // 40px to the right of the actual <article>
-        const btnWidth = btn.offsetWidth || 44;
-
-        // if leftPos would put the button off-screen, use fallback right value
-        if (leftPos + btnWidth > window.innerWidth - 8){
-            btn.style.left = 'auto';
-            btn.style.right = fallbackRight + 'px';
-        } else {
-            btn.style.right = 'auto';
-            btn.style.left = leftPos + 'px';
-        }
-    } else {
-        // no article element found: use fallback bottom-right
-        btn.style.left = 'auto';
-        btn.style.right = fallbackRight + 'px';
+    if (!article) {
+        // No article found: use fallback right offset
+        btn.style.removeProperty('--scroll-left');
+        btn.style.setProperty('--scroll-right', fallbackRight + 'px');
+        return;
     }
 
-    // restore hidden state if it was hidden and article isn't open
-    if (wasHidden){
-        const articleView = document.getElementById('article-view');
-        if (!articleView || articleView.style.display === 'none') btn.style.display = 'none';
+    const rect = article.getBoundingClientRect();
+    const desiredLeft = Math.round(rect.right + 40); // 40px to the right of the <article>
+    const btnWidth = btn.offsetWidth || 44;
+
+    // if placing at desiredLeft would overflow the viewport, fall back to right offset
+    if (desiredLeft + btnWidth > window.innerWidth - 8) {
+        btn.style.removeProperty('--scroll-left');
+        btn.style.setProperty('--scroll-right', fallbackRight + 'px');
+    } else {
+        btn.style.setProperty('--scroll-left', desiredLeft + 'px');
+        btn.style.removeProperty('--scroll-right');
     }
 }
 

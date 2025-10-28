@@ -292,10 +292,15 @@ z-index:2;
 /* smaller breakpoints */
 @media (max-width:600px){#binary-bg .bit{opacity:.09}}
 
-/* Scroll-to-top floating button shown when articles are open */
+/* Scroll-to-top floating button shown when articles are open.
+   Positioning uses a CSS variable --scroll-left when available so JavaScript
+   only writes the numeric left value and CSS handles the final placement.
+*/
 .scroll-top{
 	position:fixed;
-	right:20px;
+	/* If --scroll-left is set, use it; otherwise fall back to right offset */
+	left: var(--scroll-left, auto);
+	right: var(--scroll-right, 20px);
 	bottom:22px;
 	z-index:9999;
 	width:44px;
@@ -311,7 +316,7 @@ z-index:2;
 	cursor:pointer;
 	font-size:20px;
 	line-height:1;
-	transition:transform .15s,opacity .15s;
+	transition:transform .15s,opacity .15s,left .12s,right .12s;
 }
 .scroll-top:hover{transform:translateY(-3px)}
 
