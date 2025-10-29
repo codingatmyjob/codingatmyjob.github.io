@@ -181,6 +181,9 @@ box-shadow:0 2px 8px var(--shadow);transition:transform .3s,box-shadow .3s;curso
 
 .article-content{padding:25px}
 .article-date{font-size:13px;color:#9aa;margin-bottom:8px}
+
+/* dark mode: make article date more visible */
+[data-theme="dark"] .article-date{color:rgba(255,255,255,0.8) !important}
 .article-title{font-size:20px;margin-bottom:12px}
 .article-description{font-size:14px;color:#909090}
 .article-tags{display:flex;gap:8px;flex-wrap:wrap;margin-top:15px}
@@ -207,7 +210,7 @@ color:var(--text-primary);font-family:system-ui,-apple-system,"Segoe UI",Roboto,
 }
 .article-container > .back-link, #article-view .back-link{display:inline-block;margin-bottom:18px;background:transparent;border:1px solid var(--border);color:var(--text-primary);padding:8px 12px;border-radius:8px;cursor:pointer}
 .article-container h1{font-size:32px;margin:6px 0 6px;color:var(--text-primary);letter-spacing:-.2px}
-.article-container .meta{display:flex;gap:12px;align-items:center;margin-bottom:20px;color:#9aa;font-size:13px}
+.article-container .meta{display:flex;gap:12px;align-items:center;margin-bottom:20px;color:var(--text-primary);font-size:13px}
 .article-container .meta .tag{background:var(--bg-primary);color:#cfcfcf;padding:4px 10px;border-radius:6px;font-size:12px}
 
 .article-container article{color:var(--text-primary);font-size:17px}

@@ -151,7 +151,9 @@ async function openArticle(path) {
         articleView.appendChild(wrapper);
         articlesView.style.display = 'none';
         articleView.style.display = 'block';
-
+    // hide the sidebar tag filter when viewing a single article
+    const tagFilter = document.getElementById('tag-filter');
+    if (tagFilter) tagFilter.style.display = 'none';
     // show scroll-to-top button when article is open and update CSS placement
     const st = document.getElementById('scroll-top');
     if (st) {
@@ -175,6 +177,9 @@ function closeArticle() {
     articleView.style.display = 'none';
     articleView.innerHTML = '';
     articlesView.style.display = 'block';
+    // show the sidebar tag filter when returning to the articles list
+    const tagFilter = document.getElementById('tag-filter');
+    if (tagFilter) tagFilter.style.display = '';
     // hide scroll-to-top when returning to articles list
     const st = document.getElementById('scroll-top');
     if (st) st.style.display = 'none';
@@ -199,6 +204,8 @@ window.addEventListener('popstate', (e) => {
             articleView.style.display = 'none';
             articleView.innerHTML = '';
             articlesView.style.display = 'block';
+                const tagFilter = document.getElementById('tag-filter');
+                if (tagFilter) tagFilter.style.display = '';
         }
     }
 });
@@ -212,6 +219,11 @@ document.addEventListener('DOMContentLoaded', () => {
     if (st) st.style.display = 'none';
     // initialize tag filters UI
     try{ initTagFilters(); }catch(e){console.warn('initTagFilters failed', e)}
+    // show/hide tag filter depending on whether an article is opened via query
+    const tagFilter = document.getElementById('tag-filter');
+    if (tagFilter) {
+        if (a) tagFilter.style.display = 'none'; else tagFilter.style.display = '';
+    }
     if (a) openArticle(a);
 });
 
