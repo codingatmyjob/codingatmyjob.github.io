@@ -210,6 +210,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // ensure scroll-top is hidden by default
     const st = document.getElementById('scroll-top');
     if (st) st.style.display = 'none';
+    // initialize tag filters UI
+    try{ initTagFilters(); }catch(e){console.warn('initTagFilters failed', e)}
     if (a) openArticle(a);
 });
 
@@ -256,3 +258,64 @@ window.addEventListener('resize', function(){
     const articleView = document.getElementById('article-view');
     if (articleView && articleView.style.display !== 'none') positionScrollButton();
 });
+
+
+// Tag filter helpers
+let currentTagFilter = null;
+function initTagFilters(){
+    const listEl = document.getElementById('tag-filter-list');
+    if (!listEl) return;
+
+    // gather unique tags from article cards
+    const tagEls = Array.from(document.querySelectorAll('.article-card .tag'));
+    const tags = Array.from(new Set(tagEls.map(t => t.textContent.trim()).filter(Boolean)));
+    tags.sort((a,b)=>a.localeCompare(b));
+
+    // clear any existing
+    listEl.innerHTML = '';
+    tags.forEach(tag => {
+        const btn = document.createElement('button');
+        btn.className = 'filter-btn';
+        btn.type = 'button';
+        btn.textContent = tag;
+        btn.setAttribute('data-tag', tag);
+        btn.onclick = () => {
+            // single-select: if clicking same tag, clear; otherwise set
+            if (currentTagFilter === tag) {
+                clearFilter();
+            } else {
+                applyFilter(tag);
+            }
+        };
+        listEl.appendChild(btn);
+    });
+}
+
+function applyFilter(tag){
+    currentTagFilter = tag;
+    // mark active button
+    document.querySelectorAll('#tag-filter-list .filter-btn').forEach(b=>{
+        if (b.getAttribute('data-tag')===tag) b.classList.add('active'); else b.classList.remove('active');
+    });
+
+    // show/hide article cards
+    document.querySelectorAll('.articles-grid .article-card').forEach(card => {
+        const cardTags = Array.from(card.querySelectorAll('.tag')).map(t=>t.textContent.trim());
+        const match = cardTags.some(t=>t.toLowerCase() === tag.toLowerCase());
+        card.style.display = match ? '' : 'none';
+    });
+
+    // ensure main articles view visible (in case an article was open)
+    const articlesView = document.getElementById('articles-view');
+    const articleView = document.getElementById('article-view');
+    if (articlesView){ articlesView.style.display = 'block'; }
+    if (articleView){ articleView.style.display = 'none'; articleView.innerHTML = ''; }
+    history.pushState({}, '', location.pathname); // clear query
+    window.scrollTo({ top: 0, behavior: 'instant' });
+}
+
+function clearFilter(){
+    currentTagFilter = null;
+    document.querySelectorAll('#tag-filter-list .filter-btn').forEach(b=>b.classList.remove('active'));
+    document.querySelectorAll('.articles-grid .article-card').forEach(card => card.style.display = '');
+}

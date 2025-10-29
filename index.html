@@ -25,7 +25,12 @@
 
     <div class="container">
         <header>
-            <h2 class="title" onclick="closeArticle()" onkeydown="if(event.key==='Enter'||event.key===' ') closeArticle()" role="button" tabindex="0" aria-label="Return Home">Articles & Projects</h2>
+            <h2 class="title" onclick="closeArticle()" onkeydown="if(event.key==='Enter'||event.key===' ') closeArticle()" role="button" tabindex="0" aria-label="Return Home">
+                <!-- <svg class="home-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                    <path fill="currentColor" d="M6 19h3v-5q0-.425.288-.712T10 13h4q.425 0 .713.288T15 14v5h3v-9l-6-4.5L6 10zm-2 0v-9q0-.475.213-.9t.587-.7l6-4.5q.525-.4 1.2-.4t1.2.4l6 4.5q.375.275.588.7T20 10v9q0 .825-.588 1.413T18 21h-4q-.425 0-.712-.288T13 20v-5h-2v5q0 .425-.288.713T10 21H6q-.825 0-1.412-.587T4 19m8-6.75"></path>
+                </svg> -->
+                Articles & Projects
+            </h2>
             <button class="theme-toggle" onclick="toggleTheme()">
                 <div class="switch"></div>
                 <span id="theme-icon">Light Mode</span>
@@ -66,6 +71,14 @@
                         </svg>
                     </a>
                 </div>
+                <!-- Tag filters: populated dynamically from article cards -->
+                <div class="tag-filter" id="tag-filter" aria-label="Filter articles by tag">
+                    <div class="tag-filter-title">
+                        <span>Filter by tag:</span>
+                        <button class="clear-filter-btn" id="clear-filter-btn" onclick="clearFilter()" aria-label="Clear tag filter">Clear</button>
+                    </div>
+                    <div class="tag-filter-list" id="tag-filter-list"></div>
+                </div>
             </aside>
 
             <section class="content-area">
@@ -77,13 +90,13 @@
                             <div class="article-image">VirtualBox Lab</div>
                             <div class="article-content">
                                 <div class="article-date">Coming soon...</div>
-                                <div class="article-title">Set up a Home Lab on VirtualBox with me!</div>
+                                <div class="article-title">Set up a Home Lab on VirtualBox!</div>
                                 <div class="article-description">Learn how to set up a home lab on VirtualBox, everything from specific Linux distros to virtual networks.</div>
                                 <div class="article-tags">
                                     <span class="tag">VM</span>
                                     <span class="tag">Security</span>
                                     <span class="tag">Pentest</span>
-                                    <span class="tag">Metasploit</span>
+                                    <span class="tag">Networking</span>
                                 </div>
                             </div>
                         </div>
@@ -96,7 +109,7 @@
                                 <div class="article-description">A technical write up detailing steps taken to acquire user and root flags on the Artificial HTB Machine.</div>
                                 <div class="article-tags">
                                     <span class="tag">HTB</span>
-                                    <span class="tag">Pentest</span>
+                                    <span class="tag">Machine</span>
                                     <span class="tag">Writeup</span>
                                 </div>
                             </div>
@@ -111,7 +124,7 @@
                                 <div class="article-title">How I passed CompTIA Security+ SY0-701</div>
                                 <div class="article-description">A Security+ review, glimpse into my study plan, resources used, and testing skills that helped me pass.</div>
                                 <div class="article-tags">
-                                    <span class="tag">Certification</span>
+                                    <span class="tag">CERT</span>
                                     <span class="tag">Security</span>
                                 </div>
                             </div>
@@ -126,7 +139,7 @@
                                 <div class="article-title">How I passed CompTIA Network+ N10-009</div>
                                 <div class="article-description">A Network+ review, including study resources used, and exam-day tips that helped me pass.</div>
                                 <div class="article-tags">
-                                    <span class="tag">Certification</span>
+                                    <span class="tag">CERT</span>
                                     <span class="tag">Networking</span>
                                 </div>
                             </div>

@@ -14,13 +14,14 @@ Variables & Base
 }
 
 [data-theme="light"]{
---bg-primary:#ffffff;
---bg-secondary:#eceeef;
---text-primary:#2c3e50;
---accent:#2c3e50; /* dark-grey accent in light mode */
---border:#cccccc;
---shadow:rgba(0,0,0,0.1);
---binary-color:rgba(0,0,0,0.06);
+	/* Soft grey / dark grey scheme (user provided palette) */
+	--bg-primary:#D3D3D3;    /* light gray - page background */
+	--bg-secondary:#E9E9E9;  /* slightly lighter secondary panels */
+	--text-primary:#363636;   /* dark gray - primary text */
+	--accent:#5E5E5E;        /* medium gray - accents, links */
+	--border:#878787;        /* light-medium gray - dividers */
+	--shadow:rgba(54,54,54,0.06);
+	--binary-color:rgba(54,54,54,0.06);
 }
 
 /* reset / base */
@@ -101,7 +102,7 @@ overflow-y:auto;
 }
 .profile-photo{width:180px;height:180px;border-radius:50%;border:2px solid var(--accent);object-fit:cover;margin-bottom:20px}
 .sidebar h1{font-size:28px;margin-bottom:10px;color:var(--text-primary)}
-.sidebar .title{font-size:16px;color:#b0b0b0;margin-bottom:15px;border-bottom:1px solid var(--border);padding-bottom:15px}
+.sidebar .title{font-size:16px;color:#909090;margin-bottom:15px;border-bottom:1px solid var(--border);padding-bottom:15px}
 .sidebar .bio{font-size:14px;color:#909090;text-align:left;margin-bottom:25px;line-height:1.7}
 
 /* icon links */
@@ -112,6 +113,54 @@ color:var(--accent);background:var(--bg-primary);border:1px solid var(--border);
 }
 .icon-btn:hover{background:var(--accent);color:var(--bg-primary);transform:translateY(-2px)}
 .icon-btn svg{width:22px;height:22px}
+
+/* Sidebar tag filter */
+.tag-filter{margin-top:20px;text-align:left;padding:0 8px}
+
+/* modern widget styling for tag filter */
+.tag-filter{
+	margin-top:25px;
+	text-align:left;
+	padding:12px;
+	border-radius:12px;
+	background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.02));
+	border:1px solid var(--border);
+	box-shadow:0 6px 18px rgba(0,0,0,0.06);
+}
+.tag-filter-title{display:flex;align-items:center;justify-content:space-between;font-size:13px;color:var(--text-primary);margin-bottom:10px;font-weight:700}
+.clear-filter-btn{background:transparent;border:none;color:var(--accent);font-weight:600;cursor:pointer;padding:6px 8px;border-radius:8px}
+.clear-filter-btn:hover{background:rgba(0,0,0,0.04)}
+.tag-filter-list{display:flex;flex-wrap:wrap;gap:8px}
+/* Make filter buttons visually match the .tag pills used on the article cards */
+.tag-filter-list .filter-btn{
+	/* slightly larger and rounder than the article .tag pills */
+	padding:6px 14px;
+	border-radius:8px;
+	border:1px solid var(--border);
+	background:var(--bg-primary);
+	color:#a0a0a0; /* match .tag color */
+	cursor:pointer;
+	font-size:13px;
+	line-height:1;
+	transition:transform .08s,box-shadow .08s,background .12s,color .12s;
+}
+.tag-filter-list .filter-btn:hover{transform:translateY(-2px);box-shadow:0 6px 16px rgba(0,0,0,0.06)}
+.tag-filter-list .filter-btn.active{
+	background:var(--accent);
+	color:var(--bg-primary);
+	border-color:var(--accent);
+	box-shadow:0 8px 20px rgba(0,0,0,0.12);
+}
+
+@media (max-width:768px){
+	.tag-filter{padding:8px 0}
+}
+
+/* header home icon sizing inside the title */
+.home-icon{width:1.35rem;height:1.35rem;vertical-align:middle;margin-right:10px;fill:var(--accent);flex:0 0 auto}
+
+/* ensure the title remains centered but clickable */
+header .title{display:flex;align-items:center;gap:8px}
 
 /* main content */
 .main-content{display:flex;flex-direction:column;align-items:center;margin-left:var(--sidebar-width)}
@@ -127,8 +176,8 @@ box-shadow:0 2px 8px var(--shadow);transition:transform .3s,box-shadow .3s;curso
 }
 .article-card:hover{transform:translateY(-5px);box-shadow:0 8px 16px var(--shadow)}
 
-.article-image{height:180px;background:var(--bg-primary);display:flex;align-items:center;justify-content:center;text-align:center;border-radius:8px 8px 0 0;overflow:hidden}
-.article-image img{width:100%;height:100%;object-fit:contain;object-position:center;display:block;border-radius:inherit;background:var(--bg-primary)}
+.article-image{height:180px;background:var(--border);;display:flex;align-items:center;justify-content:center;text-align:center;border-radius:8px 8px 0 0;overflow:hidden}
+.article-image img{width:100%;height:100%;object-fit:contain;object-position:center;display:block;border-radius:inherit;background:var(--border);}
 
 .article-content{padding:25px}
 .article-date{font-size:13px;color:#9aa;margin-bottom:8px}
