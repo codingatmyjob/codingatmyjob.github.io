@@ -118,28 +118,66 @@ color:var(--accent);background:var(--bg-primary);border:1px solid var(--border);
 .tag-filter{margin-top:20px;text-align:left;padding:0 8px}
 
 /* modern widget styling for tag filter */
-.tag-filter{
-	margin-top:25px;
-	text-align:left;
-	padding:12px;
-	border-radius:12px;
-	background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.02));
-	border:1px solid var(--border);
+.tag-filter.docked{
+	/* Inline / centered layout: center above the articles, keep border and
+	   make it comfortably wide. This applies when the viewport is NOT
+	   wide enough to dock it to the right of the sidebar. */
+	display: block;
+	position: relative; /* flow with the document */
+	margin: 18px auto;
+	width: min(1100px, 92%);
+	max-width:1100px;
 	box-shadow:0 6px 18px rgba(0,0,0,0.06);
+	padding:14px;
+	border:1px solid var(--border);
+	border-radius:12px;
+	background:var(--bg-secondary);
 }
-.tag-filter-title{display:flex;align-items:center;justify-content:space-between;font-size:13px;color:var(--text-primary);margin-bottom:10px;font-weight:700}
-.clear-filter-btn{background:transparent;border:none;color:var(--accent);font-weight:600;cursor:pointer;padding:6px 8px;border-radius:8px}
 
-/* When an article is open we hide the sidebar tag-filter to avoid distraction.
-   Use a body class so this works reliably across responsive layouts. */
-body.article-open #tag-filter {
-    display: none !important;
+/* Ensure the Clear button sits at the top-right of the filter panel */
+.tag-filter{position:relative}
+.tag-filter .tag-filter-title{display:flex;align-items:center;justify-content:space-between;font-size:13px;color:var(--text-primary);margin-bottom:10px;font-weight:700}
+
+/* On very wide displays, make it a fixed dock to the right of the sidebar. */
+@media (min-width:2200px){
+	.tag-filter.docked{
+		position:fixed;
+		left: calc(var(--sidebar-width) + 18px); /* a small gutter to the right of the sidebar */
+		top: 120px; /* aligns vertically near the profile area; adjust if needed */
+		width:260px;
+		z-index:3;
+		margin:0;
+		padding:12px;
+	}
 }
-.clear-filter-btn:hover{background:rgba(0,0,0,0.04)}
-.tag-filter-list{display:flex;flex-wrap:wrap;gap:8px}
-/* Make filter buttons visually match the .tag pills used on the article cards */
+
+/* On small screens keep the panel full-width stacked above content */
+@media (max-width:768px){
+	.tag-filter.docked{
+		position:static;
+		margin:12px 16px;
+		width:calc(100% - 32px);
+		box-shadow:none;
+		border-radius:8px;
+	}
+}
+
+/* Clear button removed — no styles required */
+
+/* Slightly increase filter button sizing when the panel is inline so it feels roomy */
+.tag-filter.docked .tag-filter-list .filter-btn{
+	padding:8px 16px;
+}
+
+/* Ensure filter buttons have spacing between them */
+.tag-filter-list{
+	display:flex;
+	flex-wrap:wrap;
+	gap:6px;
+	align-items:center;
+}
+
 .tag-filter-list .filter-btn{
-	/* slightly larger and rounder than the article .tag pills */
 	padding:6px 14px;
 	border-radius:8px;
 	border:1px solid var(--border);

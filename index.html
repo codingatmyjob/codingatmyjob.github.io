@@ -71,15 +71,18 @@
                         </svg>
                     </a>
                 </div>
-                <!-- Tag filters: populated dynamically from article cards -->
-                <div class="tag-filter" id="tag-filter" aria-label="Filter articles by tag">
+                <!-- Tag filters: populated dynamically from article cards (moved to docked panel) -->
+            </aside>
+
+            <!-- Docked tag filter: standalone panel just to the right of the sidebar on desktop.
+                 Keeps the same id (`tag-filter`) so existing JS continues to work. On small screens
+                 it will flow into the document (stacked above content). -->
+            <div class="tag-filter docked" id="tag-filter" aria-label="Filter articles by tag">
                     <div class="tag-filter-title">
                         <span>Filter by tag:</span>
-                        <button class="clear-filter-btn" id="clear-filter-btn" onclick="clearFilter()" aria-label="Clear tag filter">Clear</button>
                     </div>
-                    <div class="tag-filter-list" id="tag-filter-list"></div>
-                </div>
-            </aside>
+                <div class="tag-filter-list" id="tag-filter-list"></div>
+            </div>
 
             <section class="content-area">
 
