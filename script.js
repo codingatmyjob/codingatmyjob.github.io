@@ -320,7 +320,6 @@ function applyFilter(tag){
     if (articlesView){ articlesView.style.display = 'block'; }
     if (articleView){ articleView.style.display = 'none'; articleView.innerHTML = ''; }
     history.pushState({}, '', location.pathname); // clear query
-    window.scrollTo({ top: 0, behavior: 'instant' });
 }
 
 function clearFilter(){

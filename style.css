@@ -162,8 +162,8 @@ body.article-open #tag-filter{display:none !important}
 	.tag-filter.docked{
 		/* Center and match the content area's effective width on mobile */
 		position:static;
-		margin:12px auto;
-		width:calc(100% - 32px);
+		margin: 20px; /* keeping margins consistent */
+        width: calc(100% - 40px); /*aligning with article-grid when on mobile*/
 		max-width:calc(1100px - 40px); /* keep same max as inline state */
 		box-sizing:border-box;
 		padding:14px 28px; /* match inline padding so inner content lines up with articles */
