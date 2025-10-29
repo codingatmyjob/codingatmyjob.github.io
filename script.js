@@ -151,9 +151,8 @@ async function openArticle(path) {
         articleView.appendChild(wrapper);
         articlesView.style.display = 'none';
         articleView.style.display = 'block';
-    // hide the sidebar tag filter when viewing a single article
-    const tagFilter = document.getElementById('tag-filter');
-    if (tagFilter) tagFilter.style.display = 'none';
+    // mark body so CSS can hide sidebar elements reliably when an article is open
+    document.body.classList.add('article-open');
     // show scroll-to-top button when article is open and update CSS placement
     const st = document.getElementById('scroll-top');
     if (st) {
@@ -178,8 +177,7 @@ function closeArticle() {
     articleView.innerHTML = '';
     articlesView.style.display = 'block';
     // show the sidebar tag filter when returning to the articles list
-    const tagFilter = document.getElementById('tag-filter');
-    if (tagFilter) tagFilter.style.display = '';
+    document.body.classList.remove('article-open');
     // hide scroll-to-top when returning to articles list
     const st = document.getElementById('scroll-top');
     if (st) st.style.display = 'none';
@@ -204,8 +202,7 @@ window.addEventListener('popstate', (e) => {
             articleView.style.display = 'none';
             articleView.innerHTML = '';
             articlesView.style.display = 'block';
-                const tagFilter = document.getElementById('tag-filter');
-                if (tagFilter) tagFilter.style.display = '';
+                document.body.classList.remove('article-open');
         }
     }
 });
@@ -222,7 +219,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // show/hide tag filter depending on whether an article is opened via query
     const tagFilter = document.getElementById('tag-filter');
     if (tagFilter) {
-        if (a) tagFilter.style.display = 'none'; else tagFilter.style.display = '';
+        if (a) document.body.classList.add('article-open'); else document.body.classList.remove('article-open');
     }
     if (a) openArticle(a);
 });
