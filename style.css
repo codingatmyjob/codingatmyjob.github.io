@@ -134,6 +134,10 @@ color:var(--accent);background:var(--bg-primary);border:1px solid var(--border);
 	background:var(--bg-secondary);
 }
 
+/* Hide the tag-filter panel whenever an article is open. Using a body class
+	avoids timing/order issues and works for both docked and inline states. */
+body.article-open #tag-filter{display:none !important}
+
 /* Ensure the Clear button sits at the top-right of the filter panel */
 .tag-filter{position:relative}
 .tag-filter .tag-filter-title{display:flex;align-items:center;justify-content:space-between;font-size:13px;color:var(--text-primary);margin-bottom:10px;font-weight:700}
