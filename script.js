@@ -187,7 +187,7 @@ function closeArticle() {
         st.style.removeProperty('--scroll-right');
     }
     history.pushState({}, '', location.pathname); // clear query
-    window.scrollTo({ top: 0, behavior: 'instant' });
+    // Do not auto-scroll when applying a tag filter; keep user's scroll position
 }
 
 // handle back/forward navigation

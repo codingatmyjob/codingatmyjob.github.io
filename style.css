@@ -160,9 +160,13 @@ body.article-open #tag-filter{display:none !important}
 /* On small screens keep the panel full-width stacked above content */
 @media (max-width:768px){
 	.tag-filter.docked{
+		/* Center and match the content area's effective width on mobile */
 		position:static;
-		margin:12px 16px;
+		margin:12px auto;
 		width:calc(100% - 32px);
+		max-width:calc(1100px - 40px); /* keep same max as inline state */
+		box-sizing:border-box;
+		padding:14px 28px; /* match inline padding so inner content lines up with articles */
 		box-shadow:none;
 		border-radius:8px;
 	}
