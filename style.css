@@ -115,7 +115,7 @@ color:var(--accent);background:var(--bg-primary);border:1px solid var(--border);
 .icon-btn svg{width:22px;height:22px}
 
 /* Sidebar tag filter */
-.tag-filter{margin-top:20px;text-align:left;padding:0 8px}
+.tag-filter{text-align:left;padding:0 8px}
 
 /* modern widget styling for tag filter */
 .tag-filter.docked{
@@ -124,11 +124,11 @@ color:var(--accent);background:var(--bg-primary);border:1px solid var(--border);
 	   wide enough to dock it to the right of the sidebar. */
 	display: block;
 	position: relative; /* flow with the document */
-	margin: 18px auto;
-	 /* match article/grid width but subtract 40px to account for the
-		 extra padding added to the article grid elsewhere */
-	 width: min(calc(1100px - 40px), calc(92% - 40px));
-	 max-width: calc(1100px - 40px);
+	margin-bottom: 18px;
+    margin-right: auto;
+    margin-left: auto;
+	width: min(calc(1100px - 40px), calc(92% - 40px));
+	max-width: calc(1100px - 40px);
 	box-shadow:0 6px 18px rgba(0,0,0,0.06);
 	padding:14px;
 	border:1px solid var(--border);
