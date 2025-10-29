@@ -300,6 +300,21 @@ li{margin:4px 0}
 	color: var(--text-primary) !important;
 }
 
+/* Light-mode overrides for small UI elements so they remain visible */
+[data-theme="light"] .tag{
+	/* make tags stand out against the soft gray page background */
+	background:var(--accent) !important;
+	color:var(--bg-primary) !important;
+	border-color:rgba(0,0,0,0.06);
+}
+
+[data-theme="light"] .article-date{
+	/* make the date readable in light mode */
+	color:var(--accent) !important;
+}
+
+[data-theme="light"] .article-description{color:#6f6f6f}
+
 /* =========================
 Responsive: Mobile tweaks
 - Keep desktop centering intact
