@@ -142,7 +142,7 @@ color:var(--accent);background:var(--bg-primary);border:1px solid var(--border);
 @media (min-width:2200px){
 	.tag-filter.docked{
 		position:fixed;
-		left: calc(var(--sidebar-width) + 18px); /* a small gutter to the right of the sidebar */
+		left: calc(var(--sidebar-width) + 40px); /* a small gutter to the right of the sidebar */
 		top: 120px; /* aligns vertically near the profile area; adjust if needed */
 		width:260px;
 		z-index:3;
