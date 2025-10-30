@@ -331,7 +331,7 @@ Responsive: Mobile tweaks
 header{justify-content:space-between;padding-left:16px;padding-right:16px;gap:12px}
 header > .title, header .title{
 position:static;transform:none;margin:0;font-size:1.05rem;color:var(--text-primary);
-display:inline-block;flex:0 0 auto;max-width:calc(100% - 160px);overflow-wrap:break-word;overflow:visible;text-overflow:clip;white-space:normal;word-break:break-word;vertical-align:middle
+display:inline-block;flex:0 0 auto;max-width:calc(100% - 262px);overflow-wrap:break-word;text-overflow:clip;white-space:normal;word-break:break-word;vertical-align:middle /* 1/3 of iphone 393px window width */
 }
 
 .theme-toggle{flex:0 0 auto;white-space:nowrap}
