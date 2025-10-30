@@ -10,6 +10,7 @@ Variables & Base
 --shadow:rgba(0,255,65,0.1);
 --sidebar-width:340px;
 --header-gap:40px;
+--filter-gap:12px;
 --binary-color: rgba(80,255,140,0.06);
 }
 
@@ -53,7 +54,7 @@ border-bottom:1px solid var(--border);
 .filter-dropdown-wrap{position:relative}
 .filter-toggle{appearance:none;padding:10px 20px;border-radius:8px;border:1px solid var(--border);background:var(--bg-secondary);color:var(--text-primary);font-size:14px;cursor:pointer;display:flex;align-items:center;gap:12px}
 .filter-toggle[aria-expanded="true"]{box-shadow:0 8px 24px rgba(0,0,0,0.12)}
-.filter-panel{position:absolute;top:calc(100% + 12px);left:50%;transform:translateX(-50%);width:320px;background:var(--bg-secondary);border:1px solid var(--border);border-radius:10px;box-shadow:0 18px 48px rgba(0,0,0,0.12);display:none;z-index:50;--filter-row-h:44px}
+.filter-panel{position:absolute;top:calc(100% + var(--filter-gap));left:50%;transform:translateX(-50%);width:320px;background:var(--bg-secondary);border:1px solid var(--border);border-radius:10px;box-shadow:0 18px 48px rgba(0,0,0,0.12);display:none;z-index:50;--filter-row-h:44px}
 .filter-panel[aria-hidden="false"]{display:block}
 .filter-panel-inner{height:var(--filter-row-h);display:flex;align-items:center;padding:0 12px;border-bottom:1px solid var(--border)}
 .filter-panel-title{font-weight:700;margin:0;color:var(--text-primary)}
@@ -66,8 +67,8 @@ border-bottom:1px solid var(--border);
 .filter-clear-btn:hover{background:var(--accent);color:var(--bg-primary);border-color:var(--accent)}
 
 /* little arrow pointing up into the Filter button */
-.filter-panel::before{content:"";position:absolute;top:-8px;left:50%;transform:translateX(-50%);border-left:8px solid transparent;border-right:8px solid transparent;border-bottom:8px solid var(--bg-secondary);z-index:51}
-.filter-panel::after{content:"";position:absolute;top:-9px;left:50%;transform:translateX(-50%);border-left:9px solid transparent;border-right:9px solid transparent;border-bottom:9px solid var(--border);z-index:50}
+.filter-panel::before{content:"";position:absolute;top:-8px;left:var(--filter-arrow-left,50%);transform:translateX(-50%);border-left:8px solid transparent;border-right:8px solid transparent;border-bottom:8px solid var(--bg-secondary);z-index:51}
+.filter-panel::after{content:"";position:absolute;top:-9px;left:var(--filter-arrow-left,50%);transform:translateX(-50%);border-left:9px solid transparent;border-right:9px solid transparent;border-bottom:9px solid var(--border);z-index:50}
 
 /* divider below the title to match the footer divider */
 .filter-panel-divider{
@@ -354,6 +355,13 @@ z-index:2;
 /* smaller breakpoints */
 @media (max-width:600px){#binary-bg .bit{opacity:.09}}
 
+/* On very small screens hide the visual switch inside the theme toggle
+	 so only the label/text remains. Adjust padding so the button looks right. */
+@media (max-width:600px){
+	.theme-toggle .switch{display:none}
+	.theme-toggle{padding-left:12px;padding-right:12px}
+}
+
 /* Scroll-to-top floating button shown when articles are open.
    Positioning uses a CSS variable --scroll-left when available so JavaScript
    only writes the numeric left value and CSS handles the final placement.
@@ -383,5 +391,9 @@ z-index:2;
 .scroll-top:hover{transform:translateY(-3px)}
 
 @media (max-width:600px){
-	.scroll-top{right:14px;bottom:16px;width:40px;height:40px;font-size:18px}
+	/* On small screens center the panel on the viewport but allow the arrow
+	   to be positioned (via --filter-arrow-left) so it can point at the
+	   Filter toggle button. JS will set --filter-arrow-left and top when
+	   the panel is opened. */
+	.filter-panel{position:fixed;left:50%;transform:translateX(-50%);width:calc(100% - 32px);box-shadow:0 18px 48px rgba(0,0,0,0.12);border-radius:8px;margin-top:0;--filter-arrow-left:50%}
 }

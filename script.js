@@ -304,26 +304,85 @@ function initTagFilters(){
         const toggle = document.getElementById('filter-toggle');
         const panel = document.getElementById('tag-filter-panel');
         const clearBtn = document.getElementById('filter-clear-btn');
-        if(toggle && panel){
-            toggle.addEventListener('click', ()=>{
+        if (toggle && panel) {
+            // helper to position the centered panel and arrow on small screens
+            function positionFilterPanel() {
+                const tRect = toggle.getBoundingClientRect();
+                const pRect = panel.getBoundingClientRect();
+                // If panel hasn't been laid out yet, retry shortly
+                if (!pRect.width || pRect.width < 8) {
+                    return setTimeout(positionFilterPanel, 20);
+                }
+
+                // compute arrow X as percentage of panel width so it's robust
+                const arrowX = (tRect.left + tRect.width / 2) - pRect.left;
+                const pct = Math.max(5, Math.min(95, (arrowX / pRect.width) * 100));
+                panel.style.setProperty('--filter-arrow-left', pct + '%');
+
+                // determine gap from CSS
+                let gap = 12; // default px (match --filter-gap in CSS)
+                try {
+                    const val = getComputedStyle(document.documentElement).getPropertyValue('--filter-gap');
+                    if (val) gap = parseFloat(val) || gap;
+                } catch (e) {}
+
+                // set top depending on panel positioning context
+                const panelPos = getComputedStyle(panel).position;
+                if (panelPos === 'fixed') {
+                    // viewport coordinates
+                    panel.style.setProperty('top', (tRect.bottom + gap) + 'px');
+                } else {
+                    // absolute positioned: compute relative to offsetParent
+                    const parent = panel.offsetParent || document.documentElement;
+                    const parentRect = parent.getBoundingClientRect();
+                    const topRel = (tRect.bottom - parentRect.top) + gap;
+                    panel.style.setProperty('top', topRel + 'px');
+                }
+            }
+
+            toggle.addEventListener('click', () => {
                 const expanded = toggle.getAttribute('aria-expanded') === 'true';
                 toggle.setAttribute('aria-expanded', String(!expanded));
                 panel.setAttribute('aria-hidden', String(expanded));
+
                 // if opening, focus the first tag button for keyboard users
-                if(!expanded){
+                if (!expanded) {
                     const first = panel.querySelector('.filter-item');
-                    if(first) first.focus();
+                    if (first) first.focus();
+                    // position arrow/panel for small viewports
+                    // allow the browser to reflect layout changes first
+                    requestAnimationFrame(positionFilterPanel);
+                } else {
+                    // closed -> clear inline placement overrides
+                    panel.style.removeProperty('--filter-arrow-left');
+                    panel.style.removeProperty('top');
                 }
             });
-            // close when clicking outside
-            document.addEventListener('click', (e)=>{
-                if(!wrap.contains(e.target)){
-                    panel.setAttribute('aria-hidden','true');
-                    toggle.setAttribute('aria-expanded','false');
+
+            // close when clicking outside (also clear placement)
+            document.addEventListener('click', (e) => {
+                if (!wrap.contains(e.target)) {
+                    panel.setAttribute('aria-hidden', 'true');
+                    toggle.setAttribute('aria-expanded', 'false');
+                    panel.style.removeProperty('--filter-arrow-left');
+                    panel.style.removeProperty('top');
                 }
             });
-            // ESC closes
-            document.addEventListener('keydown', (e)=>{ if(e.key === 'Escape'){ panel.setAttribute('aria-hidden','true'); toggle.setAttribute('aria-expanded','false'); }});
+
+            // ESC closes (and clear placement)
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    panel.setAttribute('aria-hidden', 'true');
+                    toggle.setAttribute('aria-expanded', 'false');
+                    panel.style.removeProperty('--filter-arrow-left');
+                    panel.style.removeProperty('top');
+                }
+            });
+
+            // reposition while open when resizing
+            window.addEventListener('resize', () => {
+                if (panel.getAttribute('aria-hidden') === 'false') requestAnimationFrame(positionFilterPanel);
+            });
         }
         if(clearBtn) clearBtn.addEventListener('click', clearFilter);
         return;
