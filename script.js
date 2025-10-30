@@ -420,6 +420,9 @@ function applyFilter(tag){
             card.style.display = match ? '' : 'none';
         });
         history.pushState({}, '', location.pathname);
+        // reflect active state on the Filter toggle button
+        const toggleBtn = document.getElementById('filter-toggle');
+        if (toggleBtn) toggleBtn.classList.toggle('filters-active', tags.length > 0);
         return;
     }
 
@@ -436,6 +439,9 @@ function applyFilter(tag){
     if (articlesView) articlesView.style.display = 'block';
     if (articleView){ articleView.style.display = 'none'; articleView.innerHTML = ''; }
     history.pushState({}, '', location.pathname); // clear query
+    // update filter-toggle active state for legacy single-tag behavior
+    const toggleBtn2 = document.getElementById('filter-toggle');
+    if (toggleBtn2) toggleBtn2.classList.toggle('filters-active', Boolean(tag));
 }
 
 function clearFilter(){
@@ -446,4 +452,6 @@ function clearFilter(){
     // show all articles
     document.querySelectorAll('.articles-grid .article-card').forEach(card => card.style.display = '');
     history.pushState({}, '', location.pathname);
+    const toggleBtn3 = document.getElementById('filter-toggle');
+    if (toggleBtn3) toggleBtn3.classList.remove('filters-active');
 }
