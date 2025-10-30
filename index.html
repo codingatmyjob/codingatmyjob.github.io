@@ -26,15 +26,30 @@
     <div class="container">
         <header>
             <h2 class="title" onclick="closeArticle()" onkeydown="if(event.key==='Enter'||event.key===' ') closeArticle()" role="button" tabindex="0" aria-label="Return Home">
-                <!-- <svg class="home-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-                    <path fill="currentColor" d="M6 19h3v-5q0-.425.288-.712T10 13h4q.425 0 .713.288T15 14v5h3v-9l-6-4.5L6 10zm-2 0v-9q0-.475.213-.9t.587-.7l6-4.5q.525-.4 1.2-.4t1.2.4l6 4.5q.375.275.588.7T20 10v9q0 .825-.588 1.413T18 21h-4q-.425 0-.712-.288T13 20v-5h-2v5q0 .425-.288.713T10 21H6q-.825 0-1.412-.587T4 19m8-6.75"></path>
-                </svg> -->
                 Articles & Projects
             </h2>
-            <button class="theme-toggle" onclick="toggleTheme()">
-                <div class="switch"></div>
-                <span id="theme-icon">Light Mode</span>
-            </button>
+            <div class="header-controls">
+                <!-- Multi-select filter dropdown (checkboxes) -->
+                <div id="tag-filter-wrap" class="filter-dropdown-wrap" aria-haspopup="true">
+                    <button id="filter-toggle" class="filter-toggle" aria-expanded="false" aria-controls="tag-filter-panel">Filter</button>
+                    <div id="tag-filter-panel" class="filter-panel" role="menu" aria-hidden="true">
+                        <div class="filter-panel-inner">
+                                <div class="filter-panel-title">Filter by tag</div>
+                        </div>
+                        <div class="filter-panel-body">
+                            <div id="tag-filter-list" class="tag-filter-list" role="group" aria-label="Tag filters"></div>
+                        </div>
+                        <div class="filter-panel-footer">
+                            <button id="filter-clear-btn" class="filter-clear-btn">Clear filters</button>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="theme-toggle" onclick="toggleTheme()">
+                    <div class="switch"></div>
+                    <span id="theme-icon">Light Mode</span>
+                </button>
+            </div>
         </header>
 
         <div class="main-content">
@@ -74,15 +89,8 @@
                 <!-- Tag filters: populated dynamically from article cards (moved to docked panel) -->
             </aside>
 
-            <!-- Docked tag filter: standalone panel just to the right of the sidebar on desktop.
-                 Keeps the same id (`tag-filter`) so existing JS continues to work. On small screens
-                 it will flow into the document (stacked above content). -->
-            <div class="tag-filter docked" id="tag-filter" aria-label="Filter articles by tag">
-                    <div class="tag-filter-title">
-                        <span>Filter by tag:</span>
-                    </div>
-                <div class="tag-filter-list" id="tag-filter-list"></div>
-            </div>
+            <!-- Compact filter is now a header dropdown (id="tag-filter-select").
+                 The old docked panel was removed in favor of a simpler dropdown UI. -->
 
             <section class="content-area">
 

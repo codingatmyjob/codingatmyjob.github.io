@@ -25,7 +25,7 @@ document.getElementById('theme-icon').textContent =
         // Clear existing bits
         container.innerHTML = '';
 
-        const vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
+    // (was computing viewport width here previously; not needed anymore)
         for (let i = 0; i < count; i++) {
             const bit = document.createElement('div');
             bit.className = 'bit';
@@ -216,8 +216,8 @@ document.addEventListener('DOMContentLoaded', () => {
     if (st) st.style.display = 'none';
     // initialize tag filters UI
     try{ initTagFilters(); }catch(e){console.warn('initTagFilters failed', e)}
-    // show/hide tag filter depending on whether an article is opened via query
-    const tagFilter = document.getElementById('tag-filter');
+    // show/hide filter UI depending on whether an article is opened via query
+    const tagFilter = document.getElementById('tag-filter-wrap');
     if (tagFilter) {
         if (a) document.body.classList.add('article-open'); else document.body.classList.remove('article-open');
     }
@@ -272,58 +272,119 @@ window.addEventListener('resize', function(){
 // Tag filter helpers
 let currentTagFilter = null;
 function initTagFilters(){
+    // Build a multi-select checkbox panel when tag-filter-wrap exists,
+    // otherwise fall back to legacy button-list behavior if present.
+    const wrap = document.getElementById('tag-filter-wrap');
     const listEl = document.getElementById('tag-filter-list');
-    if (!listEl) return;
-
     // gather unique tags from article cards
     const tagEls = Array.from(document.querySelectorAll('.article-card .tag'));
     const tags = Array.from(new Set(tagEls.map(t => t.textContent.trim()).filter(Boolean)));
     tags.sort((a,b)=>a.localeCompare(b));
 
-    // clear any existing
+    if (wrap && listEl) {
+        listEl.innerHTML = '';
+        tags.forEach(tag=>{
+            // create a chip-like button for each tag
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'filter-item';
+            btn.setAttribute('data-tag', tag);
+            btn.textContent = tag;
+            btn.addEventListener('click', ()=>{
+                // toggle active state
+                btn.classList.toggle('active');
+                // collect selected tags and apply
+                const sel = Array.from(document.querySelectorAll('#tag-filter-list .filter-item.active')).map(b=>b.getAttribute('data-tag'));
+                applyFilter(sel);
+            });
+            listEl.appendChild(btn);
+        });
+
+        // toggle behavior and clear button wiring
+        const toggle = document.getElementById('filter-toggle');
+        const panel = document.getElementById('tag-filter-panel');
+        const clearBtn = document.getElementById('filter-clear-btn');
+        if(toggle && panel){
+            toggle.addEventListener('click', ()=>{
+                const expanded = toggle.getAttribute('aria-expanded') === 'true';
+                toggle.setAttribute('aria-expanded', String(!expanded));
+                panel.setAttribute('aria-hidden', String(expanded));
+                // if opening, focus the first tag button for keyboard users
+                if(!expanded){
+                    const first = panel.querySelector('.filter-item');
+                    if(first) first.focus();
+                }
+            });
+            // close when clicking outside
+            document.addEventListener('click', (e)=>{
+                if(!wrap.contains(e.target)){
+                    panel.setAttribute('aria-hidden','true');
+                    toggle.setAttribute('aria-expanded','false');
+                }
+            });
+            // ESC closes
+            document.addEventListener('keydown', (e)=>{ if(e.key === 'Escape'){ panel.setAttribute('aria-hidden','true'); toggle.setAttribute('aria-expanded','false'); }});
+        }
+        if(clearBtn) clearBtn.addEventListener('click', clearFilter);
+        return;
+    }
+
+    // legacy fallback: populate as buttons if a simple list exists
+    if (!listEl) return;
     listEl.innerHTML = '';
-    tags.forEach(tag => {
+    tags.forEach(tag=>{
         const btn = document.createElement('button');
-        btn.className = 'filter-btn';
-        btn.type = 'button';
-        btn.textContent = tag;
-        btn.setAttribute('data-tag', tag);
-        btn.onclick = () => {
-            // single-select: if clicking same tag, clear; otherwise set
-            if (currentTagFilter === tag) {
-                clearFilter();
-            } else {
-                applyFilter(tag);
-            }
-        };
+        // use the same chip styling so fallback looks consistent
+        btn.className = 'filter-item'; btn.type = 'button'; btn.textContent = tag; btn.setAttribute('data-tag', tag);
+        btn.onclick = () => { if (currentTagFilter === tag) clearFilter(); else applyFilter(tag); };
         listEl.appendChild(btn);
     });
 }
 
 function applyFilter(tag){
-    currentTagFilter = tag;
-    // mark active button
-    document.querySelectorAll('#tag-filter-list .filter-btn').forEach(b=>{
-        if (b.getAttribute('data-tag')===tag) b.classList.add('active'); else b.classList.remove('active');
-    });
+    // Accept either a single tag (string) or an array of tags (multi-select)
+    if (Array.isArray(tag)){
+        const tags = tag.map(t=>String(t).trim()).filter(Boolean);
+        if (tags.length === 0) return clearFilter();
+        currentTagFilter = tags.slice();
+        // sync chip buttons (if present)
+        document.querySelectorAll('#tag-filter-list .filter-item').forEach(b=>{
+            b.classList.toggle('active', tags.includes(b.getAttribute('data-tag')));
+        });
+    // no legacy buttons to sync
 
-    // show/hide article cards
+        // show/hide article cards: require all selected tags (AND semantics)
+        const tagsLC = tags.map(s=>s.toLowerCase());
+        document.querySelectorAll('.articles-grid .article-card').forEach(card => {
+            const cardTags = Array.from(card.querySelectorAll('.tag')).map(t=>t.textContent.trim().toLowerCase());
+            const match = tagsLC.every(s=>cardTags.includes(s));
+            card.style.display = match ? '' : 'none';
+        });
+        history.pushState({}, '', location.pathname);
+        return;
+    }
+
+    // single-tag legacy behavior
+    currentTagFilter = tag;
+    // legacy single-button UI removed; nothing to sync here
     document.querySelectorAll('.articles-grid .article-card').forEach(card => {
         const cardTags = Array.from(card.querySelectorAll('.tag')).map(t=>t.textContent.trim());
         const match = cardTags.some(t=>t.toLowerCase() === tag.toLowerCase());
         card.style.display = match ? '' : 'none';
     });
-
-    // ensure main articles view visible (in case an article was open)
     const articlesView = document.getElementById('articles-view');
     const articleView = document.getElementById('article-view');
-    if (articlesView){ articlesView.style.display = 'block'; }
+    if (articlesView) articlesView.style.display = 'block';
     if (articleView){ articleView.style.display = 'none'; articleView.innerHTML = ''; }
     history.pushState({}, '', location.pathname); // clear query
 }
 
 function clearFilter(){
     currentTagFilter = null;
-    document.querySelectorAll('#tag-filter-list .filter-btn').forEach(b=>b.classList.remove('active'));
+    // clear chip buttons if present
+    document.querySelectorAll('#tag-filter-list .filter-item').forEach(b=>b.classList.remove('active'));
+    // no legacy buttons to clear
+    // show all articles
     document.querySelectorAll('.articles-grid .article-card').forEach(card => card.style.display = '');
+    history.pushState({}, '', location.pathname);
 }

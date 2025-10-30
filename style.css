@@ -9,9 +9,10 @@ Variables & Base
 --border:#2a332a;
 --shadow:rgba(0,255,65,0.1);
 --sidebar-width:340px;
---binary-color:rgba(80,255,140,0.12);
---sidebar-transition:300ms;
+--header-gap:40px;
+--binary-color: rgba(80,255,140,0.06);
 }
+
 
 [data-theme="light"]{
 	/* Soft grey / dark grey scheme (user provided palette) */
@@ -43,7 +44,46 @@ justify-content:flex-end; /* desktop: toggle on right */
 align-items:center;
 padding:20px 20px 20px 0;
 border-bottom:1px solid var(--border);
-margin-bottom:40px;
+}
+
+/* header control grouping (filter dropdown + theme toggle) */
+.header-controls{display:flex;align-items:center;gap:12px;margin-left:auto;padding-right:20px}
+
+/* filter dropdown wrapper (toggle + panel) */
+.filter-dropdown-wrap{position:relative}
+.filter-toggle{appearance:none;padding:10px 20px;border-radius:8px;border:1px solid var(--border);background:var(--bg-secondary);color:var(--text-primary);font-size:14px;cursor:pointer;display:flex;align-items:center;gap:12px}
+.filter-toggle[aria-expanded="true"]{box-shadow:0 8px 24px rgba(0,0,0,0.12)}
+.filter-panel{position:absolute;top:calc(100% + 12px);left:50%;transform:translateX(-50%);width:320px;background:var(--bg-secondary);border:1px solid var(--border);border-radius:10px;box-shadow:0 18px 48px rgba(0,0,0,0.12);display:none;z-index:50;--filter-row-h:44px}
+.filter-panel[aria-hidden="false"]{display:block}
+.filter-panel-inner{height:var(--filter-row-h);display:flex;align-items:center;padding:0 12px;border-bottom:1px solid var(--border)}
+.filter-panel-title{font-weight:700;margin:0;color:var(--text-primary)}
+.tag-filter-list{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.tag-filter-list .filter-item{display:inline-flex;align-items:center;justify-content:center;padding:8px 14px;border-radius:8px;background:var(--bg-primary);border:1px solid var(--border);color:#a0a0a0;cursor:pointer;font-size:13px}
+.tag-filter-list .filter-item:hover{transform:translateY(-2px);box-shadow:0 6px 16px rgba(0,0,0,0.06)}
+.tag-filter-list .filter-item.active{background:var(--accent);color:var(--bg-primary);border-color:var(--accent);box-shadow:0 8px 20px rgba(0,0,0,0.12)}
+.filter-panel-footer{height:var(--filter-row-h);padding:0 12px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:flex-end}
+.filter-clear-btn{background:transparent;border:1px solid var(--border);color:var(--text-primary);padding:6px 10px;border-radius:8px;cursor:pointer}
+.filter-clear-btn:hover{background:var(--accent);color:var(--bg-primary);border-color:var(--accent)}
+
+/* little arrow pointing up into the Filter button */
+.filter-panel::before{content:"";position:absolute;top:-8px;left:50%;transform:translateX(-50%);border-left:8px solid transparent;border-right:8px solid transparent;border-bottom:8px solid var(--bg-secondary);z-index:51}
+.filter-panel::after{content:"";position:absolute;top:-9px;left:50%;transform:translateX(-50%);border-left:9px solid transparent;border-right:9px solid transparent;border-bottom:9px solid var(--border);z-index:50}
+
+/* divider below the title to match the footer divider */
+.filter-panel-divider{
+	height:1px;background:transparent;border-top:1px solid var(--border);margin:8px 0;width:100%;
+}
+
+/* the list/body area (separate from the title area) */
+.filter-panel-body{padding:12px 12px;max-height:240px;overflow:auto}
+
+/* ensure the filter panel is hidden when article is open */
+body.article-open .filter-panel{display:none !important}
+
+/* on small screens make the panel full-width below the header */
+@media (max-width:900px){
+	.filter-panel{position:static;width:100%;box-shadow:none;border-radius:8px;margin-top:8px}
+	.filter-panel-inner{max-height:220px}
 }
 
 /* desktop: centered title across content area (accounts for sidebar) */
@@ -55,6 +95,9 @@ margin:0;
 pointer-events:auto;
 cursor:pointer;
 color:var(--text-primary);
+display:flex;
+align-items:center;
+gap:8px;
 }
 
 /* theme toggle */
@@ -113,107 +156,14 @@ color:var(--accent);background:var(--bg-primary);border:1px solid var(--border);
 }
 .icon-btn:hover{background:var(--accent);color:var(--bg-primary);transform:translateY(-2px)}
 .icon-btn svg{width:22px;height:22px}
-
-/* Sidebar tag filter */
-.tag-filter{text-align:left;padding:0 8px}
-
-/* modern widget styling for tag filter */
-.tag-filter.docked{
-	/* Inline / centered layout: center above the articles and match the
-	   content area's width so the filter aligns with the article grid. */
-	display: block;
-	position: static; /* flow with the document */
-	margin-bottom: 20px;
-	margin-right: 20px;
-	margin-left: 20px;
-	width: min(1060px, 94.5%);
-	max-width: 1100px;
-	box-sizing: border-box;
-	box-shadow:0 6px 18px rgba(0,0,0,0.06);
-	padding:14px 20px; /* match .articles-grid left/right padding */
-	border:1px solid var(--border);
-	border-radius:12px;
-	background:var(--bg-secondary);
-}
-
-/* Hide the tag-filter panel whenever an article is open. Using a body class
-	avoids timing/order issues and works for both docked and inline states. */
-body.article-open #tag-filter{display:none !important}
-
-/* Ensure the Clear button sits at the top-right of the filter panel */
-.tag-filter{position:relative}
-.tag-filter .tag-filter-title{display:flex;align-items:center;justify-content:space-between;font-size:13px;color:var(--text-primary);margin-bottom:10px;font-weight:700}
-
-/* On very wide displays, make it a fixed dock to the right of the sidebar. */
-@media (min-width:2200px){
-	.tag-filter.docked{
-		position:fixed;
-		left: calc(var(--sidebar-width) + 40px); /* a small gutter to the right of the sidebar */
-		width:260px;
-		z-index:3;
-		margin:0;
-		padding:12px;
-	}
-}
-
-/* On small screens keep the panel full-width stacked above content */
-@media (max-width:1278px){
-	.tag-filter.docked{
-		/* Center and match the content area's effective width on mobile */
-		position:static;
-		margin: 20px; /* keeping margins consistent */
-        width: calc(100% - 40px); /*aligning with article-grid when on mobile*/
-		max-width:calc(100% - 40px); /* keep same max as inline state */
-		box-sizing:border-box;
-		padding:14px 28px; /* match inline padding so inner content lines up with articles */
-		box-shadow:none;
-		border-radius:8px;
-	}
-}
-
-/* Clear button removed — no styles required */
-
-/* Slightly increase filter button sizing when the panel is inline so it feels roomy */
-.tag-filter.docked .tag-filter-list .filter-btn{
-	padding:8px 16px;
-}
-
-/* Ensure filter buttons have spacing between them */
-.tag-filter-list{
-	display:flex;
-	flex-wrap:wrap;
-	gap:6px;
-	align-items:center;
-}
-
-.tag-filter-list .filter-btn{
-	padding:6px 14px;
-	border-radius:8px;
-	border:1px solid var(--border);
-	background:var(--bg-primary);
-	color:#a0a0a0; /* match .tag color */
-	cursor:pointer;
-	font-size:13px;
-	line-height:1;
-	transition:transform .08s,box-shadow .08s,background .12s,color .12s;
-}
-.tag-filter-list .filter-btn:hover{transform:translateY(-2px);box-shadow:0 6px 16px rgba(0,0,0,0.06)}
-.tag-filter-list .filter-btn.active{
-	background:var(--accent);
-	color:var(--bg-primary);
-	border-color:var(--accent);
-	box-shadow:0 8px 20px rgba(0,0,0,0.12);
-}
+/* Sidebar tag filter (legacy rules removed) */
+/* Legacy docked sidebar filter removed — header-based filter now used. */
 
 @media (max-width:768px){
-	.tag-filter{padding:8px 0}
 }
 
 /* header home icon sizing inside the title */
 .home-icon{width:1.35rem;height:1.35rem;vertical-align:middle;margin-right:10px;fill:var(--accent);flex:0 0 auto}
-
-/* ensure the title remains centered but clickable */
-header .title{display:flex;align-items:center;gap:8px}
 
 /* main content */
 .main-content{display:flex;flex-direction:column;align-items:center;margin-left:var(--sidebar-width)}
@@ -222,14 +172,14 @@ header .title{display:flex;align-items:center;gap:8px}
 /* =========================
 Articles Grid / Cards
 ========================= */
-.articles-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;padding-left:20px;padding-right:20px;}
+.articles-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;padding-left:20px;padding-right:20px;margin-top:var(--header-gap);}
 .article-card{
 background:var(--bg-secondary);border-radius:12px;overflow:hidden;
 box-shadow:0 2px 8px var(--shadow);transition:transform .3s,box-shadow .3s;cursor:pointer
 }
 .article-card:hover{transform:translateY(-5px);box-shadow:0 8px 16px var(--shadow)}
 
-.article-image{height:180px;background:var(--border);;display:flex;align-items:center;justify-content:center;text-align:center;border-radius:8px 8px 0 0;overflow:hidden}
+.article-image{height:180px;background:var(--border);display:flex;align-items:center;justify-content:center;text-align:center;border-radius:8px 8px 0 0;overflow:hidden}
 .article-image img{width:100%;height:100%;object-fit:contain;object-position:center;display:block;border-radius:inherit;background:var(--border);}
 
 .article-content{padding:25px}
@@ -325,14 +275,11 @@ display:inline-block;color:var(--accent);background:rgba(255,255,255,0.02);borde
 /* ensure inner fetched article is positioned properly */
 #article-view .article-container{position:relative}
 
-/* neutral wrapper for injected article */
-#article-view .article-frame{width:100%;max-width:none;margin:0;padding:0;background:transparent;border:none;box-shadow:none}
-
 /* =========================
 Binary background (rain)
 ========================= */
-#binary-bg{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden;mix-blend-mode:screen}
-#binary-bg .bit{position:absolute;top:-5%;color:var(--binary-color);font-family:monospace;user-select:none;will-change:transform,opacity;text-shadow:0 0 6px rgba(80,255,140,0.06);z-index:0;animation-name:binary-fall,binary-fade;animation-timing-function:linear;animation-iteration-count:infinite}
+#binary-bg{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden;mix-blend-mode:normal}
+#binary-bg .bit{position:absolute;top:-5%;color:var(--binary-color);font-family:monospace;user-select:none;will-change:transform,opacity;text-shadow:0 0 4px var(--binary-color);z-index:0;animation-name:binary-fall,binary-fade;animation-timing-function:linear;animation-iteration-count:infinite;opacity:0.9}
 @keyframes binary-fall{0%{transform:translateY(-10vh)}100%{transform:translateY(110vh)}}
 @keyframes binary-fade{0%{opacity:0}10%{opacity:.9}90%{opacity:.4}100%{opacity:0}}
 
