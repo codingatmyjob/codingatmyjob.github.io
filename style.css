@@ -80,12 +80,6 @@ border-bottom:1px solid var(--border);
 /* ensure the filter panel is hidden when article is open */
 body.article-open .filter-panel{display:none !important}
 
-/* on small screens make the panel full-width below the header */
-@media (max-width:900px){
-	.filter-panel{position:static;width:100%;box-shadow:none;border-radius:8px;margin-top:8px}
-	.filter-panel-inner{max-height:220px}
-}
-
 /* desktop: centered title across content area (accounts for sidebar) */
 header .title{
 position:absolute;
