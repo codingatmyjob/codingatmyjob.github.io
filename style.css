@@ -328,10 +328,19 @@ Responsive: Mobile tweaks
 ========================= */
 @media (max-width:1278px){
 /* header: left-align title and allow wrapping (same as before) */
-header{justify-content:space-between;padding-left:16px;padding-right:16px;gap:12px}
+header{justify-content:space-between;padding-left:16px;padding-right:16px;gap:12px;flex-wrap:wrap;align-items:center}
 header > .title, header .title{
-position:static;transform:none;margin:0;font-size:1.05rem;color:var(--text-primary);
-display:inline-block;flex:0 0 auto;max-width:calc(100% - 262px);overflow-wrap:break-word;text-overflow:clip;white-space:normal;word-break:break-word;vertical-align:middle /* 1/3 of iphone 393px window width */
+position:static;
+transform:none;
+margin:0;
+font-size:1.05rem;
+color:var(--text-primary);
+display:block;
+text-align:left;
+overflow-wrap:break-word;
+white-space:normal;
+word-break:break-word;
+max-width: 33%;
 }
 
 .theme-toggle{flex:0 0 auto;white-space:nowrap}
