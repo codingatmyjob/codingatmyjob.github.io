@@ -1,1 +1,0 @@
-/* legacy script removed — functionality migrated into React (src/) */
