@@ -53,13 +53,16 @@ border-bottom:1px solid var(--border);
 
 /* filter dropdown wrapper (toggle + panel) */
 .filter-dropdown-wrap{position:relative}
-.filter-toggle{appearance:none;padding:10px 20px;border-radius:8px;border:1px solid var(--border);background:var(--bg-secondary);color:var(--text-primary);font-size:14px;cursor:pointer;display:flex;align-items:center;gap:12px}
 .filter-toggle[aria-expanded="true"]{box-shadow:0 8px 24px rgba(0,0,0,0.12)}
 .filter-toggle.filters-active{background:var(--accent);color:var(--bg-primary);border-color:var(--accent);box-shadow:0 8px 20px rgba(0,0,0,0.12)}
 .filter-toggle:hover{background:var(--accent);color:var(--bg-primary);border-color:var(--accent)}
 
 /* Ensure controls (theme-toggle and filter-toggle) share the same visual height */
 .theme-toggle, .filter-toggle { min-height: var(--control-height); }
+
+/* small numeric badge inside the Filter button showing active count */
+.filter-toggle .filter-count:empty{display:none}
+.filter-toggle.filters-active .filter-count{background:var(--bg-primary);color:var(--accent)}
 .filter-panel{position:absolute;top:calc(100% + var(--filter-gap));left:50%;transform:translateX(-50%);width:320px;background:var(--bg-secondary);border:1px solid var(--border);border-radius:10px;box-shadow:0 18px 48px rgba(0,0,0,0.12);display:none;z-index:50;--filter-row-h:44px}
 .filter-panel[aria-hidden="false"]{display:block}
 .filter-panel-inner{height:var(--filter-row-h);display:flex;align-items:center;padding:0 12px;border-bottom:1px solid var(--border)}
@@ -75,6 +78,19 @@ border-bottom:1px solid var(--border);
 /* little arrow pointing up into the Filter button */
 .filter-panel::before{content:"";position:absolute;top:-8px;left:var(--filter-arrow-left,50%);transform:translateX(-50%);border-left:8px solid transparent;border-right:8px solid transparent;border-bottom:8px solid var(--bg-secondary);z-index:51}
 .filter-panel::after{content:"";position:absolute;top:-9px;left:var(--filter-arrow-left,50%);transform:translateX(-50%);border-left:9px solid transparent;border-right:9px solid transparent;border-bottom:9px solid var(--border);z-index:50}
+
+/* Adaptive Filter button: icon + label. On small screens show icon-only; on larger show label + badge.
+   The toggle is positioned relative so the badge can be absolutely positioned in compact mode. */
+.filter-toggle{position:relative;display:inline-flex;align-items:center;justify-content:center;padding:8px;width:var(--control-height);min-width:var(--control-height);border-radius:8px;appearance:none;border:1px solid var(--border);background:var(--bg-secondary);color:var(--text-primary);font-size:14px;cursor:pointer}
+.filter-toggle .filter-icon{width:18px;height:18px;flex:0 0 auto}
+/* badge floats in the corner so it never stretches the button */
+.filter-toggle .filter-count{position:absolute;top:-6px;right:-6px;min-width:18px;padding:2px 6px;font-size:11px;margin-left:0;background:rgba(0,0,0,0.12);color:var(--text-primary);border-radius:999px;font-weight:700;line-height:1;text-align:center}
+
+/* On very large screens we can slightly increase padding while keeping icon-only */
+@media (min-width:1200px){
+	.filter-toggle{padding:10px;width:auto;min-width:var(--control-height)}
+	.filter-toggle .filter-count{right:-8px;top:-8px}
+}
 
 /* divider below the title to match the footer divider */
 .filter-panel-divider{

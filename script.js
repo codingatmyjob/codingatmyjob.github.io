@@ -16,6 +16,8 @@ document.documentElement.setAttribute('data-theme', savedTheme);
 document.getElementById('theme-icon').textContent = 
     savedTheme === 'dark' ? 'Dark Mode' : 'Light Mode';
 
+// Note: tooltip/aria-label for the filter toggle is defined in the HTML (static "Filter by tag").
+
 // Binary rain generator (random falling 1s and 0s)
 (function () {
     function createBinaryRain(containerId = 'binary-bg', count = 90) {
@@ -384,7 +386,8 @@ function initTagFilters(){
                 if (panel.getAttribute('aria-hidden') === 'false') requestAnimationFrame(positionFilterPanel);
             });
         }
-        if(clearBtn) clearBtn.addEventListener('click', clearFilter);
+            // aria/title for the filter toggle is static in HTML; no JS initialization needed here
+            if(clearBtn) clearBtn.addEventListener('click', clearFilter);
         return;
     }
 
@@ -422,7 +425,11 @@ function applyFilter(tag){
         history.pushState({}, '', location.pathname);
         // reflect active state on the Filter toggle button
         const toggleBtn = document.getElementById('filter-toggle');
-        if (toggleBtn) toggleBtn.classList.toggle('filters-active', tags.length > 0);
+        if (toggleBtn) {
+            toggleBtn.classList.toggle('filters-active', tags.length > 0);
+            const badge = toggleBtn.querySelector('.filter-count');
+            if (badge) badge.textContent = tags.length > 0 ? String(tags.length) : '';
+        }
         return;
     }
 
@@ -441,7 +448,11 @@ function applyFilter(tag){
     history.pushState({}, '', location.pathname); // clear query
     // update filter-toggle active state for legacy single-tag behavior
     const toggleBtn2 = document.getElementById('filter-toggle');
-    if (toggleBtn2) toggleBtn2.classList.toggle('filters-active', Boolean(tag));
+    if (toggleBtn2) {
+        toggleBtn2.classList.toggle('filters-active', Boolean(tag));
+        const badge2 = toggleBtn2.querySelector('.filter-count');
+        if (badge2) badge2.textContent = tag ? '1' : '';
+    }
 }
 
 function clearFilter(){
@@ -454,4 +465,8 @@ function clearFilter(){
     history.pushState({}, '', location.pathname);
     const toggleBtn3 = document.getElementById('filter-toggle');
     if (toggleBtn3) toggleBtn3.classList.remove('filters-active');
+    if (toggleBtn3) {
+        const badge3 = toggleBtn3.querySelector('.filter-count');
+        if (badge3) badge3.textContent = '';
+    }
 }
