@@ -21,9 +21,27 @@ export default function ArticleView({ path, onClose }){
 
     async function load(){
       try{
-        const base = new URL('.', location.origin + location.pathname).href
-        const url = new URL(path, base).href
-        const res = await fetch(url)
+        // Resolve the fetch URL to always target the server-side `articles/`
+        // folder (respecting Vite's BASE_URL).   
+        // Prefer absolute URLs when provided, and build an absolute URL for
+        // relative paths so the request goes to HTTP(S) rather than a local
+        // file:// path.
+        let urlToFetch
+        const isRemote = /^https?:\/\//i.test(path)
+        const viteBase = (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.BASE_URL) ? import.meta.env.BASE_URL : '/'
+
+        if(isRemote){
+          urlToFetch = path
+        } else if(path.startsWith('/')){
+          // Leading slash — resolve against origin
+          urlToFetch = new URL(path, location.origin).href
+        } else {
+          // No leading slash — resolve against Vite base (handles repo subpaths)
+          // e.g. base might be '/' or '/repo-name/'
+          urlToFetch = new URL(path, location.origin + viteBase).href
+        }
+
+        const res = await fetch(urlToFetch)
         if(!res.ok) throw new Error(res.status)
         const text = await res.text()
         const parser = new DOMParser()
