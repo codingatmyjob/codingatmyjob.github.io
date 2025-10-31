@@ -20,23 +20,45 @@ export default function ScrollTop(){
     const position = ()=>{
       const article = document.querySelector('#article-view > div > main > article') || document.querySelector('#article-view .article-container > article')
       const fallbackRight = 20
-      if(!article){
-        btn.style.removeProperty('--scroll-left')
-        btn.style.setProperty('--scroll-right', fallbackRight + 'px')
-        btn.style.display = 'none'
+
+      // If an article is open, position the button to the right of the article
+      if(article){
+        btn.style.display = 'flex'
+        const rect = article.getBoundingClientRect()
+        const desiredLeft = Math.round(rect.right + 50)
+        const btnWidth = btn.offsetWidth || 44
+        if(desiredLeft + btnWidth > window.innerWidth - 8){
+          btn.style.removeProperty('--scroll-left')
+          btn.style.setProperty('--scroll-right', fallbackRight + 'px')
+        } else {
+          btn.style.setProperty('--scroll-left', desiredLeft + 'px')
+          btn.style.removeProperty('--scroll-right')
+        }
         return
       }
-      btn.style.display = 'flex'
-      const rect = article.getBoundingClientRect()
-      const desiredLeft = Math.round(rect.right + 50)
-      const btnWidth = btn.offsetWidth || 44
-      if(desiredLeft + btnWidth > window.innerWidth - 8){
-        btn.style.removeProperty('--scroll-left')
-        btn.style.setProperty('--scroll-right', fallbackRight + 'px')
-      } else {
-        btn.style.setProperty('--scroll-left', desiredLeft + 'px')
-        btn.style.removeProperty('--scroll-right')
+
+      // No article open: try to position next to the articles grid on the main page
+      const grid = document.querySelector('.articles-grid') || document.querySelector('.content-area')
+      if(grid){
+        btn.style.display = 'flex'
+        const rect = grid.getBoundingClientRect()
+        // Position the button just to the right of the grid, similar spacing as for articles
+        const desiredLeft = Math.round(rect.right + 24)
+        const btnWidth = btn.offsetWidth || 44
+        if(desiredLeft + btnWidth > window.innerWidth - 8){
+          btn.style.removeProperty('--scroll-left')
+          btn.style.setProperty('--scroll-right', fallbackRight + 'px')
+        } else {
+          btn.style.setProperty('--scroll-left', desiredLeft + 'px')
+          btn.style.removeProperty('--scroll-right')
+        }
+        return
       }
+
+      // Fallback: hide the button if we can't find a sensible anchor
+      btn.style.removeProperty('--scroll-left')
+      btn.style.setProperty('--scroll-right', fallbackRight + 'px')
+      btn.style.display = 'none'
     }
 
     let resizeTimer
