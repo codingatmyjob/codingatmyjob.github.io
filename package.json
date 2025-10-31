@@ -7,7 +7,7 @@
     "build": "vite build",
     "preview": "vite preview",
     "predeploy": "npm run build",
-    "deploy": "git add . && git commit -m 'Update' && git push origin main && npm run build && git checkout -f gh-pages && git checkout main -- dist && mv dist/* . && rm -r dist && git add -A && git commit -m 'Deploy' && git push origin gh-pages && git checkout main"
+    "deploy": "npm run build && gh-pages -d dist"
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^5.1.0",

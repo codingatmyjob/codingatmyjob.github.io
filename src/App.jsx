@@ -3,6 +3,7 @@ import Header from './components/Header'
 import BinaryBg from './components/BinaryBg'
 import ArticlesGrid from './components/ArticlesGrid'
 import ArticleView from './components/ArticleView'
+import ScrollTop from './components/ScrollTop'
 
 export default function App(){
   const [tags, setTags] = useState([])
@@ -35,17 +36,30 @@ export default function App(){
 
   const closeArticle = useCallback(()=>{
     setArticlePath(null)
-    history.pushState({}, '', location.pathname)
+    // Clear hash to return home
+    window.location.hash = ''
   },[])
 
-  // respond to back navigation (update articlePath)
+  // Respond to hash changes for navigation
   useEffect(()=>{
-    const onpop = e=>{
-      if(e.state && e.state.article) setArticlePath(e.state.article)
-      else setArticlePath(null)
+    const onHashChange = ()=>{
+      const hash = window.location.hash.slice(1)
+      if(!hash || hash === '/'){
+        setArticlePath(null)
+        return
+      }
+      
+      const hashMatch = hash.match(/^\/articles\/(.+)$/)
+      if(hashMatch){
+        const slug = hashMatch[1]
+        const fullPath = slug.endsWith('.html') ? `articles/${slug}` : `articles/${slug}.html`
+        setArticlePath(fullPath)
+      }
     }
-    window.addEventListener('popstate', onpop)
-    return ()=>window.removeEventListener('popstate', onpop)
+
+    onHashChange()
+    window.addEventListener('hashchange', onHashChange)
+    return ()=>window.removeEventListener('hashchange', onHashChange)
   },[])
 
   // allow external "Return Home" triggers (e.g., header title) to close the article
@@ -59,21 +73,9 @@ export default function App(){
     <>
       <Header tags={tags} selected={selected} onApply={applyFilter} onClear={clearFilter} onOpenArticle={openArticle} />
       <BinaryBg />
-  <ArticlesGrid onOpenArticle={openArticle} onTags={setTags} />
-  {/* ArticleView handles the article fetching and injection into the existing #article-view container */}
-  <ArticleView path={articlePath} onClose={closeArticle} />
-      {/* ScrollTop manages its own button element appended to document.body */}
-      { /* lazy-load to avoid circular refs in some environments */ }
-      <React.Suspense fallback={null}>
-        {/* import dynamically to keep initial bundle small */}
-        <ScrollTopLoader />
-      </React.Suspense>
+      <ArticlesGrid onOpenArticle={openArticle} onTags={setTags} />
+      <ArticleView path={articlePath} onClose={closeArticle} />
+      <ScrollTop />
     </>
   )
-}
-
-// dynamic loader for ScrollTop to avoid import ordering issues
-function ScrollTopLoader(){
-  const ScrollTop = React.lazy(()=>import('./components/ScrollTop'))
-  return <ScrollTop />
 }

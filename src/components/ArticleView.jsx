@@ -12,8 +12,6 @@ export default function ArticleView({ path, onClose }){
       articleView.innerHTML = ''
       articlesView.style.display = 'block'
       document.body.classList.remove('article-open')
-      const st = document.getElementById('scroll-top')
-      if(st) st.style.display = 'none'
       return
     }
 
@@ -84,9 +82,9 @@ export default function ArticleView({ path, onClose }){
         articlesView.style.display = 'none'
         articleView.style.display = 'block'
         document.body.classList.add('article-open')
-        const st = document.getElementById('scroll-top')
-        if(st) st.style.display = 'flex'
-        history.pushState({article:path}, '', '?article='+encodeURIComponent(path))
+        // Update URL to hash-based clean path: #/articles/<slug>
+        const cleanSlug = (path || '').replace(/^articles\//,'').replace(/\.html$/,'')
+        window.location.hash = `#/articles/${cleanSlug}`
         window.scrollTo({ top: 0, behavior: 'instant' })
       }catch(err){
         console.error('ArticleView load failed', err)

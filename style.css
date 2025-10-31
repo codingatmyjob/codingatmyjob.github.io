@@ -417,7 +417,7 @@ z-index:2;
 	z-index:9999;
 	width:44px;
 	height:44px;
-	display:none; /* JS will toggle */
+	display:flex; /* Always flex, visibility controlled by opacity */
 	align-items:center;
 	justify-content:center;
 	background:var(--accent);
@@ -428,7 +428,9 @@ z-index:2;
 	cursor:pointer;
 	font-size:20px;
 	line-height:1;
-	transition:transform .15s,opacity .15s,left .12s,right .12s;
+	opacity:0;
+	pointer-events:none;
+	transition:transform .15s,opacity .3s,left .12s,right .12s;
 }
 .scroll-top:hover{transform:translateY(-3px)}
 
