@@ -25,34 +25,10 @@
 
     <div class="container">
         <header>
-            <h2 class="title" onclick="closeArticle()" onkeydown="if(event.key==='Enter'||event.key===' ') closeArticle()" role="button" tabindex="0" aria-label="Return Home">
-                Articles & Projects
+            <h2 class="title">
+                <a href="/" aria-label="Return Home">Articles & Projects</a>
             </h2>
-            <div class="header-controls">
-                <!-- Multi-select filter dropdown (checkboxes) -->
-                <div id="tag-filter-wrap" class="filter-dropdown-wrap" aria-haspopup="true">
-                    <button id="filter-toggle" class="filter-toggle" aria-expanded="false" aria-controls="tag-filter-panel" aria-label="Filter by tag" title="Filter by tag">
-                        <svg class="filter-icon" viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M3 5h18v2l-7 7v5l-4 2v-7L3 7V5z"></path></svg>
-                        <span class="filter-count" aria-hidden="true"></span>
-                    </button>
-                    <div id="tag-filter-panel" class="filter-panel" role="menu" aria-hidden="true">
-                        <div class="filter-panel-inner">
-                                <div class="filter-panel-title">Filter by tag:</div>
-                        </div>
-                        <div class="filter-panel-body">
-                            <div id="tag-filter-list" class="tag-filter-list" role="group" aria-label="Tag filters"></div>
-                        </div>
-                        <div class="filter-panel-footer">
-                            <button id="filter-clear-btn" class="filter-clear-btn">Clear filter</button>
-                        </div>
-                    </div>
-                </div>
-
-                <button class="theme-toggle" onclick="toggleTheme()">
-                    <div class="switch"></div>
-                    <span id="theme-icon">Light Mode</span>
-                </button>
-            </div>
+            <div id="react-root" class="header-controls"></div>
         </header>
 
         <div class="main-content">
@@ -62,12 +38,6 @@
                 <div class="title">Cybersecurity Analyst & Junior Penetration Tester</div>
 
                 <p class ="bio">NET+|SEC+|CYSA+ (loading...)</p>
-
-                <p class="bio">
-                    Cybersecurity professional with an AAS in Network Systems Management and 4 years of experience with Cisco networking equipment. 
-                    Skilled in front-end web development and Jupyter notebooks, with a strong focus on network security and penetration testing. 
-                    Continuously learning and adapting to the evolving security landscape.
-                </p>
 
                 <div class="icon-links">
                     <a href="https://github.com/codingatmyjob/" class="icon-btn" target="_blank" aria-label="GitHub">
@@ -115,7 +85,7 @@
                             </div>
                         </div>
 
-                        <div class="article-card" onclick="openArticle('articles/HTB-Artificial-Writeup.html')">
+                        <div class="article-card" data-path="articles/HTB-Artificial-Writeup.html">
                             <div class="article-image">HTB Artificial Writeup</div>
                             <div class="article-content">
                                 <div class="article-date">October 27, 2025</div>
@@ -129,7 +99,7 @@
                             </div>
                         </div>
 
-                        <div class="article-card" onclick="openArticle('articles/how-i-passed-security-plus.html')">
+                        <div class="article-card" data-path="articles/how-i-passed-security-plus.html">
                             <div class="article-image">
                                 <img src="secplus.png" alt="How I passed CompTIA Security+">
                             </div>
@@ -144,7 +114,7 @@
                             </div>
                         </div>
 
-                        <div class="article-card" onclick="openArticle('articles/how-i-passed-network-plus.html')">
+                        <div class="article-card" data-path="articles/how-i-passed-network-plus.html">
                             <div class="article-image">
                                 <img src="netplus.png" alt="How I passed CompTIA Network+">
                             </div>
@@ -164,10 +134,24 @@
             </section>
             <!-- injected article will appear here -->
             <div id="article-view" style="display:none;"></div>
-            <button id="scroll-top" class="scroll-top" onclick="scrollToTop()" aria-label="Scroll to top">▲</button>
         </div>
     </div>
 
-    <script src="script.js"></script>
+    <script type="module" src="/src/main.jsx"></script>
+        <script>
+            // wire the header title to the SPA "Return Home" action by emitting a custom event.
+            (function(){
+                const sel = 'header .title a';
+                function init(){
+                    const el = document.querySelector(sel);
+                    if(!el) return;
+                    el.addEventListener('click', function(e){
+                        e.preventDefault();
+                        window.dispatchEvent(new CustomEvent('returnHome'));
+                    });
+                }
+                if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
+            })();
+        </script>
 </body>
 </html>
