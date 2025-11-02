@@ -77,6 +77,37 @@ export default function ArticleView({ path, onClose }){
         articlesView.style.display = 'none'
         articleView.style.display = 'block'
         document.body.classList.add('article-open')
+        
+        // Add collapsible functionality if article has data-collapsible attribute
+        const articleContainer = wrapper.querySelector('.article-container')
+        if(articleContainer && articleContainer.dataset.collapsible === 'true'){
+          articleContainer.querySelectorAll('article h2').forEach(header => {
+            header.style.cursor = 'pointer'
+            header.classList.add('collapsed')
+            
+            // Collapse all content by default
+            let nextEl = header.nextElementSibling
+            while(nextEl && nextEl.tagName !== 'H2'){
+              nextEl.style.display = 'none'
+              nextEl = nextEl.nextElementSibling
+            }
+            
+            // Toggle on click
+            header.addEventListener('click', () => {
+              header.classList.toggle('collapsed')
+              let nextEl = header.nextElementSibling
+              while(nextEl && nextEl.tagName !== 'H2'){
+                if(nextEl.style.display === 'none'){
+                  nextEl.style.display = ''
+                } else {
+                  nextEl.style.display = 'none'
+                }
+                nextEl = nextEl.nextElementSibling
+              }
+            })
+          })
+        }
+        
         // Update URL to hash-based path: #/articles/<slug>
         const cleanSlug = (path || '').replace(/^articles\//,'').replace(/\.html$/,'')
         window.location.hash = `#/articles/${cleanSlug}`

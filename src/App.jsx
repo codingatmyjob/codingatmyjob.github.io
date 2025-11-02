@@ -6,13 +6,9 @@ import ArticleView from './components/ArticleView'
 import ScrollTop from './components/ScrollTop'
 
 export default function App(){
-  const [tags, setTags] = useState([])
+  const [allTags, setAllTags] = useState([])
   const [selected, setSelected] = useState([])
   const [articlePath, setArticlePath] = useState(null)
-
-  // Tags are provided by ArticlesGrid (lifted from DOM on mount)
-
-  // ArticlesGrid will render the article cards (portal into existing `.articles-grid`).
 
   const applyFilter = useCallback((selTags)=>{
     const tagsLC = selTags.map(s=>s.toLowerCase())
@@ -71,9 +67,9 @@ export default function App(){
 
   return (
     <>
-      <Header tags={tags} selected={selected} onApply={applyFilter} onClear={clearFilter} onOpenArticle={openArticle} />
+      <Header tags={allTags} selected={selected} onApply={applyFilter} onClear={clearFilter} onOpenArticle={openArticle} />
       <BinaryBg />
-      <ArticlesGrid onOpenArticle={openArticle} onTags={setTags} />
+      <ArticlesGrid onOpenArticle={openArticle} onTags={setAllTags} />
       <ArticleView path={articlePath} onClose={closeArticle} />
       <ScrollTop />
     </>
