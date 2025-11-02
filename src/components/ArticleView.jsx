@@ -19,11 +19,6 @@ export default function ArticleView({ path, onClose }){
 
     async function load(){
       try{
-        // Resolve the fetch URL to always target the server-side `articles/`
-        // folder (respecting Vite's BASE_URL).   
-        // Prefer absolute URLs when provided, and build an absolute URL for
-        // relative paths so the request goes to HTTP(S) rather than a local
-        // file:// path.
         let urlToFetch
         const isRemote = /^https?:\/\//i.test(path)
         const viteBase = (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.BASE_URL) ? import.meta.env.BASE_URL : '/'
@@ -82,7 +77,7 @@ export default function ArticleView({ path, onClose }){
         articlesView.style.display = 'none'
         articleView.style.display = 'block'
         document.body.classList.add('article-open')
-        // Update URL to hash-based clean path: #/articles/<slug>
+        // Update URL to hash-based path: #/articles/<slug>
         const cleanSlug = (path || '').replace(/^articles\//,'').replace(/\.html$/,'')
         window.location.hash = `#/articles/${cleanSlug}`
         window.scrollTo({ top: 0, behavior: 'instant' })

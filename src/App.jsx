@@ -36,30 +36,30 @@ export default function App(){
 
   const closeArticle = useCallback(()=>{
     setArticlePath(null)
-    // Clear hash to return home
-    window.location.hash = ''
+    // Remove hash entirely to return home
+    history.pushState('', document.title, window.location.pathname)
   },[])
 
-  // Respond to hash changes for navigation
+  // Handle navigation via hash
   useEffect(()=>{
-    const onHashChange = ()=>{
+    const parseRoute = ()=>{
       const hash = window.location.hash.slice(1)
       if(!hash || hash === '/'){
         setArticlePath(null)
         return
       }
       
-      const hashMatch = hash.match(/^\/articles\/(.+)$/)
-      if(hashMatch){
-        const slug = hashMatch[1]
+      const match = hash.match(/^\/articles\/(.+)$/)
+      if(match){
+        const slug = match[1]
         const fullPath = slug.endsWith('.html') ? `articles/${slug}` : `articles/${slug}.html`
         setArticlePath(fullPath)
       }
     }
 
-    onHashChange()
-    window.addEventListener('hashchange', onHashChange)
-    return ()=>window.removeEventListener('hashchange', onHashChange)
+    parseRoute()
+    window.addEventListener('hashchange', parseRoute)
+    return ()=>window.removeEventListener('hashchange', parseRoute)
   },[])
 
   // allow external "Return Home" triggers (e.g., header title) to close the article
