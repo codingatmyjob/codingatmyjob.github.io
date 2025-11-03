@@ -7,7 +7,7 @@ import ArticleView from './components/ArticleView'
 import ScrollTop from './components/ScrollTop'
 import Pagination from './components/Pagination'
 
-const ROWS_PER_PAGE = 1
+const ROWS_PER_PAGE = 8
 
 // Calculate items per page based on grid columns (responsive)
 const getItemsPerPage = ()=>{
