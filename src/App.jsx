@@ -40,6 +40,9 @@ export default function App(){
     return ()=> window.removeEventListener('resize', handleResize)
   },[])
 
+  // Filter out About Me from articles (helper function)
+  const filterOutAbout = (articles) => articles.filter(article => article.path !== 'About.html')
+
   // Filter articles based on selected tags
   useEffect(()=>{
     let filtered = allArticles
@@ -52,7 +55,7 @@ export default function App(){
       })
     }
 
-    setFilteredArticles(filtered)
+    setFilteredArticles(filterOutAbout(filtered))
   },[selected, allArticles])
 
   // Sort filtered articles
@@ -143,20 +146,6 @@ export default function App(){
   const startIndex = (currentPage - 1) * itemsPerPage
   const endIndex = startIndex + itemsPerPage
   const currentArticles = sortedArticles.slice(startIndex, endIndex)
-  
-  // Debug logging
-  console.log('Debug:', { 
-    allArticlesCount: allArticles.length, 
-    filteredCount: filteredArticles.length, 
-    sortedCount: sortedArticles.length,
-    currentArticlesCount: currentArticles.length,
-    itemsPerPage,
-    currentPage,
-    totalPages,
-    startIndex,
-    endIndex,
-    currentArticles: currentArticles.map(a => a.title)
-  })
 
   const paginationRoot = typeof document !== 'undefined' ? document.getElementById('pagination-root') : null
   const controlsRoot = typeof document !== 'undefined' ? document.getElementById('articles-controls-root') : null
