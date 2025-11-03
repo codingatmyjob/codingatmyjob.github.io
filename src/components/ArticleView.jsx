@@ -81,36 +81,45 @@ export default function ArticleView({ path, onClose }){
         // Add collapsible functionality if article has data-collapsible attribute
         const articleContainer = wrapper.querySelector('.article-container')
         if(articleContainer && articleContainer.dataset.collapsible === 'true'){
-          articleContainer.querySelectorAll('article h2').forEach(header => {
-            header.style.cursor = 'pointer'
-            header.classList.add('collapsed')
-            
-            // Collapse all content by default
+          // Helper function to get all content elements between h2 elements
+          const getContentElements = (header) => {
+            const elements = []
             let nextEl = header.nextElementSibling
             while(nextEl && nextEl.tagName !== 'H2'){
-              nextEl.style.display = 'none'
+              elements.push(nextEl)
               nextEl = nextEl.nextElementSibling
             }
-            
-            // Toggle on click
-            header.addEventListener('click', () => {
-              header.classList.toggle('collapsed')
-              let nextEl = header.nextElementSibling
-              while(nextEl && nextEl.tagName !== 'H2'){
-                if(nextEl.style.display === 'none'){
-                  nextEl.style.display = ''
-                } else {
-                  nextEl.style.display = 'none'
-                }
-                nextEl = nextEl.nextElementSibling
-              }
-            })
+            return elements
+          }
+
+          articleContainer.querySelectorAll('article h2').forEach(header => {
+            const contentElements = getContentElements(header)
+
+            // Only make it interactive if there's actual content to collapse
+            const hasContent = contentElements.some(el => el.tagName && el.textContent.trim())
+
+            if(hasContent){
+              header.style.cursor = 'pointer'
+              header.classList.add('collapsible', 'collapsed')
+
+              // Collapse all content by default
+              contentElements.forEach(el => el.style.display = 'none')
+
+              // Toggle on click
+              header.addEventListener('click', () => {
+                const isCollapsed = header.classList.toggle('collapsed')
+                contentElements.forEach(el => {
+                  el.style.display = isCollapsed ? 'none' : ''
+                })
+              })
+            }
           })
         }
         
-        // Update URL to hash-based path: #/articles/<slug>
+        // Update URL to hash-based path: #/articles/<slug> or #/<filename> for root files
         const cleanSlug = (path || '').replace(/^articles\//,'').replace(/\.html$/,'')
-        window.location.hash = `#/articles/${cleanSlug}`
+        const hashPath = path.startsWith('articles/') ? `/articles/${cleanSlug}` : `/${cleanSlug}`
+        window.location.hash = `#${hashPath}`
         window.scrollTo({ top: 0, behavior: 'instant' })
       }catch(err){
         console.error('ArticleView load failed', err)

@@ -14,18 +14,18 @@ export default function ScrollTop(){
     }
 
     // click handler
-    const onClick = ()=> window.scrollTo({ top: 0, behavior: 'smooth' })
+    const onClick = ()=> {
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+    }
     btn.addEventListener('click', onClick)
 
     const updateVisibility = ()=>{
-      const scrolled = window.scrollY > 200
-      if(scrolled){
-        btn.style.opacity = '1'
-        btn.style.pointerEvents = 'auto'
-      } else {
-        btn.style.opacity = '0'
-        btn.style.pointerEvents = 'none'
-      }
+      const articleOpen = document.body.classList.contains('article-open')
+      const scrollTop = articleOpen ? document.documentElement.scrollTop : window.scrollY
+
+      const shouldShow = scrollTop > 200
+      btn.style.opacity = shouldShow ? '1' : '0'
+      btn.style.pointerEvents = shouldShow ? 'auto' : 'none'
     }
 
     const position = ()=>{
@@ -61,12 +61,15 @@ export default function ScrollTop(){
 
     window.addEventListener('resize', onResize)
     window.addEventListener('scroll', onScroll)
+    document.body.addEventListener('scroll', onScroll) // For when article is open
+
     position()
 
     return ()=>{
       btn.removeEventListener('click', onClick)
       window.removeEventListener('resize', onResize)
       window.removeEventListener('scroll', onScroll)
+      document.body.removeEventListener('scroll', onScroll)
       obs.disconnect()
     }
   },[])

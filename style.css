@@ -8,7 +8,6 @@ Variables & Base
 --accent:#00ff41;
 --border:#2a332a;
 --shadow:rgba(0,255,65,0.1);
---sidebar-width:340px;
 --header-gap:20px;
 --filter-gap:12px;
 --control-height:44px;
@@ -48,14 +47,81 @@ padding:20px;
 border-bottom:1px solid var(--border);
 }
 
-/* header control grouping (filter dropdown + theme toggle) */
-.header-controls{display:flex;align-items:center;gap:12px;margin-left:auto;}
+/* Menu button styling */
+.menu-toggle{
+  width:44px;
+  height:44px;
+  border:1px solid var(--border);
+  border-radius:8px;
+  background:var(--bg-secondary);
+  color:var(--text-primary);
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:18px;
+  transition:all 0.2s;
+}
 
-/* filter dropdown wrapper (toggle + panel) */
-.filter-dropdown-wrap{position:relative}
-.filter-toggle[aria-expanded="true"]{box-shadow:0 8px 24px rgba(0,0,0,0.12)}
-.filter-toggle.filters-active{background:var(--accent);color:var(--bg-primary);border-color:var(--accent);box-shadow:0 8px 20px rgba(0,0,0,0.12)}
-.filter-toggle:hover{background:var(--accent);color:var(--bg-primary);border-color:var(--accent)}
+.menu-toggle:hover{
+  background:var(--border);
+}
+
+/* Rotate hamburger icon when menu is open */
+.menu-toggle.menu-open svg {
+  transform: rotate(-90deg);
+  transition: transform 0.2s ease;
+}
+
+.menu-toggle svg {
+  transition: transform 0.2s ease;
+}
+
+/* Menu dropdown wrapper for positioning */
+.menu-dropdown-wrap{
+  position:relative;
+}
+
+/* Menu dropdown options */
+.menu-dropdown{
+  position:absolute;
+  top:calc(100% + 8px);
+  right:0;
+  min-width:150px;
+  background:var(--bg-secondary);
+  border:1px solid var(--border);
+  border-radius:8px;
+  box-shadow:0 4px 12px var(--shadow);
+  overflow:hidden;
+  z-index:1000;
+}
+
+.menu-option{
+  display:block;
+  width:100%;
+  padding:12px 16px;
+  background:transparent;
+  border:none;
+  color:var(--text-primary);
+  font-family:inherit;
+  font-size:14px;
+  text-align:left;
+  cursor:pointer;
+  transition:background 0.2s;
+}
+
+.menu-option:hover{
+  background:var(--border);
+}
+
+.menu-option:first-child{
+  border-radius:8px 8px 0 0;
+}
+
+.menu-option:last-child{
+  border-radius:0 0 8px 8px;
+  border-top:1px solid var(--border);
+}
 
 /* Ensure controls (theme-toggle and filter-toggle) share the same visual height */
 .theme-toggle, .filter-toggle { min-height: var(--control-height); }
@@ -63,22 +129,6 @@ border-bottom:1px solid var(--border);
 /* small numeric badge inside the Filter button showing active count */
 .filter-toggle .filter-count:empty{display:none}
 .filter-toggle.filters-active .filter-count{background:var(--bg-primary);color:var(--accent)}
-.filter-panel{position:absolute;top:calc(100% + var(--filter-gap));left:50%;transform:translateX(-50%);width:320px;background:var(--bg-secondary);border:1px solid var(--border);border-radius:10px;box-shadow:0 18px 48px rgba(0,0,0,0.12);display:none;z-index:50;--filter-row-h:44px}
-.filter-panel[aria-hidden="false"]{display:block}
-.filter-panel-inner{height:var(--filter-row-h);display:flex;align-items:center;padding:0 12px;border-bottom:1px solid var(--border)}
-.filter-panel-title{font-weight:700;margin:0;color:var(--text-primary)}
-.tag-filter-list{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
-.tag-filter-list .filter-item{display:inline-flex;align-items:center;justify-content:center;padding:8px 14px;border-radius:8px;background:var(--bg-primary);border:1px solid var(--border);color:#a0a0a0;cursor:pointer;font-size:13px}
-.tag-filter-list .filter-item:hover{transform:translateY(-2px);box-shadow:0 6px 16px rgba(0,0,0,0.06)}
-.tag-filter-list .filter-item.active{background:var(--accent);color:var(--bg-primary);border-color:var(--accent);box-shadow:0 8px 20px rgba(0,0,0,0.12)}
-.filter-panel-footer{height:var(--filter-row-h);padding:0 12px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:flex-end}
-.filter-clear-btn{background:transparent;border:1px solid var(--border);color:var(--text-primary);padding:8px 14px;border-radius:8px;cursor:pointer;display:inline-flex;align-items:center;height:auto}
-.filter-clear-btn:hover{background:var(--accent);color:var(--bg-primary);border-color:var(--accent)}
-
-/* little arrow pointing up into the Filter button */
-.filter-panel::before{content:"";position:absolute;top:-8px;left:var(--filter-arrow-left,50%);transform:translateX(-50%);border-left:8px solid transparent;border-right:8px solid transparent;border-bottom:8px solid var(--bg-secondary);z-index:51}
-.filter-panel::after{content:"";position:absolute;top:-9px;left:var(--filter-arrow-left,50%);transform:translateX(-50%);border-left:9px solid transparent;border-right:9px solid transparent;border-bottom:9px solid var(--border);z-index:50}
-
 /* Adaptive Filter button: icon + label. On small screens show icon-only; on larger show label + badge.
    The toggle is positioned relative so the badge can be absolutely positioned in compact mode. */
 .filter-toggle{position:relative;display:inline-flex;align-items:center;justify-content:center;padding:8px;width:var(--control-height);min-width:var(--control-height);border-radius:8px;appearance:none;border:1px solid var(--border);background:var(--bg-secondary);color:var(--text-primary);font-size:14px;cursor:pointer}
@@ -92,22 +142,10 @@ border-bottom:1px solid var(--border);
 	.filter-toggle .filter-count{right:-8px;top:-8px}
 }
 
-/* divider below the title to match the footer divider */
-.filter-panel-divider{
-	height:1px;background:transparent;border-top:1px solid var(--border);margin:8px 0;width:100%;
-}
-
-/* the list/body area (separate from the title area) */
-.filter-panel-body{padding:12px 12px;max-height:240px;overflow:auto}
-
-/* previously the panel was hidden when an article was open; keep it available
-	so users can filter while viewing an article. */
-/* body.article-open .filter-panel{display:none !important} */
-
 /* desktop: centered title across content area (accounts for sidebar) */
 header .title{
 position:absolute;
-left:calc(50% + var(--sidebar-width)/2);
+left:50%;
 transform:translateX(-50%);
 margin:0;
 pointer-events:auto;
@@ -151,50 +189,344 @@ border-color:var(--accent);
 .switch::before{content:'';position:absolute;width:16px;height:16px;border-radius:50%;background:var(--accent);top:2px;left:2px;transition:transform .3s}
 [data-theme="light"] .switch::before{transform:translateX(20px)}
 
-/* mobile menu toggle (hidden by default) */
-.mobile-menu-toggle{display:none;align-items:center;justify-content:center;width:44px;height:44px;border-radius:8px;border:1px solid var(--border);background:var(--bg-secondary);color:var(--text-primary);font-size:20px;cursor:pointer;margin-right:12px}
-
 /* =========================
 Layout: Sidebar / Main
 ========================= */
 .container, .article-container{position:relative;z-index:2}
 
-.sidebar{
-width:var(--sidebar-width);
-position:fixed;
-left:0;top:0;bottom:0;
-background:var(--bg-secondary);
-padding:40px 20px;
-border-right:1px solid var(--border);
-box-shadow:2px 0 8px var(--shadow);
-text-align:center;
-overflow-y:auto;
+.main-content{display:flex;flex-direction:column;align-items:center;margin-left:0}
+
+/* When article is open, make body scrollable */
+body.article-open {
+  max-height: 100vh;
+  overflow-y: auto;
+  padding-bottom: 40px;
 }
-.profile-photo{width:180px;height:180px;border-radius:50%;border:2px solid var(--accent);object-fit:cover;margin-bottom:20px}
-.sidebar h1{font-size:28px;margin-bottom:10px;color:var(--text-primary)}
-.sidebar .title{font-size:16px;color:#909090;margin-bottom:15px;border-bottom:1px solid var(--border);padding-bottom:15px}
-.sidebar .bio{font-size:14px;color:#909090;text-align:left;margin-bottom:25px;line-height:1.7; text-align:center}
 
-/* icon links */
-.icon-links{display:flex;justify-content:center;gap:20px}
-.icon-btn{
-width:40px;height:40px;display:flex;align-items:center;justify-content:center;
-color:var(--accent);background:var(--bg-primary);border:1px solid var(--border);border-radius:8px;transition:.3s
+/* Custom scrollbar for body (both home page and articles) */
+body::-webkit-scrollbar {
+  width: 8px;
 }
-.icon-btn:hover{background:var(--accent);color:var(--bg-primary);transform:translateY(-2px)}
-.icon-btn svg{width:22px;height:22px}
 
-/* header home icon sizing inside the title */
-.home-icon{width:1.35rem;height:1.35rem;vertical-align:middle;margin-right:10px;fill:var(--accent);flex:0 0 auto}
+body::-webkit-scrollbar-track {
+  background: transparent;
+}
 
-/* main content */
-.main-content{display:flex;flex-direction:column;align-items:center;margin-left:var(--sidebar-width)}
-.content-area{max-width:1100px;width:100%}
+body::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 4px;
+}
+
+body::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* Custom scrollbar for body when article is open */
+body.article-open::-webkit-scrollbar {
+  width: 8px;
+}
+
+body.article-open::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+body.article-open::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 4px;
+}
+
+body.article-open::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+.content-area{max-width:1100px;width:100%;margin:0 auto}
+
+/* =========================
+Articles Controls (Sort & Filter)
+========================= */
+.articles-controls{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:12px;
+  padding:0 20px;
+  margin-top:var(--header-gap);
+  margin-bottom:20px;
+}
+
+#articles-controls-root{
+  display:flex;
+  align-items:center;
+  gap:20px;
+}
+
+.sort-dropdown-wrap{
+  position:relative;
+}
+
+.sort-toggle{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  width:150px;
+  height:44px;
+  padding:10px 12px;
+  background:var(--bg-secondary);
+  border:1px solid var(--border);
+  border-radius:8px;
+  color:var(--text-primary);
+  font-family:inherit;
+  font-size:14px;
+  cursor:pointer;
+  transition:all 0.2s;
+}
+
+.sort-toggle:hover{
+  background:var(--border);
+}
+
+.sort-icon{
+  flex-shrink:0;
+}
+
+.sort-label{
+  font-weight:500;
+  white-space:nowrap;
+}
+
+.dropdown-arrow{
+  transition:transform 0.2s;
+}
+
+.dropdown-arrow.arrow-up{
+  transform: rotate(180deg);
+}
+
+.dropdown-arrow.arrow-down{
+  transform: rotate(0deg);
+}
+
+.sort-dropdown{
+  position:absolute;
+  top:calc(100% + 8px);
+  left:0;
+  min-width:150px;
+  background:var(--bg-secondary);
+  border:1px solid var(--border);
+  border-radius:8px;
+  box-shadow:0 4px 12px var(--shadow);
+  overflow:hidden;
+  z-index:1000;
+}
+
+.sort-option{
+  display:block;
+  width:100%;
+  padding:12px 16px;
+  background:transparent;
+  border:none;
+  color:var(--text-primary);
+  font-family:inherit;
+  font-size:14px;
+  text-align:left;
+  cursor:pointer;
+  transition:background 0.2s;
+}
+
+.sort-option:hover{
+  background:var(--border);
+}
+
+.sort-option.active{
+  background:var(--accent);
+  color:var(--bg-primary);
+  font-weight:600;
+}
+
+/* Filter in controls area */
+#articles-controls-root .filter-dropdown-wrap{
+  position:relative;
+}
+
+#articles-controls-root .filter-toggle{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  width:150px;
+  height:44px;
+  padding:10px 12px;
+  background:var(--bg-secondary);
+  border:1px solid var(--border);
+  border-radius:8px;
+  color:var(--text-primary);
+  font-family:inherit;
+  font-size:14px;
+  cursor:pointer;
+  transition:all 0.2s;
+}
+
+#articles-controls-root .filter-toggle:hover{
+  background:var(--border);
+}
+
+#articles-controls-root .filter-toggle.filters-active{
+  background:var(--accent);
+  color:var(--bg-primary);
+  border-color:var(--accent);
+}
+
+#articles-controls-root .filter-icon{
+  flex-shrink:0;
+}
+
+#articles-controls-root .filter-label{
+  font-weight:500;
+  white-space:nowrap;
+}
+
+#articles-controls-root .filter-count{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-width:20px;
+  height:20px;
+  padding:0 6px;
+  background:var(--bg-primary);
+  border-radius:10px;
+  font-size:12px;
+  font-weight:600;
+}
+
+#articles-controls-root .filter-toggle.filters-active .filter-count{
+  background:var(--bg-primary);
+  color:var(--accent);
+}
+
+/* Filter panel in controls area - match sort dropdown style */
+#articles-controls-root .filter-panel{
+  position:absolute;
+  top:calc(100% + 8px);
+  left:0;
+  width:100%;
+  min-width:150px;
+  background:var(--bg-secondary);
+  border:1px solid var(--border);
+  border-radius:8px;
+  box-shadow:0 4px 12px var(--shadow);
+  z-index:1000;
+  display:none;
+}
+
+#articles-controls-root .filter-panel[aria-hidden="false"]{
+  display:block;
+}
+
+#articles-controls-root .filter-panel::before,
+#articles-controls-root .filter-panel::after{
+  display:none;
+}
+
+#articles-controls-root .filter-panel-body{
+  padding:12px 16px;
+  max-height:300px;
+  overflow-y:auto;
+}
+
+/* Custom scrollbar for filter dropdown */
+#articles-controls-root .filter-panel-body::-webkit-scrollbar {
+  width: 6px;
+}
+
+#articles-controls-root .filter-panel-body::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+#articles-controls-root .filter-panel-body::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 3px;
+}
+
+#articles-controls-root .filter-panel-body::-webkit-scrollbar-thumb:hover {
+  background: rgb(70, 70, 70);
+}
+
+#articles-controls-root .tag-filter-list{
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+}
+
+#articles-controls-root .tag-filter-list .filter-item{
+  display:block;
+  width:100%;
+  padding:10px 12px;
+  background:transparent;
+  border:none;
+  border-radius:6px;
+  color:var(--text-primary);
+  font-family:inherit;
+  font-size:14px;
+  text-align:left;
+  cursor:pointer;
+  transition:background 0.2s;
+}
+
+#articles-controls-root .tag-filter-list .filter-item:hover{
+  background:var(--border);
+  transform:none;
+  box-shadow:none;
+}
+
+#articles-controls-root .tag-filter-list .filter-item.active{
+  background:var(--accent);
+  color:var(--bg-primary);
+  border-color:transparent;
+  font-weight:600;
+  box-shadow:none;
+}
+
+#articles-controls-root .filter-panel-footer{
+  padding:12px 16px;
+  border-top:1px solid var(--border);
+  display:flex;
+  justify-content:flex-start;
+}
+
+#articles-controls-root .filter-clear-btn{
+  padding:8px 16px;
+  background:transparent;
+  border:1px solid var(--border);
+  border-radius:6px;
+  color:var(--text-primary);
+  font-family:inherit;
+  font-size:13px;
+  cursor:pointer;
+  transition:all 0.2s;
+}
+
+#articles-controls-root .filter-clear-btn:hover{
+  background:var(--accent);
+  color:var(--bg-primary);
+  border-color:var(--accent);
+}
+
+@media (max-width:600px){
+  .articles-controls{
+    padding:0 16px;
+    margin-bottom:16px;
+  }
+  .sort-toggle,
+  #articles-controls-root .filter-toggle{
+    padding:8px 12px;
+    font-size:13px;
+  }
+}
 
 /* =========================
 Articles Grid / Cards
 ========================= */
-.articles-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;padding-left:20px;padding-right:20px;margin-top:var(--header-gap);margin-bottom: 20px;}
+.articles-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;padding-left:20px;padding-right:20px;margin-top:0;margin-bottom: 20px;}
 .article-card{
 background:var(--bg-secondary);border-radius:12px;overflow:hidden;
 box-shadow:0 2px 8px var(--shadow);transition:transform .3s,box-shadow .3s;cursor:pointer
@@ -205,7 +537,8 @@ box-shadow:0 2px 8px var(--shadow);transition:transform .3s,box-shadow .3s;curso
 .article-image img{width:100%;height:100%;object-fit:contain;object-position:center;display:block;border-radius:inherit;background:var(--border);}
 
 .article-content{padding:25px}
-.article-date{font-size:13px;color:#9aa;margin-bottom:8px}
+.article-date{font-size:13px;color:#9aa;margin-bottom:4px}
+.reading-time{font-size:12px;color:#888;margin-bottom:8px;display:block}
 .article-title{font-size:19px;margin-bottom:12px}
 .article-description{font-size:14px;color:#909090}
 .article-tags{display:flex;gap:8px;flex-wrap:wrap;margin-top:15px}
@@ -346,8 +679,9 @@ color:var(--text-primary);font-family:system-ui,-apple-system,"Segoe UI",Roboto,
 .article-container article{color:var(--text-primary);font-size:17px}
 .article-container article p{margin:0 0 16px 0;color:rgba(255,255,255,0.85)}
 .article-container article ul,.article-container article ol{margin:0 0 18px 1.15em;color:rgba(255,255,255,0.9)}
-.article-container article h2{font-size:20px;margin:22px 0 10px;color:var(--accent);user-select:none}
-.article-container article h2:hover{opacity:0.8}
+.article-container article h2{font-size:20px;margin:22px 0 10px;color:var(--accent)}
+.article-container article h2.collapsible{user-select:none}
+.article-container article h2.collapsed:hover{opacity:0.8}
 .article-container article h3{font-size:18px;margin:18px 0 8px;color:var(--text-primary)}
 .article-container article img, .article-container article figure{max-width:100%;height:auto;display:block;margin:18px auto;border-radius:10px;box-shadow:0 8px 24px rgba(0,0,0,0.22)}
 .article-container article blockquote{border-left:4px solid var(--accent);margin:16px 0;padding:10px 14px;background:rgba(0,0,0,0.04);color:rgba(255,255,255,0.9);border-radius:6px}
@@ -362,8 +696,9 @@ color:var(--text-primary);font-family:system-ui,-apple-system,"Segoe UI",Roboto,
 .command-desc{color:rgba(255,255,255,0.75);font-size:14px;margin:8px 0 0 0}
 
 /* Collapsible sections (for articles with data-collapsible attribute) */
-.article-container[data-collapsible="true"] article h2::after{content:"▼";margin-left:10px;font-size:14px;transition:transform 0.3s ease;display:inline-block}
-.article-container[data-collapsible="true"] article h2.collapsed::after{transform:rotate(-90deg)}
+.article-container[data-collapsible="true"] article .collapsible::after{margin-left:10px;font-size:14px;transition:all 0.3s ease;display:inline-block}
+.article-container[data-collapsible="true"] article .collapsible.collapsed::after{content:"▶"}
+.article-container[data-collapsible="true"] article .collapsible:not(.collapsed)::after{content:"▼"}
 
 /* Light mode overrides for code and commands */
 [data-theme="light"] .article-container article code{color:var(--text-primary);background:rgba(0,0,0,0.06)}
@@ -460,6 +795,10 @@ li{margin:4px 0}
 	color:var(--accent) !important;
 }
 
+[data-theme="light"] .reading-time{
+	color:#666 !important;
+}
+
 [data-theme="light"] .article-description{color:#6f6f6f}
 
 /* =========================
@@ -478,7 +817,7 @@ margin:0;
 font-size:1.05rem;
 color:var(--text-primary);
 display:block;
-text-align:left;
+text-align:center;
 overflow-wrap:break-word;
 white-space:normal;
 word-break:break-word;
@@ -486,24 +825,6 @@ max-width: 33%;
 }
 
 .theme-toggle{flex:0 0 auto;white-space:nowrap}
-
-/* Always show the sidebar stacked above the articles on small screens */
-.mobile-menu-toggle{display:none}               /* hide the button (no toggle) */
-#sidebar-overlay{display:none}                  /* remove overlay use */
-
-.sidebar{
-position:static;       /* flow in document (stacked above content) */
-left:auto; top:auto; bottom:auto;
-width:100%;            /* full width */
-transform:none;
-transition:none;
-border-right:none;
-box-shadow:none;
-padding:20px 16px;
-border-bottom:1px solid var(--border);
-z-index:2;
-}
-.sidebar.open{transform:none}
 
 /* layout shifts */
 .main-content{margin-left:0}
@@ -556,10 +877,43 @@ z-index:2;
 }
 .scroll-top:hover{transform:translateY(-3px)}
 
-@media (max-width:600px){
-	/* On small/condensed screens center the panel on the viewport but allow the arrow
-	   to be positioned (via --filter-arrow-left) so it can point at the
-	   Filter toggle button. JS will set --filter-arrow-left and top when
-	   the panel is opened. */
-	.filter-panel{position:fixed;left:50%;transform:translateX(-50%);width:calc(100% - 32px);box-shadow:0 18px 48px rgba(0,0,0,0.12);border-radius:8px;margin-top:0;--filter-arrow-left:50%;width:fit-content}
+/* =========================
+Site Footer
+========================= */
+.site-footer, .about-footer {
+    text-align: center;
+    margin-top: 20px;
+    padding-top: 20px;
+}
+
+.site-footer .copyright, .about-footer .copyright {
+    color: var(--text-primary);
+    opacity: 0.6;
+    font-size: 0.9rem;
+    margin-bottom: 10px;
+}
+
+.site-footer .social-links, .about-footer .social-links {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-bottom: 10px;
+}
+
+.site-footer .social-link, .about-footer .social-link {
+    color: var(--accent);
+    text-decoration: none;
+    padding: 10px;
+    border-radius: 8px;
+    transition: all 0.2s;
+}
+
+.site-footer .social-link:hover, .about-footer .social-link:hover {
+    background: var(--accent);
+    color: var(--bg-primary);
+}
+
+.site-footer .social-link svg, .about-footer .social-link svg {
+    width: 24px;
+    height: 24px;
 }
