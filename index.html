@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Project Portfolio</title>
 
-    <!-- Social preview / favicon -->
+    <!-- Social preview -->
     <meta property="og:title" content="Articles & Projects">
     <meta property="og:description" content="Cybersecurity analyst — articles, projects, and study guides.">
     <meta property="og:url" content="https://codingatmyjob.github.io/">
@@ -59,16 +59,25 @@
                         </svg>
                     </a>
                 </div>
-                <!-- Tag filters: populated dynamically from article cards (moved to docked panel) -->
             </aside>
-
-            <!-- Compact filter is now a header dropdown (id="tag-filter-select").
-                 The old docked panel was removed in favor of a simpler dropdown UI. -->
 
             <section class="content-area">
 
                 <div id="articles-view">
                     <div class="articles-grid">
+                        
+                        <div class="article-card">
+                            <div class="article-image">Configuring Pi-hole</div>
+                            <div class="article-content">
+                                <div class="article-date">Coming soon...</div>
+                                <div class="article-title">Set up a Pi-hole at Home!</div>
+                                <div class="article-description">Learn how to configure a Pi-hole, redirect dns traffic and block unwanted ads at home (results may vary).</div>
+                                <div class="article-tags">
+                                    <span class="tag">Project</span>
+                                    <span class="tag">Networking</span>
+                                </div>
+                            </div>
+                        </div>
 
                         <div class="article-card">
                             <div class="article-image">VirtualBox Lab</div>
@@ -79,7 +88,7 @@
                                 <div class="article-tags">
                                     <span class="tag">VM</span>
                                     <span class="tag">Security</span>
-                                    <span class="tag">Pentest</span>
+                                    <span class="tag">Project</span>
                                     <span class="tag">Networking</span>
                                 </div>
                             </div>
@@ -90,7 +99,7 @@
                             <div class="article-content">
                                 <div class="article-date">November 2, 2025</div>
                                 <div class="article-title">HTB Command Cheatsheet</div>
-                                <div class="article-description">A cheatsheet of useful commands and tools for CTF events and basic penetration testing.</div>
+                                <div class="article-description">A regularly updated cheatsheet of essential commands and tools for CTFs and penetration testing.</div>
                                 <div class="article-tags">
                                     <span class="tag">HTB</span>
                                     <span class="tag">Pentest</span>
@@ -104,7 +113,7 @@
                             <div class="article-content">
                                 <div class="article-date">October 27, 2025</div>
                                 <div class="article-title">HTB Artificial Writeup - Box 668</div>
-                                <div class="article-description">A technical write up detailing steps taken to acquire user and root flags on the Artificial HTB Machine.</div>
+                                <div class="article-description">A technical write up detailing steps taken pwn the Artificial HTB Machine.</div>
                                 <div class="article-tags">
                                     <span class="tag">HTB</span>
                                     <span class="tag">Machine</span>
@@ -142,8 +151,8 @@
                                 </div>
                             </div>
                         </div>
-
                     </div>
+                    <div id="pagination-root"></div>
                 </div>
             </section>
             <!-- injected article will appear here -->
@@ -152,20 +161,5 @@
     </div>
 
     <script type="module" src="/src/main.jsx"></script>
-        <script>
-            // wire the header title to the SPA "Return Home" action by emitting a custom event.
-            (function(){
-                const sel = 'header .title a';
-                function init(){
-                    const el = document.querySelector(sel);
-                    if(!el) return;
-                    el.addEventListener('click', function(e){
-                        e.preventDefault();
-                        window.dispatchEvent(new CustomEvent('returnHome'));
-                    });
-                }
-                if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
-            })();
-        </script>
 </body>
 </html>

@@ -78,11 +78,15 @@ export default function FilterPanel({ tags=[], open=false, selectedTags=[], onCl
     const onDocClick = (e)=>{
       if(!panel.contains(e.target) && !toggle.contains(e.target)) onClose()
     }
+    const onScroll = ()=> onClose()
+    
     window.addEventListener('resize', onResize)
+    window.addEventListener('scroll', onScroll)
     document.addEventListener('click', onDocClick)
 
     return ()=>{
       window.removeEventListener('resize', onResize)
+      window.removeEventListener('scroll', onScroll)
       document.removeEventListener('click', onDocClick)
       panel.style.removeProperty('--filter-arrow-left')
       panel.style.removeProperty('top')

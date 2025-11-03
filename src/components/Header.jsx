@@ -1,8 +1,22 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import FilterPanel from './FilterPanel'
 
 export default function Header({ tags=[], selected=[], onApply, onClear, onOpenArticle }){
   const [open, setOpen] = useState(false)
+
+  // Handle header title click for "Return Home"
+  useEffect(()=>{
+    const el = document.querySelector('header .title a');
+    if(!el) return;
+    
+    const handler = function(e){
+      e.preventDefault();
+      window.dispatchEvent(new CustomEvent('returnHome'));
+    }
+    
+    el.addEventListener('click', handler);
+    return ()=> el.removeEventListener('click', handler)
+  },[])
 
   return (
     <div className="react-header" style={{display:'flex',alignItems:'center',gap:12}}>
