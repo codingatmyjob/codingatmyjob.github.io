@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>VirtualBox Home Lab Setup</title>
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+    <div id="binary-bg" aria-hidden="true"></div>
+
+    <main class="article-container">
+        <h1>VirtualBox Home Lab Setup</h1>
+        <div class="meta">
+            <time datetime="2025-11-08">November 08, 2025</time>
+            <span class="tag">VM</span>
+            <span class="tag">Security</span>
+            <span class="tag">Project</span>
+            <span class="tag">Networking</span>
+            <span class="tag">SIEM</span>
+        </div>
+
+        <article>
+            <h2>Overview</h2>
+            <p>Documenting the design and implementation of a home lab environment using Oracle VirtualBox. 
+            The lab features multiple VMs configured on an internal network, enabling safe penetration practice, 
+            exploit analysis, and network traffic monitoring with Security Onion and Elastic. This setup provides a cost-effective platform (free)
+            for developing offensive and defensive skills without impacting public facing networks.</p>
+
+            <h2>Objectives</h2>
+            <p>The primary objectives:</p>
+            <ul>
+                <li>Create a safe environment for security testing and exploit practice</li>
+                <li>Configure multiple VMs with static IP addresses for a consistent lab topology</li>
+                <li>Deploy Security Onion for network traffic monitoring, and exploit analysis</li>
+                <li>Learn Elastic Stack for centralized logging and analysis at home</li>
+                <li>Document the setup process for reproducibility and knowledge sharing</li>
+            </ul>
+
+            <h2>Environment Setup</h2>
+            <p>The lab consists of four virtual machines on an isolated VirtualBox internal network. 
+            Each VM serves a specific purpose in the lab environment.</p>
+
+            <h3>Virtual Machine Inventory</h3>
+            <table class="info-table" aria-label="VM configuration">
+                <tbody>
+                    <tr>
+                        <th>VM Name</th>
+                        <th>Operating System</th>
+                        <th>Purpose</th>
+                    </tr>
+                    <tr>
+                        <td>Ubuntu</td>
+                        <td>Ubuntu 24.04.3 Desktop</td>
+                        <td>General purpose Linux platform for testing</td>
+                    </tr>
+                    <tr>
+                        <td>Parrot OS</td>
+                        <td>Parrot Security 6.4</td>
+                        <td>Primary attack platform with pre-installed penetration testing toolkits</td>
+                    </tr>
+                    <tr>
+                        <td>Metasploitable2</td>
+                        <td>Linux 2.6.24-16-Server</td>
+                        <td>Deliberately vulnerable target for exploit practice</td>
+                    </tr>
+                    <tr>
+                        <td>Security Onion</td>
+                        <td>Security Onion 2.3.300</td>
+                        <td>Network monitoring, exploit analysis, and traffic capture</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h2>Methodology</h2>
+            <p>The lab was built systematically to ensure proper network functionality from the start.</p>
+
+            <h3>VM Deployment Process</h3>
+            <p>Each virtual machine was deployed with specific network adapter settings. The attack platform (Parrot OS) and 
+            target systems (Ubuntu and Metasploitable2) were configured with standard internal network adapters. Security Onion required 
+            special configuration with its monitoring interface set to promiscuous mode, allowing it to capture all traffic 
+            on the network segment for analysis.</p>
+
+            <h3>Network Configuration</h3>
+            <p>First I created an internal network in VirtualBox. DHCP was disabled in favor of static IP assignments for consistent lab topology. Each VM was configured 
+            with static networking using either Netplan (modern Ubuntu/Parrot) or traditional interfaces file (Metasploitable2). Upon configuration of a single VM, I verified connectivity with other devices.</p>
+
+            <h3>Security Onion Configuration</h3>
+            <p>Security Onion was configured with Elastic, Suricata IDS and Zeek for comprehensive network traffic analysis and SIEM. 
+            The promiscuous configuration allows the system to intercept all packets on the network, not just those addressed 
+            to it, enabling full visibility into attacks, exploits, and lateral movement attempts during penetration testing evolutions.</p>
+
+            <h3>Verification Testing</h3>
+            <p>After configuration, I verified connectivity between all VMs and tested Security Onion's monitoring capabilities 
+            by performing basic port scans and exploit attempts. The IDS successfully detected and logged the reconnaissance 
+            activity, confirming proper network visibility and alerting functionality.</p>
+
+            <h2>Future Improvements</h2>
+            <p>Several enhancements are planned to expand the lab's capabilities:</p>
+            <ul>
+                <li><strong>pfSense Router:</strong> Deploy a pfSense VM to add firewall rules, and inter-network routing capabilities</li>
+                <li><strong>SIEM Upgrade:</strong> Working towards customizing Security Onion's Elastic stack for improved log visualization</li>
+                <li><strong>Vulnerable Web Applications:</strong> Deploy DVWA, OWASP Juice Shop, and other intentionally vulnerable apps for web security practice</li>
+                <li><strong>Automated Snapshots:</strong> Implement snapshot management scripts to quickly revert VMs to known states during testing</li>
+            </ul>
+
+            <h2>References</h2>
+            <ul>
+                <li><a class="article-link" href="https://www.virtualbox.org/manual/" target="_blank" rel="noopener">Oracle VirtualBox</a></li>
+                <li><a class="article-link" href="https://netplan.io/" target="_blank" rel="noopener">Netplan Configuration</a></li>
+                <li><a class="article-link" href="https://docs.securityonion.net/" target="_blank" rel="noopener">Security Onion</a></li>
+                <li><a class="article-link" href="https://www.parrotsec.org/" target="_blank" rel="noopener">Parrot Security OS</a></li>
+                <li><a class="article-link" href="https://sourceforge.net/projects/metasploitable/" target="_blank" rel="noopener">Metasploitable2</a></li>
+                <li>Hack The Box Academy - Network Fundamentals</li>
+            </ul>
+        </article>
+    </main>
+
+    <footer class="site-footer">
+        <div class="copyright">
+            © 2025 CodingAtMyJob. All rights reserved.
+        </div>
+        <div class="social-links">
+            <a href="https://github.com/codingatmyjob/" class="social-link" target="_blank" aria-label="GitHub">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 .5C5.73.5.5 5.73.5 12c0 5.09 3.29 9.4 7.86 10.94.57.1.78-.25.78-.56v-2.02c-3.2.7-3.87-1.55-3.87-1.55-.52-1.3-1.27-1.64-1.27-1.64-1.04-.7.08-.68.08-.68 1.15.08 1.76 1.18 1.76 1.18 1.02 1.75 2.68 1.24 3.33.95.1-.74.4-1.24.73-1.53-2.56-.29-5.26-1.28-5.26-5.72 0-1.26.45-2.29 1.18-3.1-.12-.29-.51-1.46.11-3.04 0 0 .96-.31 3.14 1.18.91-.25 1.88-.38 2.85-.38s1.94.13 2.85.38c2.18-1.49 3.14-1.18 3.14-1.18.62 1.58.23 2.75.11 3.04.73.81 1.18 1.84 1.18 3.1 0 4.46-2.7 5.42-5.27 5.7.41.35.77 1.04.77 2.1v3.12c0 .31.21.67.79.56A10.51 10.51 0 0 0 23.5 12C23.5 5.73 18.27.5 12 .5z"/>
+                </svg>
+            </a>
+
+            <a href="https://app.hackthebox.com/profile/2578864" class="social-link" target="_blank" aria-label="Hack The Box">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 512 512" fill="currentColor">
+                    <path d="M256 0L32 128v256l224 128 224-128V128L256 0zm0 48l176 96v224l-176 96-176-96V144l176-96z"/>
+                </svg>
+            </a>
+
+            <a href="https://discord.com/users/506303556119298071" class="social-link" target="_blank" rel="noopener" aria-label="Discord">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 245 240" fill="currentColor">
+                    <path d="M104.4 104.3c-5.7 0-10.2 5-10.2 11.1s4.6 11.1 10.2 11.1c5.7 0 10.2-5 10.2-11.1.1-6.1-4.5-11.1-10.2-11.1zm36.2 0c-5.7 0-10.2 5-10.2 11.1s4.6 11.1 10.2 11.1 10.2-5 10.2-11.1c0-6.1-4.5-11.1-10.2-11.1z"/>
+                    <path d="M189.5 20h-134C39.1 20 30 29.2 30 40.6v142.8c0 11.3 9.1 20.6 25.5 20.6h113.4l-5.3-18.4 12.8 11.8 12.1 11.2L215 220V40.6c0-11.4-9.1-20.6-25.5-20.6zm-39 131.1s-3.6-4.3-6.6-8.1c13.1-3.7 18.1-11.8 18.1-11.8-4.1 2.7-8 4.6-11.5 5.9-5 2.1-9.8 3.5-14.4 4.3-9.5 1.8-18.2 1.3-25.7-.1-5.7-1.1-10.6-2.7-14.7-4.3-2.3-.9-4.8-2-7.3-3.4-.3-.2-.6-.3-.9-.5-.2-.1-.3-.2-.4-.3-1.8-1-2.8-1.7-2.8-1.7s4.8 8 17.5 11.8c-3 3.8-6.7 8.3-6.7 8.3-22.1-.7-30.5-15.2-30.5-15.2 0-32.2 14.4-58.4 14.4-58.4 14.4-10.9 28.1-10.6 28.1-10.6l1 1.2c-18 5.2-26.2 13.1-26.2 13.1s2.2-1.2 5.9-2.9c10.7-4.7 19.1-6 22.6-6.3.6-.1 1.1-.2 1.7-.2 6.1-.8 13-1 20.2-.2 9.5 1.1 19.7 3.9 30.1 9.6 0 0-7.9-7.5-24.9-12.8l1.4-1.6s13.7-.3 28.1 10.6c0 0 14.4 26.2 14.4 58.4 0-.1-8.5 14.4-30.6 15.1z"/>
+                </svg>
+            </a>
+        </div>
+    </footer>
+
+</body>
+</html>
