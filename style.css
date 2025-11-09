@@ -721,13 +721,11 @@ color:var(--text-primary);font-family:system-ui,-apple-system,"Segoe UI",Roboto,
 	vertical-align:top;
 }
 .info-table th{
-	width:33.333%;
 	color:rgba(255,255,255,0.8);
 	font-weight:600;
 	background:transparent;
 }
 .info-table td{
-	width:66.666%;
 	color:rgba(255,255,255,0.95);
 }
 .info-table tr + tr th,
