@@ -13,6 +13,8 @@
         <h1>VirtualBox Home Lab Setup</h1>
         <div class="meta">
             <time datetime="2025-11-08">November 08, 2025</time>
+        </div>
+        <div class="tags">
             <span class="tag">VM</span>
             <span class="tag">Security</span>
             <span class="tag">Project</span>
@@ -38,34 +40,29 @@
             </ul>
 
             <h2>Environment Setup</h2>
-            <p>The lab consists of four virtual machines on an isolated VirtualBox internal network. 
+            <p>The lab is comprised of four virtual machines on a VirtualBox internal network. 
             Each VM serves a specific purpose in the lab environment.</p>
 
             <h3>Virtual Machine Inventory</h3>
             <table class="info-table" aria-label="VM configuration">
                 <tbody>
                     <tr>
-                        <th>VM Name</th>
-                        <th>Operating System</th>
+                        <th>VM/OS</th>
                         <th>Purpose</th>
                     </tr>
                     <tr>
-                        <td>Ubuntu</td>
                         <td>Ubuntu 24.04.3 Desktop</td>
                         <td>General purpose Linux platform for testing</td>
                     </tr>
                     <tr>
-                        <td>Parrot OS</td>
-                        <td>Parrot Security 6.4</td>
+                        <td>Parrot OS (Parrot Security 6.4)</td>
                         <td>Primary attack platform with pre-installed penetration testing toolkits</td>
                     </tr>
                     <tr>
-                        <td>Metasploitable2</td>
-                        <td>Linux 2.6.24-16-Server</td>
+                        <td>Metasploitable2 Linux 2.6.24-16-Server</td>
                         <td>Deliberately vulnerable target for exploit practice</td>
                     </tr>
                     <tr>
-                        <td>Security Onion</td>
                         <td>Security Onion 2.3.300</td>
                         <td>Network monitoring, exploit analysis, and traffic capture</td>
                     </tr>
@@ -102,7 +99,7 @@
                 <li><strong>Automated Snapshots:</strong> Implement snapshot management to quickly revert VMs to healthy states</li>
                 <li><strong>Documentation:</strong> Document the Security Onion installation and configuration process</li>
                 <li><strong>pfSense Router:</strong> Deploy a pfSense VM to add firewall rules, and inter-network routing capabilities</li>
-                <li><strong>Vulnerable Web Apps:</strong> Deploy DVWA, OWASP Juice Shop, and other intentionally vulnerable apps for web security practice</li>
+                <li><strong>Vulnerable Web Apps:</strong> Deploy DVWA, OWASP Juice Shop, and others for web security practice</li>
                 <li><strong>Enhanced SIEM:</strong> Customize Security Onion's Elastic stack for improved log visualization</li>
             </ul>
 
