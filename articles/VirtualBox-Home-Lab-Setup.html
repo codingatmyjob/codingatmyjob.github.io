@@ -75,33 +75,34 @@
             <h2>Methodology</h2>
             <p>The lab was built systematically to ensure proper network functionality from the start.</p>
 
+            <h3>Network Configuration</h3>
+            <p>First I created an internal network in VirtualBox. DHCP was disabled on end devices in favor of static IP assignments for a more consistent lab topology. Each VM was configured 
+            with static networking using either Netplan (on modern Ubuntu/Parrot) or traditional interfaces file (Metasploitable2). Upon configuration of a single VM, I verified connectivity with other devices on the network.</p>
+
             <h3>VM Deployment Process</h3>
             <p>Each virtual machine was deployed with specific network adapter settings. The attack platform (Parrot OS) and 
             target systems (Ubuntu and Metasploitable2) were configured with standard internal network adapters. Security Onion required 
             special configuration with its monitoring interface set to promiscuous mode, allowing it to capture all traffic 
-            on the network segment for analysis.</p>
-
-            <h3>Network Configuration</h3>
-            <p>First I created an internal network in VirtualBox. DHCP was disabled in favor of static IP assignments for consistent lab topology. Each VM was configured 
-            with static networking using either Netplan (modern Ubuntu/Parrot) or traditional interfaces file (Metasploitable2). Upon configuration of a single VM, I verified connectivity with other devices.</p>
+            on the network segment for analysis, and it required another network adapter in bridged mode to access external resources, and access the SOC web interface.</p>
 
             <h3>Security Onion Configuration</h3>
             <p>Security Onion was configured with Elastic, Suricata IDS and Zeek for comprehensive network traffic analysis and SIEM. 
-            The promiscuous configuration allows the system to intercept all packets on the network, not just those addressed 
-            to it, enabling full visibility into attacks, exploits, and lateral movement attempts during penetration testing evolutions.</p>
+            The promiscuous configuration allows the system to intercept all traffic on the network, not just traffic addressed 
+            to the monitoring device, enabling full visibility into attacks, exploits, and lateral movement attempts during penetration testing events.</p>
 
             <h3>Verification Testing</h3>
             <p>After configuration, I verified connectivity between all VMs and tested Security Onion's monitoring capabilities 
-            by performing basic port scans and exploit attempts. The IDS successfully detected and logged the reconnaissance 
-            activity, confirming proper network visibility and alerting functionality.</p>
+            by performing basic port scans and exploit attempts. Security Onion successfully detected and logged the network 
+            activity, confirming proper network visibility and alerting functionality. 
+            In the future, I'd like to do a document both sides; successfully exploiting a service or protocol on Metasploitable2, and then uncover that exploit with Security Onion.</p>
 
             <h2>Future Improvements</h2>
             <p>Several enhancements are planned to expand the lab's capabilities:</p>
             <ul>
                 <li><strong>pfSense Router:</strong> Deploy a pfSense VM to add firewall rules, and inter-network routing capabilities</li>
-                <li><strong>SIEM Upgrade:</strong> Working towards customizing Security Onion's Elastic stack for improved log visualization</li>
+                <li><strong>Enhanced SIEM:</strong> Working towards customizing Security Onion's Elastic stack for improved log visualization</li>
                 <li><strong>Vulnerable Web Applications:</strong> Deploy DVWA, OWASP Juice Shop, and other intentionally vulnerable apps for web security practice</li>
-                <li><strong>Automated Snapshots:</strong> Implement snapshot management scripts to quickly revert VMs to known states during testing</li>
+                <li><strong>Automated Snapshots:</strong> Implement snapshot management to quickly revert VMs to healthy states during testing</li>
             </ul>
 
             <h2>References</h2>
