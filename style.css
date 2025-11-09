@@ -670,10 +670,12 @@ color:var(--text-primary);font-family:system-ui,-apple-system,"Segoe UI",Roboto,
 }
 .article-container > .back-link, #article-view .back-link{display:inline-block;margin-bottom:18px;background:transparent;border:1px solid var(--border);color:var(--text-primary);padding:8px 12px;border-radius:8px;cursor:pointer}
 .article-container h1{font-size:32px;margin:6px 0 6px;color:var(--text-primary);letter-spacing:-.2px}
-.article-container .meta{display:flex;gap:12px;align-items:center;margin-bottom:20px;color:rgba(255,255,255,0.8);font-size:13px}
+.article-container .meta{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-bottom:20px;color:rgba(255,255,255,0.8);font-size:13px}
+.article-container .tags{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:20px;color:rgba(255,255,255,0.8);font-size:13px}
 
 /* In light theme, prefer the primary text color for small meta elements */
 [data-theme="light"] .article-container .meta{color:var(--text-primary) !important}
+[data-theme="light"] .article-container .tags{color:var(--text-primary) !important}
 .article-container .meta .tag{background:var(--bg-primary);color:#cfcfcf;padding:4px 10px;border-radius:6px;font-size:12px}
 
 .article-container article{color:var(--text-primary);font-size:17px}
