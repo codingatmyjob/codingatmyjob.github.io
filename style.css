@@ -653,47 +653,9 @@ box-shadow:0 2px 8px var(--shadow);transition:transform .3s,box-shadow .3s;curso
 .no-results-message {
   color: var(--text-primary);
   opacity: 0.7;
-  font-size: 16px;
+  font-size: 14px;
   line-height: 1.5;
   margin: 0;
-}
-
-.search-suggestions {
-  margin-top: 24px;
-  text-align: left;
-  max-width: 500px;
-}
-
-.suggestions-title {
-  color: var(--text-primary);
-  font-size: 16px;
-  font-weight: 600;
-  margin: 0 0 12px 0;
-}
-
-.suggestions-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-.suggestion-chip {
-  background: var(--bg-secondary);
-  border: 1px solid var(--border);
-  color: var(--text-primary);
-  padding: 6px 12px;
-  border-radius: 16px;
-  font-size: 14px;
-  cursor: pointer;
-  transition: all 0.2s;
-  white-space: nowrap;
-}
-
-.suggestion-chip:hover {
-  background: var(--accent);
-  color: var(--bg-primary);
-  border-color: var(--accent);
-  transform: translateY(-1px);
 }
 
 .article-image{height:180px;background:var(--border);display:flex;align-items:center;justify-content:center;text-align:center;border-radius:8px 8px 0 0;overflow:hidden;font-size: 16px;}
