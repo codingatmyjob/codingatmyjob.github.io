@@ -7,6 +7,7 @@ import ArticlesControls from './components/ArticlesControls'
 import ArticleView from './components/ArticleView'
 import ScrollTop from './components/ScrollTop'
 import Pagination from './components/Pagination'
+import SearchBar from './components/SearchBar'
 
 const ROWS_PER_PAGE = 8
 
@@ -30,6 +31,9 @@ export default function App(){
   const [articlePath, setArticlePath] = useState(null)
   const [currentPage, setCurrentPage] = useState(1)
   const [itemsPerPage, setItemsPerPage] = useState(getItemsPerPage())
+  const [availableTags, setAvailableTags] = useState([])
+  const [searchQuery, setSearchQuery] = useState('')
+  const [articleContents, setArticleContents] = useState(new Map())
 
   // Update items per page on window resize
   useEffect(()=>{
@@ -43,20 +47,93 @@ export default function App(){
   // Filter out About Me from articles (helper function)
   const filterOutAbout = (articles) => articles.filter(article => article.path !== 'About.html')
 
-  // Filter articles based on selected tags
-  useEffect(()=>{
-    let filtered = allArticles
+  // Load and cache article content for searching
+  const loadArticleContent = useCallback(async (article) => {
+    if (!article.path || articleContents.has(article.path)) return
 
-    if(selected.length > 0){
-      const tagsLC = selected.map(s=>s.toLowerCase())
-      filtered = allArticles.filter(article => {
-        const articleTagsLC = article.tags.map(t=>t.toLowerCase())
-        return tagsLC.every(tag => articleTagsLC.includes(tag))
-      })
+    try {
+      const response = await fetch(article.path)
+      const htmlText = await response.text()
+      const tempDiv = document.createElement('div')
+      tempDiv.innerHTML = htmlText
+
+      // Extract title, tags, and article content
+      const title = tempDiv.querySelector('h1')?.textContent || ''
+      const tags = Array.from(tempDiv.querySelectorAll('.tag')).map(t => t.textContent.trim())
+      const articleEl = tempDiv.querySelector('article')
+      const content = articleEl ? articleEl.textContent : ''
+
+      const searchableContent = {
+        title: title.toLowerCase(),
+        tags: tags.map(t => t.toLowerCase()),
+        content: content.toLowerCase()
+      }
+
+      setArticleContents(prev => new Map(prev).set(article.path, searchableContent))
+    } catch (error) {
+      console.warn(`Failed to load content for ${article.path}:`, error)
+    }
+  }, [articleContents])
+
+  // Search function that searches through title, tags, and content
+  const searchArticles = useCallback(async (query, articles) => {
+    if (!query.trim()) return articles
+
+    const searchTerm = query.toLowerCase().trim()
+
+    // Load content for all articles if not already loaded
+    await Promise.all(articles.map(loadArticleContent))
+
+    return articles.filter(article => {
+      const content = articleContents.get(article.path)
+      if (!content) return false
+
+      // Search in title
+      if (content.title.includes(searchTerm)) return true
+
+      // Search in tags
+      if (content.tags.some(tag => tag.includes(searchTerm))) return true
+
+      // Search in content
+      if (content.content.includes(searchTerm)) return true
+
+      return false
+    })
+  }, [articleContents, loadArticleContent])
+
+  // Filter articles based on selected tags and search query
+  useEffect(()=>{
+    const applyFilters = async () => {
+      let filtered = allArticles
+
+      // Apply tag filter
+      if(selected.length > 0){
+        const tagsLC = selected.map(s=>s.toLowerCase())
+        filtered = allArticles.filter(article => {
+          const articleTagsLC = article.tags.map(t=>t.toLowerCase())
+          return tagsLC.every(tag => articleTagsLC.includes(tag))
+        })
+      }
+
+      // Apply search filter
+      if(searchQuery.trim()){
+        filtered = await searchArticles(searchQuery, filtered)
+      }
+
+      setFilteredArticles(filterOutAbout(filtered))
     }
 
-    setFilteredArticles(filterOutAbout(filtered))
-  },[selected, allArticles])
+    applyFilters()
+  },[selected, allArticles, searchQuery, searchArticles])
+
+  // Calculate available tags from currently filtered articles
+  useEffect(()=>{
+    const tagsFromFiltered = new Set()
+    filteredArticles.forEach(article => {
+      article.tags.forEach(tag => tagsFromFiltered.add(tag))
+    })
+    setAvailableTags(Array.from(tagsFromFiltered).sort())
+  },[filteredArticles])
 
   // Sort filtered articles
   useEffect(()=>{
@@ -89,6 +166,11 @@ export default function App(){
   const handleSortChange = useCallback((order)=>{
     setSortOrder(order)
     setCurrentPage(1) // Reset to page 1 when sort changes
+  },[])
+
+  const handleSearch = useCallback((query)=>{
+    setSearchQuery(query)
+    setCurrentPage(1) // Reset to page 1 when search changes
   },[])
 
   // Article open/close functions now set the articlePath state; ArticleView handles the fetch/inject
@@ -156,17 +238,19 @@ export default function App(){
       <BinaryBg />
       {controlsRoot && createPortal(
         <ArticlesControls 
-          tags={allTags}
+          tags={availableTags}
           selected={selected}
           onApply={applyFilter}
           onClear={clearFilter}
           sortOrder={sortOrder}
           onSortChange={handleSortChange}
+          searchBar={<SearchBar onSearch={handleSearch} />}
         />,
         controlsRoot
       )}
       <ArticlesGrid 
-        articles={currentArticles}
+        articles={allArticles.length > 0 ? currentArticles : undefined}
+        availableTags={availableTags}
         onOpenArticle={openArticle} 
         onTags={setAllTags}
         onArticlesLoaded={setAllArticles}
