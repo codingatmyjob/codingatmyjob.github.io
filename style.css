@@ -33,6 +33,7 @@ font-family:'Courier New',monospace;
 background:var(--bg-primary);
 color:var(--text-primary);
 transition:background .3s,color .3s;
+min-height:100vh;
 }
 
 /* =========================
@@ -198,9 +199,7 @@ Layout: Sidebar / Main
 
 /* When article is open, make body scrollable */
 body.article-open {
-  max-height: 100vh;
   overflow-y: auto;
-  padding-bottom: 40px;
 }
 
 /* Custom scrollbar for body (both home page and articles) */
@@ -526,7 +525,7 @@ Articles Controls (Sort & Filter)
 /* =========================
 Articles Grid / Cards
 ========================= */
-.articles-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;padding-left:20px;padding-right:20px;margin-top:0;margin-bottom: 20px;}
+.articles-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;padding-left:20px;padding-right:20px;margin-top:0;margin-bottom: 48px;}
 .article-card{
 background:var(--bg-secondary);border-radius:12px;overflow:hidden;
 box-shadow:0 2px 8px var(--shadow);transition:transform .3s,box-shadow .3s;cursor:pointer
@@ -856,7 +855,7 @@ max-width: 33%;
 	/* If --scroll-left is set, use it; otherwise fall back to right offset */
 	left: var(--scroll-left, auto);
 	right: var(--scroll-right, 20px);
-	bottom:22px;
+	bottom: 32px;
 	z-index:9999;
 	width:44px;
 	height:44px;
@@ -880,40 +879,42 @@ max-width: 33%;
 /* =========================
 Site Footer
 ========================= */
-.site-footer, .about-footer {
+.site-footer {
     text-align: center;
-    margin-top: 20px;
-    padding-top: 20px;
-}
+    /* margin-top: 20px;
+    padding-top: 20px; */
+    margin-bottom: 20px;
+} 
 
-.site-footer .copyright, .about-footer .copyright {
+.site-footer .copyright {
     color: var(--text-primary);
     opacity: 0.6;
     font-size: 0.9rem;
     margin-bottom: 10px;
 }
 
-.site-footer .social-links, .about-footer .social-links {
+.site-footer .social-links  {
     display: flex;
     justify-content: center;
     gap: 20px;
-    margin-bottom: 10px;
 }
 
-.site-footer .social-link, .about-footer .social-link {
+.site-footer .social-link {
     color: var(--accent);
     text-decoration: none;
     padding: 10px;
     border-radius: 8px;
     transition: all 0.2s;
+    align-content: center;
+    display: flex;
 }
 
-.site-footer .social-link:hover, .about-footer .social-link:hover {
+.site-footer .social-link:hover {
     background: var(--accent);
     color: var(--bg-primary);
 }
 
-.site-footer .social-link svg, .about-footer .social-link svg {
+.site-footer .social-link svg {
     width: 24px;
     height: 24px;
 }
