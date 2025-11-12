@@ -2,23 +2,31 @@ import React, { useState, useEffect } from 'react'
 
 export default function SearchBar({ onSearch, placeholder = "Search articles..." }) {
   const [query, setQuery] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
 
   // Debounce search to avoid too many searches while typing
   useEffect(() => {
     if (!query.trim()) {
+      setIsLoading(false)
       onSearch('')
       return
     }
 
+    setIsLoading(true)
     const timer = setTimeout(() => {
       onSearch(query.trim())
+      setIsLoading(false)
     }, 300)
 
-    return () => clearTimeout(timer)
+    return () => {
+      clearTimeout(timer)
+      setIsLoading(false)
+    }
   }, [query, onSearch])
 
   const handleClear = () => {
     setQuery('')
+    setIsLoading(false)
     onSearch('')
   }
 
@@ -31,11 +39,21 @@ export default function SearchBar({ onSearch, placeholder = "Search articles..."
         <input
           type="text"
           value={query}
-          onChange={(e) => setQuery(e.target.value)}
+          onChange={(e) => {
+            setQuery(e.target.value)
+            if (e.target.value.trim() && !isLoading) {
+              setIsLoading(true)
+            }
+          }}
           placeholder={placeholder}
           className="search-input"
           aria-label="Search articles"
         />
+        {isLoading && (
+          <div className="search-spinner" aria-hidden="true">
+            <div className="spinner-circle"></div>
+          </div>
+        )}
         {query && (
           <button
             type="button"

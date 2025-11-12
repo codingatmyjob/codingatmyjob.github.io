@@ -321,6 +321,36 @@ Articles Controls (Sort & Filter)
   background: var(--border);
 }
 
+.search-spinner {
+  color: var(--text-primary);
+  opacity: 0.6;
+  margin-left: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.spinner-circle {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid var(--border);
+  background: conic-gradient(
+    from 0deg,
+    transparent 0deg,
+    transparent 270deg,
+    var(--text-primary) 360deg
+  );
+  animation: spin-circle 1s linear infinite;
+  opacity: 0.7;
+}
+
+@keyframes spin-circle {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
 .articles-controls-wrapper {
   display: flex;
   flex-direction: column;
