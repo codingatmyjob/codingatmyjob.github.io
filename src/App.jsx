@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useCallback } from 'react'
 import { createPortal } from 'react-dom'
 import Header from './components/Header'
+import Sidebar from './components/Sidebar'
 import BinaryBg from './components/BinaryBg'
 import ArticlesGrid from './components/ArticlesGrid'
 import ArticlesControls from './components/ArticlesControls'
@@ -34,6 +35,7 @@ export default function App(){
   const [availableTags, setAvailableTags] = useState([])
   const [searchQuery, setSearchQuery] = useState('')
   const [articleContents, setArticleContents] = useState(new Map())
+  const [menuOpen, setMenuOpen] = useState(false)
 
   // Update items per page on window resize
   useEffect(()=>{
@@ -231,10 +233,20 @@ export default function App(){
 
   const paginationRoot = typeof document !== 'undefined' ? document.getElementById('pagination-root') : null
   const controlsRoot = typeof document !== 'undefined' ? document.getElementById('articles-controls-root') : null
+  const sidebarRoot = typeof document !== 'undefined' ? document.getElementById('sidebar-content') : null
 
   return (
     <>
-      <Header onOpenArticle={openArticle} />
+      <Header onOpenArticle={openArticle} menuOpen={menuOpen} onMenuToggle={() => setMenuOpen(!menuOpen)} />
+      {sidebarRoot && createPortal(
+        <Sidebar 
+          isOpen={menuOpen} 
+          onClose={() => setMenuOpen(false)} 
+          onOpenArticle={openArticle}
+          onHome={closeArticle}
+        />,
+        sidebarRoot
+      )}
       <BinaryBg />
       {controlsRoot && createPortal(
         <ArticlesControls 
@@ -250,7 +262,6 @@ export default function App(){
       )}
       <ArticlesGrid 
         articles={allArticles.length > 0 ? currentArticles : undefined}
-        availableTags={availableTags}
         onOpenArticle={openArticle} 
         onTags={setAllTags}
         onArticlesLoaded={setAllArticles}

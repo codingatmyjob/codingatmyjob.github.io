@@ -52,7 +52,7 @@ export default function ArticlesControls({ tags=[], selected=[], onApply, onClea
               <path d="M3 18h6v-2H3v2zM3 6v2h18V6H3zm0 7h12v-2H3v2z"/>
             </svg>
             <span className="sort-label">{sortOrder === 'newest' ? 'Newest' : 'Oldest'}</span>
-            <svg className={`dropdown-arrow ${sortOpen ? 'arrow-up' : 'arrow-down'}`} width="12" height="12" viewBox="0 0 12 12" fill="currentColor">
+            <svg className={`dropdown-arrow ${sortOrder === 'oldest' ? 'arrow-up' : 'arrow-down'}`} width="12" height="12" viewBox="0 0 12 12" fill="currentColor">
               <path d="M6 9L1 4h10z"/>
             </svg>
           </button>

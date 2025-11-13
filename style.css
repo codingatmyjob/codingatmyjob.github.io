@@ -1,6 +1,3 @@
-/* =========================
-Variables & Base
-========================= */
 :root{
 --bg-primary:#0a0e0a;
 --bg-secondary:#1a1f1a;
@@ -9,24 +6,20 @@ Variables & Base
 --border:#2a332a;
 --shadow:rgba(0,255,65,0.1);
 --header-gap:20px;
---filter-gap:12px;
 --control-height:44px;
---binary-color: rgba(80,255,140,0.06);
+--binary-color:rgba(80,255,140,0.06);
 }
-
 
 [data-theme="light"]{
-	/* Soft grey / dark grey scheme (user provided palette) */
-	--bg-primary:#D3D3D3;    /* light gray - page background */
-	--bg-secondary:#E9E9E9;  /* slightly lighter secondary panels */
-	--text-primary:#363636;   /* dark gray - primary text */
-	--accent:#5E5E5E;        /* medium gray - accents, links */
-	--border:#878787;        /* light-medium gray - dividers */
-	--shadow:rgba(54,54,54,0.06);
-	--binary-color:rgba(54,54,54,0.06);
+--bg-primary:#D3D3D3;
+--bg-secondary:#E9E9E9;
+--text-primary:#363636;
+--accent:#5E5E5E;
+--border:#878787;
+--shadow:rgba(54,54,54,0.06);
+--binary-color:rgba(54,54,54,0.06);
 }
 
-/* reset / base */
 *{box-sizing:border-box;margin:0;padding:0}
 body{
 font-family:'Courier New',monospace;
@@ -35,141 +28,256 @@ color:var(--text-primary);
 transition:background .3s,color .3s;
 min-height:100vh;
 padding-bottom:20px;
+padding-top:40px;
 display:flex;
 flex-direction:column;
 }
 
-/* =========================
-Header
-========================= */
+/* Header */
 header{
-position:relative;
+position:fixed;
+top:0;
+left:0;
+right:0;
+width:100%;
+z-index:999;
 display:flex;
-justify-content:flex-end; /* desktop: toggle on right */
+justify-content:flex-end;
 align-items:center;
 padding:20px;
 border-bottom:1px solid var(--border);
+background: var(--bg-primary);
 }
 
-/* Menu button styling */
 .menu-toggle{
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
   width:44px;
   height:44px;
+  background:var(--bg-secondary);
   border:1px solid var(--border);
   border-radius:8px;
-  background:var(--bg-secondary);
   color:var(--text-primary);
   cursor:pointer;
   display:flex;
   align-items:center;
   justify-content:center;
-  font-size:18px;
   transition:all 0.2s;
+  z-index: 1001;
 }
 
 .menu-toggle:hover{
   background:var(--border);
 }
 
-/* Rotate hamburger icon when menu is open */
-.menu-toggle.menu-open svg {
-  transform: rotate(-90deg);
-  transition: transform 0.2s ease;
+.menu-toggle.sidebar-open svg {
+  transform: rotate(90deg);
+}
+
+/* Hide header toggle when sidebar is open so the in-sidebar button is used */
+.menu-toggle.sidebar-open {
+  opacity: 0;
+  pointer-events: none;
 }
 
 .menu-toggle svg {
-  transition: transform 0.2s ease;
+  width:20px;
+  height:20px;
+  transition:transform 0.2s;
 }
 
-/* Menu dropdown wrapper for positioning */
-.menu-dropdown-wrap{
-  position:relative;
+/* Sidebar */
+aside.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 280px;
+  height: 100vh;
+  z-index: 1000;
+  pointer-events: none;
 }
 
-/* Menu dropdown options */
-.menu-dropdown{
-  position:absolute;
-  top:calc(100% + 8px);
-  right:0;
-  min-width:150px;
+.sidebar-content {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--bg-secondary);
+  border-right: 1px solid var(--border);
+  box-shadow: 2px 0 8px var(--shadow);
+  display: none; /* Appear instantly (no slide) */
+  padding: 80px 0px 20px 0px;
+  overflow-y: auto;
+  pointer-events: auto;
+}
+
+.sidebar-content.sidebar-open {
+  display: block;
+}
+
+.sidebar-overlay {
+  position: absolute;
+  top: 0;
+  left: 280px;
+  width: calc(100vw - 280px);
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.sidebar-overlay.sidebar-open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar-header {
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.sidebar-title {
+  color: var(--text-primary);
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.sidebar-divider {
+  height: 1px;
+  background: var(--border);
+  margin: 4px 0 20px 0;
+}
+
+.sidebar-section-title {
+  color: var(--text-primary);
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin: 20px 0 8px 0;
+  opacity: 0.8;
+}
+
+.sidebar-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  color: var(--text-primary);
+  text-decoration: none;
+  border-radius: 8px;
+  transition: all 0.2s;
+  font-size: 16px;
+  font-weight: 500;
+  margin: 0 16px 0 16px;
+}
+
+.sidebar-item:hover {
+  background: var(--border);
+  color: var(--accent);
+}
+
+.sidebar-icon {
+  flex-shrink: 0;
+  opacity: 0.8;
+}
+
+.sidebar-item:hover .sidebar-icon {
+  opacity: 1;
+}
+
+/* In-sidebar close/toggle button (scrolls with sidebar) */
+.sidebar-close-toggle{
+  position: absolute;
+  left: 16px;
+  top: 20px;
+  width:44px;
+  height:44px;
   background:var(--bg-secondary);
   border:1px solid var(--border);
   border-radius:8px;
-  box-shadow:0 4px 12px var(--shadow);
-  overflow:hidden;
-  z-index:1000;
-}
-
-.menu-option{
-  display:block;
-  width:100%;
-  padding:12px 16px;
-  background:transparent;
-  border:none;
   color:var(--text-primary);
-  font-family:inherit;
-  font-size:14px;
-  text-align:left;
   cursor:pointer;
-  transition:background 0.2s;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  transition:all 0.2s;
+  z-index: 1002;
+}
+.sidebar-close-toggle:hover{background:var(--border)}
+.sidebar-close-toggle svg{width:20px;height:20px;transition:transform .2s;transform:rotate(90deg)}
+
+/* Title in sidebar for small screens */
+.sidebar-header-title{
+  position: absolute;
+  left: calc(16px + 44px + 10px);
+  top: 33px;
+  z-index: 1003;
+  pointer-events: auto;
 }
 
-.menu-option:hover{
-  background:var(--border);
+.sidebar-header-title .title{
+  margin: 0;
+  pointer-events: auto;
+  cursor: pointer;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 1.05rem;
 }
 
-.menu-option:first-child{
-  border-radius:8px 8px 0 0;
+.sidebar-header-title .title a{
+  color: inherit;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  pointer-events: auto;
 }
 
-.menu-option:last-child{
-  border-radius:0 0 8px 8px;
-  border-top:1px solid var(--border);
-}
-
-/* Ensure controls (theme-toggle and filter-toggle) share the same visual height */
 .theme-toggle, .filter-toggle { min-height: var(--control-height); }
 
-/* small numeric badge inside the Filter button showing active count */
 .filter-toggle .filter-count:empty{display:none}
 .filter-toggle.filters-active .filter-count{background:var(--bg-primary);color:var(--accent)}
-/* Adaptive Filter button: icon + label. On small screens show icon-only; on larger show label + badge.
-   The toggle is positioned relative so the badge can be absolutely positioned in compact mode. */
 .filter-toggle{position:relative;display:inline-flex;align-items:center;justify-content:center;padding:8px;width:var(--control-height);min-width:var(--control-height);border-radius:8px;appearance:none;border:1px solid var(--border);background:var(--bg-secondary);color:var(--text-primary);font-size:14px;cursor:pointer}
 .filter-toggle .filter-icon{width:18px;height:18px;flex:0 0 auto}
-/* badge floats in the corner so it never stretches the button */
 .filter-toggle .filter-count{position:absolute;top:-6px;right:-6px;min-width:18px;padding:2px 6px;font-size:11px;margin-left:0;background:rgba(0,0,0,0.12);color:var(--text-primary);border-radius:999px;font-weight:700;line-height:1;text-align:center}
 
-/* On very large screens we can slightly increase padding while keeping icon-only */
 @media (min-width:1200px){
 	.filter-toggle{padding:10px;width:auto;min-width:var(--control-height)}
 	.filter-toggle .filter-count{right:-8px;top:-8px}
 }
 
-/* desktop: centered title across content area (accounts for sidebar) */
 header .title{
 position:absolute;
 left:50%;
-transform:translateX(-50%);
+top:50%;
+transform:translate(-50%, -50%);
 margin:0;
 pointer-events:auto;
 cursor:pointer;
 color:var(--text-primary);
 display:flex;
 align-items:center;
+justify-content:center;
 gap:8px;
+pointer-events:none;
 }
 
-/* ensure the title link inherits styling and is clickable without underline */
-header .title a{color:inherit;text-decoration:none;display:inline-flex;align-items:center}
+header .title a{color:inherit;text-decoration:none;display:inline-flex;align-items:center;pointer-events:auto}
 
-/* Only the link text should be clickable; disable pointer events on the surrounding title
-	so whitespace and surrounding area do not act as a link. The anchor itself re-enables
-	pointer events so the text remains interactive. */
-header .title{pointer-events:none}
-header .title a{pointer-events:auto}
-
-/* theme toggle */
 .theme-toggle{
 background:var(--bg-secondary);
 border:1px solid var(--border);
@@ -193,58 +301,18 @@ border-color:var(--accent);
 .switch::before{content:'';position:absolute;width:16px;height:16px;border-radius:50%;background:var(--accent);top:2px;left:2px;transition:transform .3s}
 [data-theme="light"] .switch::before{transform:translateX(20px)}
 
-/* =========================
-Layout: Sidebar / Main
-========================= */
+/* Layout */
 .container, .article-container{position:relative;z-index:2}
-
-.main-content{display:flex;flex-direction:column;align-items:center;margin-left:0;}
-
-/* When article is open, make body scrollable */
-body.article-open {
-  overflow-y: auto;
-}
-
-/* Custom scrollbar for body (both home page and articles) */
-body::-webkit-scrollbar {
-  width: 8px;
-}
-
-body::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-body::-webkit-scrollbar-thumb {
-  background: var(--border);
-  border-radius: 4px;
-}
-
-body::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.3);
-}
-
-/* Custom scrollbar for body when article is open */
-body.article-open::-webkit-scrollbar {
-  width: 8px;
-}
-
-body.article-open::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-body.article-open::-webkit-scrollbar-thumb {
-  background: var(--border);
-  border-radius: 4px;
-}
-
-body.article-open::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.3);
-}
+.main-content{display:flex;flex-direction:column;align-items:center;margin-left:0;margin-top:44px}
 .content-area{max-width:1100px;width:100%;margin:0 auto}
 
-/* =========================
-Articles Controls (Sort & Filter)
-========================= */
+body.article-open{overflow-y:auto}
+
+body::-webkit-scrollbar,body.article-open::-webkit-scrollbar{width:8px}
+body::-webkit-scrollbar-track,body.article-open::-webkit-scrollbar-track{background:transparent}
+body::-webkit-scrollbar-thumb,body.article-open::-webkit-scrollbar-thumb{background:var(--border);border-radius:5px}
+
+/* Search & Controls */
 .search-bar-container {
   width: 320px;
 }
@@ -377,8 +445,6 @@ Articles Controls (Sort & Filter)
   gap: 20px;
 }
 
-
-
 .sort-dropdown-wrap{
   position:relative;
 }
@@ -463,7 +529,6 @@ Articles Controls (Sort & Filter)
   font-weight:600;
 }
 
-/* Filter in controls area */
 #articles-controls-root .filter-dropdown-wrap{
   position:relative;
 }
@@ -643,9 +708,7 @@ Articles Controls (Sort & Filter)
   }
 }
 
-/* =========================
-Articles Grid / Cards
-========================= */
+/* Articles Grid */
 .articles-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;padding-left:20px;padding-right:20px;margin-top:0;margin-bottom: 48px;}
 .article-card{
 background:var(--bg-secondary);border-radius:12px;overflow:hidden;
@@ -699,14 +762,11 @@ box-shadow:0 2px 8px var(--shadow);transition:transform .3s,box-shadow .3s;curso
 .article-tags{display:flex;gap:8px;flex-wrap:wrap;margin-top:15px}
 .tag{padding:4px 12px;background:var(--bg-primary);border-radius:4px;font-size:12px;color:#a0a0a0}
 
-/* grid responsiveness (kept near other responsive rules) */
 @media (max-width:1278px){.articles-grid{grid-template-columns:repeat(3,1fr)}}
 @media (max-width:900px){.articles-grid{grid-template-columns:repeat(2,1fr)}}
 @media (max-width:640px){.articles-grid{grid-template-columns:1fr}}
 
-/* =========================
-Pagination
-========================= */
+/* Pagination */
 .pagination-container{
   display:flex;
   justify-content:center;
@@ -809,15 +869,12 @@ Pagination
   }
 }
 
-/* =========================
-Article View / Injected Content
-========================= */
+/* Article View */
 #articles-view{position:relative;z-index:2;width:100%;max-width:1200px;margin:0 auto;color:var(--text-primary)}
-/* wrapper neutral so only fetched .article-container styles apply */
 #article-view .article-frame{width:100%;max-width:none;margin:0;padding:0;background:transparent;border:none;box-shadow:none}
+#article-view{max-width:1100px;width:100%;margin:0 auto}
 #article-view .article-frame > .back-link{margin-bottom:18px}
 
-/* Article presentation styles (inner .article-container from article files) */
 .article-container{
 max-width:900px;margin:28px auto;padding:28px;background:var(--bg-secondary);
 border:1px solid var(--border);border-radius:12px;box-shadow:0 8px 30px rgba(0,0,0,0.25);
@@ -825,13 +882,11 @@ color:var(--text-primary);font-family:system-ui,-apple-system,"Segoe UI",Roboto,
 }
 .article-container > .back-link, #article-view .back-link{display:inline-block;margin-bottom:18px;background:transparent;border:1px solid var(--border);color:var(--text-primary);padding:8px 12px;border-radius:8px;cursor:pointer}
 .article-container h1{font-size:32px;margin:6px 0 6px;color:var(--text-primary);letter-spacing:-.2px}
-.article-container .meta{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-bottom:20px;color:rgba(255,255,255,0.8);font-size:13px}
-.article-container .tags{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:20px;color:rgba(255,255,255,0.8);font-size:13px}
-
-/* In light theme, prefer the primary text color for small meta elements */
-[data-theme="light"] .article-container .meta{color:var(--text-primary) !important}
-[data-theme="light"] .article-container .tags{color:var(--text-primary) !important}
+.article-container .meta,.article-container .tags{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-bottom:20px;color:rgba(255,255,255,0.8);font-size:13px}
+.article-container .tags{gap:8px}
 .article-container .meta .tag{background:var(--bg-primary);color:#cfcfcf;padding:4px 10px;border-radius:6px;font-size:12px}
+
+[data-theme="light"] .article-container .meta,[data-theme="light"] .article-container .tags{color:var(--text-primary) !important}
 
 .article-container article{color:var(--text-primary);font-size:17px}
 .article-container article p{margin:0 0 16px 0;color:rgba(255,255,255,0.85)}
@@ -847,23 +902,19 @@ color:var(--text-primary);font-family:system-ui,-apple-system,"Segoe UI",Roboto,
 .article-container article pre code{color:rgba(255,255,255,0.95)}
 .article-container a{color:var(--accent);text-decoration:underline;text-underline-offset:3px}
 
-/* CTF Command Cheatsheet styles */
 .command-section{margin:0 0 20px 0}
 .command-title{font-weight:600;color:rgba(255,255,255,0.95);margin:0 0 8px 0;font-size:15px}
 .command-desc{color:rgba(255,255,255,0.75);font-size:14px;margin:8px 0 0 0}
 
-/* Collapsible sections (for articles with data-collapsible attribute) */
 .article-container[data-collapsible="true"] article .collapsible::after{margin-left:10px;font-size:14px;transition:all 0.3s ease;display:inline-block}
 .article-container[data-collapsible="true"] article .collapsible.collapsed::after{content:"▶"}
 .article-container[data-collapsible="true"] article .collapsible:not(.collapsed)::after{content:"▼"}
 
-/* Light mode overrides for code and commands */
 [data-theme="light"] .article-container article code{color:var(--text-primary);background:rgba(0,0,0,0.06)}
 [data-theme="light"] .article-container article pre code{color:var(--text-primary)}
 [data-theme="light"] .command-title{color:var(--text-primary)}
 [data-theme="light"] .command-desc{color:#6f6f6f}
 
-/* Initial Info table used in HTB writeups */
 .info-table{
 	width:100%;
 	border-collapse:collapse;
@@ -892,7 +943,6 @@ color:var(--text-primary);font-family:system-ui,-apple-system,"Segoe UI",Roboto,
 [data-theme="light"] .info-table th{color:#55606a}
 [data-theme="light"] .info-table td{color:#2c3e50}
 
-/* styled resource links inside articles (buttons with hover) */
 .article-container article .article-link{
 display:inline-block;color:var(--accent);background:rgba(255,255,255,0.02);border:1px solid transparent;padding:6px 10px;border-radius:8px;text-decoration:none;transition:transform .16s,box-shadow .16s,background-color .16s,border-color .16s;font-weight:600;margin:6px 0
 }
@@ -900,29 +950,20 @@ display:inline-block;color:var(--accent);background:rgba(255,255,255,0.02);borde
 [data-theme="light"] .article-container article .article-link{background:rgba(0,0,0,0.03);border-color:rgba(0,0,0,0.04);color:var(--accent)}
 [data-theme="light"] .article-container article .article-link:hover{box-shadow:0 8px 18px rgba(0,0,0,0.06);transform:translateY(-2px)}
 
-/* small adjustments for article container on narrow screens */
 @media (max-width:900px){.article-container{margin:18px 16px;padding:20px}.article-container h1{font-size:26px}}
 
-/* left accent bar for article cards */
 .article-container::before{content:"";position:absolute;left:-8px;top:12px;bottom:12px;width:4px;border-radius:4px;background:linear-gradient(180deg,var(--accent),rgba(0,0,0,0.15));opacity:.9}
-
-/* ensure inner fetched article is positioned properly */
 #article-view .article-container{position:relative}
 
-/* =========================
-Binary background (rain)
-========================= */
+/* Binary Background */
 #binary-bg{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden;mix-blend-mode:normal}
 #binary-bg .bit{position:absolute;top:-5%;color:var(--binary-color);font-family:monospace;user-select:none;will-change:transform,opacity;text-shadow:0 0 4px var(--binary-color);z-index:0;animation-name:binary-fall,binary-fade;animation-timing-function:linear;animation-iteration-count:infinite;opacity:0.9}
 @keyframes binary-fall{0%{transform:translateY(-10vh)}100%{transform:translateY(110vh)}}
 @keyframes binary-fade{0%{opacity:0}10%{opacity:.9}90%{opacity:.4}100%{opacity:0}}
 
-/* =========================
-Utility / Lists
-========================= */
+/* Utility */
 li{margin:4px 0}
 
-/* Light theme: ensure article text uses a readable dark gray (overrides any white/rgba values) */
 [data-theme="light"] .article-container,
 [data-theme="light"] .article-container article,
 [data-theme="light"] .article-container article p,
@@ -937,137 +978,34 @@ li{margin:4px 0}
 	color: var(--text-primary) !important;
 }
 
-/* Light-mode overrides for small UI elements so they remain visible */
-[data-theme="light"] .tag{
-	/* make tags stand out against the soft gray page background */
-	background:var(--accent) !important;
-	color:var(--bg-primary) !important;
-	border-color:rgba(0,0,0,0.06);
-}
-
-[data-theme="light"] .article-date{
-	/* make the date readable in light mode */
-	color:var(--accent) !important;
-}
-
-[data-theme="light"] .reading-time{
-	color:#666 !important;
-}
-
+[data-theme="light"] .tag{background:var(--accent) !important;color:var(--bg-primary) !important;border-color:rgba(0,0,0,0.06)}
+[data-theme="light"] .article-date{color:var(--accent) !important}
+[data-theme="light"] .reading-time{color:#666 !important}
 [data-theme="light"] .article-description{color:#6f6f6f}
 
-/* =========================
-Responsive: Mobile tweaks
-- Keep desktop centering intact
-- On mobile: left-align title, allow wrapping
-- Sidebar becomes off-canvas / stacked
-========================= */
+/* Responsive */
 @media (max-width:1278px){
-/* header: left-align title and allow wrapping (same as before) */
-header{justify-content:space-between;padding-left:16px;padding-right:16px;gap:12px;flex-wrap:wrap;align-items:center}
-header > .title, header .title{
-position:static;
-transform:none;
-margin:0;
-font-size:1.05rem;
-color:var(--text-primary);
-display:block;
-text-align:center;
-overflow-wrap:break-word;
-white-space:normal;
-word-break:break-word;
-max-width: 33%;
-}
-
+header{justify-content:flex-end;padding-left:16px;padding-right:16px;gap:12px;flex-wrap:wrap;align-items:center}
+header > .title, header .title{position:absolute;top:50%;transform:translateY(-50%);margin:0;font-size:1.05rem;color:var(--text-primary);display:flex;align-items:center;justify-content:center;gap:8px;left:calc(16px + 44px + 10px)}
 .theme-toggle{flex:0 0 auto;white-space:nowrap}
-
-/* layout shifts */
 .main-content{margin-left:0}
 .container{overflow-x:hidden}
-
-/* When the sidebar stacks above the articles, reduce the grid's top margin
-	so the visual gap between the sidebar and tiles stays around 20px. The
-	sidebar has its own bottom padding, so keeping the grid margin small makes
-	the combined spacing feel correct on mobile. */
 .articles-grid{margin-top:20px}
 }
 
-/* smaller breakpoints */
-@media (max-width:600px){#binary-bg .bit{opacity:.09}}
-
-/* On very small screens hide the visual switch inside the theme toggle
-	 so only the label/text remains. Adjust padding so the button looks right. */
 @media (max-width:600px){
-	.theme-toggle .switch{display:none}
-	.theme-toggle{padding-left:12px;padding-right:12px}
+#binary-bg .bit{opacity:.09}
+.theme-toggle .switch{display:none}
+.theme-toggle{padding-left:12px;padding-right:12px}
 }
 
-/* Scroll-to-top floating button shown when articles are open.
-   Positioning uses a CSS variable --scroll-left when available so JavaScript
-   only writes the numeric left value and CSS handles the final placement.
-*/
-.scroll-top{
-	position:fixed;
-	/* If --scroll-left is set, use it; otherwise fall back to right offset */
-	left: var(--scroll-left, auto);
-	right: var(--scroll-right, 20px);
-	bottom: 32px;
-	z-index:9999;
-	width:44px;
-	height:44px;
-	display:flex; /* Always flex, visibility controlled by opacity */
-	align-items:center;
-	justify-content:center;
-	background:var(--accent);
-	color:var(--bg-primary);
-	border:none;
-	border-radius:50%;
-	box-shadow:0 6px 20px rgba(0,0,0,0.2);
-	cursor:pointer;
-	font-size:20px;
-	line-height:1;
-	opacity:0;
-	pointer-events:none;
-	transition:transform .15s,opacity .3s,left .12s,right .12s;
-}
+.scroll-top{position:fixed;left:var(--scroll-left, auto);right:var(--scroll-right, 20px);bottom:32px;z-index:9999;width:44px;height:44px;display:flex;align-items:center;justify-content:center;background:var(--accent);color:var(--bg-primary);border:none;border-radius:50%;box-shadow:0 6px 20px rgba(0,0,0,0.2);cursor:pointer;font-size:20px;line-height:1;opacity:0;pointer-events:none;transition:transform .15s,opacity .3s,left .12s,right .12s}
 .scroll-top:hover{transform:translateY(-3px)}
 
-/* =========================
-Site Footer
-========================= */
-.site-footer {
-    text-align: center;
-} 
-
-.site-footer .copyright {
-    color: var(--text-primary);
-    opacity: 0.6;
-    font-size: 0.9rem;
-    margin-bottom: 10px;
-}
-
-.site-footer .social-links  {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-}
-
-.site-footer .social-link {
-    color: var(--accent);
-    text-decoration: none;
-    padding: 10px;
-    border-radius: 8px;
-    transition: all 0.2s;
-    align-content: center;
-    display: flex;
-}
-
-.site-footer .social-link:hover {
-    background: var(--accent);
-    color: var(--bg-primary);
-}
-
-.site-footer .social-link svg {
-    width: 24px;
-    height: 24px;
-}
+/* Footer */
+.site-footer{text-align:center}
+.site-footer .copyright{color:var(--text-primary);opacity:0.6;font-size:0.9rem;margin-bottom:10px}
+.site-footer .social-links{display:flex;justify-content:center;gap:20px}
+.site-footer .social-link{color:var(--accent);text-decoration:none;padding:10px;border-radius:8px;transition:all 0.2s;align-content:center;display:flex}
+.site-footer .social-link:hover{background:var(--accent);color:var(--bg-primary)}
+.site-footer .social-link svg{width:24px;height:24px}

@@ -1,8 +1,32 @@
 import React, { useState, useEffect } from 'react'
 
-export default function Header({ onOpenArticle }){
-  const [menuOpen, setMenuOpen] = useState(false)
+function ThemeToggle() {
+  const [theme, setTheme] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem('theme') || 'dark'
+    }
+    return 'dark'
+  })
 
+  useEffect(() => {
+    const html = document.documentElement
+    html.setAttribute('data-theme', theme)
+    localStorage.setItem('theme', theme)
+  }, [theme])
+
+  const toggleTheme = () => {
+    setTheme(prev => prev === 'light' ? 'dark' : 'light')
+  }
+
+  return (
+    <button className="theme-toggle" onClick={toggleTheme}>
+      <div className="switch"></div>
+      <span id="theme-icon">{theme === 'dark' ? 'Dark Mode' : 'Light Mode'}</span>
+    </button>
+  )
+}
+
+export default function Header({ onOpenArticle, menuOpen, onMenuToggle }){
   // Handle header title click for "Return Home"
   useEffect(()=>{
     const el = document.querySelector('header .title a');
@@ -21,16 +45,16 @@ export default function Header({ onOpenArticle }){
   useEffect(()=>{
     if(!menuOpen) return
     const handleClick = (e)=>{
-      if(!e.target.closest('.menu-dropdown') && !e.target.closest('.menu-toggle')) {
-        setMenuOpen(false)
+      if(!e.target.closest('.sidebar') && !e.target.closest('.menu-toggle')) {
+        onMenuToggle(false)
       }
     }
     document.addEventListener('click', handleClick)
     return ()=> document.removeEventListener('click', handleClick)
-  },[menuOpen])
+  },[menuOpen, onMenuToggle])
 
   const handleMenuClick = (action)=>{
-    setMenuOpen(false)
+    onMenuToggle(false)
     if(action === 'home'){
       window.dispatchEvent(new CustomEvent('returnHome'));
     } else if(action === 'about'){
@@ -40,48 +64,25 @@ export default function Header({ onOpenArticle }){
   }
 
   return (
-    <div style={{display:'flex',alignItems:'center',gap:12}}>
-      <div className="menu-dropdown-wrap">
-        <button 
-          className={`menu-toggle ${menuOpen ? 'menu-open' : ''}`} 
-          onClick={()=>setMenuOpen(v=>!v)}
-          aria-expanded={menuOpen}
-          aria-label="Menu"
-        >
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/>
-          </svg>
-        </button>
-        {menuOpen && (
-          <div className="menu-dropdown">
-            <button 
-              className="menu-option"
-              onClick={()=>handleMenuClick('home')}
-            >
-              Home
-            </button>
-            <button 
-              className="menu-option"
-              onClick={()=>handleMenuClick('about')}
-            >
-              About Me
-            </button>
-          </div>
-        )}
-      </div>
-
-      <button className="theme-toggle" onClick={()=>{
-        const html = document.documentElement
-        const current = html.getAttribute('data-theme')
-        const next = current === 'light' ? 'dark' : 'light'
-        html.setAttribute('data-theme', next)
-        localStorage.setItem('theme', next)
-        const icon = document.getElementById('theme-icon')
-        if(icon) icon.textContent = next === 'dark' ? 'Dark Mode' : 'Light Mode'
-      }}>
-        <div className="switch"></div>
-        <span id="theme-icon">Theme</span>
+    <>
+      <button 
+        className={`menu-toggle ${menuOpen ? 'sidebar-open' : ''}`} 
+        onClick={() => onMenuToggle(!menuOpen)}
+        aria-label="Toggle menu"
+        aria-expanded={menuOpen}
+      >
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/>
+        </svg>
       </button>
-    </div>
+
+      <h2 className="title">
+        <a href="/" aria-label="Return Home">Portfolio</a>
+      </h2>
+
+      <div className="header-controls">
+        <ThemeToggle />
+      </div>
+    </>
   )
 }
