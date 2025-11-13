@@ -41,7 +41,7 @@ export default function FilterPanel({ tags=[], open=false, selectedTags=[], onCl
     })
   }
 
-  const clear = ()=>{ setSelected([]); onClear() }
+  const clear = ()=>{ setSelected([]); onClear(); onClose() }
 
   if(!open) return null
   return (
