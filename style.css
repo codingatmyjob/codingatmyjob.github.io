@@ -222,7 +222,8 @@ aside.sidebar {
 .sidebar-header-title{
   position: absolute;
   left: calc(16px + 44px + 16px);
-  top: 32.5px;
+  top: 42px;
+  transform: translateY(-50%);
   z-index: 1003;
   pointer-events: auto;
 }
