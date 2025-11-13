@@ -221,8 +221,8 @@ aside.sidebar {
 /* Title in sidebar for small screens */
 .sidebar-header-title{
   position: absolute;
-  left: calc(16px + 44px + 10px);
-  top: 33px;
+  left: calc(16px + 44px + 16px);
+  top: 32.5px;
   z-index: 1003;
   pointer-events: auto;
 }
@@ -986,7 +986,7 @@ li{margin:4px 0}
 /* Responsive */
 @media (max-width:1278px){
 header{justify-content:flex-end;padding-left:16px;padding-right:16px;gap:12px;flex-wrap:wrap;align-items:center}
-header > .title, header .title{position:absolute;top:50%;transform:translateY(-50%);margin:0;font-size:1.05rem;color:var(--text-primary);display:flex;align-items:center;justify-content:center;gap:8px;left:calc(16px + 44px + 10px)}
+header > .title, header .title{position:absolute;top:50%;transform:translateY(-50%);margin:0;font-size:1.05rem;color:var(--text-primary);display:flex;align-items:center;justify-content:center;gap:8px;left:calc(16px + 44px + 16px)}
 .theme-toggle{flex:0 0 auto;white-space:nowrap}
 .main-content{margin-left:0}
 .container{overflow-x:hidden}
