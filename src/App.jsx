@@ -140,17 +140,28 @@ export default function App(){
   // Sort filtered articles
   useEffect(()=>{
     const sorted = [...filteredArticles].sort((a, b)=>{
-      // Extract dates from article HTML or use a default
-      const getDate = (article)=>{
-        const dateMatch = article.html.match(/<div class="article-date">([^<]+)<\/div>/)
-        if(!dateMatch || dateMatch[1].includes('Coming soon')) return new Date('2099-12-31') // Put "Coming soon" at beginning for newest
-        return new Date(dateMatch[1])
+      if (sortOrder === 'a-z' || sortOrder === 'z-a') {
+        const titleA = (a.title || '').toLowerCase()
+        const titleB = (b.title || '').toLowerCase()
+        
+        if (sortOrder === 'a-z') {
+          return titleA.localeCompare(titleB)
+        } else { // z-a
+          return titleB.localeCompare(titleA)
+        }
+      } else {
+        // Date-based sorting for newest/oldest
+        const getDate = (article)=>{
+          const dateMatch = article.html.match(/<div class="article-date">([^<]+)<\/div>/)
+          if(!dateMatch || dateMatch[1].includes('Coming soon')) return new Date('2099-12-31') // Put "Coming soon" at beginning for newest
+          return new Date(dateMatch[1])
+        }
+        
+        const dateA = getDate(a)
+        const dateB = getDate(b)
+        
+        return sortOrder === 'newest' ? dateB - dateA : dateA - dateB
       }
-      
-      const dateA = getDate(a)
-      const dateB = getDate(b)
-      
-      return sortOrder === 'newest' ? dateB - dateA : dateA - dateB
     })
     setSortedArticles(sorted)
   },[filteredArticles, sortOrder])

@@ -170,17 +170,23 @@ aside.sidebar {
 }
 
 .sidebar-item {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 12px 16px;
-  color: var(--text-primary);
-  text-decoration: none;
-  border-radius: 8px;
-  transition: all 0.2s;
   font-size: 16px;
   font-weight: 500;
   margin: 0 16px 0 16px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px 16px;
+  transition: all 0.2s;
+  height: 44px;
+  min-height: 44px;
+  margin-bottom: 16px;
+  color: var(--text-primary);
+  text-decoration: none;
+  gap: 12px;
 }
 
 .sidebar-item:hover {
@@ -216,7 +222,8 @@ aside.sidebar {
   z-index: 1002;
 }
 .sidebar-close-toggle:hover{background:var(--border)}
-.sidebar-close-toggle svg{width:20px;height:20px;transition:transform .2s;transform:rotate(90deg)}
+.sidebar-close-toggle svg{width:20px;height:20px;transition:transform .3s ease-in-out;transform:rotate(0deg)}
+.sidebar-close-toggle.sidebar-open svg{transition:transform .3s ease-in-out; transform:rotate(90deg)}
 
 /* Title in sidebar for small screens */
 .sidebar-header-title{
@@ -507,9 +514,10 @@ body::-webkit-scrollbar-thumb,body.article-open::-webkit-scrollbar-thumb{backgro
 }
 
 .sort-option{
-  display:block;
+  display:flex;
+  align-items: center;
   width:100%;
-  padding:12px 16px;
+  padding:10px 12px;
   background:transparent;
   border:none;
   color:var(--text-primary);
@@ -680,21 +688,21 @@ body::-webkit-scrollbar-thumb,body.article-open::-webkit-scrollbar-thumb{backgro
 }
 
 #articles-controls-root .filter-clear-btn{
-  padding:8px 16px;
-  background:transparent;
-  border:1px solid var(--border);
-  border-radius:6px;
-  color:var(--text-primary);
-  font-family:inherit;
-  font-size:13px;
-  cursor:pointer;
-  transition:all 0.2s;
+padding: 10px 12px;
+background: transparent;
+border: 1px solid var(--border);
+border-radius: 6px;
+color: var(--text-primary);
+font-family: inherit;
+font-size: 13px;
+cursor: pointer;
+transition: all 0.2s;
+width: 100%;
+text-align: left;
 }
 
 #articles-controls-root .filter-clear-btn:hover{
-  background:var(--accent);
-  color:var(--bg-primary);
-  border-color:var(--accent);
+  background:var(--border);
 }
 
 @media (max-width:600px){

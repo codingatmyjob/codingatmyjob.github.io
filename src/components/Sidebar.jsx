@@ -55,7 +55,7 @@ export default function Sidebar({ isOpen, onClose, onOpenArticle, onHome }) {
         )}
         <nav className="sidebar-nav" role="navigation" aria-label="Main navigation">
           <button
-            className="sidebar-close-toggle"
+            className={`sidebar-close-toggle ${isOpen ? 'sidebar-open' : ''}`}
             onClick={onClose}
             aria-label="Close menu"
           >
