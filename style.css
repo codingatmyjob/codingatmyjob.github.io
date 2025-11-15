@@ -511,6 +511,13 @@ body::-webkit-scrollbar-thumb,body.article-open::-webkit-scrollbar-thumb{backgro
   box-shadow:0 4px 12px var(--shadow);
   overflow:hidden;
   z-index:1000;
+  padding:12px 12px;
+}
+
+.sort-options-list{
+  display:flex;
+  flex-direction:column;
+  gap:4px;
 }
 
 .sort-option{
@@ -526,16 +533,21 @@ body::-webkit-scrollbar-thumb,body.article-open::-webkit-scrollbar-thumb{backgro
   text-align:left;
   cursor:pointer;
   transition:background 0.2s;
+  border-radius:6px;
 }
 
 .sort-option:hover{
   background:var(--border);
+  transform:none;
+  box-shadow:none;
 }
 
 .sort-option.active{
   background:var(--accent);
   color:var(--bg-primary);
   font-weight:600;
+  border-color:transparent;
+  box-shadow:none;
 }
 
 #articles-controls-root .filter-dropdown-wrap{
@@ -602,12 +614,12 @@ body::-webkit-scrollbar-thumb,body.article-open::-webkit-scrollbar-thumb{backgro
   position:absolute;
   top:calc(100% + 8px);
   left:0;
-  width:100%;
   min-width:150px;
   background:var(--bg-secondary);
   border:1px solid var(--border);
   border-radius:8px;
   box-shadow:0 4px 12px var(--shadow);
+  overflow:hidden;
   z-index:1000;
   display:none;
 }
@@ -622,8 +634,8 @@ body::-webkit-scrollbar-thumb,body.article-open::-webkit-scrollbar-thumb{backgro
 }
 
 #articles-controls-root .filter-panel-body{
-  padding:12px 16px;
-  max-height:300px;
+  padding:12px 12px;
+  max-height:260px;
   overflow-y:auto;
 }
 
@@ -652,36 +664,33 @@ body::-webkit-scrollbar-thumb,body.article-open::-webkit-scrollbar-thumb{backgro
 }
 
 #articles-controls-root .tag-filter-list .filter-item{
-  display:block;
+  display:flex;
+  align-items: center;
   width:100%;
   padding:10px 12px;
   background:transparent;
   border:none;
-  border-radius:6px;
   color:var(--text-primary);
   font-family:inherit;
   font-size:14px;
   text-align:left;
   cursor:pointer;
   transition:background 0.2s;
+  border-radius:6px;
 }
 
 #articles-controls-root .tag-filter-list .filter-item:hover{
   background:var(--border);
-  transform:none;
-  box-shadow:none;
 }
 
 #articles-controls-root .tag-filter-list .filter-item.active{
   background:var(--accent);
   color:var(--bg-primary);
-  border-color:transparent;
   font-weight:600;
-  box-shadow:none;
 }
 
 #articles-controls-root .filter-panel-footer{
-  padding:12px 16px;
+  padding:12px 12px;
   border-top:1px solid var(--border);
   display:flex;
   justify-content:flex-start;
