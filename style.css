@@ -717,7 +717,6 @@ text-align: left;
 @media (max-width:600px){
   .articles-controls-wrapper{
     padding:0 16px;
-    margin-bottom:16px;
   }
   .sort-toggle,
   #articles-controls-root .filter-toggle{
@@ -727,7 +726,7 @@ text-align: left;
 }
 
 /* Articles Grid */
-.articles-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;padding-left:20px;padding-right:20px;margin-top:0;margin-bottom: 48px;}
+.articles-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;padding-left:20px;padding-right:20px;margin-top:0;margin-bottom: 32px;}
 .article-card{
 background:var(--bg-secondary);border-radius:12px;overflow:hidden;
 box-shadow:0 2px 8px var(--shadow);transition:transform .3s,box-shadow .3s;cursor:pointer
@@ -894,7 +893,7 @@ box-shadow:0 2px 8px var(--shadow);transition:transform .3s,box-shadow .3s;curso
 #article-view .article-frame > .back-link{margin-bottom:18px}
 
 .article-container{
-max-width:900px;margin:28px auto;padding:28px;background:var(--bg-secondary);
+max-width:900px;margin:20px auto 36px auto;padding:32px;background:var(--bg-secondary);
 border:1px solid var(--border);border-radius:12px;box-shadow:0 8px 30px rgba(0,0,0,0.25);
 color:var(--text-primary);font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial;line-height:1.75;font-size:17px;z-index:4
 }
@@ -968,7 +967,7 @@ display:inline-block;color:var(--accent);background:rgba(255,255,255,0.02);borde
 [data-theme="light"] .article-container article .article-link{background:rgba(0,0,0,0.03);border-color:rgba(0,0,0,0.04);color:var(--accent)}
 [data-theme="light"] .article-container article .article-link:hover{box-shadow:0 8px 18px rgba(0,0,0,0.06);transform:translateY(-2px)}
 
-@media (max-width:900px){.article-container{margin:18px 16px;padding:20px}.article-container h1{font-size:26px}}
+@media (max-width:900px){.article-container{margin:20px 16px 36px 16px;padding:20px}.article-container h1{font-size:26px}}
 
 .article-container::before{content:"";position:absolute;left:-8px;top:12px;bottom:12px;width:4px;border-radius:4px;background:linear-gradient(180deg,var(--accent),rgba(0,0,0,0.15));opacity:.9}
 #article-view .article-container{position:relative}
