@@ -69,19 +69,11 @@ export default function ArticlesGrid({ articles, onOpenArticle, onTags, onArticl
     })).then(itemsWithReadingTime => {
       setAllItems(itemsWithReadingTime)
       if(onArticlesLoaded) onArticlesLoaded(itemsWithReadingTime)
+      
+      // clear existing DOM so React can render into it
+      container.innerHTML = ''
+      setInitialized(true)
     })
-    
-    // compute unique tag list and lift to parent if requested
-    try{
-      // Filter out About Me article from tag collection since it's not displayed in the grid
-      const filteredForTags = parsed.filter(p => p.path !== 'About.html')
-      const allTags = Array.from(new Set(filteredForTags.flatMap(p=>p.tags).filter(Boolean))).sort((a,b)=>a.localeCompare(b))
-      if(onTags) onTags(allTags)
-    }catch(e){}
-    
-    // clear existing DOM so React can render into it
-    container.innerHTML = ''
-    setInitialized(true)
   },[initialized, onTags, onArticlesLoaded])
 
   const container = typeof document !== 'undefined' ? document.querySelector('.articles-grid') : null
