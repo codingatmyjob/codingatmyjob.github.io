@@ -88,6 +88,7 @@
                     <li><code>/stockall</code> command checks a static <i>watchlist</i> for the inventory status of many items in those same nearby stores. The watchlist is just 
                     a json file with a number of hard coded TCINs (Target.com Item Numbers) that made it incredibly fast to check a whole set of products at once without needing to do individual lookups every time.</li>
                 </ul>
+                <img src="../pokestock-images/stockall.png" style="max-width:100%; margin-top:1rem;">
             </p>
             <p>
                 In order to not get ourselves soft blocked from the API, the bot finds stores in the provided ZIP code and caches that list in a 
@@ -99,16 +100,22 @@
             <p>
                 Once the bot has stores and products the bot can check stock across each location in parallel, with guardrails to
                 avoid sending too many requests at once. It then reports whether each store has it in stock, has limited
-                stock, is out of stock, or does not carry that item, along with the quantity when available.
+                stock, is out of stock, or does not carry that item, along with the quantity when available
             </p>
 
             <h2>Discord Output</h2>
             <p>
                 Results are formatted into Discord embeds; an embed per product listing the local stores and availability for <code>/search</code>, and an 
-                embed per store for <code>/stockall</code> showing the list of products and their availability. In-stock stores get a red embed with "🚨" markers so 
-                they stand out. If any stores have stock, the bot also hits the Google Maps API to generate a maps route embed with 
-                all the in-stock locations provided in a travel optimized order, along with a static map image pulled from the Maps API 
+                embed per store for <code>/stockall</code> showing the list of products and their availability. These are batched as to not exceed 
+                the 10 embed Discord limit or the 6000 character limit. In-stock stores get a red embed with "🚨" markers so 
+                they stand out. 
+            </p>    
+            <p>  
+                If any stores have stock, the bot also hits the Google Maps API to generate a maps route embed with 
+                all the in-stock locations provided in a travel optimized order, along with a static map image pulled from the Maps API. When 
+                the user opens the route embed, they see the best route to hit all the in-stock stores, and maps prepends the users own location as the starting point
                 (Honestly this was so unnecessary but I love working with the Maps API). 
+                <img src="../pokestock-images/mapsrender.png" style="max-width:100%; margin-top:1rem;">
             </p>
 
             <h2>What I Left Out</h2>
