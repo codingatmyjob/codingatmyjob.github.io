@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Creating a Pokémon Stock Bot</title>
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+    <div id="binary-bg" aria-hidden="true"></div>
+
+    <main class="article-container">
+        <h1>Creating a Pokémon Stock Bot</h1>
+        <div class="meta">
+            <time datetime="2026-05-01">May 01, 2026</time>
+        </div>
+        <div class="tags">
+            <span class="tag">Project</span>
+            <span class="tag">Python</span>
+            <span class="tag">Discord</span>
+            <span class="tag">Automation</span>
+            <span class="tag">API</span>
+        </div>
+
+        <article>
+            <h2>Overview</h2>
+            <p>
+                I wanted to start by saying this was purely an educational project. I wanted to see just how far modern scalpers are willing
+                to go to strip the joy from others, and I did it. I built a Pokémon card stock checker that can query
+                Target's inventory by ZIP code (using specific SKUs) and send useful, concise Discord alerts. I stopped just
+                shy of automated polling, because the next step was no longer fun. It was just a lot of work figuring out how to 
+                circumvent and evade anti-bot measures across different vendors.
+            </p>
+            <p>
+                Almost all online storefronts have some kind of anti scraping measures in place. 
+                All vendors I tried (Walgreens, Target, Walmart, GameStop, and Dollar General) had either Cloudflare, 
+                rate limits, CAPTCHA triggers, and behavior detection mechanisms, and device fingerprinting to outright block 
+                individual bad actors. Getting any of them to a reliable state would have meant running code on a 
+                VPS with Selenium or Playwright in order to imitate real browser sessions. Thats on top of rotating residential proxy IPs, 
+                managing cookies properly, and handling JS challenges. That's a lot of operational overhead for a research
+                project, and honestly not where I wanted to spend my time. Target however, had a nice internal API that their own website 
+                used, and it was very friendly to reverse engineer and work with.
+            </p>
+
+            <h2>How Target's Inventory API Works</h2>
+            <p>
+                Target's internal API, <strong>redsky.target.com</strong> — is pretty dang cool. Every time you load a product page,
+                your browser hits these endpoints in the background. The API requires a <code>key</code> query parameter, but it is not a
+                personal developer token. It behaves like an app-level value used by Target's frontend and appears in page HTML as a Next.js
+                <code>buildId</code>. That value rotates when Target deploys a new build, and during rollout windows more than one recent key
+                can sometimes work simultaneously. Extracting it was tricky to figure out at first but strangely straightforward:
+            </p>
+            <pre><code>resp = await http.get("https://www.target.com", headers={"User-Agent": ...})
+                        m = re.search(r'"buildId"\s*:\s*"([0-9a-f]{40})', resp.text)
+                        new_key = m.group(1)</code></pre>
+            <p>
+                When my bot starts up or gets a 403 for Target, it loads target.com, regexes out the key, and stores it off locally. 
+                If the request key parameter changes, the key rotates and the bot picks it up on the next retry.
+            </p>
+
+            <h2>Browser Impersonation</h2>
+            <p>
+                Target's API doesn't serve responses to bare <code>httpx</code> clients. The requests need to look
+                like they came from a real browser — and I chose Chrome on Windows (just easy to do, not for any actual reason). 
+                That means spoofing a full set of headers:
+            </p>
+            <pre><code>TARGET_HEADERS = {
+                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) ... Chrome/124.0.0.0 Safari/537.36",
+                "sec-ch-ua": '"Chromium";v="124", "Google Chrome";v="124"...',
+                "sec-ch-ua-platform": '"Windows"',
+                "Sec-Fetch-Dest": "empty",
+                "Sec-Fetch-Mode": "cors",
+                "Sec-Fetch-Site": "same-site",
+                "Referer": "https://www.target.com/",
+                "Origin": "https://www.target.com",
+            }</code></pre>
+            <p>
+                The <code>Sec-Fetch-*</code> and <code>sec-ch-ua</code> headers are important, and missing them is a quick
+                way to get blocked. Matching Referer to request context (search page for search endpoints, locator page for 
+                store lookup endpoints) usually improves consistency and reduces risk of soft blocking. 
+            </p>
+
+            <h2>Finding Stores and Products</h2>
+            <p>
+                I ended up creating two ways to run stock checks in Discord:
+                <ul>
+                    <li><code>/search</code> command basically mimics search on the website, returning the top 5 results for a given query and checks stock for those 5 items at all nearby stores.</li>
+                    <li><code>/stockall</code> command checks a static <i>watchlist</i> for the inventory status of many items in those same nearby stores. The watchlist is just 
+                    a json file with a number of hard coded TCINs (Target.com Item Numbers) that made it incredibly fast to check a whole set of products at once without needing to do individual lookups every time.</li>
+                </ul>
+            </p>
+            <p>
+                In order to not get ourselves soft blocked from the API, the bot finds stores in the provided ZIP code and caches that list in a 
+                'locked' state for a short time. This way, searches in short succession can reuse the same store list without hitting the API with 
+                unneeded lookups. The same goes for products, it keeps a local list with readable item names mapped to internal IDs. If your search 
+                matches any recently queried ZIP codes or item names, it returns results immediately from the local cache. If not, it does a live lookup 
+                and maps the updated result to the correct internal product ID. 
+            </p>
+            <p>
+                Once the bot has stores and products the bot can check stock across each location in parallel, with guardrails to
+                avoid sending too many requests at once. It then reports whether each store has it in stock, has limited
+                stock, is out of stock, or does not carry that item, along with the quantity when available.
+            </p>
+
+            <h2>Discord Output</h2>
+            <p>
+                Results are formatted into Discord embeds; an embed per product listing the local stores and availability for <code>/search</code>, and an 
+                embed per store for <code>/stockall</code> showing the list of products and their availability. In-stock stores get a red embed with "🚨" markers so 
+                they stand out. If any stores have stock, the bot also hits the Google Maps API to generate a maps route embed with 
+                all the in-stock locations provided in a travel optimized order, along with a static map image pulled from the Maps API 
+                (Honestly this was so unnecessary but I love working with the Maps API). 
+            </p>
+
+            <h2>What I Left Out</h2>
+            <p>
+                Costs added up faster than expected. The APIs I hit were free, but I still needed somewhere to host the bot and a residential proxy list to rotate through —
+                and cheap proxy lists are basically useless for large scale projects. That put me at about $7 a month. Datacenter IPs get flagged almost immediately, and the 
+                entry-level residential ones aren't much better at scale. To do this reliably for multiple stores you'd need a rotating premium residential proxy pool, which 
+                starts getting real expensive real fast. Add a VPS on top of that, and now you're running a headless browser, tracking proxy burn rate, and dealing with every 
+                storefront's unique anti-bot measures. I drew the line there. I did what I came to accomplish, I made a bot that can reliably check Target's inventory and 
+                send nice Discord alerts, and I had fun doing it. 
+            </p>
+            <p>
+                It was fun to see how these systems work. They obviously aren't impervious (just takes time and effort), 
+                but they certainly keep out Joe Shmoe well enough. It's unfortunate that there are so many individuals who are willing to purchase 
+                access to scalping tools, and even more unfortunate that people go through the effort to develop and keep those tools up to date in a constantly evolving 
+                web security landscape. But, hey! We wouldn't have jobs in cyber security if we didn't have bad actors right?
+            </p>
+        </article>
+    </main>
+</body>
+</html>
+
+
