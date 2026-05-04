@@ -33,20 +33,20 @@
             </p>
             <p>
                 Almost all online storefronts have some kind of anti scraping measures in place. 
-                All vendors I tried (Walgreens, Target, Walmart, GameStop, and Dollar General) had either Cloudflare, 
-                rate limits, CAPTCHA triggers, and behavior detection mechanisms, and device fingerprinting to outright block 
+                All the vendors I tried (Walgreens, Target, Walmart, GameStop, and Dollar General) had either Cloudflare, 
+                rate limits, CAPTCHA triggers, behavior detection mechanisms, or device fingerprinting to outright block 
                 individual bad actors. Getting any of them to a reliable state would have meant running code on a 
-                VPS with Selenium or Playwright in order to imitate real browser sessions. Thats on top of rotating residential proxy IPs, 
-                managing cookies properly, and handling JS challenges. That's a lot of operational overhead for a research
-                project, and honestly not where I wanted to spend my time. Target however, had a nice internal API that their own website 
+                VPS with Selenium or Playwright in order to imitate real browser sessions. Thats in addition to rotating residential proxy IPs, 
+                managing cookies, and handling JS challenges. That's a lot of overhead for my little research
+                project, and honestly not where I wanted to spend my time. Target however, had an internal API that their own website 
                 used, and it was very friendly to reverse engineer and work with.
             </p>
 
             <h2>How Target's Inventory API Works</h2>
             <p>
-                Target's internal API, <strong>redsky.target.com</strong> — is pretty dang cool. Every time you load a product page,
+                Target's internal API, <strong>redsky.target.com</strong> — is pretty cool. Every time you load a product page,
                 your browser hits these endpoints in the background. The API requires a <code>key</code> query parameter, but it is not a
-                personal developer token. It behaves like an app-level value used by Target's frontend and appears in page HTML as a Next.js
+                developer token. It behaves like an app-level value used by Target's frontend and appears in page HTML as a Next.js
                 <code>buildId</code>. That value rotates when Target deploys a new build, and during rollout windows more than one recent key
                 can sometimes work simultaneously. Extracting it was tricky to figure out at first but strangely straightforward:
             </p>
@@ -122,9 +122,9 @@
             <p>
                 Costs added up faster than expected. The APIs I hit were free, but I still needed somewhere to host the bot and a residential proxy list to rotate through.
                 On top of that the affordable proxy lists are basically useless for projects like this at scale. That put me at about $7 a month (bare minimum) before anything else. 
-                Datacenter IPs get flagged almost immediately, and the entry-level residential ones aren't much better at scale. To do this reliably for multiple stores you'd 
-                need a rotating premium residential proxy pool, which starts getting real expensive real fast. The next steps were to spin up a VPS, start running headless browsers, 
-                track proxy burn rate, build out a captcha solver, beat cloudflare, and deal with every storefront's unique anti-bot measures. 
+                Datacenter IPs get flagged almost immediately, and the entry-level residential ones aren't much better at scale. To do this reliably for multiple stores you would
+                need a premium rotating residential proxy pool, which can be incredibly expensive. The next steps were to spin up a VPS, start running headless browsers, 
+                track proxy burn rate in that premium pool, build out a captcha solver, beat cloudflare, and deal with every storefront's unique anti-bot measures. 
             </p>
             <p>
                 It was fun to see how these systems work. They obviously aren't impervious (just takes time and effort), 

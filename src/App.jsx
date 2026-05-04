@@ -65,10 +65,11 @@ export default function App(){
       const articleEl = tempDiv.querySelector('article')
       const content = articleEl ? articleEl.textContent : ''
 
+      const normalize = str => str.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase()
       const searchableContent = {
-        title: title.toLowerCase(),
-        tags: tags.map(t => t.toLowerCase()),
-        content: content.toLowerCase()
+        title: normalize(title),
+        tags: tags.map(t => normalize(t)),
+        content: normalize(content)
       }
 
       setArticleContents(prev => new Map(prev).set(article.path, searchableContent))
@@ -81,7 +82,7 @@ export default function App(){
   const searchArticles = useCallback(async (query, articles) => {
     if (!query.trim()) return articles
 
-    const searchTerm = query.toLowerCase().trim()
+    const searchTerm = query.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim()
 
     // Load content for all articles if not already loaded
     await Promise.all(articles.map(loadArticleContent))
