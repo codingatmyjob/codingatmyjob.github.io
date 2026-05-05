@@ -163,20 +163,20 @@ THIS SECTION NEEDS WORK
             <p><strong>Ease of use:</strong> Medium*</p>
             <p><strong>How it was used:</strong> This was the endpoint that actually integrated well with the time slider. 
                 Using <code>flowSegmentData/statistics</code>, I got a sub-hourly historical speed profile across the full day. 
-                As I quickly found out, at street-level granularity across a zoomed out viewport, I burned through it in minutes.</p>
-            <p>
-                <strong>Coverage problem:</strong> TomTom's historical data comes from GPS probes. These are essentially cars that drive around and report their 
+                As I quickly found out, at street-level granularity across a zoomed out viewport, I burned through it in minutes.
+            </p>
+            <p><strong>Coverage problem:</strong> TomTom's historical data comes from GPS probes. These are essentially cars that drive around and report their 
                 speed and location. The more traffic a road sees, the more probe data exists for it. Major roads in big cities were well covered; 
                 quiet residential streets and anything outside major metro areas had little to no data at all.
             </p>
-            <p>
-                <strong>Requests limitation:</strong> This was why I marked it as a Medium* for ease of use. I don't think it was genuinely any more difficult to 
+            <p><strong>Requests limitation:</strong> This was why I marked it as a Medium* for ease of use. I don't think it was genuinely any more difficult to 
                 use than other endpoints, however I did have to do some mental gymnastics to efficiently utilize my limited requests. TomTom's free tier was 2,500 
                 requests per day. When implemented, this endpoint made one request per hex (per time slider step), and a city viewport at zoom 15 could have 200+ hexes. I started panning
                 around Manhattan with my time slider playing at regular fractional speed, and hit the daily cap 
                 of 2500 API hits in about four minutes. I "fixed" this overuse problem by getting aggressive:
                 I designed a fixed 3×3 sample grid across the viewport (nine points total, ever), and only requested those 9 points from TomTom per hour
-                of slider time rather than on every fractional step. 
+                of slider time rather than on every fractional step. Below I discuss how the OSM road baseline scores I built also helped here. Hexes with
+                a near-zero road density score weren't worth wasting an API request on.
             </p>
             <p>
                 While this isn't a true fix and it seriously limited my traffic visibility, it eliminated the majority 
@@ -184,23 +184,21 @@ THIS SECTION NEEDS WORK
                 4 minutes when my cap reset (I still only lasted about 20 minutes).
             </p>
 
-        
-THIS SECTION NEEDS WORK
             <h2>OpenStreetMap — Overpass API</h2>
             <p><strong>Cost:</strong> Free</p>
             <p><strong>Ease of use:</strong> Medium</p>
-            <p><strong>How it was used:</strong> I used Overpass to build a structural road-density baseline for every hex.
-                Since TomTom only ever covers nine sampled points across the viewport, the other 95% of hexes
-                needed to look plausible without real traffic data. For each hex center, the app queried for all
-                road ways within ~430 meters, weighted by class — motorways and trunks at 1.5×, primary roads
-                at 1.25×, down to 0.6× for service roads. The total weighted road length is log-compressed and
-                normalized to a 0–1 score, then blended 70/30 with any live TomTom signal to decide both how to
-                color unsampled hexes and which ones were worth hitting TomTom for. Queries capped at 6 seconds;
-                failures silently return 0.
+            <p><strong>How it was used:</strong> Before I had any TomTom data wired up, I needed every hex to show
+                something reasonable. Overpass let me query what roads actually existed near each hex center, and I
+                used that to build a baseline score for each cell to try and represent potential activity. For example, a hex sitting on top of a highway got a higher
+                score than one sitting in a park. When TomTom data eventually came in for sampled points, it was
+                blended on top of those baseline scores, and the result drove both the hex color and whether a hex
+                was worth spending a TomTom request on in the first place.
             </p>
-            <p>The structural limitation: Overpass gave us roads, not generators of traffic. A highway through
-                an industrial park and a highway through midtown scored similarly. There wasn't a cheap way to ask
-                OSM "how much stuff was generating activity in this area."
+            <p>
+                The limitation was that Overpass only knew about roads, not what was generating traffic on them.
+                A highway through an empty industrial zone and a highway through midtown Manhattan looked the same to it.
+                There was no free way to ask "how much activity does this area actually produce." A crazy example of this are neighborhoods. 
+                They can have very complex street grids, and OSM will interpret these as higher road density (busier), when they're actually quiet residential streets. 
             </p>
 
             <h2>H3 — Uber's Hexagonal Grid</h2>
