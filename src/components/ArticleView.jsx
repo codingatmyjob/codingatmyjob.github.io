@@ -42,6 +42,12 @@ export default function ArticleView({ path, onClose }){
         const content = main ? main.cloneNode(true) : document.createElement('div')
         if(!main) content.innerHTML = text
 
+        // Collect inline scripts from the full document (they may live outside <main>)
+        const inlineScripts = Array.from(doc.querySelectorAll('script:not([src])')).map(s => s.textContent)
+
+        // Collect <style> blocks from <head> (main-only clone misses them)
+        const headStyles = Array.from(doc.querySelectorAll('head style')).map(s => s.textContent)
+
         // Clean up unwanted elements and fix paths
         content.querySelectorAll('link, script, header, #binary-bg').forEach(n=>n.remove())
         Array.from(content.querySelectorAll('[src],[href]')).forEach(el=>{
@@ -60,6 +66,25 @@ export default function ArticleView({ path, onClose }){
         articlesView.style.display = 'none'
         articleView.style.display = 'block'
         document.body.classList.add('article-open')
+
+        // Inject any <style> blocks that lived in the article's <head>
+        headStyles.forEach(css => {
+          if (!css.trim()) return
+          const el = document.createElement('style')
+          el.textContent = css
+          articleView.appendChild(el)
+        })
+
+        // Re-execute any inline scripts from the article
+        inlineScripts.forEach(src => {
+          if (!src.trim()) return
+          try {
+            // eslint-disable-next-line no-new-func
+            new Function(src)()
+          } catch(e) {
+            console.warn('Article script error:', e)
+          }
+        })
 
         // Add collapsible functionality
         const articleContainer = wrapper.querySelector('.article-container')
