@@ -24,8 +24,9 @@
             }
             .typeahead-container {
                 position: relative;
-                width: 340px;
-                /* margin: 1rem 0 0.4rem; */
+                width: 100%;
+                max-width: 340px;
+                min-width: 0;
             }
             .typeahead-input {
                 width: 100%;
@@ -106,8 +107,13 @@
             .typeahead-controls {
                 display: flex;
                 align-items: center;
+                flex-wrap: wrap;
                 gap: 10px;
                 margin-bottom: 0.4rem;
+            }
+            .typeahead-wrapper {
+                flex: 0 1 340px;
+                min-width: 0;
             }
             .debounce-label {
                 display: flex;
