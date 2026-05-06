@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Playing in Traffic and Heatmaps</title>
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+    <div id="binary-bg" aria-hidden="true"></div>
+
+    <main class="article-container">
+        <h1>Playing in Traffic and Heatmaps</h1>
+        <div class="meta">
+            <time datetime="2026-05-02">May 02, 2026</time>
+        </div>
+        <div class="tags">
+            <span class="tag">Project</span>
+            <span class="tag">JavaScript</span>
+            <span class="tag">WebApp</span>
+            <span class="tag">API</span>
+        </div>
+    
+        <article>
+            <h2>I Like Hexagons</h2>
+            <p>
+                I had no plan going into this, but recently I've seen a lot of hexagon-based
+                UIs. I also really like maps, so I decided to combine the two and create some kind of map 
+                visualization with some hexagonal flair.
+            </p>
+            <p>
+                As I was browsing through the APIs Google Maps has to offer, I thought it would be 
+                really cool to try and create an activity heatmap (with a last second traffic congestion overlay). 
+                From what I could find, the Maps API didn't have anything readily available to accomplish this task, so I simulated congestion by 
+                generating a per-hex hourly traffic curve using commute-shaped Gaussian peaks (morning/evening), 
+                overnight dips, and included some randomness so each hex was unique. Then I factored in a 
+                road-density baseline from OpenStreetMap to make it look plausible. 
+            </p>
+
+            <p> After playing around with this, trying to tweak it and make it look legitimate (why is a neighborhood more 
+                active than the busiest intersection in town??), I did some research 
+                (probably should have started with this) and found that not only does TomTom still exist, but they have 
+                an awesome API that provides aggregated historical traffic data at a per-street level. 
+                After finally determining the scope of my project I finalized the requirements: A semi-accurate 
+                hexagon-based activity map, with a historical traffic overlay, and a slider at the bottom to visualize 
+                the time of day... with a few other scope creep inclusions like per-hex tooltips, ZIP code search, etc. 
+            </p>
+            <p>
+                Below is the documentation of my personal experience with each API and library I used. I documented the cost 
+                of each API/library (we're broke out here), the ease of use, and finally a brief explanation 
+                of how it was used or integrated into the overall project. 
+            </p>
+
+
+THIS SECTION NEEDS EVERYTHING. IMAGES, GIFS, AND EXPLANATION OF THE UI
+            <h2>What the App Actually ended up doing</h2>
+            <p>
+                
+            </p>
+            <p>
+                
+            </p>
+            <p>
+            
+            </p>
+
+
+THIS SECTION NEEDS WORK
+"Before anything else, let me address the simulated activity heatmap."
+            <h2>The Fake Traffic Problem</h2>
+            <p>
+                Let me be honest about what the time slider was actually showing for most of the hex grid:
+                it was made up. Not randomly made up — the synthetic profiles were shaped like actual commute
+                patterns using a Gaussian model with morning and evening peaks, an overnight dip, and some
+                noise — but it was still a mathematical approximation, not real data. Every hex that didn't
+                have a TomTom segment attached to it ran on this synthetic profile, seeded by the
+                hex's ID and location so it was at least consistent and spatially plausible. Hexes closer to
+                the center of the ZIP area got slightly higher peak values. Hexes near what the algorithm
+                guessed were road corridors got a boost.
+            </p>
+            <p>
+                The reason for this was that real historical traffic data — per-segment speed readings broken
+                down by time of day across a full city — simply didn't exist for free at the resolution
+                I wanted. TomTom's statistics endpoint was the closest thing I found and it was behind a pay
+                wall past 2,500 requests. Google didn't expose it at all. HERE had similar data but their
+                API pricing was enterprise-only by the time I wanted meaningful coverage. Overpass gave me
+                road structure, not congestion. There was no open dataset of "here is what congestion looked
+                like on every road at every hour last Tuesday."
+            </p>
+            <p>
+                So I built a plausible-looking simulation and sprinkled real data on top of it where I
+                could afford to. The roads that had TomTom segments attached showed real
+                street-level data. Everything else was a good-faith estimate.
+            </p>            
+            
+            <h2>Google APIs</h2>
+            <p>All Google Maps Platform APIs share a <i>$200/month free credit</i>. For personal projects
+                this effectively makes most Google APIs free, though billing must be enabled on your Cloud project
+                to generate a key at all.</p>
+            <h3>Google's Maps JavaScript API</h3>
+            <p><strong>Cost:</strong> $7 per 1,000 map loads</p>
+            <p><strong>Ease of use:</strong> Easy</p>
+            <p><strong>How it was used:</strong> Google Maps provided the basemap and camera controls, loaded in with <code>@googlemaps/js-api-loader</code>. 
+                I originally wanted a tilted basemap with raised 3D hex columns reflecting activity levels. My first attempt was deck.gl's <code>HexagonLayer</code>, but that 
+                approach was not a good fit, because I needed <i>stable</i>, globally addressable hex cells for caching and per-hex state. I dropped the 
+                raised-column idea and moved to H3-indexed hexes, rendered with deck.gl <code>PolygonLayer</code>, which gave me predictable geometry and global IDs.
+            </p>
+            <p>
+                My second issue was tilt. Google Maps defaults to raster rendering, which is essentially a flat map layer with no available 3D camera behavior. 
+                To enable tilt, I had to generate a Map ID with vector rendering enabled. I integrated everything correctly, went to test my code, but my map in Chrome was still 
+                flat. After about 15 minutes of debugging and testing, I switched browsers. To my surprise, the tilt worked great in Edge and the VS Code browser. 
+                The issue was something silly; hardware acceleration was disabled in Chrome, which caused a silent 
+                default to raster mode. Apparently tilting the map is a GPU intensive task, who knew.
+            </p>
+
+            <h3>Google's Geocoding API</h3>
+            <p><strong>Cost:</strong> $5 per 1,000 requests</p>
+            <p><strong>Ease of use:</strong> Easy</p>
+            <p><strong>How it was used:</strong> I used this to power the ZIP code search in the top-left panel. You typed a US ZIP, hit Go,
+                and the Geocoding API returned the coordinates and a formatted address. The app pulled
+                <code>geometry.location</code> to recenter the map and read the address components to build a
+                label like "Manhattan, NY" shown as feedback below the search field. It was straightforward, no issues.
+            </p>
+            <h3>Google's Places API</h3>
+            <p><strong>Cost:</strong> Nearby Search -$0.032/request, Place Details are billed per field - Basic $0.017, Contact $0.03, Atmosphere $0.05</p>
+            <p><strong>Ease of use:</strong> Easy</p>
+            <p><strong>How it was used:</strong> I tried to use Places to populate a "Nearby Places" section in my hex tooltips that would include
+                restaurants, transit stops, anything that might explain why an area was busy. The problem was that
+                Nearby Search frequently returned street names (routes) or town names (localities) instead of actual
+                businesses, which was useless for contextualizing traffic. When it did return businesses, it felt random and inconsistent, 
+                and these were not the businesses causing traffic (Subway, McDonald's, Laundromat, etc.). I stopped using it after a few test cycles.
+            </p>
+
+            <h2>TomTom APIs</h2>
+            <p>
+                Yes, TomTom is still around, and 
+                they have a robust collection of APIs from decades of aggregated traffic data.
+                The free tier includes <i>50,000 tile requests/day</i> and <i>2,500 non-tile requests/day</i> (separate
+                limits). It was my only source of real traffic data - or any data - for this project. One cool thing about TomTom's API is 
+                you don't need to upload a Credit Card when you sign up, the API will essentially 'shut off' when you hit your daily cap.
+            </p>
+
+            <h3>TomTom's Traffic Tile API</h3>
+            <p><strong>Cost:</strong> Tile request - Included in the 50,000/day free tier</p>
+            <p><strong>Ease of use:</strong> Easy</p>
+            <p><strong>How it was used:</strong> I tried this first since it felt like a lightweight solution.
+                I encountered an immediate hard stop issue in that Tiles are pre-rendered images fetched by zoom/x/y grid coordinate. There was no underlying data 
+                to query; I couldn't ask what the speed was on a given road, click a segment, or map time of day values to the time slider.
+                I stopped using this very quickly.
+            </p>
+
+            <h3>TomTom's Flow Segment Data - Real-Time</h3>
+            <p><strong>Cost:</strong> Non-tile request - Included in the 2,500/day free tier</p>
+            <p><strong>Ease of use:</strong> Easy</p>
+            <p><strong>How it was used:</strong> I tried <code>flowSegmentData/absolute</code> as an initial data source just to see how it worked. 
+                By passing it a lat/lng and zoom level, it returned the nearest road segment's current speed,
+                free-flow speed, and polyline geometry. As this was strictly realtime traffic, it couldn't be used with the time slider.
+            </p>
+            
+            <h3>TomTom's Flow Segment Data - Statistics (Historical)</h3>
+            <p><strong>Cost:</strong> Non-tile request - 2,500/day free tier </p>
+            <p><strong>Ease of use:</strong> Medium*</p>
+            <p><strong>How it was used:</strong> This was the endpoint that actually integrated well with the time slider. 
+                Using <code>flowSegmentData/statistics</code>, I got a sub-hourly historical speed profile across the full day. 
+                As I quickly found out, at street-level granularity across a zoomed out viewport, I burned through it in minutes.
+            </p>
+            <p><strong>Coverage problem:</strong> TomTom's historical data comes from GPS probes. These are essentially cars that drive around and report their 
+                speed and location. The more traffic a road sees, the more probe data exists for it. Major roads in big cities were well covered; 
+                quiet residential streets and anything outside major metro areas had little to no data at all.
+            </p>
+            <p><strong>Requests limitation:</strong> This was why I marked it as a Medium* for ease of use. I don't think it was genuinely any more difficult to 
+                use than other endpoints, however I did have to do some mental gymnastics to efficiently utilize my limited requests. TomTom's free tier was 2,500 
+                requests per day. When implemented, this endpoint made one request per hex (per time slider step), and a city viewport at zoom 15 could have 200+ hexes. I started panning
+                around Manhattan with my time slider playing at regular fractional speed, and hit the daily cap 
+                of 2500 API hits in about four minutes. I "fixed" this overuse problem by getting aggressive:
+                I designed a fixed 3×3 sample grid across the viewport (nine points total, ever), and only requested those 9 points from TomTom per hour
+                of slider time rather than on every fractional step. Below I discuss how the OSM road baseline scores I built also helped here. Hexes with
+                a near-zero road density score weren't worth wasting an API request on.
+            </p>
+            <p>
+                While this isn't a true fix and it seriously limited my traffic visibility, it eliminated the majority 
+                of idle API usage. It also allowed me to continue testing the API without hitting the daily cap in 
+                4 minutes when my cap reset (I still only lasted about 20 minutes).
+            </p>
+
+            <h2>OpenStreetMap — Overpass API</h2>
+            <p><strong>Cost:</strong> Free</p>
+            <p><strong>Ease of use:</strong> Medium</p>
+            <p><strong>How it was used:</strong> Before I had any TomTom data wired up, I needed every hex to show
+                something reasonable. Overpass let me query what roads actually existed near each hex center, and I
+                used that to build a baseline score for each cell to try and represent potential activity. For example, a hex sitting on top of a highway got a higher
+                score than one sitting in a park. When TomTom data eventually came in for sampled points, it was
+                blended on top of those baseline scores, and the result drove both the hex color and whether a hex
+                was worth spending a TomTom request on in the first place.
+            </p>
+            <p>
+                The limitation was that Overpass only knew about roads, not what was generating traffic on them.
+                A highway through an empty industrial zone and a highway through midtown Manhattan looked the same to it.
+                There was no free way to ask "how much activity does this area actually produce." A crazy example of this are neighborhoods. 
+                They can have very complex street grids, and OSM will interpret these as higher road density (busier), when they're actually quiet residential streets. 
+            </p>
+
+            <h2>H3 — Uber's Hexagonal Grid</h2>
+            <p><strong>Cost:</strong> Open-source library (free)</p>
+            <p><strong>Ease of use:</strong> Easy</p>
+            <p><strong>How it was used:</strong> H3 became the core hexagonal grid system for the app. I used it to fill the visible map area
+                with hex indexes at a fixed resolution, which gave me a deterministic set of cells every time the camera moved.
+            </p>
+            <p>
+                With a stable grid in place, I drew each hex cleanly on the map and use each one as a
+                reference point to collect specific traffic data. Any location I clicked or searched for could be matched to a specific hex, 
+                which made cell-specific API calls very easy.  Now instead of constantly recalculating everything from scratch, I had the ability to 
+                cache data to specific hexes for reuse. 
+            </p>
+
+            <h2>If I could do something differently</h2>
+            <p>
+                I went about fulfilling my requirements wrong, and backwards. I had initially tried to establish an activity heatmap with 
+                synthesized data, and then later decided to layer historical traffic data (what I didn't realize was basically 
+                activity) on top. In retrospect, the historical traffic data TomTom provided was the closest thing
+                to an activity heatmap I could use as a starting point for free. 
+            </p>
+            <p>
+                I should have started with the TomTom historical data at a small scale, then layered my hexagons and done the heatmap calculations based on  
+                traffic, rather than the other way around. This would have provided a consistent baseline across all types of cities 
+                and infrastructure. Hex grid coloring could have easily coincided 
+                with real traffic congestion patterns, and resembled a real activity heatmap instead of a total simulation. Albeit there 
+                are arguments for what an activity heatmap truly entails - higher phone or population density, foot traffic, 
+                public transit (and more), TomTom's traffic congestion data is a pretty good proxy for "activity".
+            </p>
+        </article>
+    </main>
+</body>
+</html>
