@@ -25,17 +25,20 @@
         <article>
             <h2>Overview</h2>
             <p>
-                I wanted to start by saying this was purely an educational project. I wanted to see just how far modern scalpers are willing
-                to go to strip the joy from others, and I did it. I built a Pokémon card stock checker that can query
+                Disclaimer: this is purely an educational project.
+            </p>
+            <p>
+                I wanted to see how far scalpers currently push ethical and legal 
+                boundaries to line their pockets. I built a Pokémon card stock checker that can query
                 Target's inventory by ZIP code (using specific SKUs) and send useful, concise Discord alerts. I stopped just
-                shy of automated polling, because the next step was no longer fun. It was just a lot of work figuring out how to 
-                circumvent and evade anti-bot measures across different vendors.
+                shy of automated polling, because the next step wasn't fun. It was going to take a lot of work figuring out how to 
+                circumvent and evade anti-bot measures across the different vendors.
             </p>
             <p>
                 Almost all online storefronts have some kind of anti scraping measures in place. 
-                All the vendors I tried (Walgreens, Target, Walmart, GameStop, and Dollar General) had either Cloudflare, 
+                The vendors I tried (Walgreens, Target, Walmart, GameStop, and Dollar General) had either Cloudflare, 
                 rate limits, CAPTCHA triggers, behavior detection mechanisms, or device fingerprinting to outright block 
-                individual bad actors. Getting any of them to a reliable state would have meant running code on a 
+                suspected bad actors. Getting a bot to run against any of these in a reliable state would require running code on a 
                 VPS with Selenium or Playwright in order to imitate real browser sessions. Thats in addition to rotating residential proxy IPs, 
                 managing cookies, and handling JS challenges. That's a lot of overhead for my little research
                 project, and honestly not where I wanted to spend my time. Target however, had an internal API that their own website 
