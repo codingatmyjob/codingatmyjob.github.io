@@ -159,8 +159,7 @@
           always spans whatever is on screen.</li>
         <li><strong>TomTom road overlay:</strong> Orange and red polylines are drawn over real road
           segments fetched from TomTom's historical Flow Statistics API. Only segments with a normalized
-          congestion score ≥ 0.6 (orange–red range) are shown — blue and green segments are hidden
-          so the overlay only highlights the busy roads.</li>
+          congestion score ≥ 0.6 (orange–red range) are shown.</li>
         <li><strong>ZIP code search:</strong> Entering any US ZIP code recenters the map and rebuilds
           the hex grid at that location. The Google Geocoding API resolves coordinates and a place
           label (e.g. "Manhattan, NY") is shown as feedback below the search field.</li>
@@ -244,7 +243,7 @@
         label like "Manhattan, NY" shown as feedback below the search field. It was straightforward, no issues.
       </p>
       <h3>Google's Places API</h3>
-      <p><strong>Cost:</strong> Nearby Search — $0.032/request, Place Details billed per field: Basic $0.017, Contact $0.03, Atmosphere $0.05</p>
+      <p><strong>Cost:</strong> Nearby Search $0.032/request, Place Details billed per field: Basic $0.017, Contact $0.03, Atmosphere $0.05</p>
       <p><strong>Ease of use:</strong> Easy</p>
       <p><strong>How it was used:</strong> I tried to use Places to populate a "Nearby Places" section in my hex tooltips that would include
         restaurants, transit stops, anything that might explain why an area was busy. The problem was that
@@ -271,7 +270,7 @@
         I stopped using this very quickly.
       </p>
 
-      <h3>TomTom's Flow Segment Data — Real-Time</h3>
+      <h3>TomTom's Flow Segment Data - Real-Time</h3>
       <p><strong>Cost:</strong> Included in the 2,500/day free tier</p>
       <p><strong>Ease of use:</strong> Easy</p>
       <p><strong>How it was used:</strong> I tried <code>flowSegmentData/absolute</code> as an initial data source just to see how it worked.
@@ -279,14 +278,14 @@
         free-flow speed, and polyline geometry. As this was strictly real-time traffic, it couldn't be used with the time slider.
       </p>
 
-      <h3>TomTom's Flow Segment Data — Statistics (Historical)</h3>
+      <h3>TomTom's Flow Segment Data - Statistics (Historical)</h3>
       <p><strong>Cost:</strong> Included in the 2,500/day free tier</p>
       <p><strong>Ease of use:</strong> Medium*</p>
       <p><strong>How it was used:</strong> This was the endpoint that actually integrated well with the time slider.
         Using <code>flowSegmentData/statistics</code>, I got a sub-hourly historical speed profile across the full day.
         As I quickly found out, at street-level granularity across a zoomed-out viewport, I burned through it in minutes.
       </p>
-      <p><strong>Coverage problem:</strong> TomTom's historical data comes from GPS probes — essentially cars that drive around and report their
+      <p><strong>Coverage problem:</strong> TomTom's historical data comes from GPS probes. These are cars that drive around and report their
         speed and location. The more traffic a road sees, the more probe data exists for it. Major roads in big cities were well covered;
         quiet residential streets and anything outside major metro areas had little to no data at all.
       </p>
@@ -302,7 +301,7 @@
         4 minutes when my cap reset (I still only lasted about 20 minutes).
       </p>
 
-      <h2>OpenStreetMap — Overpass API</h2>
+      <h2>OpenStreetMap - Overpass API</h2>
       <p><strong>Cost:</strong> Free</p>
       <p><strong>Ease of use:</strong> Medium</p>
       <p><strong>How it was used:</strong> Overpass let me query what roads actually existed near each hex center, and I
@@ -318,7 +317,7 @@
         when they're actually quiet residential streets, vice 4 way intersections, where it only sees 2 multilane roads.
       </p>
 
-      <h2>H3 — Uber's Hexagonal Grid</h2>
+      <h2>H3 - Uber's Hexagonal Grid</h2>
       <p><strong>Cost:</strong> Open-source library (free)</p>
       <p><strong>Ease of use:</strong> Easy</p>
       <p><strong>How it was used:</strong> H3 became the core hexagonal grid system for the app. I used it to fill the visible map area
