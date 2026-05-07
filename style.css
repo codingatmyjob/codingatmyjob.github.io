@@ -898,6 +898,7 @@ border:1px solid var(--border);border-radius:12px;box-shadow:0 8px 30px rgba(0,0
 color:var(--text-primary);font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial;line-height:1.75;font-size:17px;z-index:4
 }
 .article-container > .back-link, #article-view .back-link{display:inline-block;margin-bottom:18px;background:transparent;border:1px solid var(--border);color:var(--text-primary);padding:8px 12px;border-radius:8px;cursor:pointer}
+@media (max-width:600px){.article-container{padding:20px 16px;}}
 .article-container h1{font-size:32px;margin:6px 0 6px;color:var(--text-primary);letter-spacing:-.2px}
 .article-container .meta,.article-container .tags{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-bottom:20px;color:rgba(255,255,255,0.8);font-size:13px}
 .article-container .tags{gap:8px}
