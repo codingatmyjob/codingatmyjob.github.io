@@ -6,13 +6,6 @@
   <title>Playing in Traffic and Heatmaps</title>
   <link rel="stylesheet" href="../style.css" />
   <style>
-/* ── Hero image ─────────────────────────────────────────────────────────── */
-.hero-img-wrap{
-  width:100%;margin:8px 0 24px 0;border-radius:10px;overflow:hidden;
-  border:1px solid var(--border);box-shadow:0 8px 24px rgba(0,0,0,0.35);
-}
-.hero-img-wrap img{width:100%;height:auto;display:block;}
-
 /* ── Feature list ───────────────────────────────────────────────────────── */
 .feature-list{
   list-style:none;padding:0;margin:0 0 18px 0;
@@ -58,10 +51,11 @@
 .tl-btn:hover{background:var(--border);}
 .tl-btn.primary{
   background:var(--accent);color:var(--bg-primary);
-  border-color:var(--accent);font-weight:700;padding:6px 22px;
+  border-color:var(--accent);font-weight:700;padding:6px 22px;gap:5px;
+  min-width:102px;justify-content:center;
 }
 .tl-btn.primary:hover{opacity:0.85;}
-@media (max-width:480px){.tl-play-label{display:none;}}
+@media (max-width:480px){.tl-play-label{display:none;}.tl-btn.primary{min-width:unset;}}
 
 .timeline-slider-row{display:flex;align-items:center;gap:14px;}
 .timeline-label{
@@ -192,7 +186,7 @@
           <div class="timeline-playback-row">
             <button class="tl-btn" id="tl-rev-fast" title="Reverse fast">&lt;&lt;</button>
             <button class="tl-btn" id="tl-rev" title="Reverse">&lt;</button>
-            <button class="tl-btn primary" id="tl-play"><span class="tl-play-icon">&#9654;</span><span class="tl-play-label"> Play</span></button>
+            <button class="tl-btn primary" id="tl-play"><span class="tl-play-icon">&#9654;</span><span class="tl-play-label">Play</span></button>
             <button class="tl-btn" id="tl-fwd" title="Forward">&gt;</button>
             <button class="tl-btn" id="tl-fwd-fast" title="Forward fast">&gt;&gt;</button>
           </div>
@@ -265,7 +259,7 @@
         they have a robust collection of APIs from decades of aggregated traffic data.
         The free tier includes <i>50,000 tile requests/day</i> and <i>2,500 non-tile requests/day</i> (separate
         limits). It was my only source of real traffic data for this project. One cool thing about TomTom's API is
-        you don't need to upload a credit card when you sign up — the API will essentially 'shut off' when you hit your daily cap.
+        you don't need to upload a credit card when you sign up, the API will simply start to block requests when you hit your daily cap.
       </p>
 
       <h3>TomTom's Traffic Tile API</h3>
@@ -436,8 +430,8 @@
     function startPlay(delta, intervalMs) {
       stopPlay();
       playing = true;
-      playIcon.textContent  = '⏸';
-      playLabel.textContent = ' Pause';
+      playIcon.textContent  = '❚❚';
+      playLabel.textContent = 'Pause';
       playBtn.classList.add('primary');
       playTimer = setInterval(() => setHour(currentHour + delta), intervalMs);
     }
@@ -447,7 +441,7 @@
       clearInterval(playTimer);
       playTimer = null;
       playIcon.textContent  = '▶';
-      playLabel.textContent = ' Play';
+      playLabel.textContent = 'Play';
     }
 
     playBtn.addEventListener('click', () => {
