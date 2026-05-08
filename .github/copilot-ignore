@@ -1,0 +1,20 @@
+# Ignore by pattern
+target/
+build/
+out/
+*.class
+*.jar
+*.war
+# Generated files
+generated/
+generated-sources/
+*.generated.java
+# Logs
+*.log
+logs/
+# IDE files
+.idea/
+*.iml
+.settings/
+.classpath
+.project
