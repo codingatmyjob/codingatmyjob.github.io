@@ -1,20 +1,21 @@
-# Ignore by pattern
-target/
-build/
-out/
-*.class
-*.jar
-*.war
-# Generated files
-generated/
-generated-sources/
-*.generated.java
-# Logs
-*.log
-logs/
-# IDE files
-.idea/
-*.iml
-.settings/
-.classpath
-.project
+# Ignore by pattern:
+"*":
+- "**/target/**"
+- "**/build/**"
+- "**/out/**"
+- "**/*.class"
+- "**/*.jar"
+- "**/*.war"
+- "**/*.log"
+- "**/generated/**"
+- "**/generated-sources/**"
+- "**/*.generated.java"
+- "**/*.xml"
+- "**/*.yaml"
+- "**/*.yml"
+- "**/*.properties"
+- "**/mock-data/**"
+- "**/test-data/**"
+- "**/.env"
+- "**/secrets/**"
+- "**/credentials/**"
