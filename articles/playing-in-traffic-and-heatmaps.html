@@ -91,6 +91,40 @@
 }
 [data-theme="light"] .img-caption{color:rgba(54,54,54,0.5);}
 
+/* ── APIs Used list ─────────────────────────────────────────────────────── */
+.apis-section{margin:32px 0 8px 0;}
+.apis-section h2{margin-bottom:6px;}
+.apis-section .apis-intro{margin:0 0 18px 0;font-size:15px;color:var(--text-secondary);}
+.api-list{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;}
+.api-item{
+  /* padding:16px 0; */
+}
+.api-item-header{display:flex;align-items:flex-start;flex-direction:column;gap:8px;margin-bottom:10px;}
+.api-item-name{
+  font-size:15px;font-weight:700;color:var(--accent);
+  font-family:'Courier New',monospace;
+}
+.api-item-meta{display:flex;gap:8px;flex-wrap:wrap;}
+.api-meta-pill{
+  font-size:12px;color:var(--text-secondary);
+  background:rgba(0,255,65,0.07);border:1px solid var(--border);
+  border-radius:20px;padding:2px 10px;white-space:normal;word-break:break-word;
+}
+[data-theme="light"] .api-meta-pill{background:rgba(0,0,0,0.04);}
+.api-item-body{font-size:14px;color:var(--text-secondary);line-height:1.65;}
+.api-item-body p{margin:0 0 8px 0;}
+.api-item-body p:last-child{margin-bottom:0;}
+.api-item-body strong{color:var(--text-primary);}
+.api-group-label{
+  font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+  color:var(--accent);margin:0px 0 10px 0;padding-bottom:6px;
+  border-bottom:1px solid var(--border);
+}
+.api-group-label:first-child{margin-top:4px;}
+
+.article-container article ul{
+  margin:0px !important;
+}
 
   </style>
 </head>
@@ -137,7 +171,7 @@
         the time of day... with a few other scope creep inclusions like per-hex tooltips, ZIP code search, etc.
       </p>
       <p>
-        Below is the documentation of my personal experience with each API and library I used. I documented the cost
+        Below is the documentation of the project, what it does, and my personal experience with each API and library I used. I documented the cost
         of each API/library (we're broke out here), the ease of use, and finally a brief explanation
         of how it was used or integrated into the overall project.
       </p>
@@ -173,7 +207,7 @@
         images with the slider hidden on the actual webapp, injecting those images here, and then reattaching the slider. 
         The time slider at the bottom advances the hour from 00:00 to 23:00. Every hex and road
         segment re-evaluates its color at the selected hour, with smooth transitions between frames.
-        Use the slider below to scrub through a full day of traffic. 
+        Use the slider below to view a full day of traffic. 
       </p>
 
       <!-- ── Interactive 24-hour timeline ── -->
@@ -214,122 +248,6 @@
         congestion score on top of the baseline to get a final congestion score for each hex, which is what drove the color.
       </p>
 
-      <h2>Google APIs</h2>
-      <p>All Google Maps Platform APIs share a <i>$200/month free credit</i>. For personal projects
-        this effectively makes most Google APIs free, though billing must be enabled on your Cloud project
-        to generate a key at all.</p>
-      <h3>Google's Maps JavaScript API</h3>
-      <p><strong>Cost:</strong> $7 per 1,000 map loads</p>
-      <p><strong>Ease of use:</strong> Easy</p>
-      <p><strong>How it was used:</strong> Google Maps provided the basemap and camera controls, loaded in with <code>@googlemaps/js-api-loader</code>.
-        I originally wanted a tilted basemap with raised 3D hex columns reflecting activity levels. My first attempt was deck.gl's <code>HexagonLayer</code>, but that
-        approach was not a good fit, because I needed <i>stable</i>, globally addressable hex cells for caching and per-hex state. I dropped the
-        raised-column idea and moved to H3-indexed hexes, rendered with deck.gl <code>PolygonLayer</code>, which gave me predictable geometry and global IDs.
-      </p>
-      <p>
-        My second issue was tilt. Google Maps defaults to raster rendering, which is essentially a flat map layer with no available 3D camera behavior.
-        To enable tilt, I had to generate a Map ID with vector rendering enabled. I integrated everything correctly, went to test my code, but my map in Chrome was still
-        flat. After about 15 minutes of debugging and testing, I switched browsers. To my surprise, the tilt worked great in Edge and the VS Code browser.
-        The issue was something silly; hardware acceleration was disabled in Chrome, which caused a silent
-        default to raster mode. Apparently tilting the map is a GPU intensive task, who knew.
-      </p>
-
-      <h3>Google's Geocoding API</h3>
-      <p><strong>Cost:</strong> $5 per 1,000 requests</p>
-      <p><strong>Ease of use:</strong> Easy</p>
-      <p><strong>How it was used:</strong> I used this to power the ZIP code search in the top-left panel. You typed a US ZIP, hit Go,
-        and the Geocoding API returned the coordinates and a formatted address. The app pulled
-        <code>geometry.location</code> to recenter the map and read the address components to build a
-        label like "Manhattan, NY" shown as feedback below the search field. It was straightforward, no issues.
-      </p>
-      <h3>Google's Places API</h3>
-      <p><strong>Cost:</strong> Nearby Search $0.032/request, Place Details billed per field: Basic $0.017, Contact $0.03, Atmosphere $0.05</p>
-      <p><strong>Ease of use:</strong> Easy</p>
-      <p><strong>How it was used:</strong> I tried to use Places to populate a "Nearby Places" section in my hex tooltips that would include
-        restaurants, transit stops, anything that might explain why an area was busy. The problem was that
-        Nearby Search frequently returned street names (routes) or town names (localities) instead of actual
-        businesses, which was useless for contextualizing traffic. When it did return businesses, it felt random and inconsistent,
-        and these were not the businesses causing traffic (Subway, McDonald's, Laundromat, etc.). I stopped using it after a few test cycles.
-      </p>
-
-      <h2>TomTom APIs</h2>
-      <p>
-        Yes, TomTom is still around, and
-        they have a robust collection of APIs from decades of aggregated traffic data.
-        The free tier includes <i>50,000 tile requests/day</i> and <i>2,500 non-tile requests/day</i> (separate
-        limits). It was my only source of real traffic data for this project. One cool thing about TomTom's API is
-        you don't need to upload a credit card when you sign up, the API will simply start to block requests when you hit your daily cap.
-      </p>
-
-      <h3>TomTom's Traffic Tile API</h3>
-      <p><strong>Cost:</strong> Included in the 50,000/day free tier</p>
-      <p><strong>Ease of use:</strong> Easy</p>
-      <p><strong>How it was used:</strong> I tried this first since it felt like a lightweight solution.
-        I encountered an immediate hard stop: tiles are pre-rendered images fetched by zoom/x/y grid coordinate. There was no underlying data
-        to query; I couldn't ask what the speed was on a given road, click a segment, or map time-of-day values to the time slider.
-        I stopped using this very quickly.
-      </p>
-
-      <h3>TomTom's Flow Segment Data - Real-Time</h3>
-      <p><strong>Cost:</strong> Included in the 2,500/day free tier</p>
-      <p><strong>Ease of use:</strong> Easy</p>
-      <p><strong>How it was used:</strong> I tried <code>flowSegmentData/absolute</code> as an initial data source just to see how it worked.
-        By passing it a lat/lng and zoom level, it returned the nearest road segment's current speed,
-        free-flow speed, and polyline geometry. As this was strictly real-time traffic, it couldn't be used with the time slider.
-      </p>
-
-      <h3>TomTom's Flow Segment Data - Statistics (Historical)</h3>
-      <p><strong>Cost:</strong> Included in the 2,500/day free tier</p>
-      <p><strong>Ease of use:</strong> Medium*</p>
-      <p><strong>How it was used:</strong> This was the endpoint that actually integrated well with the time slider.
-        Using <code>flowSegmentData/statistics</code>, I got a sub-hourly historical speed profile across the full day.
-        As I quickly found out, at street-level granularity across a zoomed-out viewport, I burned through it in minutes.
-      </p>
-      <p><strong>Coverage problem:</strong> TomTom's historical data comes from GPS probes. These are cars that drive around and report their
-        speed and location. The more traffic a road sees, the more probe data exists for it. Major roads in big cities were well covered;
-        quiet residential streets and anything outside major metro areas had little to no data at all.
-      </p>
-      <p><strong>Requests limitation:</strong> This was why I marked it Medium*. The API was straightforward,
-        but I had to do mental gymnastics to stay within my request budget. TomTom's free tier is 2,500 requests per day,
-        and a city viewport at zoom 15 could have 200+ hexes with one hit each, per slider step. Panning around Manhattan
-        with the slider playing burned through the daily cap in minutes. I attacked this by only requesting data
-        for hexes above a certain OSM road density score, and only once per whole hour rather than on every fractional step.
-      </p>
-      <p>
-        While this seriously limited my traffic visibility, it eliminated the majority
-        of idle API usage. It also allowed me to continue testing the API without hitting the daily cap in
-        4 minutes when my cap reset (I still only lasted about 20 minutes).
-      </p>
-
-      <h2>OpenStreetMap - Overpass API</h2>
-      <p><strong>Cost:</strong> Free</p>
-      <p><strong>Ease of use:</strong> Medium</p>
-      <p><strong>How it was used:</strong> Overpass let me query what roads actually existed near each hex center, and I
-        used that to build a baseline score for each cell to try and represent potential activity. For example, a hex sitting on top of a highway got a higher
-        score than one sitting in a park. When TomTom data eventually came in for sampled points, it was
-        blended on top of those baseline scores, and the result drove both the hex color and whether a hex
-        was worth spending a TomTom request on in the first place.
-      </p>
-      <p>
-        The limitation was that Overpass only knew about roads, not what was generating traffic on them.
-        A crazy example of this phenomena is a neighborhood.
-        Neighborhoods can have very complex street grids, and OSM will interpret these as higher road density (busier),
-        when they're actually quiet residential streets, vice 4 way intersections, where it only sees 2 multilane roads.
-      </p>
-
-      <h2>H3 - Uber's Hexagonal Grid</h2>
-      <p><strong>Cost:</strong> Open-source library (free)</p>
-      <p><strong>Ease of use:</strong> Easy</p>
-      <p><strong>How it was used:</strong> H3 became the core hexagonal grid system for the app. I used it to fill the visible map area
-        with hex indexes at a fixed resolution, which gave me a deterministic set of cells every time the camera moved.
-      </p>
-      <p>
-        With a stable grid in place, I drew each hex cleanly on the map and used each one as a
-        reference point to collect specific traffic data. Any location I clicked or searched for could be matched to a specific hex,
-        which made cell-specific API calls very easy. Now instead of constantly recalculating everything from scratch, I had the ability to
-        cache data to specific hexes for reuse.
-      </p>
-
       <h2>If I Could Do Something Differently</h2>
       <p>
         I went about fulfilling my requirements wrong, and backwards. I had initially tried to establish an activity heatmap with
@@ -343,6 +261,167 @@
         and infrastructure. Hex grid coloring could have easily coincided
         with real traffic congestion patterns, and resembled a real activity heatmap instead of an approximation.
       </p>
+
+      <div class="apis-section">
+        <h2>APIs Used</h2>
+        <ul class="api-list">
+
+          <p class="api-group-label">Google Maps Platform</p>
+
+          <li class="api-item">
+            <div class="api-item-header">
+              <span class="api-item-name">Google Maps JavaScript API</span>
+              <div class="api-item-meta">
+                <span class="api-meta-pill">Cost: $7 / 1,000 map loads</span>
+                <span class="api-meta-pill">Ease of use: Easy</span>
+              </div>
+            </div>
+            <div class="api-item-body">
+              <p>Google Maps provided the basemap and camera controls, loaded in with <code>@googlemaps/js-api-loader</code>.
+                I originally wanted a tilted basemap with raised 3D hex columns reflecting activity levels. My first attempt was deck.gl's <code>HexagonLayer</code>, but that
+                approach was not a good fit, because I needed <i>stable</i>, globally addressable hex cells for caching and per-hex state. I dropped the
+                raised-column idea and moved to H3-indexed hexes, rendered with deck.gl <code>PolygonLayer</code>, which gave me predictable geometry and global IDs.</p>
+              <p>My second issue was tilt. Google Maps defaults to raster rendering, which is essentially a flat map layer with no available 3D camera behavior.
+                To enable tilt, I had to generate a Map ID with vector rendering enabled. I integrated everything correctly, went to test my code, but my map in Chrome was still
+                flat. After about 15 minutes of debugging and testing, I switched browsers. To my surprise, the tilt worked great in Edge and the VS Code browser.
+                The issue was something silly; hardware acceleration was disabled in Chrome, which caused a silent
+                default to raster mode. Apparently tilting the map is a GPU intensive task, who knew.</p>
+            </div>
+          </li>
+
+          <li class="api-item">
+            <div class="api-item-header">
+              <span class="api-item-name">Google Geocoding API</span>
+              <div class="api-item-meta">
+                <span class="api-meta-pill">Cost: $5 / 1,000 requests</span>
+                <span class="api-meta-pill">Ease of use: Easy</span>
+              </div>
+            </div>
+            <div class="api-item-body">
+              <p>I used this to power the ZIP code search in the top-left panel. You typed a US ZIP, hit Go,
+                and the Geocoding API returned the coordinates and a formatted address. The app pulled
+                <code>geometry.location</code> to recenter the map and read the address components to build a
+                label like "Manhattan, NY" shown as feedback below the search field. It was straightforward, no issues.</p>
+            </div>
+          </li>
+
+          <li class="api-item">
+            <div class="api-item-header">
+              <span class="api-item-name">Google Places API</span>
+              <div class="api-item-meta">
+                <span class="api-meta-pill">Cost: $0.032/req (Nearby Search); $0.017–$0.05/req (Place Details)</span>
+                <span class="api-meta-pill">Ease of use: Medium</span>
+              </div>
+            </div>
+            <div class="api-item-body">
+              <p>I tried Places so I could populate a "Nearby Places" section in my hex tooltips. The problem was that
+                Nearby Search frequently returned street names (routes) or town names (localities) instead of actual
+                businesses, which was useless for contextualizing traffic/activity. When it did return businesses, it felt random and inconsistent,
+                and these were not the businesses causing traffic (Subway, McDonald's, Laundromat, etc.). Stopped using it after a few testing iterations.</p>
+            </div>
+          </li>
+
+          <p class="api-group-label">TomTom</p>
+
+          <li class="api-item">
+            <div class="api-item-header">
+              <span class="api-item-name">TomTom Traffic Tile API</span>
+              <div class="api-item-meta">
+                <span class="api-meta-pill">Cost: Included in 50,000/day free tier</span>
+                <span class="api-meta-pill">Ease of use: Easy</span>
+              </div>
+            </div>
+            <div class="api-item-body">
+              <p>I tried this first since it felt like a lightweight solution.
+                I encountered an immediate hard stop: tiles are pre-rendered images fetched by zoom/x/y grid coordinate. There was no underlying data
+                to query; I couldn't ask what the speed was on a given road, click a segment, or map time-of-day values to the time slider.
+                I stopped using this very quickly.</p>
+            </div>
+          </li>
+
+          <li class="api-item">
+            <div class="api-item-header">
+              <span class="api-item-name">TomTom Flow Segment Data — Real-Time</span>
+              <div class="api-item-meta">
+                <span class="api-meta-pill">Cost: Included in 2,500/day free tier</span>
+                <span class="api-meta-pill">Ease of use: Easy</span>
+              </div>
+            </div>
+            <div class="api-item-body">
+              <p>I tried <code>flowSegmentData/absolute</code> as an initial data source just to see how it worked.
+                By passing it a lat/lng and zoom level, it returned the nearest road segment's current speed,
+                free-flow speed, and polyline geometry. As this was strictly real-time traffic, it couldn't be used with the time slider.</p>
+            </div>
+          </li>
+
+          <li class="api-item">
+            <div class="api-item-header">
+              <span class="api-item-name">TomTom Flow Segment Data — Statistics (Historical)</span>
+              <div class="api-item-meta">
+                <span class="api-meta-pill">Cost: Included in 2,500/day free tier</span>
+                <span class="api-meta-pill">Ease of use: Medium*</span>
+              </div>
+            </div>
+            <div class="api-item-body">
+              <p>This was the endpoint that actually integrated well with the time slider.
+                Using <code>flowSegmentData/statistics</code>, I got a sub-hourly historical speed profile across the full day.
+                As I quickly found out, at street-level granularity across a zoomed-out viewport, I burned through my 2500 free API requests in minutes.</p>
+              <p>TomTom's historical data comes from GPS probes. These are cars that drive around and report their
+                speed and location. The more traffic a road sees, the more probe data exists for it. Major roads in big cities were well covered;
+                however, quiet residential streets and anything outside major metro areas had little to no data at all.</p>
+              <p>There is a big drawback - the requests limitation - and this was why I marked it Medium*. The API was straightforward,
+                but I had to do mental gymnastics to stay within my request budget. TomTom's free tier is 2,500 requests per day,
+                and a city viewport at zoom 15 could have 200+ hexes with one hit each, per slider step. Panning around Manhattan
+                with the slider playing burned through the daily cap in minutes. I attacked this by only requesting data
+                for hexes above a certain OSM road density score, and only once per whole hour rather than on every fractional step.
+                While this seriously limited my traffic visibility, it eliminated the majority of idle API usage. It also allowed me to continue
+                testing without hitting the daily cap in 4 minutes when my cap reset (I still only lasted about 20 minutes).</p>
+            </div>
+          </li>
+
+          <p class="api-group-label">Other</p>
+
+          <li class="api-item">
+            <div class="api-item-header">
+              <span class="api-item-name">OpenStreetMap — Overpass API</span>
+              <div class="api-item-meta">
+                <span class="api-meta-pill">Cost: Free</span>
+                <span class="api-meta-pill">Ease of use: Medium</span>
+              </div>
+            </div>
+            <div class="api-item-body">
+              <p>Overpass let me query what roads actually existed near each hex center, and I
+                used that to build a baseline score for each cell to try and represent potential activity. For example, a hex sitting on top of a highway got a higher
+                score than one sitting in a park. When TomTom data eventually came in for sampled points, it was
+                blended on top of those baseline scores, and the result drove both the hex color and whether a hex
+                was worth spending a TomTom request on in the first place.</p>
+              <p>The limitation was that Overpass only knew about roads, not what was generating traffic on them.
+                A crazy example of this phenomena is a neighborhood.
+                Neighborhoods can have very complex street grids, and OSM will interpret these as higher road density (busier),
+                when they're actually quiet residential streets, vice 4 way intersections, where it only sees 2 multilane roads.</p>
+            </div>
+          </li>
+
+          <li class="api-item">
+            <div class="api-item-header">
+              <span class="api-item-name">H3 — Uber's Hexagonal Grid</span>
+              <div class="api-item-meta">
+                <span class="api-meta-pill">Cost: Open-source (free)</span>
+                <span class="api-meta-pill">Ease of use: Easy</span>
+              </div>
+            </div>
+            <div class="api-item-body">
+              <p>H3 became the core hexagonal grid system for the app. I used it to fill the visible map area
+                with hex indexes at a fixed resolution, which gave me a deterministic set of cells every time the camera moved.</p>
+              <p>With a stable grid in place, I drew each hex cleanly on the map and used each one as a
+                reference point to collect specific traffic data. Any location I clicked or searched for could be matched to a specific hex,
+                which made cell-specific API calls very easy. Now instead of constantly recalculating everything from scratch, I had the ability to
+                cache data to specific hexes for reuse.</p>
+            </div>
+          </li>
+
+        </ul>
+      </div>
     </article>
   </main>
 
