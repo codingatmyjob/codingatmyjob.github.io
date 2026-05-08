@@ -981,7 +981,7 @@ display:inline-block;color:var(--accent);background:rgba(255,255,255,0.02);borde
 
 /* Utility */
 li{margin:4px 0}
-ul,ol{padding-left:1.5rem}
+/* ul,ol{padding-left:1.5rem} */
 
 [data-theme="light"] .article-container,
 [data-theme="light"] .article-container article,
