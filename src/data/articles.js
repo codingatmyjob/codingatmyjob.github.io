@@ -78,9 +78,7 @@ export const articlesData = [
     title: 'HTB Command Cheatsheet',
     description: 'A regularly updated cheatsheet of essential commands and tools for CTFs and penetration testing.',
     tags: ['HTB', 'Pentest', 'Writeup'],
-    imageSrc: 'htb-cheatsheet.png',
-    imageAlt: 'HTB Command Cheatsheet',
-    imageClassName: 'article-card-image--default'
+    imageLabel: 'HTB Command Cheatsheet'
   },
   {
     id: 'htb-artificial-writeup',
@@ -90,9 +88,7 @@ export const articlesData = [
     title: 'HTB Artificial Writeup',
     description: 'A technical write up detailing steps taken pwn the Artificial HTB Machine.',
     tags: ['HTB', 'Machine', 'Writeup'],
-    imageSrc: 'htb-artificial.png',
-    imageAlt: 'HTB Artificial Writeup',
-    imageClassName: 'article-card-image--default'
+    imageLabel: 'HTB Artificial Writeup'
   },
   {
     id: 'how-i-passed-security-plus',
