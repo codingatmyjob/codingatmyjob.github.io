@@ -9,7 +9,7 @@ export const articlesData = [
     tags: ['CERT', 'Cloud'],
     imageSrc: 'OCI25FNDCFA.png',
     imageAlt: 'Passing OCI Foundations Associate',
-    imageClassName: 'article-card-image--oci'
+    imageStyle: { height: '120%', width: '120%' }
   },
 // CURRENTLY REMOVED - will be re-added when the article is published
 //   {
@@ -32,7 +32,7 @@ export const articlesData = [
     tags: ['JavaScript', 'Demo', 'WebApp'],
     imageSrc: 'typeahead.png',
     imageAlt: 'Typeahead Demo',
-    imageClassName: 'article-card-image--typeahead'
+    imageStyle: { height: '85%', width: '85%' }
   },
   {
     id: 'playing-in-traffic-and-heatmaps',
@@ -44,7 +44,7 @@ export const articlesData = [
     tags: ['Project', 'JavaScript', 'WebApp', 'API'],
     imageSrc: '/screenshots/hero.png',
     imageAlt: 'Playing in Traffic and Heatmaps',
-    imageClassName: 'article-card-image--traffic'
+    imageStyle: { height: '85%', width: '100%' }
   },
   {
     id: 'creating-a-pokemon-stock-bot',
@@ -56,7 +56,7 @@ export const articlesData = [
     tags: ['Project', 'Python', 'Discord', 'Automation', 'API'],
     imageSrc: 'pokestock.png',
     imageAlt: 'Creating a Pokemon Stock Bot',
-    imageClassName: 'article-card-image--pokestock'
+    imageStyle: { height: '90%', width: '90%' }
   },
   {
     id: 'virtualbox-home-lab-setup',
@@ -68,7 +68,7 @@ export const articlesData = [
     tags: ['VM', 'Security', 'SIEM', 'Project', 'Networking'],
     imageSrc: 'VirtualBox_logo.png',
     imageAlt: 'VirtualBox Home Lab Setup',
-    imageClassName: 'article-card-image--virtualbox'
+    imageStyle: { height: '85%', width: '85%' }
   },
   {
     id: 'htb-command-cheatsheet',
@@ -78,7 +78,9 @@ export const articlesData = [
     title: 'HTB Command Cheatsheet',
     description: 'A regularly updated cheatsheet of essential commands and tools for CTFs and penetration testing.',
     tags: ['HTB', 'Pentest', 'Writeup'],
-    imageLabel: 'HTB Command Cheatsheet'
+    imageSrc: 'htb-cheatsheet.png',
+    imageAlt: 'HTB Command Cheatsheet',
+    imageClassName: 'article-card-image--default'
   },
   {
     id: 'htb-artificial-writeup',
@@ -88,7 +90,9 @@ export const articlesData = [
     title: 'HTB Artificial Writeup',
     description: 'A technical write up detailing steps taken pwn the Artificial HTB Machine.',
     tags: ['HTB', 'Machine', 'Writeup'],
-    imageLabel: 'HTB Artificial Writeup'
+    imageSrc: 'htb-artificial.png',
+    imageAlt: 'HTB Artificial Writeup',
+    imageClassName: 'article-card-image--default'
   },
   {
     id: 'how-i-passed-security-plus',

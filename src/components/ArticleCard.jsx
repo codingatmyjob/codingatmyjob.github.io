@@ -10,6 +10,7 @@ export default function ArticleCard({ item, onOpenArticle }){
     imageSrc,
     imageAlt,
     imageClassName,
+    imageStyle,
     imageLabel,
     readingTime
   } = item || {}
@@ -40,6 +41,7 @@ export default function ArticleCard({ item, onOpenArticle }){
             className={[ 'article-card-image', imageClassName ].filter(Boolean).join(' ')}
             src={imageSrc}
             alt={imageAlt || title || 'Article image'}
+            style={imageStyle ? imageStyle : undefined}
           />
         ) : (
           imageLabel || title
