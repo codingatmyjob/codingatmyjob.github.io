@@ -1,7 +1,18 @@
 import React from 'react'
 
 export default function ArticleCard({ item, onOpenArticle }){
-  const { id, path, title, tags, html, readingTime } = item || {}
+  const {
+    path,
+    title,
+    tags,
+    date,
+    description,
+    imageSrc,
+    imageAlt,
+    imageClassName,
+    imageLabel,
+    readingTime
+  } = item || {}
 
   const handleClick = (e)=>{
     // don't intercept clicks on links inside the card
@@ -14,34 +25,38 @@ export default function ArticleCard({ item, onOpenArticle }){
     if(e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleClick(e) }
   }
 
-  // Create a wrapper to inject reading time
-  const cardContent = React.useMemo(() => {
-    const tempDiv = document.createElement('div')
-    tempDiv.innerHTML = html
-    
-    // Only add reading time if it exists (not null for "Coming soon" articles)
-    if(readingTime){
-      const dateEl = tempDiv.querySelector('.article-date')
-      if(dateEl){
-        const readingTimeEl = document.createElement('div')
-        readingTimeEl.className = 'reading-time'
-        readingTimeEl.textContent = `${readingTime} read`
-        dateEl.parentNode.insertBefore(readingTimeEl, dateEl.nextSibling)
-      }
-    }
-    
-    return tempDiv.innerHTML
-  }, [html, readingTime])
-
   return (
     <div
       className="article-card"
+      data-path={path}
       role="button"
       tabIndex={0}
       onClick={handleClick}
       onKeyDown={onKey}
-      // preserve original markup inside the card
-      dangerouslySetInnerHTML={{ __html: cardContent }}
-    />
+    >
+      <div className="article-image">
+        {imageSrc ? (
+          <img
+            className={[ 'article-card-image', imageClassName ].filter(Boolean).join(' ')}
+            src={imageSrc}
+            alt={imageAlt || title || 'Article image'}
+          />
+        ) : (
+          imageLabel || title
+        )}
+      </div>
+
+      <div className="article-content">
+        <div className="article-date">{date}</div>
+        {readingTime ? <div className="reading-time">{readingTime} read</div> : null}
+        <div className="article-title">{title}</div>
+        <div className="article-description">{description}</div>
+        <div className="article-tags">
+          {(tags || []).map(tag => (
+            <span key={tag} className="tag">{tag}</span>
+          ))}
+        </div>
+      </div>
+    </div>
   )
 }

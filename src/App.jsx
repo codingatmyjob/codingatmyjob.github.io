@@ -9,6 +9,7 @@ import ArticleView from './components/ArticleView'
 import ScrollTop from './components/ScrollTop'
 import Pagination from './components/Pagination'
 import SearchBar from './components/SearchBar'
+import { articlesData } from './data/articles'
 
 const ROWS_PER_PAGE = 8
 
@@ -23,9 +24,8 @@ const getItemsPerPage = ()=>{
 }
 
 export default function App(){
-  const [allTags, setAllTags] = useState([])
-  const [allArticles, setAllArticles] = useState([])
-  const [filteredArticles, setFilteredArticles] = useState([])
+  const allArticles = articlesData
+  const [filteredArticles, setFilteredArticles] = useState(articlesData)
   const [sortedArticles, setSortedArticles] = useState([])
   const [selected, setSelected] = useState([])
   const [sortOrder, setSortOrder] = useState('newest')
@@ -46,12 +46,12 @@ export default function App(){
     return ()=> window.removeEventListener('resize', handleResize)
   },[])
 
-  // Filter out About Me from articles (helper function)
-  const filterOutAbout = (articles) => articles.filter(article => article.path !== 'About.html')
-
   // Load and cache article content for searching
   const loadArticleContent = useCallback(async (article) => {
-    if (!article.path || articleContents.has(article.path)) return
+    if (!article.path) return null
+
+    const cached = articleContents.get(article.path)
+    if (cached) return cached
 
     try {
       const response = await fetch(article.path)
@@ -73,8 +73,10 @@ export default function App(){
       }
 
       setArticleContents(prev => new Map(prev).set(article.path, searchableContent))
+      return searchableContent
     } catch (error) {
       console.warn(`Failed to load content for ${article.path}:`, error)
+      return null
     }
   }, [articleContents])
 
@@ -84,11 +86,10 @@ export default function App(){
 
     const searchTerm = query.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim()
 
-    // Load content for all articles if not already loaded
-    await Promise.all(articles.map(loadArticleContent))
+    const contents = await Promise.all(articles.map(loadArticleContent))
 
-    return articles.filter(article => {
-      const content = articleContents.get(article.path)
+    return articles.filter((article, index) => {
+      const content = contents[index] || articleContents.get(article.path)
       if (!content) return false
 
       // Search in title
@@ -123,7 +124,7 @@ export default function App(){
         filtered = await searchArticles(searchQuery, filtered)
       }
 
-      setFilteredArticles(filterOutAbout(filtered))
+      setFilteredArticles(filtered)
     }
 
     applyFilters()
@@ -152,11 +153,7 @@ export default function App(){
         }
       } else {
         // Date-based sorting for newest/oldest
-        const getDate = (article)=>{
-          const dateMatch = article.html.match(/<div class="article-date">([^<]+)<\/div>/)
-          if(!dateMatch || dateMatch[1].includes('Coming soon')) return new Date('2099-12-31') // Put "Coming soon" at beginning for newest
-          return new Date(dateMatch[1])
-        }
+        const getDate = (article)=> article.publishedAt ? new Date(article.publishedAt) : new Date('2099-12-31')
         
         const dateA = getDate(a)
         const dateB = getDate(b)
@@ -273,10 +270,8 @@ export default function App(){
         controlsRoot
       )}
       <ArticlesGrid 
-        articles={allArticles.length > 0 ? currentArticles : undefined}
+        articles={currentArticles}
         onOpenArticle={openArticle} 
-        onTags={setAllTags}
-        onArticlesLoaded={setAllArticles}
       />
       {totalPages > 1 && paginationRoot && createPortal(
         <Pagination 

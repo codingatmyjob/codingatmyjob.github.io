@@ -770,6 +770,13 @@ box-shadow:0 2px 8px var(--shadow);transition:transform .3s,box-shadow .3s;curso
 
 .article-image{height:180px;background:var(--border);display:flex;align-items:center;justify-content:center;text-align:center;border-radius:8px 8px 0 0;overflow:hidden;font-size: 16px;}
 .article-image img{width:100%;height:100%;object-fit:contain;object-position:center;display:block;border-radius:inherit;background:var(--border);}
+.article-card-image{width:100%;height:100%;object-fit:contain;object-position:center;display:block}
+.article-card-image--default{width:100%;height:100%}
+.article-card-image--oci{width:120%;height:120%}
+.article-card-image--typeahead{width:85%;height:85%}
+.article-card-image--traffic{width:100%;height:85%}
+.article-card-image--pokestock{width:90%;height:90%}
+.article-card-image--virtualbox{width:85%;height:85%}
 
 .article-content{padding:25px}
 .article-date{font-size:13px;color:#9aa;margin-bottom:4px}

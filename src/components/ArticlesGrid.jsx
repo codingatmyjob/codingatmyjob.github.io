@@ -3,12 +3,9 @@ import { createPortal } from 'react-dom'
 import ArticleCard from './ArticleCard'
 
 // Calculate reading time based on full article content
-const calculateReadingTime = async (path, cardHtml) => {
+const calculateReadingTime = async (path) => {
   if(!path) return null
-  
-  // Check if this is a "Coming soon" article from the card preview
-  if(cardHtml && cardHtml.includes('Coming soon')) return null
-  
+
   try {
     const response = await fetch(`${path}`)
     const htmlText = await response.text()
@@ -39,56 +36,53 @@ const calculateReadingTime = async (path, cardHtml) => {
   }
 }
 
-export default function ArticlesGrid({ articles, onOpenArticle, onTags, onArticlesLoaded }){
-  const [allItems, setAllItems] = useState([])
-  const [initialized, setInitialized] = useState(false)
+export default function ArticlesGrid({ articles = [], onOpenArticle }){
+  const [readingTimes, setReadingTimes] = useState({})
 
-  // Initial load: parse HTML cards once
   useEffect(()=>{
-    if(initialized) return
-    
-    const container = document.querySelector('.articles-grid')
-    if(!container) return
+    if(articles.length === 0) return
 
-    // read existing cards and extract minimal data
-    const els = Array.from(container.querySelectorAll('.article-card'))
-    
-    // Parse all cards first
-    const parsed = els.map((el, i)=>{
-      const path = el.dataset && el.dataset.path ? el.dataset.path : (el.querySelector && (el.querySelector('a')?.getAttribute('href'))) || null
-      const title = (el.querySelector && (el.querySelector('.article-title')?.textContent || el.querySelector('h3')?.textContent || el.querySelector('h2')?.textContent)) || ''
-      const tags = Array.from(el.querySelectorAll('.tag')).map(t=>t.textContent.trim())
-      const html = el.innerHTML
-      return { id: i, path, title, tags, html, readingTime: null }
+    let cancelled = false
+
+    const uncached = articles.filter(item => item.path && readingTimes[item.path] === undefined)
+    if(uncached.length === 0) return
+
+    Promise.all(
+      uncached.map(async (item) => ({
+        path: item.path,
+        readingTime: await calculateReadingTime(item.path)
+      }))
+    ).then(results => {
+      if(cancelled) return
+      setReadingTimes(prev => {
+        const next = { ...prev }
+        results.forEach(({ path, readingTime }) => {
+          next[path] = readingTime
+        })
+        return next
+      })
     })
-    
-    // Calculate reading times asynchronously
-    Promise.all(parsed.map(async (item) => {
-      const readingTime = await calculateReadingTime(item.path, item.html)
-      return { ...item, readingTime }
-    })).then(itemsWithReadingTime => {
-      setAllItems(itemsWithReadingTime)
-      if(onArticlesLoaded) onArticlesLoaded(itemsWithReadingTime)
-      
-      // clear existing DOM so React can render into it
-      container.innerHTML = ''
-      setInitialized(true)
-    })
-  },[initialized, onTags, onArticlesLoaded])
+
+    return ()=> {
+      cancelled = true
+    }
+  },[articles, readingTimes])
 
   const container = typeof document !== 'undefined' ? document.querySelector('.articles-grid') : null
   if(!container) return null
 
-  // Use articles from props (paginated and filtered) or all items during init
-  const itemsToShow = articles !== undefined ? articles : allItems
+  const itemsToShow = articles.map(item => ({
+    ...item,
+    readingTime: item.path ? readingTimes[item.path] ?? null : null
+  }))
 
   const content = (
     <>
       {itemsToShow.length > 0 ? (
         itemsToShow.map(it=> (
-          <ArticleCard key={it.id} item={it} onOpenArticle={onOpenArticle} />
+          <ArticleCard key={it.id || it.path || it.title} item={it} onOpenArticle={onOpenArticle} />
         ))
-      ) : articles !== undefined ? (
+      ) : (
         <div className="no-results">
           <div className="no-results-content">
             <svg className="no-results-icon" viewBox="0 0 24 24" width="48" height="48" fill="currentColor">
@@ -98,7 +92,7 @@ export default function ArticlesGrid({ articles, onOpenArticle, onTags, onArticl
             <p className="no-results-message">Try adjusting your search terms or filters to find what you're looking for.</p>
           </div>
         </div>
-      ) : null}
+      )}
     </>
   )
 
