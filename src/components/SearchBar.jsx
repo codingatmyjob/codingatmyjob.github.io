@@ -13,14 +13,12 @@ export default function SearchBar({ onSearch, placeholder = "Search articles..."
     }
 
     const timer = setTimeout(() => {
-      setIsLoading(true)
       onSearch(query.trim())
       setIsLoading(false)
-    }, 300)
+    }, 500)
 
     return () => {
       clearTimeout(timer)
-      setIsLoading(false)
     }
   }, [query, onSearch])
 
@@ -40,8 +38,9 @@ export default function SearchBar({ onSearch, placeholder = "Search articles..."
           type="text"
           value={query}
           onChange={(e) => {
-            setQuery(e.target.value)
-            if (e.target.value.trim() && !isLoading) {
+            const newQuery = e.target.value
+            setQuery(newQuery)
+            if (newQuery.trim()) {
               setIsLoading(true)
             }
           }}
