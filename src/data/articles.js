@@ -8,8 +8,7 @@ export const articlesData = [
     description: 'An OCI Foundations Associate review, and opinions on the Oracle course.',
     tags: ['CERT', 'Cloud'],
     imageSrc: 'OCI25FNDCFA.png',
-    imageAlt: 'Passing OCI Foundations Associate',
-    imageStyle: { height: '120%', width: '120%' }
+    imageAlt: 'Passing OCI Foundations Associate'
   },
 // CURRENTLY REMOVED - will be re-added when the article is published
 //   {
