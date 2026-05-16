@@ -12,8 +12,8 @@ export default function SearchBar({ onSearch, placeholder = "Search articles..."
       return
     }
 
-    setIsLoading(true)
     const timer = setTimeout(() => {
+      setIsLoading(true)
       onSearch(query.trim())
       setIsLoading(false)
     }, 300)
