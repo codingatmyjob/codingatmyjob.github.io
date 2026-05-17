@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Playing in Traffic and Heatmaps</title>
+  <link rel="stylesheet" href="../style.css" />
+  <style>
+/* ── Feature list ───────────────────────────────────────────────────────── */
+.feature-list{
+  list-style:none;padding:0;margin:0 0 18px 0;
+  display:flex;flex-direction:column;gap:10px;
+}
+.feature-list li{
+  display:flex;align-items:flex-start;gap:12px;
+  background:rgba(0,255,65,0.04);border:1px solid var(--border);
+  border-radius:8px;padding:12px 16px;
+  color:rgba(255,255,255,0.85);font-size:15px;
+}
+[data-theme="light"] .feature-list li{color:var(--text-primary);}
+.feature-list li .feat-icon{flex-shrink:0;color:var(--accent);font-size:18px;margin-top:1px;}
+.feature-list li strong{color:var(--text-primary);}
+
+/* ── Timeline demo widget ───────────────────────────────────────────────── */
+.timeline-demo{
+  margin:24px 0 8px 0;
+  border:1px solid var(--border);border-radius:12px;overflow:hidden;
+  box-shadow:0 4px 20px rgba(0,0,0,0.4);
+}
+.timeline-screen{
+  width:100%;overflow:hidden;
+}
+.timeline-screen img{
+  width:100%;height:auto;display:none;vertical-align:top;
+}
+
+.timeline-controls-bar{
+  padding:16px 20px 18px;display:flex;flex-direction:column;gap:12px;
+  background:var(--bg-secondary);border-top:1px solid var(--border);
+}
+[data-theme="light"] .timeline-controls-bar{background:var(--bg-primary);}
+
+.timeline-playback-row{display:flex;align-items:center;gap:8px;justify-content:center;}
+
+.tl-btn{
+  background:var(--bg-primary);border:1px solid var(--border);
+  color:var(--text-primary);font-family:'Courier New',monospace;font-size:13px;
+  border-radius:6px;padding:6px 14px;cursor:pointer;transition:all .2s;
+  display:flex;align-items:center;justify-content:center;min-width:40px;height:34px;
+}
+.tl-btn:hover{background:var(--border);}
+.tl-btn.primary{
+  background:var(--accent);color:var(--bg-primary);
+  border-color:var(--accent);font-weight:700;padding:6px 22px;gap:5px;
+  min-width:102px;justify-content:center;
+}
+.tl-btn.primary:hover{opacity:0.85;}
+@media (max-width:480px){.tl-play-label{display:none;}.tl-btn.primary{min-width:unset;}}
+
+.timeline-slider-row{display:flex;align-items:center;gap:14px;}
+.timeline-label{
+  font-family:'Courier New',monospace;font-size:13px;
+  color:var(--text-primary);opacity:0.6;white-space:nowrap;flex-shrink:0;
+}
+.timeline-range{
+  -webkit-appearance:none;appearance:none;flex:1;height:6px;
+  border-radius:3px;cursor:pointer;outline:none;
+  background:linear-gradient(to right,
+    var(--accent) 0%, var(--accent) var(--fill,35%),
+    var(--border) var(--fill,35%), var(--border) 100%);
+}
+.timeline-range::-webkit-slider-thumb{
+  -webkit-appearance:none;appearance:none;
+  width:18px;height:18px;border-radius:50%;border:none;
+  background:var(--accent);box-shadow:0 0 6px rgba(0,255,65,0.6);
+  cursor:pointer;transition:transform .1s;
+}
+.timeline-range::-webkit-slider-thumb:hover{transform:scale(1.2);}
+.timeline-range::-moz-range-thumb{
+  width:18px;height:18px;border-radius:50%;border:none;
+  background:var(--accent);box-shadow:0 0 6px rgba(0,255,65,0.6);cursor:pointer;
+}
+.article-container article img {
+  margin: 0px !important; border-radius: 0px !important; box-shadow: none !important; border: none !important;
+}
+
+/* ── Caption ────────────────────────────────────────────────────────────── */
+.img-caption{
+  font-size:13px;color:rgba(255,255,255,0.45);
+  text-align:center;margin:8px 0 0 0;font-style:italic;
+}
+[data-theme="light"] .img-caption{color:rgba(54,54,54,0.5);}
+
+/* ── APIs Used list ─────────────────────────────────────────────────────── */
+.apis-section{margin:32px 0 8px 0;}
+.apis-section h2{margin-bottom:6px;}
+.apis-section .apis-intro{margin:0 0 18px 0;font-size:15px;color:var(--text-secondary);}
+.api-list{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;}
+.api-item-header{display:flex;align-items:flex-start;flex-direction:column;gap:8px;margin-bottom:10px;}
+.api-item-name{
+  font-size:15px;font-weight:700;color:var(--accent);
+  font-family:'Courier New',monospace;
+}
+.api-item-meta{display:flex;gap:8px;flex-wrap:wrap;}
+.api-meta-pill{
+  font-size:12px;color:var(--text-secondary);
+  background:rgba(0,255,65,0.07);border:1px solid var(--border);
+  border-radius:20px;padding:2px 10px;white-space:normal;word-break:break-word;
+}
+[data-theme="light"] .api-meta-pill{background:rgba(0,0,0,0.04);}
+.api-item-body{font-size:14px;color:var(--text-secondary);line-height:1.65;}
+.api-item-body p{margin:0 0 8px 0;}
+.api-item-body p:last-child{margin-bottom:0;}
+.api-item-body strong{color:var(--text-primary);}
+.api-group-label{
+  font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+  color:var(--accent);margin:0px 0 10px 0;padding-bottom:6px;
+  border-bottom:1px solid var(--border);
+  padding-top: 10px;
+}
+.api-group-label:first-child{margin-top:4px;}
+
+.article-container article ul{
+  margin:0px !important;
+}
+
+  </style>
+</head>
+<body>
+  <div id="binary-bg" aria-hidden="true"></div>
+
+  <header>
+    <p class="title"><a href="#">Connor's Portfolio</a></p>
+    <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">
+      <span id="theme-label">Light</span>
+      <div class="switch"></div>
+    </button>
+  </header>
+
+  <main class="article-container">
+    <h1>Playing in Traffic and Heatmaps</h1>
+    <div class="meta">
+      <time datetime="2026-05-02">May 02, 2026</time>
+    </div>
+    <div class="tags">
+      <span class="tag">Project</span>
+      <span class="tag">JavaScript</span>
+      <span class="tag">WebApp</span>
+      <span class="tag">API</span>
+    </div>
+
+    <article>
+      <h2>I Like Hexagons</h2>
+      <p>
+        Inspired by the Google Maps API, I thought it would be
+        really cool to try and create a hex oriented activity heatmap (with a last second traffic congestion overlay).
+        From what I could find, the Maps API didn't have anything readily available to accomplish this task, so instead I simulated congestion by
+        generating a per-hex hourly activity curve using commute-shaped Gaussian peaks (morning/evening),
+        overnight dips, and included some randomness so each hex was unique. Then I factored in a
+        road-density baseline from OpenStreetMap to make it look plausible.
+      </p>
+      <p>
+        After playing around with this, trying to tweak it and make it look legitimate (why is a neighborhood more
+        active than the busiest intersection in town??), I did some research
+        (probably should have started with this) and found that not only does TomTom still exist, but they have
+        an awesome API that provides aggregated historical traffic data at a per-street level.
+        After finally determining the scope of my project I finalized the requirements: A semi-accurate
+        hexagon-based activity heatmap, with a historical traffic overlay, and a slider at the bottom to visualize
+        the time of day... with a few other scope creep inclusions like per-hex tooltips, ZIP code search, etc.
+      </p>
+      <p>
+        Below is the documentation of the project, what it does, and my personal experience with each API and library I used. I documented the cost
+        of each API/library (we're broke out here), the ease of use, and finally a brief explanation
+        of how it was used or integrated into the overall project.
+      </p>
+
+      <h2>What the App Does</h2>
+      <p>
+        The app renders a live Google Maps basemap overlaid with an Uber H3 hexagonal grid. Each hex is colored
+        on a gradient from cool blue (low activity) to hot red (high congestion) based on a
+        traffic profile unique to that hex's location and road density. On top of the hex layer,
+        TomTom road segments are drawn in orange and red wherever historical speed data shows significant congestion.
+      </p>
+      <p>
+        The four main features are:
+      </p>
+      <ul>
+        <li><strong>Hex grid:</strong> The entire visible viewport is tiled with H3 resolution-9 hexagons.
+          Each cell is colored based on its traffic profile at the given hour.
+          The color gradient dynamically normalizes to the min/max of the visible cells, so the full color range
+          always spans whatever is on screen.</li>
+        <li><strong>TomTom road overlay:</strong> Orange and red polylines are drawn over real road
+          segments fetched from TomTom's historical Flow Statistics API. Only segments with a normalized
+          congestion score ≥ 0.6 (orange–red range) are shown.</li>
+        <li><strong>ZIP code search:</strong> Entering any US ZIP code recenters the map and rebuilds
+          the hex grid at that location. The Google Geocoding API resolves coordinates and a place
+          label (e.g. "Manhattan, NY") is shown as feedback below the search field.</li>
+        <li><strong>Per-hex tooltip:</strong> Clicking any hex opens a popup showing the current
+          traffic level, peak hour, quietest hour, and a 24-bar daily sparkline profile.
+          The active hour is highlighted in the sparkline as the time slider moves.</li>
+      </ul>
+
+      <p>
+        The demo was created capturing static 
+        images with the slider hidden on the actual webapp, injecting those images here, and then reattaching the slider. 
+        The time slider at the bottom advances the hour from 00:00 to 23:00. Every hex and road
+        segment re-evaluates its color at the selected hour, with smooth transitions between frames.
+        Use the slider below to view a full day of traffic. 
+      </p>
+
+      <!-- ── Interactive 24-hour timeline ── -->
+      <div class="timeline-demo" id="timeline-demo">
+        <div class="timeline-screen" id="tl-screen">
+          <!-- Images injected by script -->
+        </div>
+        <div class="timeline-controls-bar">
+          <div class="timeline-playback-row">
+            <button class="tl-btn" id="tl-rev-fast" title="Reverse fast">&lt;&lt;</button>
+            <button class="tl-btn" id="tl-rev" title="Reverse">&lt;</button>
+            <button class="tl-btn primary" id="tl-play"><span class="tl-play-icon">&#9654;</span><span class="tl-play-label">Play</span></button>
+            <button class="tl-btn" id="tl-fwd" title="Forward">&gt;</button>
+            <button class="tl-btn" id="tl-fwd-fast" title="Forward fast">&gt;&gt;</button>
+          </div>
+          <div class="timeline-slider-row">
+            <span class="timeline-label">00:00</span>
+            <input class="timeline-range" id="tl-range" type="range" min="0" max="23" step="1" value="0" />
+            <span class="timeline-label">23:00</span>
+          </div>
+        </div>
+      </div>
+      <p class="img-caption">Drag the slider or hit Play to watch congestion build and clear across the day.</p>
+
+      <h2>The Fake Traffic Problem</h2>
+      <p>
+        Most of what the time slider shows for the hex grid is synthesized. It resembles 
+        true commute patterns using Gaussian morning/evening peaks, overnight dips, and per-hex noise. 
+        Hexes near road corridors
+        got a slight boost in activity score, and hexes far from any road stayed low. It felt spatially plausible,
+        but still a mathematical approximation. 
+      </p>
+      <p>
+        Per-street historical traffic data didn't exist for free at the scale
+        I needed. TomTom's statistics endpoint has a daily limit of 2,500 daily requests, Google doesn't expose
+        anything comparable. The hexes that show TomTom segments contain real data; everything else is
+        an approximation based on the hex's road density and a synthetic traffic curve. I blended the TomTom 
+        congestion score on top of the baseline to get a final congestion score for each hex, which is what drove the color.
+      </p>
+
+      <h2>If I Could Do Something Differently</h2>
+      <p>
+        I went about fulfilling my requirements wrong, and backwards. I had initially tried to establish an activity heatmap with
+        synthesized data, and then later decided to layer historical traffic data (what I didn't realize was basically
+        activity) on top. In retrospect, the historical traffic data TomTom provided was the closest thing
+        to an activity heatmap I could use as a starting point for free.
+      </p>
+      <p>
+        I should have started with the TomTom historical data at a small scale, then layered my hexagons and done the heatmap calculations based on
+        traffic, rather than the other way around. This would have provided a consistent baseline across all types of areas
+        and infrastructure. Hex grid coloring could have easily coincided
+        with real traffic congestion patterns, and resembled a real activity heatmap instead of an approximation.
+      </p>
+
+      <div class="apis-section">
+        <h2>APIs Used</h2>
+        <ul class="api-list">
+
+          <p class="api-group-label" style="padding-top:0px !important;">Google Maps Platform</p>
+
+          <li class="api-item">
+            <div class="api-item-header">
+              <span class="api-item-name">Google Maps JavaScript API</span>
+              <div class="api-item-meta">
+                <span class="api-meta-pill">Cost: $7 / 1,000 map loads</span>
+                <span class="api-meta-pill">Ease of use: Easy</span>
+              </div>
+            </div>
+            <div class="api-item-body">
+              <p>Google Maps provided the basemap and camera controls, loaded in with <code>@googlemaps/js-api-loader</code>.
+                I originally wanted a tilted basemap with raised 3D hex columns reflecting activity levels. My first attempt was deck.gl's <code>HexagonLayer</code>, but that
+                approach was not a good fit, because I needed <i>stable</i>, globally addressable hex cells for caching and per-hex state. I dropped the
+                raised-column idea and moved to H3-indexed hexes, rendered with deck.gl <code>PolygonLayer</code>, which gave me predictable geometry and global IDs.</p>
+              <p>My second issue was tilt. Google Maps defaults to raster rendering, which is essentially a flat map layer with no available 3D camera behavior.
+                To enable tilt, I had to generate a Map ID with vector rendering enabled. I integrated everything correctly, went to test my code, but my map in Chrome was still
+                flat. After about 15 minutes of debugging and testing, I switched browsers. To my surprise, the tilt worked great in Edge and the VS Code browser.
+                The issue was something silly; hardware acceleration was disabled in Chrome, which caused a silent
+                default to raster mode. Apparently tilting the map is a GPU intensive task, who knew.</p>
+            </div>
+          </li>
+
+          <li class="api-item">
+            <div class="api-item-header">
+              <span class="api-item-name">Google Geocoding API</span>
+              <div class="api-item-meta">
+                <span class="api-meta-pill">Cost: $5 / 1,000 requests</span>
+                <span class="api-meta-pill">Ease of use: Easy</span>
+              </div>
+            </div>
+            <div class="api-item-body">
+              <p>I used this to power the ZIP code search in the top-left panel. You typed a US ZIP, hit Go,
+                and the Geocoding API returned the coordinates and a formatted address. The app pulled
+                <code>geometry.location</code> to recenter the map and read the address components to build a
+                label like "Manhattan, NY" shown as feedback below the search field. It was straightforward, no issues.</p>
+            </div>
+          </li>
+
+          <li class="api-item">
+            <div class="api-item-header">
+              <span class="api-item-name">Google Places API</span>
+              <div class="api-item-meta">
+                <span class="api-meta-pill">Cost: $0.032/req (Nearby Search); $0.017–$0.05/req (Place Details)</span>
+                <span class="api-meta-pill">Ease of use: Medium</span>
+              </div>
+            </div>
+            <div class="api-item-body">
+              <p>I tried Places so I could populate a "Nearby Places" section in my hex tooltips. The problem was that
+                Nearby Search frequently returned street names (routes) or town names (localities) instead of actual
+                businesses, which was useless for contextualizing traffic/activity. When it did return businesses, it felt random and inconsistent,
+                and these were not the businesses causing traffic (Subway, McDonald's, Laundromat, etc.). Stopped using it after a few testing iterations.</p>
+            </div>
+          </li>
+
+          <p class="api-group-label">TomTom</p>
+
+          <li class="api-item">
+            <div class="api-item-header">
+              <span class="api-item-name">TomTom Traffic Tile API</span>
+              <div class="api-item-meta">
+                <span class="api-meta-pill">Cost: Included in 50,000/day free tier</span>
+                <span class="api-meta-pill">Ease of use: Easy</span>
+              </div>
+            </div>
+            <div class="api-item-body">
+              <p>I tried this first since it felt like a lightweight solution.
+                I encountered an immediate hard stop: tiles are pre-rendered images fetched by zoom/x/y grid coordinate. There was no underlying data
+                to query; I couldn't ask what the speed was on a given road, click a segment, or map time-of-day values to the time slider.
+                I stopped using this very quickly.</p>
+            </div>
+          </li>
+
+          <li class="api-item">
+            <div class="api-item-header">
+              <span class="api-item-name">TomTom Flow Segment Data — Real-Time</span>
+              <div class="api-item-meta">
+                <span class="api-meta-pill">Cost: Included in 2,500/day free tier</span>
+                <span class="api-meta-pill">Ease of use: Easy</span>
+              </div>
+            </div>
+            <div class="api-item-body">
+              <p>I tried <code>flowSegmentData/absolute</code> as an initial data source just to see how it worked.
+                By passing it a lat/lng and zoom level, it returned the nearest road segment's current speed,
+                free-flow speed, and polyline geometry. As this was strictly real-time traffic, it couldn't be used with the time slider.</p>
+            </div>
+          </li>
+
+          <li class="api-item">
+            <div class="api-item-header">
+              <span class="api-item-name">TomTom Flow Segment Data — Statistics (Historical)</span>
+              <div class="api-item-meta">
+                <span class="api-meta-pill">Cost: Included in 2,500/day free tier</span>
+                <span class="api-meta-pill">Ease of use: Medium*</span>
+              </div>
+            </div>
+            <div class="api-item-body">
+              <p>This was the endpoint that actually integrated well with the time slider.
+                Using <code>flowSegmentData/statistics</code>, I got a sub-hourly historical speed profile across the full day.
+                As I quickly found out, at street-level granularity across a zoomed-out viewport, I burned through my 2500 free API requests in minutes.</p>
+              <p>TomTom's historical data comes from GPS probes. These are cars that drive around and report their
+                speed and location. The more traffic a road sees, the more probe data exists for it. Major roads in big cities were well covered;
+                however, quiet residential streets and anything outside major metro areas had little to no data at all.</p>
+              <p>There is a big drawback - the requests limitation - and this was why I marked it Medium*. The API was straightforward,
+                but I had to do mental gymnastics to stay within my request budget. TomTom's free tier is 2,500 requests per day,
+                and a city viewport at zoom 15 could have 200+ hexes with one hit each, per slider step. Panning around Manhattan
+                with the slider playing burned through the daily cap in minutes. I attacked this by only requesting data
+                for hexes above a certain OSM road density score, and only once per whole hour rather than on every fractional step.
+                While this seriously limited my traffic visibility, it eliminated the majority of idle API usage. It also allowed me to continue
+                testing without hitting the daily cap in 4 minutes when my cap reset (I still only lasted about 20 minutes).</p>
+            </div>
+          </li>
+
+          <p class="api-group-label">Other</p>
+
+          <li class="api-item">
+            <div class="api-item-header">
+              <span class="api-item-name">OpenStreetMap — Overpass API</span>
+              <div class="api-item-meta">
+                <span class="api-meta-pill">Cost: Free</span>
+                <span class="api-meta-pill">Ease of use: Medium</span>
+              </div>
+            </div>
+            <div class="api-item-body">
+              <p>Overpass let me query what roads actually existed near each hex center, and I
+                used that to build a baseline score for each cell to try and represent potential activity. For example, a hex sitting on top of a highway got a higher
+                score than one sitting in a park. When TomTom data eventually came in for sampled points, it was
+                blended on top of those baseline scores, and the result drove both the hex color and whether a hex
+                was worth spending a TomTom request on in the first place.</p>
+              <p>The limitation was that Overpass only knew about roads, not what was generating traffic on them.
+                A crazy example of this phenomena is a neighborhood.
+                Neighborhoods can have very complex street grids, and OSM will interpret these as higher road density (busier),
+                when they're actually quiet residential streets, vice 4 way intersections, where it only sees 2 multilane roads.</p>
+            </div>
+          </li>
+
+          <li class="api-item">
+            <div class="api-item-header">
+              <span class="api-item-name">H3 — Uber's Hexagonal Grid</span>
+              <div class="api-item-meta">
+                <span class="api-meta-pill">Cost: Open-source (free)</span>
+                <span class="api-meta-pill">Ease of use: Easy</span>
+              </div>
+            </div>
+            <div class="api-item-body">
+              <p>H3 became the core hexagonal grid system for the app. I used it to fill the visible map area
+                with hex indexes at a fixed resolution, which gave me a deterministic set of cells every time the camera moved.</p>
+              <p>With a stable grid in place, I drew each hex cleanly on the map and used each one as a
+                reference point to collect specific traffic data. Any location I clicked or searched for could be matched to a specific hex,
+                which made cell-specific API calls very easy. Now instead of constantly recalculating everything from scratch, I had the ability to
+                cache data to specific hexes for reuse.</p>
+            </div>
+          </li>
+
+        </ul>
+      </div>
+    </article>
+  </main>
+
+  <script>
+  // ── Theme toggle ────────────────────────────────────────────────────────────
+  const themeToggle = document.getElementById('theme-toggle');
+  const themeLabel  = document.getElementById('theme-label');
+  let currentTheme  = localStorage.getItem('theme') || 'dark';
+
+  function applyTheme(t) {
+    document.documentElement.setAttribute('data-theme', t === 'light' ? 'light' : '');
+    if (themeLabel) themeLabel.textContent = t === 'light' ? 'Dark' : 'Light';
+    currentTheme = t;
+    localStorage.setItem('theme', t);
+  }
+  applyTheme(currentTheme);
+  if (themeToggle) themeToggle.addEventListener('click', () => applyTheme(currentTheme === 'dark' ? 'light' : 'dark'));
+
+  // ── Binary background ───────────────────────────────────────────────────────
+  (function buildBinaryBg() {
+    const container = document.getElementById('binary-bg');
+    if (!container) return;
+    const cols = Math.floor(window.innerWidth / 18);
+    for (let i = 0; i < cols; i++) {
+      const span = document.createElement('span');
+      span.className = 'bit';
+      const duration = 6 + Math.random() * 12;
+      const delay    = -(Math.random() * duration);
+      span.style.cssText = [
+        `left:${(i / cols) * 100 + (Math.random() * (100 / cols))}%`,
+        `font-size:${10 + Math.random() * 8}px`,
+        `animation-duration:${duration}s,${duration}s`,
+        `animation-delay:${delay}s,${delay}s`,
+      ].join(';');
+      function tick() {
+        span.textContent = Math.random() > 0.5 ? '1' : '0';
+        setTimeout(tick, 400 + Math.random() * 600);
+      }
+      tick();
+      container.appendChild(span);
+    }
+  })();
+
+  // ── Timeline slider ─────────────────────────────────────────────────────────
+  (function buildTimeline() {
+    const HOURS = 24;
+    const screen  = document.getElementById('tl-screen');
+    const range   = document.getElementById('tl-range');
+    const playBtn = document.getElementById('tl-play');
+
+    // Build images (preload all)
+    const imgs = [];
+    for (let h = 0; h < HOURS; h++) {
+      const img = document.createElement('img');
+      img.src = `../screenshots/hour-${String(h).padStart(2,'0')}.png`;
+      img.alt = `Traffic map at ${String(h).padStart(2,'0')}:00`;
+      img.loading = 'eager';
+      img.style.display = 'none';
+      screen.appendChild(img);
+      imgs.push(img);
+    }
+
+    let currentHour = 0;
+    let playing = false;
+    let playTimer = null;
+
+    function setHour(h) {
+      h = ((h % HOURS) + HOURS) % HOURS;
+      imgs[currentHour].style.display = 'none';
+      currentHour = h;
+      imgs[currentHour].style.display = 'block';
+      range.value = h;
+      range.style.setProperty('--fill', `${(h / (HOURS - 1)) * 100}%`);
+    }
+
+    // Initial state
+    setHour(0);
+
+    range.addEventListener('input', () => setHour(Number(range.value)));
+
+    const playIcon  = playBtn.querySelector('.tl-play-icon');
+    const playLabel = playBtn.querySelector('.tl-play-label');
+
+    function startPlay(delta, intervalMs) {
+      stopPlay();
+      playing = true;
+      playIcon.textContent  = '❚❚';
+      playLabel.textContent = 'Pause';
+      playBtn.classList.add('primary');
+      playTimer = setInterval(() => setHour(currentHour + delta), intervalMs);
+    }
+
+    function stopPlay() {
+      playing = false;
+      clearInterval(playTimer);
+      playTimer = null;
+      playIcon.textContent  = '▶';
+      playLabel.textContent = 'Play';
+    }
+
+    playBtn.addEventListener('click', () => {
+      if (playing) { stopPlay(); } else { startPlay(1, 800); }
+    });
+
+    document.getElementById('tl-rev-fast').addEventListener('click',  () => startPlay(-2, 300));
+    document.getElementById('tl-rev').addEventListener('click',       () => startPlay(-1, 600));
+    document.getElementById('tl-fwd').addEventListener('click',       () => startPlay( 1, 600));
+    document.getElementById('tl-fwd-fast').addEventListener('click',  () => startPlay( 2, 300));
+  })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Typeahead Demo</title>
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+    <div id="binary-bg" aria-hidden="true"></div>
+
+    <main class="article-container">
+        <style>
+            .demo-section {
+                margin: 1.5rem 0;
+                padding: 1.5rem 1.5rem;
+                background: rgba(128,128,128,0.12);
+                border-radius: 4px;
+                color: rgba(255,255,255,0.85);
+            }
+            [data-theme="light"] .demo-section {
+                background: rgba(0,0,0,0.13);
+                color: #222;
+            }
+            .typeahead-container {
+                position: relative;
+                width: 100%;
+                max-width: 340px;
+                min-width: 0;
+            }
+            .typeahead-input {
+                width: 100%;
+                padding: 9px 13px;
+                font-size: 0.95rem;
+                border: 1px solid #555;
+                border-radius: 3px;
+                background: #111;
+                color: rgba(255,255,255,0.85);
+                font-family: inherit;
+                box-sizing: border-box;
+                transition: border-color 0.2s;
+            }
+            [data-theme="light"] .typeahead-input {
+                background: #f0f0f0;
+                color: #222;
+                border-color: #999;
+            }
+            .typeahead-input:focus {
+                outline: none;
+                border-color: var(--text-primary);
+            }
+            .typeahead-input::placeholder {
+                color: rgba(255,255,255,0.25);
+            }
+            [data-theme="light"] .typeahead-input::placeholder {
+                color: rgba(0,0,0,0.3);
+            }
+            .typeahead-dropdown {
+                position: absolute;
+                top: calc(100% + 3px);
+                left: 0;
+                right: 0;
+                background: #111;
+                border: 1px solid #555;
+                border-radius: 3px;
+                box-shadow: 0 6px 20px rgba(0,0,0,0.7);
+                max-height: 200px;
+                overflow-y: auto;
+                z-index: 100;
+                display: none;
+            }
+            [data-theme="light"] .typeahead-dropdown {
+                background: #f0f0f0;
+                border-color: #999;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            }
+            .typeahead-dropdown.active { display: block; }
+            .typeahead-item {
+                padding: 7px 13px;
+                cursor: pointer;
+                font-size: 0.88rem;
+                color: rgba(255,255,255,0.85);
+                border-bottom: 1px solid #555;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                transition: background 0.1s;
+            }
+            [data-theme="light"] .typeahead-item { color: #222; border-bottom-color: #999; }
+            .typeahead-item:last-child { border-bottom: none; }
+            .typeahead-item:hover {
+                background: rgba(128,128,128,0.2);
+                outline: 2px solid #fff;
+                outline-offset: -2px;
+            }
+            [data-theme="light"] .typeahead-item:hover { outline-color: #333; }
+            .typeahead-item .emp-id {
+                color: var(--text-primary);
+                font-size: 0.78rem;
+                opacity: 0.85;
+            }
+            .ta-no-results {
+                padding: 6px 13px;
+                font-size: 0.82rem;
+                color: rgba(255,100,100,0.8);
+            }
+            .typeahead-controls {
+                display: flex;
+                align-items: center;
+                flex-wrap: wrap;
+                gap: 10px;
+                margin-bottom: 0.4rem;
+            }
+            .typeahead-wrapper {
+                flex: 0 1 340px;
+                min-width: 0;
+            }
+            .debounce-label {
+                display: flex;
+                align-items: center;
+                gap: 6px;
+                font-size: 0.82rem;
+                color: rgba(180,180,180,0.45);
+                cursor: pointer;
+                user-select: none;
+            }
+            [data-theme="light"] .debounce-label { color: rgba(0,0,0,0.45); }
+            .debounce-label input[type="checkbox"] { cursor: pointer; accent-color: var(--text-primary); width: 16px; height: 16px; }
+            .info-text {
+                color: rgba(180,180,180,0.45);
+                font-size: 0.78rem;
+                margin: 0;
+            }
+            [data-theme="light"] .info-text {
+                color: rgba(0,0,0,0.45);
+            }
+            .employee-table-wrap {
+                /* margin-top: 0.75rem; */
+                border: 1px solid #000;
+                border-radius: 3px;
+            }
+            [data-theme="light"] .employee-table-wrap {
+                border-color: #999;
+                background: #f0f0f0;
+            }
+            [data-theme="light"] .employee-table thead tr { background: #ddd; }
+            [data-theme="light"] .employee-table tbody tr:nth-child(even) { background: #e6e6e6; }
+            .employee-table {
+                width: 100%;
+                border-collapse: collapse;
+                font-size: 0.85rem;
+            }
+            .employee-table th,
+            .employee-table td {
+                padding: 5px 10px;
+                border: 1px solid #555;
+                text-align: left;
+                color: rgba(255,255,255,0.85);
+            }
+            [data-theme="light"] .employee-table th,
+            [data-theme="light"] .employee-table td { color: #222; border-color: #999; }
+            .employee-table thead tr { background: #111; position: sticky; top: 0; z-index: 1; }
+            [data-theme="light"] .employee-table thead tr { background: #ccc; }
+            .employee-table th { color: var(--text-primary); }
+            [data-theme="light"] .employee-table th { color: var(--text-primary); }
+            .employee-table tbody tr:nth-child(even) { background: rgba(128,128,128,0.08); }
+            .employee-table tbody tr.matched-row {
+                background: rgba(120,120,120,0.25);
+                outline: 3px solid #fff;
+                outline-offset: -3px;
+            }
+            [data-theme="light"] .employee-table tbody tr.matched-row {
+                background: rgba(80,80,80,0.15);
+                outline-color: #444;
+            }
+        </style>
+        <h1>Typeahead Demo</h1>
+        <div class="meta">
+            <time datetime="2026-05-05">May 05, 2026</time>
+        </div>
+        <div class="tags">
+            <span class="tag">JavaScript</span><span class="tag">Demo</span><span class="tag">WebApp</span>
+        </div>
+
+        <article>
+            <h2>What is Typeahead?</h2>
+            <p>I was recently delegated to try and figure out how to develop typeahead functionality on an API that does not 
+                support incomplete or partial search (this is still being looked into). That request prompted some off-the-clock research and 
+                experimentation, and I ended up making a simple typeahead component myself. So, what is it?
+            </p>
+            <p>Typeahead, also known as search suggestion, is a UI feature that helps users find and select items by 
+                providing suggestions as they type. This demo shows a simple implementation using a local JavaScript array of employees, 
+                allowing the user to search for either the Employee ID, or Names, and returns matching results.</p>
+
+            <h2>Try It Out</h2>
+            <p>On each keystroke, the typed value is compared against every entry in the employee array using a case-insensitive 
+                <code>String.includes()</code> check on both the <code>name</code> and <code>id</code> fields. Matches are rendered 
+                into the dropdown in real time while the result count and the employee table both update to reflect the current matches.
+                Additionally, there is a checkbox to simulate debounce, which delays the input processing to save resources.</p>
+
+            <div class="demo-section">
+                <div class="typeahead-controls">
+                    <div class="typeahead-wrapper">
+                        <div class="typeahead-container">
+                            <input
+                                type="text"
+                                id="typeaheadInput"
+                                class="typeahead-input"
+                                placeholder="Search by name or ID…"
+                                autocomplete="off"
+                            >
+                            <div id="typeaheadDropdown" class="typeahead-dropdown"></div>
+                        </div>
+                    </div>
+                    <label class="debounce-label">
+                        <input type="checkbox" id="debounceToggle">Debounce (500ms)
+                    </label>
+                </div>
+                <div class="info-text" id="resultInfo">Start typing to see suggestions…</div>
+            </div>
+
+            <h2>Employee Directory</h2>
+            <p>Below is the full directory (a JavaScript array rendered as a table) the typeahead searches through. Matched rows are 
+                highlighted with a thick border as the user types, visually demonstrating how the dropdown results correspond to the underlying dataset, and how the search algorithm works.</p>
+            <div class="demo-section">
+                <div class="employee-table-wrap">
+                    <table class="employee-table">
+                        <thead>
+                            <tr>
+                                <th>Employee ID</th>
+                                <th>Name</th>
+                            </tr>
+                        </thead>
+                        <tbody id="employeeTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+            <h2>In the Real World</h2>
+            <p>In production, the employee array used here would be replaced by some kind of database query. Typically a <code>SELECT</code> against 
+                a SQL table of users or records, which is filtered server-side. The frontend would send the user's input value to an API endpoint, which returns only the 
+                matching results rather than preloading the entire dataset upfront like the Directory seen here.</p>
+            <p>Common advanced typeahead implementations include but are not limited to:</p>
+            <ul>
+                <li><strong>Debouncing:</strong> Delays the query processing until the user stops typing (e.g. 500ms like above) to prevent unnecessary 
+                    stress on the server on every keystroke.</li>
+                <li><strong>Fuzzy Matching:</strong> This is a common practice in lots of user-input interfaces, and it enables the system to tolerate typos
+                    and partial matches. "Smth" still returns "Smith" by calculating how many characters would need to be added, removed, or swapped to 
+                    turn one string into another (Levenshtein distance).</li>
+                <li><strong>Predictive Suggestions:</strong> Uses historical search patterns or user behavior to rank results by likelihood, similar to 
+                    how Google Search recommends autocompleted queries.</li>
+            </ul>
+        </article>
+    </main>
+
+    <script>
+        (function() {
+        // Employee data array
+        const EMPLOYEES = [
+            { id: "JOH001", name: "John Smith" },
+            { id: "JOH042", name: "Johnny Appleseed" },
+            { id: "JOH099", name: "Johanna Rivera" },
+            { id: "JAC010", name: "Jackson Lee" },
+            { id: "JAM021", name: "James Carter" },
+            { id: "SAR003", name: "Sarah Johnson" },
+            { id: "SAM017", name: "Samantha Patel" },
+            { id: "MIC005", name: "Michael Torres" },
+            { id: "MIA200", name: "Mia Chen" },
+            { id: "ROB045", name: "Robert Anderson" },
+            { id: "RAC002", name: "Rachel Martinez" },
+            { id: "DAV033", name: "David Kim" },
+            { id: "DAN055", name: "Daniel Wright" },
+            { id: "EMI008", name: "Emily Brown" },
+            { id: "ERI019", name: "Eric Thompson" },
+            { id: "OLI011", name: "Oliver Garcia" },
+            { id: "OLI050", name: "Olivia Hayes" },
+            { id: "JAY035", name: "Jay Wilson" },
+            { id: "KEN051", name: "Kenneth Moore" },
+            { id: "MAR020", name: "Marcus Green" },
+        ];
+
+        // DOM elements
+        const input = document.getElementById('typeaheadInput');
+        const dropdown = document.getElementById('typeaheadDropdown');
+        const tableBody = document.getElementById('employeeTableBody');
+        const resultInfo = document.getElementById('resultInfo');
+        const debounceToggle = document.getElementById('debounceToggle');
+
+        let debounceTimer = null;
+
+        // Initialize table with all employees
+        function initializeTable() {
+            tableBody.innerHTML = EMPLOYEES.map(emp => `
+                <tr data-id="${emp.id}">
+                    <td>${emp.id}</td>
+                    <td>${emp.name}</td>
+                </tr>
+            `).join('');
+        }
+
+        // Filter employees based on input
+        function filterEmployees(query) {
+            if (!query.trim()) {
+                return [];
+            }
+            const lowerQuery = query.toLowerCase();
+            return EMPLOYEES.filter(emp =>
+                emp.name.toLowerCase().includes(lowerQuery) ||
+                emp.id.toLowerCase().includes(lowerQuery)
+            );
+        }
+
+        // Update dropdown with results
+        function updateDropdown(query) {
+            const results = filterEmployees(query);
+
+            if (!query.trim()) {
+                dropdown.classList.remove('active');
+                resultInfo.textContent = 'Start typing to see suggestions...';
+                return;
+            }
+
+            if (results.length === 0) {
+                dropdown.style.maxHeight = 'none';
+                dropdown.style.overflowY = 'visible';
+                dropdown.classList.add('active');
+                dropdown.innerHTML = '<div class="ta-no-results">No results found</div>';
+                resultInfo.textContent = '0 results';
+                return;
+            }
+            dropdown.style.maxHeight = '';
+            dropdown.style.overflowY = '';
+
+            dropdown.classList.add('active');
+            dropdown.innerHTML = results.map(emp => `
+                <div class="typeahead-item" data-id="${emp.id}">
+                    ${emp.name}<span class="emp-id">${emp.id}</span>
+                </div>
+            `).join('');
+
+            resultInfo.textContent = `${results.length} result${results.length !== 1 ? 's' : ''} found`;
+
+            // Add click handlers to dropdown items
+            document.querySelectorAll('.typeahead-item').forEach(item => {
+                item.addEventListener('click', () => {
+                    const empId = item.dataset.id;
+                    const emp = EMPLOYEES.find(e => e.id === empId);
+                    if (emp) {
+                        input.value = emp.name;
+                        dropdown.classList.remove('active');
+                        highlightTableRows(emp.name);
+                        const count = filterEmployees(emp.name).length; // re-run filter on selected name to sync result count immediately
+                        resultInfo.textContent = `${count} result${count !== 1 ? 's' : ''} found`; // pluralize based on count 
+                    }
+                });
+            });
+        }
+
+        // Highlight matching rows in table
+        function highlightTableRows(query) {
+            const results = filterEmployees(query);
+            const resultIds = new Set(results.map(e => e.id));
+
+            document.querySelectorAll('.employee-table tbody tr').forEach(row => {
+                const id = row.dataset.id;
+                if (resultIds.has(id)) {
+                    row.classList.add('matched-row');
+                } else {
+                    row.classList.remove('matched-row');
+                }
+            });
+        }
+
+        // Handle input event — runs immediately or debounced based on checkbox
+        input.addEventListener('input', (e) => {
+            const query = e.target.value;
+            if (debounceToggle.checked) {
+                clearTimeout(debounceTimer);
+                debounceTimer = setTimeout(() => {
+                    updateDropdown(query);
+                    highlightTableRows(query);
+                }, 500); // 500ms debounce delay
+            } else {
+                updateDropdown(query);
+                highlightTableRows(query);
+            }
+        });
+
+        // Repopulate dropdown on focus if input already has a value
+        input.addEventListener('focus', () => {
+            if (input.value.trim()) {
+                updateDropdown(input.value);
+            }
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+            if (e.target !== input && e.target.closest('.typeahead-container') !== input.closest('.typeahead-container')) {
+                dropdown.classList.remove('active');
+            }
+        });
+
+        // Allow navigation with arrow keys (optional enhancement)
+        input.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                dropdown.classList.remove('active');
+            }
+        });
+
+        // Initialize on page load
+        initializeTable();
+        })();
+    </script>
+</body>
+</html>
