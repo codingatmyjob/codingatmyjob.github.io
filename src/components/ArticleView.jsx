@@ -23,7 +23,7 @@ export default function ArticleView({ path, onClose }){
         const viteBase = (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.BASE_URL) ? import.meta.env.BASE_URL : '/'
         const urlToFetch = isRemote ? path : path.startsWith('/') ? new URL(path, location.origin).href : new URL(path, location.origin + viteBase).href
 
-        const res = await fetch(urlToFetch)
+        const res = await fetch(urlToFetch + '?v=' + Date.now(), { cache: 'no-store' })
         if(!res.ok) throw new Error(res.status)
         const text = await res.text()
 
