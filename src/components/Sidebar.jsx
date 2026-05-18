@@ -76,6 +76,16 @@ export default function Sidebar({ isOpen, onClose, onOpenArticle, onHome }) {
             </svg>
             About Me
           </a>
+          <div className="sidebar-divider"></div>
+          <a
+            href={location.pathname.startsWith('/preview') ? '/' : '/preview/'}
+            className="sidebar-item"
+          >
+            <svg className="sidebar-icon" viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true">
+              <path d="M6.99 11L3 15l3.99 4v-3H14v-2H6.99v-3zM21 9l-3.99-4v3H10v2h7.01v3L21 9z"/>
+            </svg>
+            {location.pathname.startsWith('/preview') ? 'Production' : 'Preview'}
+          </a>
         </nav>
       </div>
     </>

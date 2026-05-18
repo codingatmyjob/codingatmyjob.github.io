@@ -15,6 +15,10 @@ export default function ArticleCard({ item, onOpenArticle }){
     readingTime
   } = item || {}
 
+  const resolvedSrc = imageSrc && !imageSrc.startsWith('/') && !imageSrc.startsWith('http')
+    ? import.meta.env.BASE_URL + imageSrc
+    : imageSrc
+
   const handleClick = (e)=>{
     // don't intercept clicks on links inside the card
     if(e.target && e.target.closest && e.target.closest('a')) return
@@ -39,7 +43,7 @@ export default function ArticleCard({ item, onOpenArticle }){
         {imageSrc ? (
           <img
             className={[ 'article-card-image', imageClassName ].filter(Boolean).join(' ')}
-            src={imageSrc}
+            src={resolvedSrc}
             alt={imageAlt || title || 'Article image'}
             style={imageStyle ? imageStyle : undefined}
           />
