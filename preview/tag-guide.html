@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Tag Guide</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .tag-guide-intro {
+            margin: 0 0 24px 0;
+            padding: 18px 20px;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            background: linear-gradient(135deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+        }
+        .tag-guide-intro p:last-child {
+            margin-bottom: 0;
+        }
+        .tag-guide-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 14px;
+            margin: 16px 0 24px 0;
+        }
+        .tag-guide-card {
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 10px 14px;
+            background: rgba(255,255,255,0.025);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+        }
+        .article-container article .tag-guide-card h3 {
+            margin-top: 0;
+            margin-bottom: 4px;
+        }
+        .tag-guide-chip-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin: 6px 0 8px 0;
+        }
+        .article-container article .tag-guide-card p {
+            margin: 0;
+        }
+        .tag-guide-chip {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 6px 10px;
+            border-radius: 999px;
+            border: 1px solid var(--border);
+            background: var(--bg-primary);
+            color: var(--accent);
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.02em;
+            text-transform: uppercase;
+        }
+        .tag-guide-example {
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 12px 16px;
+            margin: 12px 0;
+            background: rgba(255,255,255,0.02);
+        }
+        .tag-guide-example strong {
+            display: block;
+            margin-bottom: 8px;
+        }
+        .tag-guide-rules {
+            margin-top: 10px;
+            padding: 12px 16px;
+            border-left: 4px solid var(--accent);
+            background: rgba(255,255,255,0.03);
+            border-radius: 10px;
+        }
+        [data-theme="light"] .tag-guide-intro,
+        [data-theme="light"] .tag-guide-card,
+        [data-theme="light"] .tag-guide-example {
+            background: rgba(0,0,0,0.025);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+        }
+        [data-theme="light"] .tag-guide-rules {
+            background: rgba(0,0,0,0.03);
+        }
+        @media (max-width: 700px) {
+            .tag-guide-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="binary-bg" aria-hidden="true"></div>
+
+    <main class="article-container">
+        <h1>Tag Guide</h1>
+
+        <article>
+            <h2>How Tags Work</h2>
+            <div class="tag-guide-intro">
+                <p>
+                    Every article gets <strong>one content-type tag</strong> and then a few <strong>topic tags</strong>. 
+                    The first tag tells you the format. The rest tell you the subject. <strong>Notes</strong> is the default for informative posts 
+                    that are not a review or project.
+                </p>
+            </div>
+
+            <h2>Content Type Tags</h2>
+            <div class="tag-guide-grid">
+                <div class="tag-guide-card">
+                    <h3>Build / Show</h3>
+                    <div class="tag-guide-chip-row">
+                        <span class="tag-guide-chip">Project</span>
+                        <span class="tag-guide-chip">Demo</span>
+                    </div>
+                    <p><strong>Project</strong> is for something I built or engineered. <strong>Demo</strong> is for a prototype, example, or interactive showcase.</p>
+                </div>
+                <div class="tag-guide-card">
+                    <h3>Explain / Teach</h3>
+                    <div class="tag-guide-chip-row">
+                        <span class="tag-guide-chip">Notes</span>
+                        <span class="tag-guide-chip">Review</span>
+                    </div>
+                    <p><strong>Notes</strong> covers documentation-style or explanatory posts. <strong>Review</strong> is for an opinionated take after using something.</p>
+                </div>
+                <div class="tag-guide-card">
+                    <h3>Challenge / Exam</h3>
+                    <div class="tag-guide-chip-row">
+                        <span class="tag-guide-chip">Writeup</span>
+                        <span class="tag-guide-chip">Cert</span>
+                    </div>
+                    <p><strong>Writeup</strong> is reserved for HTB, CTF, and challenge walkthroughs. <strong>Cert</strong> is for certification-focused posts and exam experiences.</p>
+                </div>
+                <div class="tag-guide-card">
+                    <h3>Lookup / Utility</h3>
+                    <div class="tag-guide-chip-row">
+                        <span class="tag-guide-chip">Reference</span>
+                    </div>
+                    <p><strong>Reference</strong> is for cheatsheets, lookup pages, and content meant to be revisited quickly.</p>
+                </div>
+            </div>
+
+            <h2>Topic Tags</h2>
+            <p>
+                Topic tags are the technologies, platforms, or domains attached to the post. Common examples include <strong>Python</strong>, <strong>Maps</strong>, <strong>Security</strong>, <strong>HTB</strong>, and <strong>API</strong>.
+            </p>
+
+            <h2>What It Looks Like</h2>
+            <div class="tag-guide-example">
+                <strong>Creating a Pokemon Stock Bot</strong>
+                <div class="tag-guide-chip-row">
+                    <span class="tag-guide-chip">Project</span>
+                    <span class="tag-guide-chip">Python</span>
+                    <span class="tag-guide-chip">Discord</span>
+                    <span class="tag-guide-chip">Automation</span>
+                    <span class="tag-guide-chip">API</span>
+                </div>
+            </div>
+            <div class="tag-guide-example">
+                <strong>Typeahead Demo</strong>
+                <div class="tag-guide-chip-row">
+                    <span class="tag-guide-chip">Demo</span>
+                    <span class="tag-guide-chip">JavaScript</span>
+                    <span class="tag-guide-chip">WebApp</span>
+                </div>
+            </div>
+            <div class="tag-guide-example">
+                <strong>HTB Artificial Writeup</strong>
+                <div class="tag-guide-chip-row">
+                    <span class="tag-guide-chip">Writeup</span>
+                    <span class="tag-guide-chip">HTB</span>
+                    <span class="tag-guide-chip">Machine</span>
+                </div>
+            </div>
+            <div class="tag-guide-example">
+                <strong>Passing OCI Foundations Associate</strong>
+                <div class="tag-guide-chip-row">
+                    <span class="tag-guide-chip">Cert</span>
+                    <span class="tag-guide-chip">Cloud</span>
+                </div>
+            </div>
+        </article>
+    </main>
+</body>
+</html>
