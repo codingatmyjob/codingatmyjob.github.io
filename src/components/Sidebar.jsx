@@ -78,7 +78,7 @@ export default function Sidebar({ isOpen, onClose, onOpenArticle, onHome }) {
           </a>
           <div className="sidebar-divider"></div>
           <span className="sidebar-section-label">Modified: {import.meta.env.VITE_BUILD_TIME ? (() => { const d = new Date(import.meta.env.VITE_BUILD_TIME); const day = String(d.getUTCDate()).padStart(2, '0'); const month = String(d.getUTCMonth() + 1).padStart(2, '0'); const hours = String(d.getUTCHours()).padStart(2, '0'); const minutes = String(d.getUTCMinutes()).padStart(2, '0'); return `${day}/${month} ${hours}:${minutes} UTC`; })() : 'dev'}</span>
-          <span className="sidebar-section-label">Now Viewing: {location.pathname.startsWith('/preview') ? 'Preview' : 'Production'}</span>
+          <span className="sidebar-section-label">Environment: {location.pathname.startsWith('/preview') ? 'Preview' : 'Production'}</span>
           <a
             href={location.pathname.startsWith('/preview') ? '/' : '/preview/'}
             className="sidebar-item"
