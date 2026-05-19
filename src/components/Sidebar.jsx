@@ -77,17 +77,13 @@ export default function Sidebar({ isOpen, onClose, onOpenArticle, onHome }) {
             About Me
           </a>
           <div className="sidebar-divider"></div>
-          <span className="sidebar-section-label">Modified: {import.meta.env.VITE_BUILD_TIME ? (() => { const d = new Date(import.meta.env.VITE_BUILD_TIME); const day = String(d.getUTCDate()).padStart(2, '0'); const month = String(d.getUTCMonth() + 1).padStart(2, '0'); const hours = String(d.getUTCHours()).padStart(2, '0'); const minutes = String(d.getUTCMinutes()).padStart(2, '0'); return `${day}/${month} ${hours}:${minutes} UTC`; })() : 'dev'}</span>
-          <span className="sidebar-section-label">Environment: {import.meta.env.BASE_URL === '/preview/' ? 'Preview' : 'Production'}</span>
-          <a
-            href={import.meta.env.BASE_URL === '/preview/' ? '/' : '/preview/'}
-            className="sidebar-item"
-          >
-            <svg className="sidebar-icon" viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true">
-              <path d="M12 6v3l4-4-4-4v3c-4.42 0-8 3.58-8 8 0 1.57.46 3.03 1.24 4.26L6.7 14.8c-.45-.83-.7-1.79-.7-2.8 0-3.31 2.69-6 6-6zm6.76 1.74L17.3 9.2c.44.84.7 1.79.7 2.8 0 3.31-2.69 6-6 6v-3l-4 4 4 4v-3c4.42 0 8-3.58 8-8 0-1.57-.46-3.03-1.24-4.26z"/>
-            </svg>
-            {import.meta.env.BASE_URL === '/preview/' ? 'Production' : 'Preview'}
-          </a>
+          {(() => {
+            const isPreview = import.meta.env.BASE_URL === '/preview/' || location.pathname.startsWith('/preview');
+            return <>
+              <a href={isPreview ? '/' : '/preview/'} className="sidebar-section-label sidebar-env-label">You're On: {isPreview ? 'Preview' : 'Production'} ↗</a>
+              <span className="sidebar-section-label">Modified: {import.meta.env.VITE_BUILD_TIME ? (() => { const d = new Date(import.meta.env.VITE_BUILD_TIME); const day = String(d.getUTCDate()).padStart(2, '0'); const month = String(d.getUTCMonth() + 1).padStart(2, '0'); const hours = String(d.getUTCHours()).padStart(2, '0'); const minutes = String(d.getUTCMinutes()).padStart(2, '0'); return `${day}/${month} ${hours}:${minutes} UTC`; })() : 'dev'}</span>
+            </>
+          })()}
         </nav>
       </div>
     </>
