@@ -54,7 +54,16 @@ export default function App(){
     if (cached) return cached
 
     try {
-      const response = await fetch(article.path)
+      const isRemote = /^https?:\/\//i.test(article.path)
+      const viteBase = (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.BASE_URL) ? import.meta.env.BASE_URL : '/'
+      const urlToFetch = isRemote
+        ? article.path
+        : article.path.startsWith('/')
+          ? new URL(article.path, location.origin).href
+          : new URL(article.path, location.origin + viteBase).href
+
+      const response = await fetch(urlToFetch, { cache: 'no-store' })
+      if (!response.ok) throw new Error(response.status)
       const htmlText = await response.text()
       const tempDiv = document.createElement('div')
       tempDiv.innerHTML = htmlText

@@ -7,7 +7,16 @@ const calculateReadingTime = async (path) => {
   if(!path) return null
 
   try {
-    const response = await fetch(`${path}`)
+    const isRemote = /^https?:\/\//i.test(path)
+    const viteBase = (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.BASE_URL) ? import.meta.env.BASE_URL : '/'
+    const urlToFetch = isRemote
+      ? path
+      : path.startsWith('/')
+        ? new URL(path, location.origin).href
+        : new URL(path, location.origin + viteBase).href
+
+    const response = await fetch(urlToFetch, { cache: 'no-store' })
+    if(!response.ok) return null
     const htmlText = await response.text()
     const tempDiv = document.createElement('div')
     tempDiv.innerHTML = htmlText

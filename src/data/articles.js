@@ -1,4 +1,15 @@
 export const articlesData = [
+  // DRAFT -- NEED TO CREATE SMALL DEMO OR MAKE A REPO FOR VISUAL AID
+  {
+    id: 'efficient-html-maps-with-pydeck',
+    path: 'articles/efficient-html-maps-with-pydeck.html',
+    publishedAt: '2026-06-06',
+    date: 'June 06, 2026',
+    title: 'Efficient HTML Maps with Pydeck',
+    description: 'Diving into efficient HTML map rendering with Pydeck over Folium (Leaflet) style HTML rendering.',
+    tags: ['Notes', 'Python', 'Maps', 'Pydeck'],
+    imageLabel: 'Efficient HTML Maps with Pydeck'
+  },
   {
     id: 'passing-oci-foundations-associate',
     path: 'articles/passing-oci-foundations-associate.html',
@@ -6,21 +17,21 @@ export const articlesData = [
     date: 'May 15, 2026',
     title: 'Passing OCI Foundations Associate',
     description: 'An OCI Foundations Associate review, and opinions on the Oracle course.',
-    tags: ['CERT', 'Cloud'],
+    tags: ['Cert', 'Cloud'],
     imageSrc: 'OCI25FNDCFA.png',
     imageAlt: 'Passing OCI Foundations Associate'
   },
-// CURRENTLY REMOVED - will be re-added when the article is published
-//   {
-//     id: 'noaa-tides-llm-chatbot-demo',
-//     path: 'articles/noaa-tides-llm-chatbot-demo.html',
-//     publishedAt: '2026-05-08',
-//     date: 'May 08, 2026',
-//     title: 'NOAA Tides LLM Chatbot Demo',
-//     description: 'A Groq-powered chatbot demo that queries NOAA tide station data using tool calling and a Node.js backend on Fly.io.',
-//     tags: ['Demo', 'AI', 'Node.js', 'API'],
-//     imageLabel: 'NOAA Tides LLM Chatbot Demo'
-//   },
+  // DRAFT -- NEED TO WIRE SERVER COMPONENT TO SERVE THIS STILL
+  {
+    id: 'noaa-tides-llm-chatbot-demo',
+    path: 'articles/noaa-tides-llm-chatbot-demo.html',
+    publishedAt: '2026-05-08',
+    date: 'May 08, 2026',
+    title: 'NOAA Tides LLM Chatbot Demo',
+    description: 'A Groq-powered chatbot demo that queries NOAA data using tool calling and a Node.js backend on Fly.io.',
+    tags: ['Demo', 'LLM', 'Node.js', 'API'],
+    imageLabel: 'NOAA Tides LLM Chatbot Demo'
+  },
   {
     id: 'typeahead-demo',
     path: 'articles/typeahead-demo.html',
@@ -28,7 +39,7 @@ export const articlesData = [
     date: 'May 05, 2026',
     title: 'Typeahead Demo',
     description: 'An interactive typeahead/search suggestion demo with real-time data filtering and visual highlights.',
-    tags: ['JavaScript', 'Demo', 'WebApp'],
+    tags: ['Demo', 'JavaScript', 'WebApp'],
     imageSrc: 'typeahead.png',
     imageAlt: 'Typeahead Demo',
     imageStyle: { height: '85%', width: '85%' }
@@ -40,7 +51,7 @@ export const articlesData = [
     date: 'May 02, 2026',
     title: 'Playing in Traffic and Heatmaps',
     description: 'Building a hex heatmap with Maps, TomTom, OpenStreetMap, and H3.',
-    tags: ['Project', 'JavaScript', 'WebApp', 'API'],
+    tags: ['Project', 'JavaScript', 'WebApp', 'API', 'Maps'],
     imageSrc: '/screenshots/hero.png',
     imageAlt: 'Playing in Traffic and Heatmaps',
     imageStyle: { height: '85%', width: '100%' }
@@ -64,7 +75,7 @@ export const articlesData = [
     date: 'November 08, 2025',
     title: 'VirtualBox Home Lab Setup',
     description: 'Building a home lab with VMs for hands-on penetration testing, exploit analysis, and traffic monitoring.',
-    tags: ['VM', 'Security', 'SIEM', 'Project', 'Networking'],
+    tags: ['Project', 'VM', 'SIEM', 'Security', 'Networking'],
     imageSrc: 'VirtualBox_logo.png',
     imageAlt: 'VirtualBox Home Lab Setup',
     imageStyle: { height: '85%', width: '85%' }
@@ -76,7 +87,7 @@ export const articlesData = [
     date: 'November 2, 2025',
     title: 'HTB Command Cheatsheet',
     description: 'A regularly updated cheatsheet of essential commands and tools for CTFs and penetration testing.',
-    tags: ['HTB', 'Pentest', 'Writeup'],
+    tags: ['Reference', 'HTB', 'Pentest'],
     imageLabel: 'HTB Command Cheatsheet'
   },
   {
@@ -86,7 +97,7 @@ export const articlesData = [
     date: 'October 27, 2025',
     title: 'HTB Artificial Writeup',
     description: 'A technical write up detailing steps taken pwn the Artificial HTB Machine.',
-    tags: ['HTB', 'Machine', 'Writeup'],
+    tags: ['Writeup', 'HTB', 'Machine'],
     imageLabel: 'HTB Artificial Writeup'
   },
   {
@@ -96,7 +107,7 @@ export const articlesData = [
     date: 'October 26, 2025',
     title: 'How I passed CompTIA Security+ SY0-701',
     description: 'A Security+ review, glimpse into my study plan, resources used, and testing skills that helped me pass.',
-    tags: ['CERT', 'Security'],
+    tags: ['Cert', 'Security'],
     imageSrc: 'secplus.png',
     imageAlt: 'How I passed CompTIA Security+',
     imageClassName: 'article-card-image--default'
@@ -108,7 +119,7 @@ export const articlesData = [
     date: 'October 26, 2025',
     title: 'How I passed CompTIA Network+ N10-009',
     description: 'A Network+ review, including study resources used, and exam-day tips that helped me pass.',
-    tags: ['CERT', 'Networking'],
+    tags: ['Cert', 'Networking'],
     imageSrc: 'netplus.png',
     imageAlt: 'How I passed CompTIA Network+',
     imageClassName: 'article-card-image--default'
