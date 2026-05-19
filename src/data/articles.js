@@ -3,12 +3,23 @@ export const articlesData = [
   {
     id: 'efficient-html-maps-with-pydeck',
     path: 'articles/efficient-html-maps-with-pydeck.html',
-    publishedAt: '2026-06-06',
-    date: 'June 06, 2026',
+    publishedAt: 'DRAFT',
+    date: 'DRAFT',
     title: 'Efficient HTML Maps with Pydeck',
     description: 'Diving into efficient HTML map rendering with Pydeck over Folium (Leaflet) style HTML rendering.',
     tags: ['Notes', 'Python', 'Maps', 'Pydeck'],
     imageLabel: 'Efficient HTML Maps with Pydeck'
+  },
+    // DRAFT -- NEED TO WIRE SERVER COMPONENT TO SERVE THIS STILL
+  {
+    id: 'noaa-tides-llm-chatbot-demo',
+    path: 'articles/noaa-tides-llm-chatbot-demo.html',
+    publishedAt: 'DRAFT',
+    date: 'DRAFT',
+    title: 'NOAA Tides LLM Chatbot Demo',
+    description: 'A Groq-powered chatbot demo that queries NOAA data using tool calling and a Node.js backend on Fly.io.',
+    tags: ['Demo', 'LLM', 'Node.js', 'API'],
+    imageLabel: 'NOAA Tides LLM Chatbot Demo'
   },
   {
     id: 'passing-oci-foundations-associate',
@@ -20,17 +31,6 @@ export const articlesData = [
     tags: ['Cert', 'Cloud'],
     imageSrc: 'OCI25FNDCFA.png',
     imageAlt: 'Passing OCI Foundations Associate'
-  },
-  // DRAFT -- NEED TO WIRE SERVER COMPONENT TO SERVE THIS STILL
-  {
-    id: 'noaa-tides-llm-chatbot-demo',
-    path: 'articles/noaa-tides-llm-chatbot-demo.html',
-    publishedAt: '2026-05-08',
-    date: 'May 08, 2026',
-    title: 'NOAA Tides LLM Chatbot Demo',
-    description: 'A Groq-powered chatbot demo that queries NOAA data using tool calling and a Node.js backend on Fly.io.',
-    tags: ['Demo', 'LLM', 'Node.js', 'API'],
-    imageLabel: 'NOAA Tides LLM Chatbot Demo'
   },
   {
     id: 'typeahead-demo',
