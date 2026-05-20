@@ -136,14 +136,18 @@
             </p>
             
             <h2>Try it for yourself</h2>
+
             <p>
-                The repo is here: <a href="https://github.com/codingatmyjob/pokestock-bot" target="_blank" rel="noopener noreferrer">pokestock-bot GitHub Repository</a>.
+                Simplified methodology to pull the Target RedSky API key is here: <a href="https://github.com/codingatmyjob/redsky-key-retrieval" target="_blank" rel="noopener noreferrer">redsky-key-retrieval GitHub Repository</a>.
+            </p>
+            <p>
+                The main stock checking bot repository is here: <a href="https://github.com/codingatmyjob/pokestock-bot" target="_blank" rel="noopener noreferrer">pokestock-bot GitHub Repository</a>.
                 To make it work with your own setup, update the following:
             </p>
             <ul>
                 <li>Copy <code>.env.example</code> to your own <code>.env</code> and modify as needed.</li>
                 <li>Add a <code>BOT_TOKEN</code> (required) for your Discord bot to work. If you want it hosted, I'm shamelessly plugging 
-                    <a href="https://sparkedhost.com/" target="_blank" rel="noopener noreferrer">SparkedHost</a> who have always been affordable and reliable for me.</li>
+                <a href="https://sparkedhost.com/" target="_blank" rel="noopener noreferrer">SparkedHost</a> who have always been affordable and reliable for me.</li>
                 <li>Optional but recommended restrictions: <code>ALLOWED_USERS</code>, <code>ALLOWED_CHANNEL_ID</code>, and <code>GUILD_ID</code> (faster slash-command sync while testing).</li>
                 <li>If you want map image embeds, add <code>GOOGLE_MAPS_API_KEY</code>.</li>
                 <li>If you run into Target rate limits/captcha issues, configure <code>WEBSHARE_PROXY_URL</code> and/or a fixed <code>TARGET_API_KEY</code>.</li>
