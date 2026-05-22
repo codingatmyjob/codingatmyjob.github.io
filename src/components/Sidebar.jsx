@@ -52,7 +52,7 @@ export default function Sidebar({ isOpen, onClose, onOpenArticle, onHome }) {
         {isOpen && isSmall && (
           <div className="sidebar-header-title">
             <h2 className="title">
-              <a href="/" aria-label="Return Home">Portfolio</a>
+              <a href="/" aria-label="Return Home">Tangent</a>
             </h2>
           </div>
         )}

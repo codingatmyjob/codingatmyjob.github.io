@@ -77,7 +77,7 @@ export default function Header({ onOpenArticle, menuOpen, onMenuToggle }){
       </button>
 
       <h2 className="title">
-        <a href="/" aria-label="Return Home">Portfolio</a>
+        <a href="/" aria-label="Return Home">Tangent</a>
       </h2>
 
       <div className="header-controls">
