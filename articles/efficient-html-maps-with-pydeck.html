@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Efficient HTML Maps with Pydeck</title>
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+    <div id="binary-bg" aria-hidden="true"></div>
+
+    <main class="article-container">
+        <h1>Efficient HTML Maps with Pydeck</h1>
+        <div class="meta">
+            <time datetime="DRAFT">DRAFT</time>
+        </div>
+        <div class="tags">
+            <span class="tag">Notes</span>
+            <span class="tag">Python</span>
+            <span class="tag">Maps</span>
+            <span class="tag">Pydeck</span>
+        </div>
+
+        <article>
+            <h2>Why Move Past Leaflet HTML Maps</h2>
+            <p>
+                Folium is an easy way - I would even go so far as to say the 'OG' way - that I learned to generate interactive maps in a Python environment. Very simply put, it wraps the Leaflet 
+                library and can render a complete HTML file with minimal code. That simplicity is what drew me to it. 
+            </p>
+            <p>
+                I first began to run into issues when 
+                trying to visualize data at scale. Raw HTML map exports get heavy very quickly due to all the elements being rendered inline (tooltips are egregious). 
+                A developed HTML map needs to potentially visualize thousands of points, and multiple layers or overlays. Once a dataset grows, 
+                the output with Folium becomes slower to render, less responsive, and more awkward to integrate into a modern applet. 
+            </p>
+
+            <h2>Paths Forward</h2>
+            <p>
+                Two of the strongest options for producing richer HTML-based map output are <strong>Pydeck</strong> and <strong>Plotly</strong>. 
+                Both can generate interactive browser-ready visualizations, but they solve different problems.
+                This article is focused on deep-diving into Pydeck, because it is built specifically for large-scale spatial visualization.
+            </p>
+            <ul>
+                <li><strong>Pydeck:</strong> For GPU-accelerated, layer-based geospatial rendering and large spatial datasets.</li>
+                <li><strong>Plotly:</strong> For map-adjacent visualizations, dashboards, and charts.</li>
+            </ul>
+
+            <h2>WebGL</h2>
+            <p>fill this section - why is this so powerful compared to traditional CPU based rendering?</p>
+
+            <h2>Pydeck</h2>
+            <p> 
+                Similar to H3, Pydeck is an open source library created by Uber. Pydeck is a Python wrapper around Uber's deck.gl that enables you to render large 
+                geospatial datasets on interactive WebGL-powered maps.
+            </p>
+            <p>
+                add small code demo here, and then talk about how the layer-based rendering model is exponentially more efficient than the element-based model of Leaflet/Folium.
+            </p>
+            <p>
+                something else here we'll figure out
+            </p>
+
+            <h2>Resources</h2>
+            <ul>
+                <li><a href="https://deck.gl/" target="_blank" rel="noopener noreferrer">deck.gl</a> for the underlying WebGL visualization framework.</li>
+                <li><a href="https://pydeck.gl/" target="_blank" rel="noopener noreferrer">Pydeck documentation</a> for Python-first layer and export examples.</li>
+                <li><a href="https://plotly.com/python/" target="_blank" rel="noopener noreferrer">Plotly Python docs</a> for dashboard-friendly map and chart workflows.</li>
+                <li><a href="https://leafletjs.com/" target="_blank" rel="noopener noreferrer">Leaflet</a> for the traditional browser map model that Folium wraps.</li>
+            </ul>
+        </article>
+    </main>
+</body>
+</html>

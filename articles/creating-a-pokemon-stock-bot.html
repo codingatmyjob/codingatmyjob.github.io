@@ -134,6 +134,26 @@
                 but they certainly keep out Joe Shmoe well enough. It's unfortunate that there are so many individuals who are willing to purchase 
                 access to scalping tools, and even more unfortunate that people go through the effort to develop and keep those tools up to date. 
             </p>
+            
+            <h2>Try it for yourself</h2>
+
+            <p>
+                Simplified methodology to pull and test the Target RedSky API key is here: <a href="https://github.com/codingatmyjob/redsky-key-retrieval" target="_blank" rel="noopener noreferrer">redsky-key-retrieval GitHub Repository</a>.
+            </p>
+            <p>
+                The main stock checking bot repository is here: <a href="https://github.com/codingatmyjob/pokestock-bot" target="_blank" rel="noopener noreferrer">pokestock-bot GitHub Repository</a>.
+                To make it work with your own setup, update the following:
+            </p>
+            <ul>
+                <li>Copy <code>.env.example</code> to your own <code>.env</code> and modify as needed.</li>
+                <li>Add a <code>BOT_TOKEN</code> (required) for your Discord bot to work. If you want it hosted, I'm shamelessly plugging 
+                <a href="https://sparkedhost.com/" target="_blank" rel="noopener noreferrer">SparkedHost</a> who have always been affordable and reliable for me.</li>
+                <li>Optional but recommended restrictions: <code>ALLOWED_USERS</code>, <code>ALLOWED_CHANNEL_ID</code>, and <code>GUILD_ID</code> (faster slash-command sync while testing).</li>
+                <li>If you want map image embeds, add <code>GOOGLE_MAPS_API_KEY</code>.</li>
+                <li>If you run into Target rate limits/captcha issues, configure <code>WEBSHARE_PROXY_URL</code> and/or a fixed <code>TARGET_API_KEY</code>.</li>
+                <li>Customize the watchlist by editing <code>WATCHED_TCINS</code> and <code>TCIN_NAMES</code> in <code>utils/target_inventory.py</code>.</li>
+                <li>Install dependencies from <code>requirements.txt</code> and run with <code>python bot.py</code> (Python 3.10+).</li>
+            </ul>
         </article>
     </main>
 </body>
