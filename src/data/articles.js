@@ -1,4 +1,14 @@
 export const articlesData = [
+  {
+    id: 'cruise-comparisons',
+    path: 'articles/cruise-comparisons.html',
+    publishedAt: '2026-06-02',
+    date: 'June 02, 2026',
+    title: 'Cruise Comparisons',
+    description: 'An interactive ship comparison project with a searchable dataset, and side by side ship view with tooltips.',
+    tags: ['Project', 'JavaScript', 'WebApp'],
+    imageLabel: 'Cruise Comparisons'
+  },
   // DRAFT -- NEED TO CREATE SMALL DEMO OR MAKE A REPO FOR VISUAL AID
   // {
   //   id: 'efficient-html-maps-with-pydeck',
