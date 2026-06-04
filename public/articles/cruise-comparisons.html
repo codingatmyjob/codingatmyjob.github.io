@@ -795,6 +795,16 @@ const submergeOffset = shipDraftOffset(scale.belowPx, scale.abovePx, WAVE_LINE_F
                 };
             }
 
+            function resolveShipImageUrl(imagePath, responseUrl) {
+                // Resolve image paths against the JSON file URL so preview base paths do not break assets.
+                if (!imagePath) return '';
+                try {
+                    return new URL(imagePath, responseUrl).toString();
+                } catch {
+                    return imagePath;
+                }
+            }
+
             function selectedShipsList() {
                 // Return currently selected ships in selection order.
                 return state.ships.filter(ship => state.selectedIds.includes(ship.id));
@@ -1215,7 +1225,12 @@ const submergeOffset = shipDraftOffset(scale.belowPx, scale.abovePx, WAVE_LINE_F
                     const response = await fetch('../data/cruise-comparisons.json', { cache: 'no-store' });
                     if (!response.ok) throw new Error(String(response.status));
                     const data = await response.json();
-                    state.ships = Array.isArray(data) ? data.map(normalizeShip) : [];
+                    state.ships = Array.isArray(data)
+                        ? data.map(entry => normalizeShip({
+                            ...entry,
+                            image: resolveShipImageUrl(entry.image, response.url)
+                        }))
+                        : [];
                     render();
                 } catch (error) {
                     shipInfo.textContent = 'Unable to load ship data.';
