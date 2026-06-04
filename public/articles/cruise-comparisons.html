@@ -1213,7 +1213,7 @@ const submergeOffset = shipDraftOffset(scale.belowPx, scale.abovePx, WAVE_LINE_F
             async function loadShips() {
                 // Load ship dataset, normalize records, then render the interface.
                 try {
-                    const response = await fetch('../data/cruise-comparisons.json', { cache: 'no-store' });
+                    const response = await fetch('data/cruise-comparisons.json', { cache: 'no-store' });
                     if (!response.ok) throw new Error(String(response.status));
                     const data = await response.json();
                     state.ships = Array.isArray(data)
