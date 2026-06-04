@@ -823,9 +823,10 @@ const submergeOffset = shipDraftOffset(scale.belowPx, scale.abovePx, WAVE_LINE_F
 
             function shipMarkup(ship, width, abovePx, belowPx, opacity = 1) {
                 // Build side-view ship card markup for one vessel.
+                const placeholder = `<div class="ship-placeholder" style="--ship-color:${ship.color};"></div>`;
                 const imageBlock = ship.image
-                    ? `<img class="ship-image" src="${ship.image}" alt="${ship.name}">`
-                    : `<div class="ship-placeholder" style="--ship-color:${ship.color};"></div>`;
+                    ? `<img class="ship-image" src="${ship.image}" alt="${ship.name}" data-fallback-color="${ship.color}" onerror="var d=document.createElement('div');d.className='ship-placeholder';d.style.setProperty('--ship-color',this.dataset.fallbackColor);this.replaceWith(d);">`
+                    : placeholder;
 
                 return `
                     <div class="ship-card" data-tooltip-id="${ship.id}" style="width:${width}px;height:${abovePx}px;opacity:${opacity};">
