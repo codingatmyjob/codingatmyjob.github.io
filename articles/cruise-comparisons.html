@@ -282,7 +282,9 @@
             background: rgba(255,255,255,0.88);
             padding: 2px 7px;
             border-radius: 10px;
-            margin-bottom: 4px;
+            margin-bottom: 32px;
+            position: relative;
+            z-index: 2;
             white-space: nowrap;
         }
 
@@ -307,22 +309,25 @@
             position: relative;
             display: flex;
             flex-direction: column;
-            overflow: hidden;
-            border-radius: 10px 10px 6px 6px;
-            background: rgba(255,255,255,0.14);
-            border: 2px solid #3b3b3b;
-            box-shadow: 0 12px 22px rgba(0,0,0,0.18);
+            overflow: visible;
+            border-radius: 0;
+            background: none !important;
+            border: none;
+            box-shadow: none;
             pointer-events: auto;
             cursor: pointer;
         }
 
         .ship-above {
             position: relative;
-            display: grid;
-            place-items: center;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
             width: 100%;
-            overflow: hidden;
-            border-bottom: 2px solid rgba(205, 245, 255, 0.85);
+            overflow: visible;
+            border-bottom: none;
+            background: none !important;
+            border-radius: 0 !important;
         }
 
         .ship-below {
@@ -343,7 +348,7 @@
         }
 
         .ship-card::after {
-            content: '';
+            content: none;
             position: absolute;
             inset: auto 0 0 0;
             height: 34%;
@@ -366,10 +371,12 @@
 
         .ship-image {
             width: 100%;
-            height: 100%;
-            object-fit: contain;
-            object-position: bottom center;
+            height: auto;
+            max-height: none;
             display: block;
+            background: none !important;
+            border-radius: 0 !important;
+            box-shadow: none !important;
         }
 
         .ship-tooltip {
@@ -598,14 +605,18 @@
 
         <article>
             <h2>Overview</h2>
-            <p>I recently went on a western caribbean cruise on an older Royal Caribbean ship. I knew my boat (the Enchantment of the Seas) was on 
+            <p>I recently went on a western caribbean cruise on an older Royal Caribbean ship. I knew my ship (the Enchantment of the Seas) was on 
                 the smaller side, but I couldn't fully comprehend how much smaller it was until we were parked directly next to the Carnival Jubilee 
                 and the MSC World while in Costa Maya. On our top deck, the other ships towered over us. For reference, the Jubilee had 5 more passenger decks than our ship. </p>
             <p>In that moment of "holy cow, our ship is small," I realized I wanted to be able to compare these different ships side by side on some kind of webapp, 
                 and made this ship comparison tool. It loads ship metadata from a JSON file, lets you search for and select two ships,
                 and compares them in a side-by-side ocean view with tooltips and some basic statistics below.</p>
-            <p>The big roadblock I ran into was that clean PNG and SVG images of the ships are impossible to source. There are some *similar* images out there, 
-                but they are either class-specific, lacking updates to the ships, or just not accurate enough. I ended up just using a box as a placeholder for the ship's silhouette.
+            <p>The biggest roadblock I ran into was that clean PNG and SVG images of the ships are nearly impossible to source. There are *similar* images out there, 
+                but they are either class-specific, lacking updates to the ships, not very accurate, or not in the side profile format.</p> 
+            <p>I ended up sourcing 
+                generic class images for the different ships. Carnival had a ship/class spreadsheet that I was able to source decent images from. In Royal Caribbean's case, 
+                I found a ship class spreadsheet someone else had generated, and broke out all the images, manually cropping and adding a transparent background. 
+                Claude generated a handful of generic images for different naval vessel classes (...so apologies if your favorite ship doesn't look like the real thing).
             </p>
 
             <h2>Try it out</h2>
@@ -649,19 +660,20 @@
             <div id="metricShell"></div>
 
             <h3>Ship Scaling Logic</h3>
-            <p class="stats-code-note">This piece of code is probably the most significant/noteworthy. 
-                A single shared 'ship size to pixels' scale is created, then applied to width, hull height, and draft so every ship 
-                stays proportional, regardless of viewport or viewing area size. There is a small caveat to that, 
-                where ships on smaller viewports are manually resized for better accessibility.</p>
-            <pre class="stats-code-block"><code>function shipScale(ship, pixelsPerMeter, verticalBoost = 1) {
-    // Split total ship height into above-water profile and underwater draft, then combine back together for a total height 
-    const belowPx = Math.max(1, Math.round(ship.draftM * pixelsPerMeter * verticalBoost));
-    const abovePx = Math.max(1, Math.round(ship.profileM * pixelsPerMeter * verticalBoost));
-    const totalPx = abovePx + belowPx;
-    return { totalPx, belowPx, abovePx };
-}
+            <p class="stats-code-note">This piece of code is probably the most significant concept in the project. 
+                The idea is simple. We have an image of a ship, and based on the real life size of the ship(s) they are scaled and compared accordingly. 
+                To make that happen, a single shared pixels-per-meter scale is computed from vertical and horizontal constraints (viewport limits), then applied so 
+                each ship's width, profile height, and draft stay proportional. On the smaller viewports, width caps and spacing change based on whether 
+                one ship or two ships are selected, so ships stay visible instead of collapsing.</p>
+            <pre class="stats-code-block"><code>// Compact layout gives different spacing and width caps for 1 ship vs 2 ships
+const shipGap = compact ? (ships.length > 1 ? 12 : 8) : 20;
+const horizontalPadding = compact ? (ships.length > 1 ? 16 : 8) : 32;
+const compactShipMaxWidth = compact
+    ? (ships.length > 1
+        ? (stageWidth <= 420 ? Math.floor(stageWidth * 0.46) : Math.floor(stageWidth * 0.42))
+        : Math.floor(stageWidth * 0.82))
+    : Number.POSITIVE_INFINITY;
 
-// Cap how wide each ship can be based on viewing area width and ship count
 const perShipMaxWidth = Math.max(
     1,
     Math.min(
@@ -670,18 +682,36 @@ const perShipMaxWidth = Math.max(
     )
 );
 
-// Choose one pixels-per-meter scale that satisfies both height and width limits, use this to establish a floor
+// Shared pixels-per-meter scale picks the tighter of vertical vs horizontal fit
 const pixelsPerMeter = Math.max(
     0.12,
-    Math.min( //picks the tighter of the two constraints below
-        heightBudget / maxTotalMeters, //how much scale can fit vertically
-        perShipMaxWidth / maxLength //how much scale can fit horizontally
-    )
+    Math.min(heightBudget / maxTotalMeters, perShipMaxWidth / maxLength)
 );
 
-// Apply the scale to the current ship(s)
+// Convert ship profile/draft meters to pixel heights.
+function shipScale(ship, pixelsPerMeter, verticalBoost = 1) {
+    const belowPx = Math.max(1, Math.round(ship.draftM * pixelsPerMeter * verticalBoost));
+    const abovePx = Math.max(1, Math.round(ship.profileM * pixelsPerMeter * verticalBoost));
+    return { belowPx, abovePx };
+}
+
+// Calculate how far to submerge the rendered ship against the wave.
+function shipDraftOffset(belowPx, abovePx, waveLineFromBottom, shipCount, relativeSizeBiasPx = 0) {
+    const formationTrim = shipCount > 1 ? MULTI_SHIP_OFFSET_TRIM : SINGLE_SHIP_OFFSET_TRIM;
+    const minVisibleSubmergePx = Math.min(
+        Math.max(MIN_SUBMERGE_PX, Math.round((belowPx + abovePx) * MIN_VISIBLE_SUBMERGE_RATIO)),
+        Math.max(MIN_SUBMERGE_PX, Math.round(abovePx * MAX_SUBMERGE_RATIO_OF_ABOVE))
+    );
+    const maxVisibleSubmergePx = Math.max(minVisibleSubmergePx, Math.round(abovePx * MAX_SUBMERGE_RATIO_OF_ABOVE));
+    const targetSubmergePx = Math.min(maxVisibleSubmergePx, Math.max(belowPx, minVisibleSubmergePx));
+    return Math.round(targetSubmergePx - waveLineFromBottom + SHIP_ROW_BOTTOM_PADDING + formationTrim + relativeSizeBiasPx);
+}
+
 const scale = shipScale(ship, pixelsPerMeter, verticalBoost);
-const width = Math.max(1, Math.min(perShipMaxWidth, Math.round(ship.lengthM * pixelsPerMeter)));</code></pre>
+const relativeSizeBiasPx = ships.length > 1
+    ? Math.round(((maxAbovePx - scale.abovePx) / Math.max(1, maxAbovePx)) * MAX_MULTI_SIZE_BIAS_PX)
+    : 0;
+const submergeOffset = shipDraftOffset(scale.belowPx, scale.abovePx, WAVE_LINE_FROM_BOTTOM, ships.length, relativeSizeBiasPx);</code></pre>
 
             <h3>Data Normalization</h3>
             <p>Another important part of the project was normalizing mixed ship data into one comparison model. 
@@ -695,7 +725,7 @@ const width = Math.max(1, Math.min(perShipMaxWidth, Math.round(ship.lengthM * pi
                 to search through and/or list hundreds of ships and limit UI clutter.
                 The goal was to parse a large JSON file and have the multiselect feature automatically populate with data. 
                 I tried a few different approaches; radio buttons, a dropdown, eventually multi-level nested dropdowns 
-                (I despise these) - and didn't like any of them.</p>
+                (I despise these), and didn't like any of them.</p>
             <p>I took a short break and realized that I had already <i>very recently</i> built a similar feature and even demoed it. 
                 The <a href="https://codingatmyjob.github.io/#/articles/typeahead-demo">typeahead demo</a> came full circle and 
                 I even added a silly little debounce function. This project uses the exact same search UI and typeahead logic as the demo.</p>
@@ -706,8 +736,14 @@ const width = Math.max(1, Math.min(perShipMaxWidth, Math.round(ship.lengthM * pi
     <script>
         (function() {
             const MAX_SELECTED = 2;
-            const FRONT_WAVE_LINE_FROM_BOTTOM = 21;
+            const WAVE_LINE_FROM_BOTTOM = 10;
             const SHIP_ROW_BOTTOM_PADDING = 2;
+            const MIN_VISIBLE_SUBMERGE_RATIO = 0.08;
+            const MIN_SUBMERGE_PX = 4;
+            const MAX_SUBMERGE_RATIO_OF_ABOVE = 0.18;
+            const SINGLE_SHIP_OFFSET_TRIM = -3;
+            const MULTI_SHIP_OFFSET_TRIM = 1;
+            const MAX_MULTI_SIZE_BIAS_PX = 3;
             const METRICS = {
                 lengthM: { label: 'Length', unit: 'm', format: value => `${value} m` },
                 beamM: { label: 'Beam', unit: 'm', format: value => `${value} m` },
@@ -737,6 +773,7 @@ const width = Math.max(1, Math.min(perShipMaxWidth, Math.round(ship.lengthM * pi
             let resizeDebounceId = null;
 
             function normalizeShip(ship) {
+                // Normalize mixed source fields into one rendering model.
                 const passengers = Number(ship.passengers);
                 const crew = Number(ship.crew);
                 const totalPersonnel = Number(ship.totalPersonnel);
@@ -759,10 +796,12 @@ const width = Math.max(1, Math.min(perShipMaxWidth, Math.round(ship.lengthM * pi
             }
 
             function selectedShipsList() {
+                // Return currently selected ships in selection order.
                 return state.ships.filter(ship => state.selectedIds.includes(ship.id));
             }
 
             function filterShips(query) {
+                // Filter ships by free-text query across common metadata fields.
                 const trimmed = query.trim();
                 if (!trimmed) return [];
                 const normalized = trimmed.toLowerCase();
@@ -775,6 +814,7 @@ const width = Math.max(1, Math.min(perShipMaxWidth, Math.round(ship.lengthM * pi
             }
 
             function metricValue(ship, metricKey) {
+                // Resolve metric values with Navy passenger/crew compatibility.
                 if (metricKey === 'passengers' && ship.line === 'US Navy') {
                     return ship.totalPersonnel;
                 }
@@ -782,21 +822,23 @@ const width = Math.max(1, Math.min(perShipMaxWidth, Math.round(ship.lengthM * pi
             }
 
             function shipMarkup(ship, width, abovePx, belowPx, opacity = 1) {
+                // Build side-view ship card markup for one vessel.
+                const placeholder = `<div class="ship-placeholder" style="--ship-color:${ship.color};"></div>`;
                 const imageBlock = ship.image
-                    ? `<img class="ship-image" src="${ship.image}" alt="${ship.name}">`
-                    : `<div class="ship-placeholder" style="--ship-color:${ship.color};"></div>`;
+                    ? `<img class="ship-image" src="${ship.image}" alt="${ship.name}" data-fallback-color="${ship.color}" onerror="var d=document.createElement('div');d.className='ship-placeholder';d.style.setProperty('--ship-color',this.dataset.fallbackColor);this.replaceWith(d);">`
+                    : placeholder;
 
                 return `
-                    <div class="ship-card" data-tooltip-id="${ship.id}" style="width:${width}px;height:${abovePx + belowPx}px;opacity:${opacity};">
+                    <div class="ship-card" data-tooltip-id="${ship.id}" style="width:${width}px;height:${abovePx}px;opacity:${opacity};">
                         <div class="ship-above" style="height:${abovePx}px;">
                             ${imageBlock}
                         </div>
-                        <div class="ship-below" style="height:${belowPx}px;"></div>
                     </div>
                 `;
             }
 
             function shipTooltipMarkup(ship) {
+                // Build tooltip content for a ship card.
                 const isMilitary = ship.line === 'US Navy';
                 const capacityLabel = isMilitary ? 'Total Personnel' : 'Passengers';
                 const capacityValue = isMilitary ? ship.totalPersonnel : ship.passengers;
@@ -820,16 +862,19 @@ const width = Math.max(1, Math.min(perShipMaxWidth, Math.round(ship.lengthM * pi
             }
 
             function closeShipTooltips() {
+                // Close any open stage tooltip.
                 stageTooltipLayer.innerHTML = '';
             }
 
             function openShipTooltip(ship) {
+                // Open and render tooltip for the selected ship.
                 stageTooltipLayer.innerHTML = shipTooltipMarkup(ship);
                 const tooltip = stageTooltipLayer.querySelector('.ship-tooltip');
                 if (tooltip) tooltip.classList.add('open');
             }
 
             function bindShipTooltips() {
+                // Attach click handlers and placement logic to ship cards.
                 waterlineShips.querySelectorAll('.ship-card[data-tooltip-id]').forEach(card => {
                     card.addEventListener('click', event => {
                         event.stopPropagation();
@@ -867,17 +912,33 @@ const width = Math.max(1, Math.min(perShipMaxWidth, Math.round(ship.lengthM * pi
             }
 
             function shipScale(ship, pixelsPerMeter, verticalBoost = 1) {
+                // Convert ship dimensions from meters to render pixels.
                 const belowPx = Math.max(1, Math.round(ship.draftM * pixelsPerMeter * verticalBoost));
                 const abovePx = Math.max(1, Math.round(ship.profileM * pixelsPerMeter * verticalBoost));
                 const totalPx = abovePx + belowPx;
                 return { totalPx, belowPx, abovePx };
             }
 
-            function shipDraftOffset(belowPx) {
-                return Math.round(belowPx - FRONT_WAVE_LINE_FROM_BOTTOM + SHIP_ROW_BOTTOM_PADDING);
+            function shipDraftOffset(belowPx, abovePx, waveLineFromBottom, shipCount, relativeSizeBiasPx = 0) {
+                // Compute visual submersion depth against the shared wave reference.
+                const formationTrim = shipCount > 1 ? MULTI_SHIP_OFFSET_TRIM : SINGLE_SHIP_OFFSET_TRIM;
+                const minVisibleSubmergePx = Math.min(
+                    Math.max(MIN_SUBMERGE_PX, Math.round((belowPx + abovePx) * MIN_VISIBLE_SUBMERGE_RATIO)),
+                    Math.max(MIN_SUBMERGE_PX, Math.round(abovePx * MAX_SUBMERGE_RATIO_OF_ABOVE))
+                );
+                const maxVisibleSubmergePx = Math.max(
+                    minVisibleSubmergePx,
+                    Math.round(abovePx * MAX_SUBMERGE_RATIO_OF_ABOVE)
+                );
+                const targetSubmergePx = Math.min(
+                    maxVisibleSubmergePx,
+                    Math.max(belowPx, minVisibleSubmergePx)
+                ) + formationTrim + relativeSizeBiasPx;
+                return Math.round(targetSubmergePx - waveLineFromBottom + SHIP_ROW_BOTTOM_PADDING);
             }
 
             function renderDropdown(query) {
+                // Render search dropdown results for the current query.
                 if (!query.trim()) {
                     shipDropdown.classList.remove('active');
                     shipInfo.textContent = 'Start typing to filter the fleet.';
@@ -927,6 +988,7 @@ const width = Math.max(1, Math.min(perShipMaxWidth, Math.round(ship.lengthM * pi
             }
 
             function renderSelectedShips() {
+                // Render selected ship chips and removal actions.
                 if (!state.selectedIds.length) {
                     selectedShips.innerHTML = '';
                     return;
@@ -951,6 +1013,7 @@ const width = Math.max(1, Math.min(perShipMaxWidth, Math.round(ship.lengthM * pi
             }
 
             function renderSideView() {
+                // Render side-profile stage with scaled ships and waterline alignment.
                 const ships = selectedShipsList();
                 if (!ships.length) {
                     waterlineShips.innerHTML = '';
@@ -966,14 +1029,22 @@ const width = Math.max(1, Math.min(perShipMaxWidth, Math.round(ship.lengthM * pi
                 const stageHeight = sideStage.clientHeight || 300;
                 const stageWidth = sideStage.clientWidth || 0;
                 const compact = stageWidth <= 700;
-                const shipGap = compact ? 12 : 20;
-                const horizontalPadding = compact ? 16 : 32;
+                const shipGap = compact
+                    ? (ships.length > 1 ? 12 : 8)
+                    : 20;
+                const horizontalPadding = compact
+                    ? (ships.length > 1 ? 16 : 8)
+                    : 32;
                 const maxTotalMeters = Math.max(...ships.map(ship => ship.profileM + ship.draftM));
                 const maxDraft = Math.max(...ships.map(ship => ship.draftM));
                 const maxLength = Math.max(...ships.map(ship => ship.lengthM));
                 const waterlineFromBottom = Math.round(stageHeight * maxDraft / maxTotalMeters) + 24;
                 const compactShipMaxWidth = compact
-                    ? (stageWidth <= 420 ? Math.floor(stageWidth * 0.31) : Math.floor(stageWidth * 0.34))
+                    ? (
+                        ships.length > 1
+                            ? (stageWidth <= 420 ? Math.floor(stageWidth * 0.46) : Math.floor(stageWidth * 0.42))
+                            : Math.floor(stageWidth * 0.82)
+                    )
                     : Number.POSITIVE_INFINITY;
                 const verticalBoost = compact
                     ? (stageWidth <= 420 ? 1.14 : (stageWidth <= 560 ? 1.09 : 1.05))
@@ -995,12 +1066,29 @@ const width = Math.max(1, Math.min(perShipMaxWidth, Math.round(ship.lengthM * pi
                 );
 
                 waterline.style.bottom = `${waterlineFromBottom}px`;
+                const waveLineFromBottom = WAVE_LINE_FROM_BOTTOM;
+                const scaledShips = ships.map(ship => ({
+                    ship,
+                    scale: shipScale(ship, pixelsPerMeter, verticalBoost),
+                    width: Math.max(1, Math.min(perShipMaxWidth, Math.round(ship.lengthM * pixelsPerMeter)))
+                }));
+                const maxAbovePx = Math.max(...scaledShips.map(entry => entry.scale.abovePx));
 
-                waterlineShips.innerHTML = ships.map((ship, index) => {
-                    const scale = shipScale(ship, pixelsPerMeter, verticalBoost);
-                    const width = Math.max(1, Math.min(perShipMaxWidth, Math.round(ship.lengthM * pixelsPerMeter)));
+                waterlineShips.innerHTML = scaledShips.map((entry, index) => {
+                    const ship = entry.ship;
+                    const scale = entry.scale;
+                    const width = entry.width;
                     const bobDelay = `${index * -0.85}s`;
-                    const submergeOffset = shipDraftOffset(scale.belowPx);
+                    const relativeSizeBiasPx = ships.length > 1
+                        ? Math.round(((maxAbovePx - scale.abovePx) / Math.max(1, maxAbovePx)) * MAX_MULTI_SIZE_BIAS_PX)
+                        : 0;
+                    const submergeOffset = shipDraftOffset(
+                        scale.belowPx,
+                        scale.abovePx,
+                        waveLineFromBottom,
+                        ships.length,
+                        relativeSizeBiasPx
+                    );
                     return `
                         <div class="ship-slot">
                             <div class="ship-submerge" style="transform:translateY(${submergeOffset}px);">
@@ -1017,6 +1105,7 @@ const width = Math.max(1, Math.min(perShipMaxWidth, Math.round(ship.lengthM * pi
             }
 
             function renderMetricTabs() {
+                // Render metric tab controls and bind tab selection.
                 const tabs = [{ key: 'all', label: 'All stats' }].concat(
                     Object.entries(METRICS).map(([key, metric]) => ({ key, label: metric.label }))
                 );
@@ -1034,6 +1123,7 @@ const width = Math.max(1, Math.min(perShipMaxWidth, Math.round(ship.lengthM * pi
             }
 
             function metricPanel(metricKey, ships) {
+                // Build one metric panel with proportional bars.
                 const metric = METRICS[metricKey];
                 const sorted = [...ships].sort((left, right) => metricValue(right, metricKey) - metricValue(left, metricKey));
                 const maxValue = Math.max(...sorted.map(ship => metricValue(ship, metricKey)));
@@ -1064,6 +1154,7 @@ const width = Math.max(1, Math.min(perShipMaxWidth, Math.round(ship.lengthM * pi
             }
 
             function renderMetricShell() {
+                // Render all metric panels or a single selected metric panel.
                 const ships = selectedShipsList();
                 if (!ships.length) {
                     metricShell.innerHTML = '<p class="cruise-info">Select ships to populate the comparison chart.</p>';
@@ -1076,6 +1167,7 @@ const width = Math.max(1, Math.min(perShipMaxWidth, Math.round(ship.lengthM * pi
             }
 
             function render() {
+                // Render all primary UI regions from current state.
                 renderSelectedShips();
                 renderSideView();
                 renderMetricTabs();
@@ -1119,11 +1211,14 @@ const width = Math.max(1, Math.min(perShipMaxWidth, Math.round(ship.lengthM * pi
             });
 
             async function loadShips() {
+                // Load ship dataset, normalize records, then render the interface.
                 try {
-                    const response = await fetch('../data/cruise-comparisons.json', { cache: 'no-store' });
+                    const response = await fetch('data/cruise-comparisons.json', { cache: 'no-store' });
                     if (!response.ok) throw new Error(String(response.status));
                     const data = await response.json();
-                    state.ships = Array.isArray(data) ? data.map(normalizeShip) : [];
+                    state.ships = Array.isArray(data)
+                        ? data.map(entry => normalizeShip(entry))
+                        : [];
                     render();
                 } catch (error) {
                     shipInfo.textContent = 'Unable to load ship data.';

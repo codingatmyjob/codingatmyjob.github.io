@@ -11,7 +11,8 @@
     "grossTonnage": 9700,
     "totalPersonnel": 323,
     "profileM": 36,
-    "color": "#4a90a4"
+    "color": "#4a90a4",
+    "image": "ship-class-images/navy_arleigh_burke.png"
   },
   {
     "id": "ticonderoga-class",
@@ -25,7 +26,8 @@
     "grossTonnage": 9800,
     "totalPersonnel": 330,
     "profileM": 38,
-    "color": "#3b7f91"
+    "color": "#3b7f91",
+    "image": "ship-class-images/ticonderoga.png"
   },
   {
     "id": "america-class",
@@ -39,7 +41,8 @@
     "grossTonnage": 45000,
     "totalPersonnel": 1200,
     "profileM": 56,
-    "color": "#2c6f80"
+    "color": "#2c6f80",
+    "image": "ship-class-images/navy_america.png"
   },
   {
     "id": "gerald-r-ford-class",
@@ -53,7 +56,8 @@
     "grossTonnage": 100000,
     "totalPersonnel": 4539,
     "profileM": 76,
-    "color": "#225d6c"
+    "color": "#225d6c",
+    "image": "ship-class-images/navy_gerald_r_ford.png"
   },
   {
     "id": "nimitz-class",
@@ -67,7 +71,8 @@
     "grossTonnage": 100000,
     "totalPersonnel": 5600,
     "profileM": 74,
-    "color": "#2a5f70"
+    "color": "#2a5f70",
+    "image": "ship-class-images/navy_nimitz.png"
   },
   {
     "id": "wasp-class",
@@ -81,7 +86,8 @@
     "grossTonnage": 40500,
     "totalPersonnel": 3080,
     "profileM": 55,
-    "color": "#316f82"
+    "color": "#316f82",
+    "image": "ship-class-images/navy_wasp_class.png"
   },
   {
     "id": "san-antonio-class",
@@ -95,7 +101,8 @@
     "grossTonnage": 25000,
     "totalPersonnel": 1160,
     "profileM": 46,
-    "color": "#3b7b90"
+    "color": "#3b7b90",
+    "image": "ship-class-images/navy_san antonio.png"
   },
   {
     "id": "zumwalt-class",
@@ -109,7 +116,8 @@
     "grossTonnage": 15656,
     "totalPersonnel": 147,
     "profileM": 41,
-    "color": "#4588a0"
+    "color": "#4588a0",
+    "image": "ship-class-images/navy_zumwalt.png"
   },
   {
     "id": "freedom-class",
@@ -123,7 +131,8 @@
     "grossTonnage": 3500,
     "totalPersonnel": 75,
     "profileM": 30,
-    "color": "#4a90ab"
+    "color": "#4a90ab",
+    "image": "ship-class-images/navy_freedom.png"
   },
   {
     "id": "independence-class",
@@ -137,7 +146,8 @@
     "grossTonnage": 3100,
     "totalPersonnel": 70,
     "profileM": 30,
-    "color": "#5598b3"
+    "color": "#5598b3",
+    "image": "ship-class-images/navy_independence.png"
   },
   {
     "id": "virginia-class",
@@ -151,9 +161,9 @@
     "grossTonnage": 7800,
     "totalPersonnel": 132,
     "profileM": 27,
-    "color": "#5d9db7"
+    "color": "#5d9db7",
+    "image": "ship-class-images/navy_virginia.png"
   },
-
   {
     "id": "icon-of-the-seas",
     "name": "Icon of the Seas",
@@ -167,7 +177,8 @@
     "passengers": 7600,
     "crew": 2350,
     "profileM": 74,
-    "color": "#1f8ea8"
+    "color": "#1f8ea8",
+    "image": "ship-class-images/royal_caribbean_icon.png"
   },
   {
     "id": "utopia-of-the-seas",
@@ -182,7 +193,8 @@
     "passengers": 6800,
     "crew": 2300,
     "profileM": 72,
-    "color": "#2a86a3"
+    "color": "#2a86a3",
+    "image": "ship-class-images/royal_caribbean_oasis.png"
   },
   {
     "id": "wonder-of-the-seas",
@@ -197,7 +209,8 @@
     "passengers": 6980,
     "crew": 2300,
     "profileM": 72,
-    "color": "#2e7fa8"
+    "color": "#2e7fa8",
+    "image": "ship-class-images/royal_caribbean_oasis.png"
   },
   {
     "id": "symphony-of-the-seas",
@@ -212,7 +225,8 @@
     "passengers": 6680,
     "crew": 2200,
     "profileM": 71,
-    "color": "#327b9d"
+    "color": "#327b9d",
+    "image": "ship-class-images/royal_caribbean_oasis.png"
   },
   {
     "id": "harmony-of-the-seas",
@@ -227,7 +241,8 @@
     "passengers": 6687,
     "crew": 2155,
     "profileM": 71,
-    "color": "#356f90"
+    "color": "#356f90",
+    "image": "ship-class-images/royal_caribbean_oasis.png"
   },
   {
     "id": "oasis-of-the-seas",
@@ -242,7 +257,8 @@
     "passengers": 6780,
     "crew": 2165,
     "profileM": 71,
-    "color": "#3a6c89"
+    "color": "#3a6c89",
+    "image": "ship-class-images/royal_caribbean_oasis.png"
   },
   {
     "id": "allure-of-the-seas",
@@ -257,7 +273,8 @@
     "passengers": 6780,
     "crew": 2165,
     "profileM": 71,
-    "color": "#42657f"
+    "color": "#42657f",
+    "image": "ship-class-images/royal_caribbean_oasis.png"
   },
   {
     "id": "quantum-of-the-seas",
@@ -272,7 +289,8 @@
     "passengers": 4905,
     "crew": 1500,
     "profileM": 67,
-    "color": "#2a8fb0"
+    "color": "#2a8fb0",
+    "image": "ship-class-images/royal_caribbean_quantum.png"
   },
   {
     "id": "anthem-of-the-seas",
@@ -287,7 +305,8 @@
     "passengers": 4905,
     "crew": 1500,
     "profileM": 67,
-    "color": "#2f86a6"
+    "color": "#2f86a6",
+    "image": "ship-class-images/royal_caribbean_quantum.png"
   },
   {
     "id": "ovation-of-the-seas",
@@ -302,7 +321,8 @@
     "passengers": 4905,
     "crew": 1500,
     "profileM": 67,
-    "color": "#367f9b"
+    "color": "#367f9b",
+    "image": "ship-class-images/royal_caribbean_quantum.png"
   },
   {
     "id": "spectrum-of-the-seas",
@@ -317,7 +337,8 @@
     "passengers": 4905,
     "crew": 1550,
     "profileM": 67,
-    "color": "#3d7690"
+    "color": "#3d7690",
+    "image": "ship-class-images/royal_caribbean_quantum.png"
   },
   {
     "id": "odyssey-of-the-seas",
@@ -332,7 +353,8 @@
     "passengers": 4905,
     "crew": 1550,
     "profileM": 67,
-    "color": "#446e85"
+    "color": "#446e85",
+    "image": "ship-class-images/royal_caribbean_quantum.png"
   },
   {
     "id": "voyager-of-the-seas",
@@ -347,7 +369,8 @@
     "passengers": 3807,
     "crew": 1185,
     "profileM": 60,
-    "color": "#327c92"
+    "color": "#327c92",
+    "image": "ship-class-images/royal_caribbean_voyager.png"
   },
   {
     "id": "explorer-of-the-seas",
@@ -362,7 +385,8 @@
     "passengers": 3807,
     "crew": 1185,
     "profileM": 60,
-    "color": "#387486"
+    "color": "#387486",
+    "image": "ship-class-images/royal_caribbean_voyager.png"
   },
   {
     "id": "adventure-of-the-seas",
@@ -377,7 +401,8 @@
     "passengers": 3807,
     "crew": 1185,
     "profileM": 60,
-    "color": "#3f6d7b"
+    "color": "#3f6d7b",
+    "image": "ship-class-images/royal_caribbean_voyager.png"
   },
   {
     "id": "navigator-of-the-seas",
@@ -392,7 +417,8 @@
     "passengers": 3807,
     "crew": 1185,
     "profileM": 60,
-    "color": "#466670"
+    "color": "#466670",
+    "image": "ship-class-images/royal_caribbean_voyager.png"
   },
   {
     "id": "mariner-of-the-seas",
@@ -407,7 +433,8 @@
     "passengers": 3807,
     "crew": 1185,
     "profileM": 60,
-    "color": "#4b6068"
+    "color": "#4b6068",
+    "image": "ship-class-images/royal_caribbean_voyager.png"
   },
   {
     "id": "freedom-of-the-seas",
@@ -422,7 +449,8 @@
     "passengers": 4515,
     "crew": 1360,
     "profileM": 65,
-    "color": "#2f8da8"
+    "color": "#2f8da8",
+    "image": "ship-class-images/royal_caribbean_freedom.png"
   },
   {
     "id": "liberty-of-the-seas",
@@ -437,7 +465,8 @@
     "passengers": 4515,
     "crew": 1360,
     "profileM": 65,
-    "color": "#37869d"
+    "color": "#37869d",
+    "image": "ship-class-images/royal_caribbean_freedom.png"
   },
   {
     "id": "independence-of-the-seas",
@@ -452,7 +481,8 @@
     "passengers": 4515,
     "crew": 1360,
     "profileM": 65,
-    "color": "#3f7f92"
+    "color": "#3f7f92",
+    "image": "ship-class-images/royal_caribbean_freedom.png"
   },
   {
     "id": "radiance-of-the-seas",
@@ -467,7 +497,8 @@
     "passengers": 2466,
     "crew": 859,
     "profileM": 57,
-    "color": "#2f7b8e"
+    "color": "#2f7b8e",
+    "image": "ship-class-images/royal_caribbean_radiance.png"
   },
   {
     "id": "brilliance-of-the-seas",
@@ -482,7 +513,8 @@
     "passengers": 2466,
     "crew": 859,
     "profileM": 57,
-    "color": "#377482"
+    "color": "#377482",
+    "image": "ship-class-images/royal_caribbean_radiance.png"
   },
   {
     "id": "serenade-of-the-seas",
@@ -497,7 +529,8 @@
     "passengers": 2466,
     "crew": 859,
     "profileM": 57,
-    "color": "#3f6d77"
+    "color": "#3f6d77",
+    "image": "ship-class-images/royal_caribbean_radiance.png"
   },
   {
     "id": "jewel-of-the-seas",
@@ -512,7 +545,8 @@
     "passengers": 2466,
     "crew": 859,
     "profileM": 57,
-    "color": "#46666d"
+    "color": "#46666d",
+    "image": "ship-class-images/royal_caribbean_radiance.png"
   },
   {
     "id": "vision-of-the-seas",
@@ -527,7 +561,8 @@
     "passengers": 2435,
     "crew": 765,
     "profileM": 54,
-    "color": "#2e6f80"
+    "color": "#2e6f80",
+    "image": "ship-class-images/royal_caribbean_vision.png"
   },
   {
     "id": "enchantment-of-the-seas",
@@ -542,7 +577,8 @@
     "passengers": 2730,
     "crew": 852,
     "profileM": 55,
-    "color": "#356874"
+    "color": "#356874",
+    "image": "ship-class-images/royal_caribbean_vision.png"
   },
   {
     "id": "grandeur-of-the-seas",
@@ -557,7 +593,8 @@
     "passengers": 2435,
     "crew": 760,
     "profileM": 54,
-    "color": "#3d6169"
+    "color": "#3d6169",
+    "image": "ship-class-images/royal_caribbean_vision.png"
   },
   {
     "id": "rhapsody-of-the-seas",
@@ -572,9 +609,9 @@
     "passengers": 2435,
     "crew": 765,
     "profileM": 54,
-    "color": "#455a60"
+    "color": "#455a60",
+    "image": "ship-class-images/royal_caribbean_vision.png"
   },
-
   {
     "id": "mardi-gras",
     "name": "Mardi Gras",
@@ -588,7 +625,8 @@
     "passengers": 6338,
     "crew": 1735,
     "profileM": 67,
-    "color": "#2a90b0"
+    "color": "#2a90b0",
+    "image": "ship-class-images/carnival_excel_class.png"
   },
   {
     "id": "carnival-celebration",
@@ -603,7 +641,8 @@
     "passengers": 6338,
     "crew": 1735,
     "profileM": 67,
-    "color": "#3188a5"
+    "color": "#3188a5",
+    "image": "ship-class-images/carnival_excel_class.png"
   },
   {
     "id": "carnival-jubilee",
@@ -618,7 +657,8 @@
     "passengers": 6338,
     "crew": 1735,
     "profileM": 67,
-    "color": "#387f9a"
+    "color": "#387f9a",
+    "image": "ship-class-images/carnival_excel_class.png"
   },
   {
     "id": "carnival-vista",
@@ -633,7 +673,8 @@
     "passengers": 4977,
     "crew": 1450,
     "profileM": 62,
-    "color": "#2c889f"
+    "color": "#2c889f",
+    "image": "ship-class-images/carnival_vista_class.png"
   },
   {
     "id": "carnival-horizon",
@@ -648,7 +689,8 @@
     "passengers": 4977,
     "crew": 1450,
     "profileM": 62,
-    "color": "#337f94"
+    "color": "#337f94",
+    "image": "ship-class-images/carnival_vista_class.png"
   },
   {
     "id": "carnival-panorama",
@@ -663,7 +705,8 @@
     "passengers": 4977,
     "crew": 1450,
     "profileM": 62,
-    "color": "#3a7689"
+    "color": "#3a7689",
+    "image": "ship-class-images/carnival_vista_class.png"
   },
   {
     "id": "carnival-dream",
@@ -678,7 +721,8 @@
     "passengers": 4646,
     "crew": 1367,
     "profileM": 60,
-    "color": "#2f8397"
+    "color": "#2f8397",
+    "image": "ship-class-images/carnival_dream_class.png"
   },
   {
     "id": "carnival-magic",
@@ -693,7 +737,8 @@
     "passengers": 4646,
     "crew": 1367,
     "profileM": 60,
-    "color": "#367a8c"
+    "color": "#367a8c",
+    "image": "ship-class-images/carnival_dream_class.png"
   },
   {
     "id": "carnival-breeze",
@@ -708,7 +753,8 @@
     "passengers": 4646,
     "crew": 1367,
     "profileM": 60,
-    "color": "#3d7181"
+    "color": "#3d7181",
+    "image": "ship-class-images/carnival_dream_class.png"
   },
   {
     "id": "carnival-sunshine",
@@ -723,7 +769,8 @@
     "passengers": 3002,
     "crew": 1040,
     "profileM": 55,
-    "color": "#2d7a8a"
+    "color": "#2d7a8a",
+    "image": "ship-class-images/carnival_sunshine_class.png"
   },
   {
     "id": "carnival-sunrise",
@@ -738,7 +785,8 @@
     "passengers": 3002,
     "crew": 1040,
     "profileM": 55,
-    "color": "#34717f"
+    "color": "#34717f",
+    "image": "ship-class-images/carnival_sunshine_class.png"
   },
   {
     "id": "carnival-radiance",
@@ -753,7 +801,8 @@
     "passengers": 3002,
     "crew": 1040,
     "profileM": 55,
-    "color": "#3b6874"
+    "color": "#3b6874",
+    "image": "ship-class-images/carnival_sunshine_class.png"
   },
   {
     "id": "carnival-spirit",
@@ -768,7 +817,8 @@
     "passengers": 2680,
     "crew": 961,
     "profileM": 57,
-    "color": "#2e7380"
+    "color": "#2e7380",
+    "image": "ship-class-images/carnival_spirit_class.png"
   },
   {
     "id": "carnival-pride",
@@ -783,7 +833,8 @@
     "passengers": 2680,
     "crew": 961,
     "profileM": 57,
-    "color": "#356a75"
+    "color": "#356a75",
+    "image": "ship-class-images/carnival_spirit_class.png"
   },
   {
     "id": "carnival-legend",
@@ -798,7 +849,8 @@
     "passengers": 2680,
     "crew": 961,
     "profileM": 57,
-    "color": "#3c616a"
+    "color": "#3c616a",
+    "image": "ship-class-images/carnival_spirit_class.png"
   },
   {
     "id": "carnival-miracle",
@@ -813,7 +865,8 @@
     "passengers": 2680,
     "crew": 961,
     "profileM": 57,
-    "color": "#43585f"
+    "color": "#43585f",
+    "image": "ship-class-images/carnival_spirit_class.png"
   },
   {
     "id": "carnival-luminosa",
@@ -828,7 +881,8 @@
     "passengers": 2700,
     "crew": 930,
     "profileM": 57,
-    "color": "#4a4f55"
+    "color": "#4a4f55",
+    "image": "ship-class-images/carnival_spirit_class.png"
   },
   {
     "id": "carnival-conquest",
@@ -843,7 +897,8 @@
     "passengers": 3980,
     "crew": 1150,
     "profileM": 58,
-    "color": "#2a6f7d"
+    "color": "#2a6f7d",
+    "image": "ship-class-images/carnival_conquest_class.png"
   },
   {
     "id": "carnival-glory",
@@ -858,7 +913,8 @@
     "passengers": 3980,
     "crew": 1150,
     "profileM": 58,
-    "color": "#316673"
+    "color": "#316673",
+    "image": "ship-class-images/carnival_conquest_class.png"
   },
   {
     "id": "carnival-valor",
@@ -873,7 +929,8 @@
     "passengers": 3980,
     "crew": 1150,
     "profileM": 58,
-    "color": "#385d68"
+    "color": "#385d68",
+    "image": "ship-class-images/carnival_conquest_class.png"
   },
   {
     "id": "carnival-liberty",
@@ -888,7 +945,8 @@
     "passengers": 3980,
     "crew": 1150,
     "profileM": 58,
-    "color": "#3f545d"
+    "color": "#3f545d",
+    "image": "ship-class-images/carnival_conquest_class.png"
   },
   {
     "id": "carnival-firenze",
@@ -903,7 +961,8 @@
     "passengers": 4126,
     "crew": 1278,
     "profileM": 61,
-    "color": "#464b52"
+    "color": "#464b52",
+    "image": "ship-class-images/carnival_conquest_class.png"
   },
   {
     "id": "carnival-venezia",
@@ -918,7 +977,8 @@
     "passengers": 4126,
     "crew": 1278,
     "profileM": 61,
-    "color": "#4d4248"
+    "color": "#4d4248",
+    "image": "ship-class-images/carnival_conquest_class.png"
   },
   {
     "id": "carnival-elation",
@@ -933,7 +993,8 @@
     "passengers": 2697,
     "crew": 920,
     "profileM": 52,
-    "color": "#2d6673"
+    "color": "#2d6673",
+    "image": "ship-class-images/carnival_fantasy_class.png"
   },
   {
     "id": "carnival-paradise",
@@ -948,443 +1009,7 @@
     "passengers": 2697,
     "crew": 920,
     "profileM": 52,
-    "color": "#345d68"
-  },
-
-  {
-    "id": "disney-magic",
-    "name": "Disney Magic",
-    "line": "Disney Cruise Line",
-    "type": "Magic",
-    "year": 1998,
-    "lengthM": 300,
-    "beamM": 32,
-    "draftM": 8.2,
-    "grossTonnage": 84000,
-    "passengers": 2700,
-    "crew": 950,
-    "profileM": 58,
-    "color": "#4a9db8"
-  },
-  {
-    "id": "disney-wonder",
-    "name": "Disney Wonder",
-    "line": "Disney Cruise Line",
-    "type": "Magic",
-    "year": 1999,
-    "lengthM": 300,
-    "beamM": 32,
-    "draftM": 8.2,
-    "grossTonnage": 84000,
-    "passengers": 2700,
-    "crew": 950,
-    "profileM": 58,
-    "color": "#438fa9"
-  },
-  {
-    "id": "disney-dream",
-    "name": "Disney Dream",
-    "line": "Disney Cruise Line",
-    "type": "Dream",
-    "year": 2011,
-    "lengthM": 340,
-    "beamM": 38,
-    "draftM": 8.9,
-    "grossTonnage": 129690,
-    "passengers": 4000,
-    "crew": 1458,
-    "profileM": 63,
-    "color": "#3d8199"
-  },
-  {
-    "id": "disney-fantasy",
-    "name": "Disney Fantasy",
-    "line": "Disney Cruise Line",
-    "type": "Dream",
-    "year": 2012,
-    "lengthM": 340,
-    "beamM": 38,
-    "draftM": 8.9,
-    "grossTonnage": 129690,
-    "passengers": 4000,
-    "crew": 1458,
-    "profileM": 63,
-    "color": "#367484"
-  },
-  {
-    "id": "disney-wish",
-    "name": "Disney Wish",
-    "line": "Disney Cruise Line",
-    "type": "Wish",
-    "year": 2022,
-    "lengthM": 341,
-    "beamM": 39,
-    "draftM": 9.5,
-    "grossTonnage": 144000,
-    "passengers": 4000,
-    "crew": 1555,
-    "profileM": 64,
-    "color": "#306777"
-  },
-  {
-    "id": "disney-treasure",
-    "name": "Disney Treasure",
-    "line": "Disney Cruise Line",
-    "type": "Wish",
-    "year": 2024,
-    "lengthM": 341,
-    "beamM": 39,
-    "draftM": 9.5,
-    "grossTonnage": 144000,
-    "passengers": 4000,
-    "crew": 1555,
-    "profileM": 64,
-    "color": "#2a5a69"
-  },
-
-  {
-    "id": "msc-world-europa",
-    "name": "MSC World Europa",
-    "line": "MSC Cruises",
-    "type": "World",
-    "year": 2022,
-    "lengthM": 333,
-    "beamM": 47,
-    "draftM": 9.2,
-    "grossTonnage": 215863,
-    "passengers": 6762,
-    "crew": 2138,
-    "profileM": 69,
-    "color": "#2f7f98"
-  },
-  {
-    "id": "msc-world-america",
-    "name": "MSC World America",
-    "line": "MSC Cruises",
-    "type": "World",
-    "year": 2025,
-    "lengthM": 333,
-    "beamM": 47,
-    "draftM": 9.2,
-    "grossTonnage": 215863,
-    "passengers": 6762,
-    "crew": 2138,
-    "profileM": 69,
-    "color": "#37778d"
-  },
-  {
-    "id": "msc-meraviglia",
-    "name": "MSC Meraviglia",
-    "line": "MSC Cruises",
-    "type": "Meraviglia",
-    "year": 2017,
-    "lengthM": 315,
-    "beamM": 43,
-    "draftM": 8.8,
-    "grossTonnage": 171598,
-    "passengers": 5642,
-    "crew": 1536,
-    "profileM": 65,
-    "color": "#3e6f82"
-  },
-  {
-    "id": "msc-bellissima",
-    "name": "MSC Bellissima",
-    "line": "MSC Cruises",
-    "type": "Meraviglia",
-    "year": 2019,
-    "lengthM": 315,
-    "beamM": 43,
-    "draftM": 8.8,
-    "grossTonnage": 171598,
-    "passengers": 5642,
-    "crew": 1536,
-    "profileM": 65,
-    "color": "#456777"
-  },
-  {
-    "id": "msc-grandiosa",
-    "name": "MSC Grandiosa",
-    "line": "MSC Cruises",
-    "type": "Meraviglia-Plus",
-    "year": 2019,
-    "lengthM": 331,
-    "beamM": 43,
-    "draftM": 8.8,
-    "grossTonnage": 181541,
-    "passengers": 6334,
-    "crew": 1704,
-    "profileM": 67,
-    "color": "#4c5f6c"
-  },
-  {
-    "id": "msc-virtuosa",
-    "name": "MSC Virtuosa",
-    "line": "MSC Cruises",
-    "type": "Meraviglia-Plus",
-    "year": 2021,
-    "lengthM": 331,
-    "beamM": 43,
-    "draftM": 8.8,
-    "grossTonnage": 181541,
-    "passengers": 6334,
-    "crew": 1704,
-    "profileM": 67,
-    "color": "#545860"
-  },
-  {
-    "id": "msc-euribia",
-    "name": "MSC Euribia",
-    "line": "MSC Cruises",
-    "type": "Meraviglia-Plus",
-    "year": 2023,
-    "lengthM": 331,
-    "beamM": 43,
-    "draftM": 8.8,
-    "grossTonnage": 181541,
-    "passengers": 6334,
-    "crew": 1704,
-    "profileM": 67,
-    "color": "#5b5156"
-  },
-  {
-    "id": "msc-seaside",
-    "name": "MSC Seaside",
-    "line": "MSC Cruises",
-    "type": "Seaside",
-    "year": 2017,
-    "lengthM": 323,
-    "beamM": 41,
-    "draftM": 8.6,
-    "grossTonnage": 153516,
-    "passengers": 5331,
-    "crew": 1413,
-    "profileM": 64,
-    "color": "#2f7289"
-  },
-  {
-    "id": "msc-seaview",
-    "name": "MSC Seaview",
-    "line": "MSC Cruises",
-    "type": "Seaside",
-    "year": 2018,
-    "lengthM": 323,
-    "beamM": 41,
-    "draftM": 8.6,
-    "grossTonnage": 153516,
-    "passengers": 5331,
-    "crew": 1413,
-    "profileM": 64,
-    "color": "#36697d"
-  },
-  {
-    "id": "msc-seashore",
-    "name": "MSC Seashore",
-    "line": "MSC Cruises",
-    "type": "Seaside EVO",
-    "year": 2021,
-    "lengthM": 339,
-    "beamM": 41,
-    "draftM": 8.9,
-    "grossTonnage": 170412,
-    "passengers": 5632,
-    "crew": 1648,
-    "profileM": 66,
-    "color": "#3d6072"
-  },
-  {
-    "id": "msc-seascape",
-    "name": "MSC Seascape",
-    "line": "MSC Cruises",
-    "type": "Seaside EVO",
-    "year": 2022,
-    "lengthM": 339,
-    "beamM": 41,
-    "draftM": 8.9,
-    "grossTonnage": 170412,
-    "passengers": 5632,
-    "crew": 1648,
-    "profileM": 66,
-    "color": "#455866"
-  },
-  {
-    "id": "msc-fantasia",
-    "name": "MSC Fantasia",
-    "line": "MSC Cruises",
-    "type": "Fantasia",
-    "year": 2008,
-    "lengthM": 333,
-    "beamM": 38,
-    "draftM": 8.7,
-    "grossTonnage": 137936,
-    "passengers": 4363,
-    "crew": 1370,
-    "profileM": 63,
-    "color": "#315f74"
-  },
-  {
-    "id": "msc-splendida",
-    "name": "MSC Splendida",
-    "line": "MSC Cruises",
-    "type": "Fantasia",
-    "year": 2009,
-    "lengthM": 333,
-    "beamM": 38,
-    "draftM": 8.7,
-    "grossTonnage": 137936,
-    "passengers": 4363,
-    "crew": 1370,
-    "profileM": 63,
-    "color": "#385669"
-  },
-  {
-    "id": "msc-divina",
-    "name": "MSC Divina",
-    "line": "MSC Cruises",
-    "type": "Fantasia",
-    "year": 2012,
-    "lengthM": 333,
-    "beamM": 38,
-    "draftM": 8.7,
-    "grossTonnage": 139072,
-    "passengers": 4363,
-    "crew": 1370,
-    "profileM": 63,
-    "color": "#404e5e"
-  },
-  {
-    "id": "msc-preziosa",
-    "name": "MSC Preziosa",
-    "line": "MSC Cruises",
-    "type": "Fantasia",
-    "year": 2013,
-    "lengthM": 333,
-    "beamM": 38,
-    "draftM": 8.7,
-    "grossTonnage": 139072,
-    "passengers": 4363,
-    "crew": 1370,
-    "profileM": 63,
-    "color": "#474653"
-  },
-  {
-    "id": "msc-musica",
-    "name": "MSC Musica",
-    "line": "MSC Cruises",
-    "type": "Musica",
-    "year": 2006,
-    "lengthM": 293,
-    "beamM": 32,
-    "draftM": 7.8,
-    "grossTonnage": 92627,
-    "passengers": 3223,
-    "crew": 1014,
-    "profileM": 57,
-    "color": "#305c6e"
-  },
-  {
-    "id": "msc-orchestra",
-    "name": "MSC Orchestra",
-    "line": "MSC Cruises",
-    "type": "Musica",
-    "year": 2007,
-    "lengthM": 293,
-    "beamM": 32,
-    "draftM": 7.8,
-    "grossTonnage": 92627,
-    "passengers": 3223,
-    "crew": 1014,
-    "profileM": 57,
-    "color": "#375363"
-  },
-  {
-    "id": "msc-poesia",
-    "name": "MSC Poesia",
-    "line": "MSC Cruises",
-    "type": "Musica",
-    "year": 2008,
-    "lengthM": 293,
-    "beamM": 32,
-    "draftM": 7.8,
-    "grossTonnage": 92627,
-    "passengers": 3223,
-    "crew": 1014,
-    "profileM": 57,
-    "color": "#3e4a58"
-  },
-  {
-    "id": "msc-magnifica",
-    "name": "MSC Magnifica",
-    "line": "MSC Cruises",
-    "type": "Musica",
-    "year": 2010,
-    "lengthM": 293,
-    "beamM": 32,
-    "draftM": 7.8,
-    "grossTonnage": 95128,
-    "passengers": 3223,
-    "crew": 1038,
-    "profileM": 57,
-    "color": "#45414d"
-  },
-  {
-    "id": "msc-lirica",
-    "name": "MSC Lirica",
-    "line": "MSC Cruises",
-    "type": "Lirica",
-    "year": 2003,
-    "lengthM": 275,
-    "beamM": 29,
-    "draftM": 6.8,
-    "grossTonnage": 65591,
-    "passengers": 2679,
-    "crew": 721,
-    "profileM": 53,
-    "color": "#2f5765"
-  },
-  {
-    "id": "msc-opera",
-    "name": "MSC Opera",
-    "line": "MSC Cruises",
-    "type": "Lirica",
-    "year": 2004,
-    "lengthM": 275,
-    "beamM": 29,
-    "draftM": 6.8,
-    "grossTonnage": 65591,
-    "passengers": 2679,
-    "crew": 721,
-    "profileM": 53,
-    "color": "#364e5a"
-  },
-  {
-    "id": "msc-armonia",
-    "name": "MSC Armonia",
-    "line": "MSC Cruises",
-    "type": "Lirica",
-    "year": 2001,
-    "lengthM": 275,
-    "beamM": 29,
-    "draftM": 6.8,
-    "grossTonnage": 65542,
-    "passengers": 2620,
-    "crew": 721,
-    "profileM": 53,
-    "color": "#3d454f"
-  },
-  {
-    "id": "msc-sinfonia",
-    "name": "MSC Sinfonia",
-    "line": "MSC Cruises",
-    "type": "Lirica",
-    "year": 2002,
-    "lengthM": 275,
-    "beamM": 29,
-    "draftM": 6.8,
-    "grossTonnage": 65542,
-    "passengers": 2620,
-    "crew": 721,
-    "profileM": 53,
-    "color": "#443d45"
+    "color": "#345d68",
+    "image": "ship-class-images/carnival_fantasy_class.png"
   }
 ]
