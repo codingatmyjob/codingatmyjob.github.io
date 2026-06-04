@@ -12,7 +12,7 @@
     "totalPersonnel": 323,
     "profileM": 36,
     "color": "#4a90a4",
-    "image": "../ship-class-images/navy_arleigh_burke.png"
+    "image": "/ship-class-images/navy_arleigh_burke.png"
   },
   {
     "id": "ticonderoga-class",
@@ -27,7 +27,7 @@
     "totalPersonnel": 330,
     "profileM": 38,
     "color": "#3b7f91",
-    "image": "../ship-class-images/ticonderoga.png"
+    "image": "/ship-class-images/ticonderoga.png"
   },
   {
     "id": "america-class",
@@ -42,7 +42,7 @@
     "totalPersonnel": 1200,
     "profileM": 56,
     "color": "#2c6f80",
-    "image": "../ship-class-images/navy_america.png"
+    "image": "/ship-class-images/navy_america.png"
   },
   {
     "id": "gerald-r-ford-class",
@@ -57,7 +57,7 @@
     "totalPersonnel": 4539,
     "profileM": 76,
     "color": "#225d6c",
-    "image": "../ship-class-images/navy_gerald_r_ford.png"
+    "image": "/ship-class-images/navy_gerald_r_ford.png"
   },
   {
     "id": "nimitz-class",
@@ -72,7 +72,7 @@
     "totalPersonnel": 5600,
     "profileM": 74,
     "color": "#2a5f70",
-    "image": "../ship-class-images/navy_nimitz.png"
+    "image": "/ship-class-images/navy_nimitz.png"
   },
   {
     "id": "wasp-class",
@@ -87,7 +87,7 @@
     "totalPersonnel": 3080,
     "profileM": 55,
     "color": "#316f82",
-    "image": "../ship-class-images/navy_wasp_class.png"
+    "image": "/ship-class-images/navy_wasp_class.png"
   },
   {
     "id": "san-antonio-class",
@@ -102,7 +102,7 @@
     "totalPersonnel": 1160,
     "profileM": 46,
     "color": "#3b7b90",
-    "image": "../ship-class-images/navy_san antonio.png"
+    "image": "/ship-class-images/navy_san antonio.png"
   },
   {
     "id": "zumwalt-class",
@@ -117,7 +117,7 @@
     "totalPersonnel": 147,
     "profileM": 41,
     "color": "#4588a0",
-    "image": "../ship-class-images/navy_zumwalt.png"
+    "image": "/ship-class-images/navy_zumwalt.png"
   },
   {
     "id": "freedom-class",
@@ -132,7 +132,7 @@
     "totalPersonnel": 75,
     "profileM": 30,
     "color": "#4a90ab",
-    "image": "../ship-class-images/navy_freedom.png"
+    "image": "/ship-class-images/navy_freedom.png"
   },
   {
     "id": "independence-class",
@@ -147,7 +147,7 @@
     "totalPersonnel": 70,
     "profileM": 30,
     "color": "#5598b3",
-    "image": "../ship-class-images/navy_independence.png"
+    "image": "/ship-class-images/navy_independence.png"
   },
   {
     "id": "virginia-class",
@@ -162,7 +162,7 @@
     "totalPersonnel": 132,
     "profileM": 27,
     "color": "#5d9db7",
-    "image": "../ship-class-images/navy_virginia.png"
+    "image": "/ship-class-images/navy_virginia.png"
   },
   {
     "id": "icon-of-the-seas",
@@ -178,7 +178,7 @@
     "crew": 2350,
     "profileM": 74,
     "color": "#1f8ea8",
-    "image": "../ship-class-images/royal_caribbean_icon.png"
+    "image": "/ship-class-images/royal_caribbean_icon.png"
   },
   {
     "id": "utopia-of-the-seas",
@@ -194,7 +194,7 @@
     "crew": 2300,
     "profileM": 72,
     "color": "#2a86a3",
-    "image": "../ship-class-images/royal_caribbean_oasis.png"
+    "image": "/ship-class-images/royal_caribbean_oasis.png"
   },
   {
     "id": "wonder-of-the-seas",
@@ -210,7 +210,7 @@
     "crew": 2300,
     "profileM": 72,
     "color": "#2e7fa8",
-    "image": "../ship-class-images/royal_caribbean_oasis.png"
+    "image": "/ship-class-images/royal_caribbean_oasis.png"
   },
   {
     "id": "symphony-of-the-seas",
@@ -226,7 +226,7 @@
     "crew": 2200,
     "profileM": 71,
     "color": "#327b9d",
-    "image": "../ship-class-images/royal_caribbean_oasis.png"
+    "image": "/ship-class-images/royal_caribbean_oasis.png"
   },
   {
     "id": "harmony-of-the-seas",
@@ -242,7 +242,7 @@
     "crew": 2155,
     "profileM": 71,
     "color": "#356f90",
-    "image": "../ship-class-images/royal_caribbean_oasis.png"
+    "image": "/ship-class-images/royal_caribbean_oasis.png"
   },
   {
     "id": "oasis-of-the-seas",
@@ -258,7 +258,7 @@
     "crew": 2165,
     "profileM": 71,
     "color": "#3a6c89",
-    "image": "../ship-class-images/royal_caribbean_oasis.png"
+    "image": "/ship-class-images/royal_caribbean_oasis.png"
   },
   {
     "id": "allure-of-the-seas",
@@ -274,7 +274,7 @@
     "crew": 2165,
     "profileM": 71,
     "color": "#42657f",
-    "image": "../ship-class-images/royal_caribbean_oasis.png"
+    "image": "/ship-class-images/royal_caribbean_oasis.png"
   },
   {
     "id": "quantum-of-the-seas",
@@ -290,7 +290,7 @@
     "crew": 1500,
     "profileM": 67,
     "color": "#2a8fb0",
-    "image": "../ship-class-images/royal_caribbean_quantum.png"
+    "image": "/ship-class-images/royal_caribbean_quantum.png"
   },
   {
     "id": "anthem-of-the-seas",
@@ -306,7 +306,7 @@
     "crew": 1500,
     "profileM": 67,
     "color": "#2f86a6",
-    "image": "../ship-class-images/royal_caribbean_quantum.png"
+    "image": "/ship-class-images/royal_caribbean_quantum.png"
   },
   {
     "id": "ovation-of-the-seas",
@@ -322,7 +322,7 @@
     "crew": 1500,
     "profileM": 67,
     "color": "#367f9b",
-    "image": "../ship-class-images/royal_caribbean_quantum.png"
+    "image": "/ship-class-images/royal_caribbean_quantum.png"
   },
   {
     "id": "spectrum-of-the-seas",
@@ -338,7 +338,7 @@
     "crew": 1550,
     "profileM": 67,
     "color": "#3d7690",
-    "image": "../ship-class-images/royal_caribbean_quantum.png"
+    "image": "/ship-class-images/royal_caribbean_quantum.png"
   },
   {
     "id": "odyssey-of-the-seas",
@@ -354,7 +354,7 @@
     "crew": 1550,
     "profileM": 67,
     "color": "#446e85",
-    "image": "../ship-class-images/royal_caribbean_quantum.png"
+    "image": "/ship-class-images/royal_caribbean_quantum.png"
   },
   {
     "id": "voyager-of-the-seas",
@@ -370,7 +370,7 @@
     "crew": 1185,
     "profileM": 60,
     "color": "#327c92",
-    "image": "../ship-class-images/royal_caribbean_voyager.png"
+    "image": "/ship-class-images/royal_caribbean_voyager.png"
   },
   {
     "id": "explorer-of-the-seas",
@@ -386,7 +386,7 @@
     "crew": 1185,
     "profileM": 60,
     "color": "#387486",
-    "image": "../ship-class-images/royal_caribbean_voyager.png"
+    "image": "/ship-class-images/royal_caribbean_voyager.png"
   },
   {
     "id": "adventure-of-the-seas",
@@ -402,7 +402,7 @@
     "crew": 1185,
     "profileM": 60,
     "color": "#3f6d7b",
-    "image": "../ship-class-images/royal_caribbean_voyager.png"
+    "image": "/ship-class-images/royal_caribbean_voyager.png"
   },
   {
     "id": "navigator-of-the-seas",
@@ -418,7 +418,7 @@
     "crew": 1185,
     "profileM": 60,
     "color": "#466670",
-    "image": "../ship-class-images/royal_caribbean_voyager.png"
+    "image": "/ship-class-images/royal_caribbean_voyager.png"
   },
   {
     "id": "mariner-of-the-seas",
@@ -434,7 +434,7 @@
     "crew": 1185,
     "profileM": 60,
     "color": "#4b6068",
-    "image": "../ship-class-images/royal_caribbean_voyager.png"
+    "image": "/ship-class-images/royal_caribbean_voyager.png"
   },
   {
     "id": "freedom-of-the-seas",
@@ -450,7 +450,7 @@
     "crew": 1360,
     "profileM": 65,
     "color": "#2f8da8",
-    "image": "../ship-class-images/royal_caribbean_freedom.png"
+    "image": "/ship-class-images/royal_caribbean_freedom.png"
   },
   {
     "id": "liberty-of-the-seas",
@@ -466,7 +466,7 @@
     "crew": 1360,
     "profileM": 65,
     "color": "#37869d",
-    "image": "../ship-class-images/royal_caribbean_freedom.png"
+    "image": "/ship-class-images/royal_caribbean_freedom.png"
   },
   {
     "id": "independence-of-the-seas",
@@ -482,7 +482,7 @@
     "crew": 1360,
     "profileM": 65,
     "color": "#3f7f92",
-    "image": "../ship-class-images/royal_caribbean_freedom.png"
+    "image": "/ship-class-images/royal_caribbean_freedom.png"
   },
   {
     "id": "radiance-of-the-seas",
@@ -498,7 +498,7 @@
     "crew": 859,
     "profileM": 57,
     "color": "#2f7b8e",
-    "image": "../ship-class-images/royal_caribbean_radiance.png"
+    "image": "/ship-class-images/royal_caribbean_radiance.png"
   },
   {
     "id": "brilliance-of-the-seas",
@@ -514,7 +514,7 @@
     "crew": 859,
     "profileM": 57,
     "color": "#377482",
-    "image": "../ship-class-images/royal_caribbean_radiance.png"
+    "image": "/ship-class-images/royal_caribbean_radiance.png"
   },
   {
     "id": "serenade-of-the-seas",
@@ -530,7 +530,7 @@
     "crew": 859,
     "profileM": 57,
     "color": "#3f6d77",
-    "image": "../ship-class-images/royal_caribbean_radiance.png"
+    "image": "/ship-class-images/royal_caribbean_radiance.png"
   },
   {
     "id": "jewel-of-the-seas",
@@ -546,7 +546,7 @@
     "crew": 859,
     "profileM": 57,
     "color": "#46666d",
-    "image": "../ship-class-images/royal_caribbean_radiance.png"
+    "image": "/ship-class-images/royal_caribbean_radiance.png"
   },
   {
     "id": "vision-of-the-seas",
@@ -562,7 +562,7 @@
     "crew": 765,
     "profileM": 54,
     "color": "#2e6f80",
-    "image": "../ship-class-images/royal_caribbean_vision.png"
+    "image": "/ship-class-images/royal_caribbean_vision.png"
   },
   {
     "id": "enchantment-of-the-seas",
@@ -578,7 +578,7 @@
     "crew": 852,
     "profileM": 55,
     "color": "#356874",
-    "image": "../ship-class-images/royal_caribbean_vision.png"
+    "image": "/ship-class-images/royal_caribbean_vision.png"
   },
   {
     "id": "grandeur-of-the-seas",
@@ -594,7 +594,7 @@
     "crew": 760,
     "profileM": 54,
     "color": "#3d6169",
-    "image": "../ship-class-images/royal_caribbean_vision.png"
+    "image": "/ship-class-images/royal_caribbean_vision.png"
   },
   {
     "id": "rhapsody-of-the-seas",
@@ -610,7 +610,7 @@
     "crew": 765,
     "profileM": 54,
     "color": "#455a60",
-    "image": "../ship-class-images/royal_caribbean_vision.png"
+    "image": "/ship-class-images/royal_caribbean_vision.png"
   },
   {
     "id": "mardi-gras",
@@ -626,7 +626,7 @@
     "crew": 1735,
     "profileM": 67,
     "color": "#2a90b0",
-    "image": "../ship-class-images/carnival_excel_class.png"
+    "image": "/ship-class-images/carnival_excel_class.png"
   },
   {
     "id": "carnival-celebration",
@@ -642,7 +642,7 @@
     "crew": 1735,
     "profileM": 67,
     "color": "#3188a5",
-    "image": "../ship-class-images/carnival_excel_class.png"
+    "image": "/ship-class-images/carnival_excel_class.png"
   },
   {
     "id": "carnival-jubilee",
@@ -658,7 +658,7 @@
     "crew": 1735,
     "profileM": 67,
     "color": "#387f9a",
-    "image": "../ship-class-images/carnival_excel_class.png"
+    "image": "/ship-class-images/carnival_excel_class.png"
   },
   {
     "id": "carnival-vista",
@@ -674,7 +674,7 @@
     "crew": 1450,
     "profileM": 62,
     "color": "#2c889f",
-    "image": "../ship-class-images/carnival_vista_class.png"
+    "image": "/ship-class-images/carnival_vista_class.png"
   },
   {
     "id": "carnival-horizon",
@@ -690,7 +690,7 @@
     "crew": 1450,
     "profileM": 62,
     "color": "#337f94",
-    "image": "../ship-class-images/carnival_vista_class.png"
+    "image": "/ship-class-images/carnival_vista_class.png"
   },
   {
     "id": "carnival-panorama",
@@ -706,7 +706,7 @@
     "crew": 1450,
     "profileM": 62,
     "color": "#3a7689",
-    "image": "../ship-class-images/carnival_vista_class.png"
+    "image": "/ship-class-images/carnival_vista_class.png"
   },
   {
     "id": "carnival-dream",
@@ -722,7 +722,7 @@
     "crew": 1367,
     "profileM": 60,
     "color": "#2f8397",
-    "image": "../ship-class-images/carnival_dream_class.png"
+    "image": "/ship-class-images/carnival_dream_class.png"
   },
   {
     "id": "carnival-magic",
@@ -738,7 +738,7 @@
     "crew": 1367,
     "profileM": 60,
     "color": "#367a8c",
-    "image": "../ship-class-images/carnival_dream_class.png"
+    "image": "/ship-class-images/carnival_dream_class.png"
   },
   {
     "id": "carnival-breeze",
@@ -754,7 +754,7 @@
     "crew": 1367,
     "profileM": 60,
     "color": "#3d7181",
-    "image": "../ship-class-images/carnival_dream_class.png"
+    "image": "/ship-class-images/carnival_dream_class.png"
   },
   {
     "id": "carnival-sunshine",
@@ -770,7 +770,7 @@
     "crew": 1040,
     "profileM": 55,
     "color": "#2d7a8a",
-    "image": "../ship-class-images/carnival_sunshine_class.png"
+    "image": "/ship-class-images/carnival_sunshine_class.png"
   },
   {
     "id": "carnival-sunrise",
@@ -786,7 +786,7 @@
     "crew": 1040,
     "profileM": 55,
     "color": "#34717f",
-    "image": "../ship-class-images/carnival_sunshine_class.png"
+    "image": "/ship-class-images/carnival_sunshine_class.png"
   },
   {
     "id": "carnival-radiance",
@@ -802,7 +802,7 @@
     "crew": 1040,
     "profileM": 55,
     "color": "#3b6874",
-    "image": "../ship-class-images/carnival_sunshine_class.png"
+    "image": "/ship-class-images/carnival_sunshine_class.png"
   },
   {
     "id": "carnival-spirit",
@@ -818,7 +818,7 @@
     "crew": 961,
     "profileM": 57,
     "color": "#2e7380",
-    "image": "../ship-class-images/carnival_spirit_class.png"
+    "image": "/ship-class-images/carnival_spirit_class.png"
   },
   {
     "id": "carnival-pride",
@@ -834,7 +834,7 @@
     "crew": 961,
     "profileM": 57,
     "color": "#356a75",
-    "image": "../ship-class-images/carnival_spirit_class.png"
+    "image": "/ship-class-images/carnival_spirit_class.png"
   },
   {
     "id": "carnival-legend",
@@ -850,7 +850,7 @@
     "crew": 961,
     "profileM": 57,
     "color": "#3c616a",
-    "image": "../ship-class-images/carnival_spirit_class.png"
+    "image": "/ship-class-images/carnival_spirit_class.png"
   },
   {
     "id": "carnival-miracle",
@@ -866,7 +866,7 @@
     "crew": 961,
     "profileM": 57,
     "color": "#43585f",
-    "image": "../ship-class-images/carnival_spirit_class.png"
+    "image": "/ship-class-images/carnival_spirit_class.png"
   },
   {
     "id": "carnival-luminosa",
@@ -882,7 +882,7 @@
     "crew": 930,
     "profileM": 57,
     "color": "#4a4f55",
-    "image": "../ship-class-images/carnival_spirit_class.png"
+    "image": "/ship-class-images/carnival_spirit_class.png"
   },
   {
     "id": "carnival-conquest",
@@ -898,7 +898,7 @@
     "crew": 1150,
     "profileM": 58,
     "color": "#2a6f7d",
-    "image": "../ship-class-images/carnival_conquest_class.png"
+    "image": "/ship-class-images/carnival_conquest_class.png"
   },
   {
     "id": "carnival-glory",
@@ -914,7 +914,7 @@
     "crew": 1150,
     "profileM": 58,
     "color": "#316673",
-    "image": "../ship-class-images/carnival_conquest_class.png"
+    "image": "/ship-class-images/carnival_conquest_class.png"
   },
   {
     "id": "carnival-valor",
@@ -930,7 +930,7 @@
     "crew": 1150,
     "profileM": 58,
     "color": "#385d68",
-    "image": "../ship-class-images/carnival_conquest_class.png"
+    "image": "/ship-class-images/carnival_conquest_class.png"
   },
   {
     "id": "carnival-liberty",
@@ -946,7 +946,7 @@
     "crew": 1150,
     "profileM": 58,
     "color": "#3f545d",
-    "image": "../ship-class-images/carnival_conquest_class.png"
+    "image": "/ship-class-images/carnival_conquest_class.png"
   },
   {
     "id": "carnival-firenze",
@@ -962,7 +962,7 @@
     "crew": 1278,
     "profileM": 61,
     "color": "#464b52",
-    "image": "../ship-class-images/carnival_conquest_class.png"
+    "image": "/ship-class-images/carnival_conquest_class.png"
   },
   {
     "id": "carnival-venezia",
@@ -978,7 +978,7 @@
     "crew": 1278,
     "profileM": 61,
     "color": "#4d4248",
-    "image": "../ship-class-images/carnival_conquest_class.png"
+    "image": "/ship-class-images/carnival_conquest_class.png"
   },
   {
     "id": "carnival-elation",
@@ -994,7 +994,7 @@
     "crew": 920,
     "profileM": 52,
     "color": "#2d6673",
-    "image": "../ship-class-images/carnival_fantasy_class.png"
+    "image": "/ship-class-images/carnival_fantasy_class.png"
   },
   {
     "id": "carnival-paradise",
@@ -1010,6 +1010,6 @@
     "crew": 920,
     "profileM": 52,
     "color": "#345d68",
-    "image": "../ship-class-images/carnival_fantasy_class.png"
+    "image": "/ship-class-images/carnival_fantasy_class.png"
   }
 ]
