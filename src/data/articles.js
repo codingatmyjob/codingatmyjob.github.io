@@ -1,14 +1,15 @@
 export const articlesData = [
-  //DRAFT -- NEED LOGO IMAGE, AND NEED REFACTOR SECTION TO FOCUS IN ON TECHNICAL ASPECTS OF THE PROJECT
   {
-    id: 'discord-spotify-tracker',
-    path: 'articles/discord-spotify-tracker.html',
+    id: 'discord-spotify-activity-tracker',
+    path: 'articles/discord-spotify-activity-tracker.html',
     publishedAt: '2026-06-05',
     date: 'June 05, 2026',
-    title: 'Discord Spotify Tracker',
-    description: 'A critique and refactor of an old Discord bot function, breaking down how I\'d write it today.',
-    tags: ['Project', 'Python', 'Discord'],
-    imageLabel: 'Discord Spotify Tracker'
+    title: 'Discord Spotify Activity Tracker',
+    description: 'Critique and rewrite of an old Discord bot command, writing it how I\'d do it today.',
+    tags: ['Project', 'Python', 'Discord', 'Spotify'],
+    imageSrc: 'discord-spotify-activity-tracker.png',
+    imageAlt: 'Discord Spotify Activity Tracker',
+    imageStyle: {width: '85%' }
   },
   {
     id: 'cruise-size-comparisons',

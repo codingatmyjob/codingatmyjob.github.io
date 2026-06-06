@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Discord Spotify Tracker</title>
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+    <div id="binary-bg" aria-hidden="true"></div>
+
+    <main class="article-container">
+        <h1>Discord Spotify Tracker</h1>
+        <div class="meta">
+            <time datetime="2026-06-05">June 05, 2026</time>
+        </div>
+        <div class="tags">
+            <span class="tag">Project</span>
+            <span class="tag">Python</span>
+            <span class="tag">Discord</span>
+            <span class="tag">Spotify</span>
+        </div>
+
+        <article>
+            <h2>Overview</h2>
+            <p>
+                This is going to be a brief code review. First, I think a little bit of backstory is required. This was one of the first serious Python projects
+                I built as a live service; it served a community of thousands of users, it enabled a livestream where outages actually mattered,
+                and it was maintained entirely solo. Here's what happened.
+            </p>
+            <p>
+                What feels like a lifetime ago I was incredibly passionate for music production. One line of effort I pursued was working as a 
+                producer, and managing the discord of a newly formed label. This role I functioned a plethora of skills, but I'm going to focus on the code aspect.
+                I coded an auto-role system, setup the entire discord from scratch, created custom chat filtering (things needed to be removed specific to 
+                the Twitch stream), and coded a custom Spotify activity tracker. There was no pay, there were no perks. I poured hundreds, 
+                if not thousands of hours into this project, and when I resigned the owner didn't care, until I turned off my discord bot. 
+            </p>  
+            <p>
+                That may sound dramatic, but the Discord bot I made ran nearly half the label's Twitch stream, and the Spotify Activity Tracker was the most valuable feature. 
+                During streams, it posted an embed of the current song every 60 seconds, reflecting the activity of a particular user. This way, users receive 
+                live updates on the song being played and reviewed on the Twitch stream, and can interact with these embeds.
+                This was the core feature enabling the side by side Twitch/Discord integration, for users who wanted to listen on Twitch, and chat/make requests 
+                in the discord. I'm going to try and do a modern analysis of the Spotify code block, everything I did wrong, and how I would do it now. 
+            </p>
+
+            <h2>The Original Code</h2>
+            <p>Out of respect, I've removed any information that could identify the Discord, users, or the label I was working with from the code snippet below.
+                Everything else is exactly how I left it in August of 2023.
+            </p>
+            <pre><code>########################### SONG COMMAND #############################
+@bot.command(name="song", aliases=["nowplaying", "current", "np"])
+@commands.has_any_role("Admin", "*", "Content Team")
+async def now_playing(ctx, user: discord.Member = None):
+    if user == None: #Replace None with desired User ID to track activity of
+        user = user
+        pass
+    while spotify.enabled == True:
+        if user.activities:
+            for activity in user.activities:
+                if isinstance(activity, Spotify):
+                    channel = bot.get_channel(123456789012345678) # channel id
+                    embed = discord.Embed(title = "**NOW PLAYING:**", description = "Listening to {}".format(activity.title), color = 0xa22b20)
+                    embed.set_thumbnail(url=activity.album_cover_url)
+                    embed.add_field(name="Artist", value=activity.artist)
+                    embed.add_field(name="Track Link", value=f"[{activity.title}](https://open.spotify.com/track/{activity.track_id})")
+                    embed.set_footer(text="Song started at {}".format(activity.created_at.strftime("%H:%M")))
+                    await channel.send(embed=embed)
+                    print ("Shared current music activity.")
+                    await asyncio.sleep(60)
+                else:
+                    skip
+        else:
+            await asyncio.sleep(60)
+            print ("Bot needs music activity.")
+            continue
+    else:
+        skip
+    </code></pre>
+            <p>
+                This is the code block for the spotify activity tracking of a particular user. 
+                When enabled, it checks every 60 seconds if the user is currently listening to music on Spotify. If they are, it posts an embed with the song information.
+                If they are not, it waits 60 seconds and checks again. This loop continues indefinitely until the bot is disabled. Obviously, there area lot of glaring issues with
+                how this operated, and I'll get into those below.
+            </p>
+
+
+            <h2>Code Review</h2>
+            <p>
+                There are a number of things I would do differently if I were to write this code today:
+                <ul>
+                    <li>The command executes and is modifiable with "$song @user", which is fine, however there is a stream functionality that needs to be manually enabled in order for this to work.</li>
+                    <li>The code uses an infinite loop with asyncio.sleep(60), which is not efficient and can be improved with a Discord presence update event, which also solves the requirement for the manual stream enabling.</li>
+                    <li>There is no error handling or logging, which can lead to issues if the Spotify activity is not available or if there are API errors.</li>
+                    <li>The worst offenders is that "skip" which is used in my else statements does absolutely nothing... I'm actually amazed this runs without breaking.</li>
+                </ul>
+            </p>
+            <p>Below I'm going to try and restructure the code to track a specific user's Twitch stream activity, and when that activity status updates, begin tracking their Spotify activity. 
+                When the stream ends, the spotify tracking would end as well. This way, the Spotify tracking is only active during the streams, which is when users actually care 
+                about the Spotify activity. It also removes multiple unnecessary manual commands, and removes the infinite loop. Instead, the bot listens for presence updates.
+            </p>
+            <p>
+                For error handling; I'm going to add try-except blocks around the Spotify activity retrieval and embed posting, and log any errors that occur. 
+                This way, if there are issues, the bot can handle it gracefully without crashing.
+            </p>
+
+            <h2>Revised Code</h2>
+            <pre><code># ---- SPOTIFY (only active during Twitch stream) ----
+    # re-fetch the member's live state rather than relying on the event snapshot
+    # discord can fire separate presence events for streaming and spotify, so after.activities
+    # may not contain both at the same time — the live check guarantees accuracy
+    member = get_member()
+    live_streaming = is_streaming(member.activities if member else [])
+    print(f"is_streaming (live check): {live_streaming}")
+
+    # don't care about spotify if we're not streaming
+    if not live_streaming:
+        return
+
+    # no spotify activity in the after snapshot, nothing to post
+    if not after_spotify:
+        return
+
+    # track_id comparison prevents posting the same song twice
+    # discord will sometimes fire presence updates for the same song mid-playback
+    if before_spotify and before_spotify.track_id == after_spotify.track_id:
+        return
+
+    channel = await get_channel()
+    if channel is None:
+        print("ERROR: Could not find activity channel.")
+        return
+
+    try:
+        embed = discord.Embed(
+            title="**NOW PLAYING:**",
+            description=f"Listening to {after_spotify.title}",
+            color=0xa22b20
+        )
+        embed.set_thumbnail(url=after_spotify.album_cover_url)
+        embed.add_field(name="Artist", value=after_spotify.artist)
+        embed.add_field(
+            name="Track Link",
+            value=f"[{after_spotify.title}](https://open.spotify.com/track/{after_spotify.track_id})"
+        )
+        embed.set_footer(text=f"Song started at {after_spotify.created_at.strftime('%H:%M')}")
+        await channel.send(embed=embed)
+        print(f"Spotify embed posted: {after_spotify.title} by {after_spotify.artist}")
+
+    except discord.HTTPException as e:
+        print(f"ERROR: Failed to post Spotify embed — {e}")
+    except Exception as e:
+        print(f"ERROR: Unexpected error in Spotify tracking — {e}")
+    </code></pre>
+
+            <p>While rewriting the code, I found something interesting. Every major function from the original Discord bot
+                was passive, meaning it didn't require a user to prompt it to act, but still required a command to function. 
+                For instance, having a command to enable chat filtering, when it could just turn on automatically when a stream starts, etc.
+            </p>
+            <p>
+                With that in mind, I rewrote it so it no longer functions as a Discord "bot"; 
+                instead, it functions as a Discord Client and requires no user interaction. 
+                Everything is presence event driven, so when the user starts streaming, Spotify tracking starts, 
+                and when they stop streaming, Spotify tracking stops.
+            </p>
+            <p>
+                I uploaded the new code to GitHub, so if you're interested in seeing the full context, you can check it out <a href="https://github.com/codingatmyjob/Discord-Spotify-Activity-Tracker">here</a>.
+            </p>
+
+        </article>
+    </main>
+</body>
+</html>
