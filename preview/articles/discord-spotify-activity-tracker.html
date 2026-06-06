@@ -12,7 +12,7 @@
     <main class="article-container">
         <h1>Discord Spotify Tracker</h1>
         <div class="meta">
-            <time datetime="2026-06-05">June 05, 2026</time>
+            <time datetime="2026-06-06">June 06, 2026</time>
         </div>
         <div class="tags">
             <span class="tag">Project</span>
@@ -104,6 +104,9 @@ async def now_playing(ctx, user: discord.Member = None):
             </p>
 
             <h2>Revised Code</h2>
+            <p>
+                I uploaded the new code to GitHub, so if you're interested in seeing the full context, you can check it out <a href="https://github.com/codingatmyjob/Discord-Spotify-Activity-Tracker">here</a>.
+            </p>
             <pre><code># ---- SPOTIFY (only active during Twitch stream) ----
     # re-fetch the member's live state rather than relying on the event snapshot
     # discord can fire separate presence events for streaming and spotify, so after.activities
@@ -161,9 +164,6 @@ async def now_playing(ctx, user: discord.Member = None):
                 instead, it functions as a Discord Client and requires no user interaction. 
                 Everything is presence event driven, so when the user starts streaming, Spotify tracking starts, 
                 and when they stop streaming, Spotify tracking stops.
-            </p>
-            <p>
-                I uploaded the new code to GitHub, so if you're interested in seeing the full context, you can check it out <a href="https://github.com/codingatmyjob/Discord-Spotify-Activity-Tracker">here</a>.
             </p>
 
         </article>
