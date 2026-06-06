@@ -24,8 +24,8 @@ export const articlesData = [
   {
     id: 'discord-spotify-activity-tracker',
     path: 'articles/discord-spotify-activity-tracker.html',
-    publishedAt: '2026-06-05',
-    date: 'June 05, 2026',
+    publishedAt: '2026-06-06',
+    date: 'June 06, 2026',
     title: 'Discord Spotify Activity Tracker',
     description: 'Critique and rewrite of an old Discord bot command, writing it how I\'d do it today.',
     tags: ['Project', 'Python', 'Discord', 'Spotify'],
