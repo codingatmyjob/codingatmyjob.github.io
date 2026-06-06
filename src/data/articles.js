@@ -1,13 +1,24 @@
 export const articlesData = [
+  //DRAFT -- NEED LOGO IMAGE, AND NEED REFACTOR SECTION TO FOCUS IN ON TECHNICAL ASPECTS OF THE PROJECT
   {
-    id: 'cruise-comparisons',
-    path: 'articles/cruise-comparisons.html',
+    id: 'discord-spotify-tracker',
+    path: 'articles/discord-spotify-tracker.html',
+    publishedAt: '2026-06-05',
+    date: 'June 05, 2026',
+    title: 'Discord Spotify Tracker',
+    description: 'A critique and refactor of an old Discord bot function, breaking down how I\'d write it today.',
+    tags: ['Project', 'Python', 'Discord'],
+    imageLabel: 'Discord Spotify Tracker'
+  },
+  {
+    id: 'cruise-size-comparisons',
+    path: 'articles/cruise-size-comparisons.html',
     publishedAt: '2026-06-02',
     date: 'June 02, 2026',
-    title: 'Cruise Comparisons',
-    description: 'An interactive ship comparison project with a searchable dataset, and side by side ship view with tooltips.',
+    title: 'Cruise Size Comparisons',
+    description: 'An interactive ship size comparison project with a searchable dataset, and ship view with tooltips.',
     tags: ['Project', 'JavaScript', 'WebApp'],
-    imageLabel: 'Cruise Comparisons'
+    imageLabel: 'Cruise Size Comparisons'
   },
   // // DRAFT -- NEED TO CREATE SMALL DEMO OR MAKE A REPO FOR VISUAL AID
   // {
@@ -73,7 +84,7 @@ export const articlesData = [
     date: 'May 01, 2026',
     title: 'Creating a Pokemon Stock Bot',
     description: 'How much work does a scalper put into stock checks for Pokemon products?',
-    tags: ['Project', 'Python', 'Discord', 'Automation', 'API'],
+    tags: ['Project', 'Python', 'API', 'Discord', 'Automation'],
     imageSrc: 'pokestock.png',
     imageAlt: 'Creating a Pokemon Stock Bot',
     imageStyle: { height: '90%', width: '90%' }
