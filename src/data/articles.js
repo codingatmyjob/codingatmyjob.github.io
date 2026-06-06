@@ -1,4 +1,26 @@
 export const articlesData = [
+  // DRAFT -- NEED TO CREATE SMALL DEMO OR MAKE A REPO FOR VISUAL AID
+  {
+    id: 'efficient-html-maps-with-pydeck',
+    path: 'articles/efficient-html-maps-with-pydeck.html',
+    publishedAt: 'DRAFT',
+    date: 'DRAFT',
+    title: 'Efficient HTML Maps with Pydeck',
+    description: 'Diving into efficient HTML map rendering with Pydeck over Folium (Leaflet) style HTML rendering.',
+    tags: ['Notes', 'Python', 'Maps', 'Pydeck'],
+    imageLabel: 'Efficient HTML Maps with Pydeck'
+  },
+    // DRAFT -- NEED TO WIRE SERVER COMPONENT TO SERVE THIS STILL
+  {
+    id: 'noaa-tides-llm-chatbot-demo',
+    path: 'articles/noaa-tides-llm-chatbot-demo.html',
+    publishedAt: 'DRAFT',
+    date: 'DRAFT',
+    title: 'NOAA Tides LLM Chatbot Demo',
+    description: 'A Groq-powered chatbot demo that queries NOAA data using tool calling and a Node.js backend on Fly.io.',
+    tags: ['Demo', 'LLM', 'Node.js', 'API'],
+    imageLabel: 'NOAA Tides LLM Chatbot Demo'
+  },
   {
     id: 'discord-spotify-activity-tracker',
     path: 'articles/discord-spotify-activity-tracker.html',
@@ -9,7 +31,7 @@ export const articlesData = [
     tags: ['Project', 'Python', 'Discord', 'Spotify'],
     imageSrc: 'discord-spotify-activity-tracker.png',
     imageAlt: 'Discord Spotify Activity Tracker',
-    imageStyle: {width: '85%' }
+    imageStyle: {width: '85%'}
   },
   {
     id: 'cruise-size-comparisons',
@@ -21,28 +43,6 @@ export const articlesData = [
     tags: ['Project', 'JavaScript', 'WebApp'],
     imageLabel: 'Cruise Size Comparisons'
   },
-  // // DRAFT -- NEED TO CREATE SMALL DEMO OR MAKE A REPO FOR VISUAL AID
-  // {
-  //   id: 'efficient-html-maps-with-pydeck',
-  //   path: 'articles/efficient-html-maps-with-pydeck.html',
-  //   publishedAt: 'DRAFT',
-  //   date: 'DRAFT',
-  //   title: 'Efficient HTML Maps with Pydeck',
-  //   description: 'Diving into efficient HTML map rendering with Pydeck over Folium (Leaflet) style HTML rendering.',
-  //   tags: ['Notes', 'Python', 'Maps', 'Pydeck'],
-  //   imageLabel: 'Efficient HTML Maps with Pydeck'
-  // },
-  //   // DRAFT -- NEED TO WIRE SERVER COMPONENT TO SERVE THIS STILL
-  // {
-  //   id: 'noaa-tides-llm-chatbot-demo',
-  //   path: 'articles/noaa-tides-llm-chatbot-demo.html',
-  //   publishedAt: 'DRAFT',
-  //   date: 'DRAFT',
-  //   title: 'NOAA Tides LLM Chatbot Demo',
-  //   description: 'A Groq-powered chatbot demo that queries NOAA data using tool calling and a Node.js backend on Fly.io.',
-  //   tags: ['Demo', 'LLM', 'Node.js', 'API'],
-  //   imageLabel: 'NOAA Tides LLM Chatbot Demo'
-  // },
   {
     id: 'passing-oci-foundations-associate',
     path: 'articles/passing-oci-foundations-associate.html',
