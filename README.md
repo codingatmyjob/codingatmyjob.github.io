@@ -24,7 +24,7 @@ There are two environments, both hosted on GitHub Pages:
 | Production | `codingatmyjob.github.io/` | `main` | `npm run deploy` |
 | Preview | `codingatmyjob.github.io/preview/` | `preview` | push to `preview` branch |
 
-**Production** — deploys manually via the `gh-pages` npm package:
+**Production** - deploys manually via the `gh-pages` npm package:
 
 ```bash
 npm run deploy
@@ -32,4 +32,4 @@ npm run deploy
 
 This runs `vite build` (base `/`) then publishes `dist/` to the `gh-pages` branch.
 
-**Preview** — deploys automatically via GitHub Actions (`.github/workflows/deploy-preview.yml`) on any push to the `preview` branch. The build uses `--base /preview/` so all assets resolve correctly under the subdirectory. The sidebar includes a toggle to switch between environments at runtime.
+**Preview** - deploys automatically via GitHub Actions (`.github/workflows/deploy-preview.yml`) on any push to the `preview` branch. The build uses `--base /preview/` so all assets resolve correctly under the subdirectory. The sidebar includes a toggle to switch between environments at runtime.

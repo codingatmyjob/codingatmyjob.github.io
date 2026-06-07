@@ -6,7 +6,7 @@ Styling: Plain CSS
 
 Code Rules
 
-Components render inside <article> — never use <body> or <main> as root
+Components render inside <article>; never use <body> or <main> as root
 Use functional components + hooks only; no class components
 Prefer named exports
 Vite aliased imports: @/ → src/

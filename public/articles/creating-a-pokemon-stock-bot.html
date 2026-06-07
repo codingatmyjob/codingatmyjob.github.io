@@ -47,11 +47,11 @@
 
             <h2>How Target's Inventory API Works</h2>
             <p>
-                Target's internal API, <strong>redsky.target.com</strong> — is pretty cool. Every time you load a product page,
+                Target's internal API, <strong>redsky.target.com</strong> is pretty cool. Every time you load a product page,
                 your browser hits these endpoints in the background. The API requires a <code>key</code> query parameter, but it is not a
                 developer token. It behaves like an app-level value used by Target's frontend and appears in page HTML as a Next.js
-                <code>buildId</code>. That value rotates when Target deploys a new build, and during rollout windows more than one recent key
-                can sometimes work simultaneously. Extracting it was tricky to figure out at first but strangely straightforward:
+                <code>buildId</code>. That value rotates each time Target deploys a new build. Extracting it was tricky to figure out 
+                at first but strangely straightforward using a bit of regex to pinpoint the buildId:
             </p>
             <pre><code>resp = await http.get("https://www.target.com", headers={"User-Agent": ...})
                         m = re.search(r'"buildId"\s*:\s*"([0-9a-f]{40})', resp.text)
@@ -63,8 +63,8 @@
 
             <h2>Browser Impersonation</h2>
             <p>
-                Target's API doesn't serve responses to bare <code>httpx</code> clients. The requests need to look
-                like they came from a real browser — and I chose Chrome on Windows (just easy to do, not for any actual reason). 
+                Target's API doesn't serve responses to <code>httpx</code> clients. The requests need to look
+                like they came from a real browser, and I chose to emulate Chrome on Windows (just easy to do, not for any actual reason). 
                 That means spoofing a full set of headers:
             </p>
             <pre><code>TARGET_HEADERS = {
