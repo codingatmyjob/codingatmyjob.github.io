@@ -3,14 +3,14 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>Discord Spotify Tracker</title>
+    <title>Discord Spotify Activity Tracker</title>
     <link rel="stylesheet" href="../style.css">
 </head>
 <body>
     <div id="binary-bg" aria-hidden="true"></div>
 
     <main class="article-container">
-        <h1>Discord Spotify Tracker</h1>
+        <h1>Discord Spotify Activity Tracker</h1>
         <div class="meta">
             <time datetime="2026-06-06">June 06, 2026</time>
         </div>
@@ -110,7 +110,7 @@ async def now_playing(ctx, user: discord.Member = None):
             <pre><code># ---- SPOTIFY (only active during Twitch stream) ----
     # re-fetch the member's live state rather than relying on the event snapshot
     # discord can fire separate presence events for streaming and spotify, so after.activities
-    # may not contain both at the same time — the live check guarantees accuracy
+    # may not contain both at the same time, the live check guarantees accuracy
     member = get_member()
     live_streaming = is_streaming(member.activities if member else [])
     print(f"is_streaming (live check): {live_streaming}")
@@ -150,9 +150,9 @@ async def now_playing(ctx, user: discord.Member = None):
         print(f"Spotify embed posted: {after_spotify.title} by {after_spotify.artist}")
 
     except discord.HTTPException as e:
-        print(f"ERROR: Failed to post Spotify embed — {e}")
+        print(f"ERROR: Failed to post Spotify embed - {e}")
     except Exception as e:
-        print(f"ERROR: Unexpected error in Spotify tracking — {e}")
+        print(f"ERROR: Unexpected error in Spotify tracking - {e}")
     </code></pre>
 
             <p>While rewriting the code, I found something interesting. Every major function from the original Discord bot

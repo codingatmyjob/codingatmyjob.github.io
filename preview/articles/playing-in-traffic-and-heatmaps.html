@@ -6,21 +6,6 @@
   <title>Playing in Traffic and Heatmaps</title>
   <link rel="stylesheet" href="../style.css" />
   <style>
-/* ── Feature list ───────────────────────────────────────────────────────── */
-.feature-list{
-  list-style:none;padding:0;margin:0 0 18px 0;
-  display:flex;flex-direction:column;gap:10px;
-}
-.feature-list li{
-  display:flex;align-items:flex-start;gap:12px;
-  background:rgba(0,255,65,0.04);border:1px solid var(--border);
-  border-radius:8px;padding:12px 16px;
-  color:rgba(255,255,255,0.85);font-size:15px;
-}
-[data-theme="light"] .feature-list li{color:var(--text-primary);}
-.feature-list li .feat-icon{flex-shrink:0;color:var(--accent);font-size:18px;margin-top:1px;}
-.feature-list li strong{color:var(--text-primary);}
-
 /* ── Timeline demo widget ───────────────────────────────────────────────── */
 .timeline-demo{
   margin:24px 0 8px 0;
@@ -120,8 +105,8 @@
 }
 .api-group-label:first-child{margin-top:4px;}
 
-.article-container article ul{
-  margin:0px !important;
+ul.api-list {
+  margin-left: 0px !important;
 }
 
   </style>
@@ -155,32 +140,32 @@
       <p>
         Inspired by the Google Maps API, I thought it would be
         really cool to try and create a hex oriented activity heatmap (with a last second traffic congestion overlay).
-        From what I could find, the Maps API didn't have anything readily available to accomplish this task, so instead I simulated congestion by
-        generating a per-hex hourly activity curve using commute-shaped Gaussian peaks (morning/evening),
-        overnight dips, and included some randomness so each hex was unique. Then I factored in a
-        road-density baseline from OpenStreetMap to make it look plausible.
+        From what I could find, the Maps API didn't have anything readily available to accomplish this task. Instead, I simulated congestion by
+        generating a per-hex hourly activity curve using commute-shaped Gaussian peaks (morning/evening travel),
+        overnight dips, and included some pseudo-randomness. Lastly, I factored in a road-density baseline from OpenStreetMap to make it look 
+        plausible; More roads = busier. This was not the case.
       </p>
       <p>
-        After playing around with this, trying to tweak it and make it look legitimate (why is a neighborhood more
-        active than the busiest intersection in town??), I did some research
-        (probably should have started with this) and found that not only does TomTom still exist, but they have
-        an awesome API that provides aggregated historical traffic data at a per-street level.
-        After finally determining the scope of my project I finalized the requirements: A semi-accurate
+        After trying to tweak my algorithm to try and make it look legitimate (why is a neighborhood more
+        active than the busiest intersection in town... screw you OSM), I did some more research
+        and found that not only does TomTom still exist, but they have
+        an API that provides aggregated historical traffic data at a per-street level.
+        With this, I then finalized the requirements: A semi-accurate
         hexagon-based activity heatmap, with a historical traffic overlay, and a slider at the bottom to visualize
         the time of day... with a few other scope creep inclusions like per-hex tooltips, ZIP code search, etc.
       </p>
       <p>
         Below is the documentation of the project, what it does, and my personal experience with each API and library I used. I documented the cost
-        of each API/library (we're broke out here), the ease of use, and finally a brief explanation
-        of how it was used or integrated into the overall project.
+        of each API/library (we're broke out here), the ease of use, and finally a brief explanation of how it was used or integrated into the overall project.
       </p>
 
       <h2>What the App Does</h2>
       <p>
         The app renders a live Google Maps basemap overlaid with an Uber H3 hexagonal grid. Each hex is colored
-        on a gradient from cool blue (low activity) to hot red (high congestion) based on a
+        on a gradient from cool blue (low activity) to hot red (high activity) based on a
         traffic profile unique to that hex's location and road density. On top of the hex layer,
-        TomTom road segments are drawn in orange and red wherever historical speed data shows significant congestion.
+        TomTom road segments are drawn in orange and red wherever historical speed data shows significant congestion, 
+        we exclude TomTom segments with low congestion.
       </p>
       <p>
         The four main features are:
@@ -202,11 +187,10 @@
       </ul>
 
       <p>
-        The demo was created capturing static 
-        images with the slider hidden on the actual webapp, injecting those images here, and then reattaching the slider. 
-        The time slider at the bottom advances the hour from 00:00 to 23:00. Every hex and road
-        segment re-evaluates its color at the selected hour, with smooth transitions between frames.
-        Use the slider below to view a full day of traffic. 
+        The interactive demo was created capturing static images with the slider hidden on the actual webapp, injecting 
+        those images here, and then reattaching a slider. The time slider at the bottom advances hourly
+        from 00:00 to 23:00. Every hex and road segment re-evaluates its color at the selected hour, with smooth 
+        transitions between frames. Use the slider below to view a full day of traffic. 
       </p>
 
       <!-- ── Interactive 24-hour timeline ── -->
@@ -233,32 +217,32 @@
 
       <h2>The Fake Traffic Problem</h2>
       <p>
-        Most of what the time slider shows for the hex grid is synthesized. It resembles 
-        true commute patterns using Gaussian morning/evening peaks, overnight dips, and per-hex noise. 
-        Hexes near road corridors
+        What the time slider shows for the hex grid is entirely synthesized. It resembles 
+        plausible activity patterns, but doesn't translate to real world traffic. Hexes near road corridors
         got a slight boost in activity score, and hexes far from any road stayed low. It felt spatially plausible,
-        but still a mathematical approximation. 
+        but still a mathematical approximation. Some of the flaws showed early on with neighborhoods that have many roads showing "high activity" 
+        due to the road density, while the highways adjacent to them were lower even though they had more through traffic.
       </p>
       <p>
-        Per-street historical traffic data didn't exist for free at the scale
+        Additionally, historical traffic data didn't exist for free at the scale
         I needed. TomTom's statistics endpoint has a daily limit of 2,500 daily requests, Google doesn't expose
         anything comparable. The hexes that show TomTom segments contain real data; everything else is
-        an approximation based on the hex's road density and a synthetic traffic curve. I blended the TomTom 
-        congestion score on top of the baseline to get a final congestion score for each hex, which is what drove the color.
+        an approximation. I blended the TomTom congestion score on top of the synthesized baseline to get a final 
+        congestion score for each hex, and this combination is what drove the color.
       </p>
 
       <h2>If I Could Do Something Differently</h2>
       <p>
-        I went about fulfilling my requirements wrong, and backwards. I had initially tried to establish an activity heatmap with
-        synthesized data, and then later decided to layer historical traffic data (what I didn't realize was basically
-        activity) on top. In retrospect, the historical traffic data TomTom provided was the closest thing
-        to an activity heatmap I could use as a starting point for free.
+        I went about this project backwards. I initially tried to establish an activity heatmap with
+        synthesized data, and later layered historical traffic data (what I didn't realize was real activity) 
+        on top. In retrospect, the historical traffic data TomTom provided was the closest thing
+        to an activity heatmap I could use as a starting point.
       </p>
       <p>
         I should have started with the TomTom historical data at a small scale, then layered my hexagons and done the heatmap calculations based on
-        traffic, rather than the other way around. This would have provided a consistent baseline across all types of areas
-        and infrastructure. Hex grid coloring could have easily coincided
-        with real traffic congestion patterns, and resembled a real activity heatmap instead of an approximation.
+        traffic. This would have provided a consistent baseline across all types of areas
+        and infrastructure. Hex grid coloring would have then coincided with real traffic congestion patterns. In addition to this, starting at a smaller scale
+        would have saved me days, because I kept running out of TomTom API calls while testing.
       </p>
 
       <div class="apis-section">
@@ -340,7 +324,7 @@
 
           <li class="api-item">
             <div class="api-item-header">
-              <span class="api-item-name">TomTom Flow Segment Data — Real-Time</span>
+              <span class="api-item-name">TomTom Flow Segment Data - Real-Time</span>
               <div class="api-item-meta">
                 <span class="api-meta-pill">Cost: Included in 2,500/day free tier</span>
                 <span class="api-meta-pill">Ease of use: Easy</span>
@@ -355,7 +339,7 @@
 
           <li class="api-item">
             <div class="api-item-header">
-              <span class="api-item-name">TomTom Flow Segment Data — Statistics (Historical)</span>
+              <span class="api-item-name">TomTom Flow Segment Data - Statistics (Historical)</span>
               <div class="api-item-meta">
                 <span class="api-meta-pill">Cost: Included in 2,500/day free tier</span>
                 <span class="api-meta-pill">Ease of use: Medium*</span>
@@ -382,7 +366,7 @@
 
           <li class="api-item">
             <div class="api-item-header">
-              <span class="api-item-name">OpenStreetMap — Overpass API</span>
+              <span class="api-item-name">OpenStreetMap - Overpass API</span>
               <div class="api-item-meta">
                 <span class="api-meta-pill">Cost: Free</span>
                 <span class="api-meta-pill">Ease of use: Medium</span>
@@ -403,7 +387,7 @@
 
           <li class="api-item">
             <div class="api-item-header">
-              <span class="api-item-name">H3 — Uber's Hexagonal Grid</span>
+              <span class="api-item-name">H3 - Uber's Hexagonal Grid</span>
               <div class="api-item-meta">
                 <span class="api-meta-pill">Cost: Open-source (free)</span>
                 <span class="api-meta-pill">Ease of use: Easy</span>
