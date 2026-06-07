@@ -149,7 +149,7 @@
             <div class="demo-section">
                 <div class="chat-window" id="chat-window">
                     <div class="chat-msg assistant">
-                        <div class="chat-bubble">Hey! Ask me about tides anywhere along the U.S. coast — I can look up predictions, high/low times, and current water levels using real NOAA data.</div>
+                        <div class="chat-bubble">Hey! Ask me about tides anywhere along the U.S. coast. I can look up predictions, high/low times, and current water levels using real NOAA data.</div>
                     </div>
                 </div>
                 <div class="suggested-prompts" id="suggested-prompts">
@@ -180,15 +180,15 @@
                 The backend then fetches the data and sends it back to Groq to generate the final response which is streamed back to the user on the frontend.</p>
             <pre><code>  Browser (GitHub Pages)
           ↓ POST /chat
-  Fly.io — Node.js backend
+  Fly.io - Node.js backend
           ↓ message
   Groq (LLaMA 3)
           ↓ "call get_tides(station, date)"
-  Fly.io — Node.js backend
+  Fly.io - Node.js backend
           ↓ fetch
   NOAA API
           ↓ data
-  Fly.io — Node.js backend
+  Fly.io - Node.js backend
           ↓ data + original message
   Groq (LLaMA 3)
           ↓ streamed response
