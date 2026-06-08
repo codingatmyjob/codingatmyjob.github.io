@@ -41,7 +41,7 @@
                 </tbody>
             </table>
 
-            <img src="/artificial-images/artificial_pwned.png" class="article-image-img">
+            <img src="/images/artificial-images/artificial_pwned.png" class="article-image-img">
 
             <p>Environment: Kali Linux on VirtualBox.</p>
             <ul>
@@ -57,7 +57,7 @@ nmap -sC -sV 10.10.11.74
 # Adding to /etc/hosts
 echo 10.10.11.74 artificial.htb | sudo tee -a /etc/hosts</code></pre>
 
-            <img src="/artificial-images/artificial_recon.png" class="article-image-img">
+            <img src="/images/artificial-images/artificial_recon.png" class="article-image-img">
 
             <p>Things of note:</p>
             <ul>
@@ -98,7 +98,7 @@ nc -lvnp 4444
 # Making the shell a little easier to understand
 script -qc /bin/bash /dev/null</code></pre>
 
-            <img src="/artificial-images/artificial_compile.png" class="article-image-img">
+            <img src="/images/artificial-images/artificial_compile.png" class="article-image-img">
 
             <p>Notes on foothold:</p>
             <ul>
@@ -146,9 +146,9 @@ ss -tulnp # Ran on tgt machine and found restic backup service running on port 9
 ssh gael@10.10.11.74 -L 9898:127.0.0.1:9898 # Setting up port forwarding to access restic backup service locally
 # We can now access http://localhost:9898/ locally which prompts us for a user/pass</code></pre>
 
-            <img src="/artificial-images/artificial_creds.png" class="article-image-img">
+            <img src="/images/artificial-images/artificial_creds.png" class="article-image-img">
 
-            <img src="/artificial-images/artificial_backrest_service.png" class="article-image-img">
+            <img src="/images/artificial-images/artificial_backrest_service.png" class="article-image-img">
 
             <p>Mental break</p>
             <ul>
@@ -188,7 +188,7 @@ cd restore
 cd root
 cat root.txt</code></pre>
 
-            <img src="/artificial-images/artificial_root.png" class="article-image-img">
+            <img src="/images/artificial-images/artificial_root.png" class="article-image-img">
 
             <p>Key takeaways:</p>
             <ul>
