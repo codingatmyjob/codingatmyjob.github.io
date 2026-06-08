@@ -12,6 +12,10 @@ import SearchBar from './components/SearchBar'
 import { articlesData } from './data/articles'
 
 const ROWS_PER_PAGE = 8
+const SIDEBAR_ROUTE_ALIASES = {
+  '/About': 'sidebar/About.html',
+  '/tag-guide': 'sidebar/tag-guide.html'
+}
 
 // Calculate items per page based on grid columns (responsive)
 const getItemsPerPage = ()=>{
@@ -220,9 +224,16 @@ export default function App(){
         setArticlePath(fullPath)
         return
       }
+
+      // Backward-compatible aliases for moved sidebar pages.
+      const aliasedPath = SIDEBAR_ROUTE_ALIASES[hash]
+      if(aliasedPath){
+        setArticlePath(aliasedPath)
+        return
+      }
       
-      // Handle root-level files like About-Me
-      const rootMatch = hash.match(/^\/([^\/]+)$/)
+      // Handle non-article static pages, including nested paths like sidebar/About.
+      const rootMatch = hash.match(/^\/(.+)$/)
       if(rootMatch){
         const filename = rootMatch[1]
         const fullPath = filename.endsWith('.html') ? filename : `${filename}.html`

@@ -29,9 +29,9 @@ export const articlesData = [
     title: 'Discord Spotify Activity Tracker',
     description: 'Critique and rewrite of an old Discord bot command, writing it how I\'d do it today.',
     tags: ['Project', 'Python', 'Discord', 'Spotify'],
-    imageSrc: 'discord-spotify-activity-tracker.png',
+    imageSrc: 'images/cover/discord-spotify-activity-tracker.png',
     imageAlt: 'Discord Spotify Activity Tracker',
-    imageStyle: {width: '85%'}
+    imageStyle: {height: '85%', width: '85%'}
   },
   {
     id: 'cruise-size-comparisons',
@@ -51,7 +51,7 @@ export const articlesData = [
     title: 'Passing OCI Foundations Associate',
     description: 'An OCI Foundations Associate review, and opinions on the Oracle course.',
     tags: ['Cert', 'Cloud'],
-    imageSrc: 'OCI25FNDCFA.png',
+    imageSrc: 'images/cover/OCI25FNDCFA.png',
     imageAlt: 'Passing OCI Foundations Associate'
   },
   {
@@ -62,7 +62,7 @@ export const articlesData = [
     title: 'Typeahead Demo',
     description: 'An interactive typeahead/search suggestion demo with real-time data filtering and visual highlights.',
     tags: ['Demo', 'JavaScript', 'WebApp'],
-    imageSrc: 'typeahead.png',
+    imageSrc: 'images/cover/typeahead.png',
     imageAlt: 'Typeahead Demo',
     imageStyle: { height: '85%', width: '85%' }
   },
@@ -74,7 +74,7 @@ export const articlesData = [
     title: 'Playing in Traffic and Heatmaps',
     description: 'Building a hex heatmap with Maps, TomTom, OpenStreetMap, and H3.',
     tags: ['Project', 'JavaScript', 'WebApp', 'API', 'Maps'],
-    imageSrc: '/screenshots/hero.png',
+    imageSrc: 'images/cover/hero.png',
     imageAlt: 'Playing in Traffic and Heatmaps',
     imageStyle: { height: '85%', width: '100%' }
   },
@@ -86,7 +86,7 @@ export const articlesData = [
     title: 'Creating a Pokemon Stock Bot',
     description: 'How much work does a scalper put into stock checks for Pokemon products?',
     tags: ['Project', 'Python', 'API', 'Discord', 'Automation'],
-    imageSrc: 'pokestock.png',
+    imageSrc: 'images/cover/pokestock.png',
     imageAlt: 'Creating a Pokemon Stock Bot',
     imageStyle: { height: '90%', width: '90%' }
   },
@@ -98,7 +98,7 @@ export const articlesData = [
     title: 'VirtualBox Home Lab Setup',
     description: 'Building a home lab with VMs for hands-on penetration testing, exploit analysis, and traffic monitoring.',
     tags: ['Project', 'VM', 'SIEM', 'Security', 'Networking'],
-    imageSrc: 'VirtualBox_logo.png',
+    imageSrc: 'images/cover/VirtualBox_logo.png',
     imageAlt: 'VirtualBox Home Lab Setup',
     imageStyle: { height: '85%', width: '85%' }
   },
@@ -130,7 +130,7 @@ export const articlesData = [
     title: 'How I passed CompTIA Security+ SY0-701',
     description: 'A Security+ review, glimpse into my study plan, resources used, and testing skills that helped me pass.',
     tags: ['Cert', 'Security'],
-    imageSrc: 'secplus.png',
+    imageSrc: 'images/cover/secplus.png',
     imageAlt: 'How I passed CompTIA Security+',
     imageClassName: 'article-card-image--default'
   },
@@ -142,7 +142,7 @@ export const articlesData = [
     title: 'How I passed CompTIA Network+ N10-009',
     description: 'A Network+ review, including study resources used, and exam-day tips that helped me pass.',
     tags: ['Cert', 'Networking'],
-    imageSrc: 'netplus.png',
+    imageSrc: 'images/cover/netplus.png',
     imageAlt: 'How I passed CompTIA Network+',
     imageClassName: 'article-card-image--default'
   }

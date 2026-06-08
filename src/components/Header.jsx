@@ -59,7 +59,7 @@ export default function Header({ onOpenArticle, menuOpen, onMenuToggle }){
       window.dispatchEvent(new CustomEvent('returnHome'));
     } else if(action === 'about'){
       // Open About Me as an article
-      if(onOpenArticle) onOpenArticle('About.html');
+      if(onOpenArticle) onOpenArticle('sidebar/About.html');
     }
   }
 

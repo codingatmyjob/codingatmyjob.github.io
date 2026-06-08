@@ -778,6 +778,12 @@ const submergeOffset = shipDraftOffset(scale.belowPx, scale.abovePx, WAVE_LINE_F
                 const crew = Number(ship.crew);
                 const totalPersonnel = Number(ship.totalPersonnel);
                 const isMilitary = ship.line === 'US Navy';
+                const rawImage = typeof ship.image === 'string' ? ship.image.trim() : '';
+                const normalizedImage = !rawImage
+                    ? ''
+                    : (rawImage.startsWith('http') || rawImage.startsWith('/'))
+                        ? rawImage
+                        : `/images/${rawImage.replace(/^images\//, '')}`;
                 return {
                     ...ship,
                     lengthM: Number(ship.lengthM),
@@ -791,7 +797,8 @@ const submergeOffset = shipDraftOffset(scale.belowPx, scale.abovePx, WAVE_LINE_F
                         : (isMilitary
                             ? (Number.isFinite(passengers) ? passengers : (Number.isFinite(crew) ? crew : 0))
                             : 0),
-                    profileM: Number(ship.profileM || Math.max(42, Math.round(Number(ship.lengthM) * 0.18)))
+                    profileM: Number(ship.profileM || Math.max(42, Math.round(Number(ship.lengthM) * 0.18))),
+                    image: normalizedImage
                 };
             }
 
@@ -1213,7 +1220,7 @@ const submergeOffset = shipDraftOffset(scale.belowPx, scale.abovePx, WAVE_LINE_F
             async function loadShips() {
                 // Load ship dataset, normalize records, then render the interface.
                 try {
-                    const response = await fetch('data/cruise-comparisons.json', { cache: 'no-store' });
+                    const response = await fetch('/data/cruise-comparisons.json', { cache: 'no-store' });
                     if (!response.ok) throw new Error(String(response.status));
                     const data = await response.json();
                     state.ships = Array.isArray(data)

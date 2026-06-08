@@ -1,5 +1,10 @@
 import React, { useEffect } from 'react'
 
+const SIDEBAR_HASH_ALIASES = {
+  'sidebar/About.html': '/About',
+  'sidebar/tag-guide.html': '/tag-guide'
+}
+
 export default function ArticleView({ path, onClose }){
   useEffect(()=>{
     const articlesView = document.getElementById('articles-view')
@@ -114,7 +119,8 @@ export default function ArticleView({ path, onClose }){
         }
 
         const cleanSlug = (path || '').replace(/^articles\//,'').replace(/\.html$/,'')
-        const hashPath = path.startsWith('articles/') ? `/articles/${cleanSlug}` : `/${cleanSlug}`
+        const hashPath = SIDEBAR_HASH_ALIASES[path]
+          || (path.startsWith('articles/') ? `/articles/${cleanSlug}` : `/${cleanSlug}`)
         window.location.hash = `#${hashPath}`
         window.scrollTo({ top: 0, behavior: 'instant' })
       }catch(err){
