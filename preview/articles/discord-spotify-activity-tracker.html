@@ -24,23 +24,22 @@
         <article>
             <h2>Overview</h2>
             <p>
-                This is going to be a brief code review. First, I think a little bit of backstory is required. This was one of the first serious Python projects
-                I built as a live service; it served a community of thousands of users, it enabled a livestream where outages actually mattered,
+                This is going to be a brief code review and revisal. This was one of the first serious Python projects
+                I built as a live service; it served a community of thousands of users, it enabled a livestream where downtime mattered,
                 and it was maintained entirely solo. Here's what happened.
             </p>
             <p>
                 What feels like a lifetime ago I was incredibly passionate for music production. One line of effort I pursued was working as a 
                 producer, and managing the discord of a newly formed label. This role I functioned a plethora of skills, but I'm going to focus on the code aspect.
                 I coded an auto-role system, setup the entire discord from scratch, created custom chat filtering (things needed to be removed specific to 
-                the Twitch stream), and coded a custom Spotify activity tracker. There was no pay, there were no perks. I poured hundreds, 
-                if not thousands of hours into this project, and when I resigned the owner didn't care, until I turned off my discord bot. 
+                the Twitch stream), and coded a custom Spotify activity tracker. 
             </p>  
             <p>
-                That may sound dramatic, but the Discord bot I made ran nearly half the label's Twitch stream, and the Spotify Activity Tracker was the most valuable feature. 
+                The Discord bot I made ran nearly half the label's Twitch stream, and the Spotify Activity Tracker was the most valuable feature. 
                 During streams, it posted an embed of the current song every 60 seconds, reflecting the activity of a particular user. This way, users receive 
                 live updates on the song being played and reviewed on the Twitch stream, and can interact with these embeds.
-                This was the core feature enabling the side by side Twitch/Discord integration, for users who wanted to listen on Twitch, and chat/make requests 
-                in the discord. I'm going to try and do a modern analysis of the Spotify code block, everything I did wrong, and how I would do it now. 
+                This was the core feature enabling the side by side Twitch/Discord integration. 
+                I'm going to try and do a modern analysis of the Spotify code block, everything I did wrong, and how I would do it now. 
             </p>
 
             <h2>The Original Code</h2>
@@ -155,7 +154,7 @@ async def now_playing(ctx, user: discord.Member = None):
         print(f"ERROR: Unexpected error in Spotify tracking - {e}")
     </code></pre>
 
-            <p>While rewriting the code, I found something interesting. Every major function from the original Discord bot
+            <p>While rewriting, I found something interesting. Every major function from the original Discord bot
                 was passive, meaning it didn't require a user to prompt it to act, but still required a command to function. 
                 For instance, having a command to enable chat filtering, when it could just turn on automatically when a stream starts, etc.
             </p>
