@@ -665,7 +665,7 @@
                 To make that happen, a single shared pixels-per-meter scale is computed from vertical and horizontal constraints (viewport limits), then applied so 
                 each ship's width, profile height, and draft stay proportional. On the smaller viewports, width caps and spacing change based on whether 
                 one ship or two ships are selected, so ships stay visible instead of collapsing.</p>
-            <pre class="stats-code-block"><code>// Compact layout gives different spacing and width caps for 1 ship vs 2 ships
+            <pre class="stats-code-block"><code class="language-javascript">// Compact layout gives different spacing and width caps for 1 ship vs 2 ships
 const shipGap = compact ? (ships.length > 1 ? 12 : 8) : 20;
 const horizontalPadding = compact ? (ships.length > 1 ? 16 : 8) : 32;
 const compactShipMaxWidth = compact

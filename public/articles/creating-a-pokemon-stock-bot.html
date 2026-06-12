@@ -48,12 +48,12 @@
             <h2>How Target's Inventory API Works</h2>
             <p>
                 Target's internal API, <strong>redsky.target.com</strong> is pretty cool. Every time you load a product page,
-                your browser hits these endpoints in the background. The API requires a <code>key</code> query parameter, but it is not a
+                your browser hits these endpoints in the background. The API requires a "key" query parameter, but it is not a
                 developer token. It behaves like an app-level value used by Target's frontend and appears in page HTML as a Next.js
-                <code>buildId</code>. That value rotates each time Target deploys a new build. Extracting it was tricky to figure out 
+                "buildId". That value rotates each time Target deploys a new build. Extracting it was tricky to figure out 
                 at first but strangely straightforward using a bit of regex to pinpoint the buildId:
             </p>
-            <pre><code>resp = await http.get("https://www.target.com", headers={"User-Agent": ...})
+            <pre><code class="language-python">resp = await http.get("https://www.target.com", headers={"User-Agent": ...})
                         m = re.search(r'"buildId"\s*:\s*"([0-9a-f]{40})', resp.text)
                         new_key = m.group(1)</code></pre>
             <p>
@@ -63,11 +63,11 @@
 
             <h2>Browser Impersonation</h2>
             <p>
-                Target's API doesn't serve responses to <code>httpx</code> clients. The requests need to look
+                Target's API doesn't serve responses to httpx clients. The requests need to look
                 like they came from a real browser, and I chose to emulate Chrome on Windows (just easy to do, not for any actual reason). 
                 That means spoofing a full set of headers:
             </p>
-            <pre><code>TARGET_HEADERS = {
+            <pre><code class="language-python">TARGET_HEADERS = {
                 "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) ... Chrome/124.0.0.0 Safari/537.36",
                 "sec-ch-ua": '"Chromium";v="124", "Google Chrome";v="124"...',
                 "sec-ch-ua-platform": '"Windows"',
@@ -88,7 +88,7 @@
                 I ended up creating two ways to run stock checks in Discord:
                 <ul>
                     <li><code>/search</code> command basically mimics search on the website, returning the top 5 results for a given query and checks stock for those 5 items at all nearby stores.</li>
-                    <li><code>/stockall</code> command checks a static <i>watchlist</i> for the inventory status of many items in those same nearby stores. The watchlist is just 
+                    <li><code>/stockall</code> command checks a static watchlist for the inventory status of many items in those same nearby stores. The watchlist is just 
                     a json file with a number of hard coded TCINs (Target.com Item Numbers) that made it incredibly fast to check a whole set of products at once without needing to do individual lookups every time.</li>
                 </ul>
                 <img src="/images/pokestock-images/stockall.png" style="max-width:100%; margin-top:1rem;">
