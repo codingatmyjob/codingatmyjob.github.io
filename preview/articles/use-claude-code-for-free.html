@@ -80,14 +80,14 @@
             </table>
 
             <h2>Launch Check</h2>
-            <p>From a terminal in your project or the project's directory, type:</p>
-            <pre><code>claude</code></pre>
+            <p>From a powershell terminal in your project or the project's directory, type:</p>
+            <pre><code class="language-powershell">claude</code></pre>
             <p>
                 The welcome screen should show your configured model name, not Anthropic Opus or Sonnet (in our case, openrouter/free).
             </p>
 
             <p>If the welcome screen still shows an Anthropic model, double check the variables in PowerShell:</p>
-            <pre><code>$env:ANTHROPIC_BASE_URL="https://openrouter.ai/api"
+            <pre><code class="language-powershell">$env:ANTHROPIC_BASE_URL="https://openrouter.ai/api"
 $env:ANTHROPIC_AUTH_TOKEN="your-openrouter-key"
 $env:ANTHROPIC_API_KEY=""
 $env:ANTHROPIC_DEFAULT_SONNET_MODEL="openrouter/free"
