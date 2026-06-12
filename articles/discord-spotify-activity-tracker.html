@@ -46,7 +46,7 @@
             <p>Out of respect, I've removed any information that could identify the Discord, users, or the label I was working with from the code snippet below.
                 Everything else is exactly how I left it in August of 2023.
             </p>
-            <pre><code>########################### SONG COMMAND #############################
+            <pre><code class="language-python">########################### SONG COMMAND #############################
 @bot.command(name="song", aliases=["nowplaying", "current", "np"])
 @commands.has_any_role("Admin", "*", "Content Team")
 async def now_playing(ctx, user: discord.Member = None):
@@ -106,7 +106,7 @@ async def now_playing(ctx, user: discord.Member = None):
             <p>
                 I uploaded the new code to GitHub, so if you're interested in seeing the full context, you can check it out <a href="https://github.com/codingatmyjob/Discord-Spotify-Activity-Tracker">here</a>.
             </p>
-            <pre><code># ---- SPOTIFY (only active during Twitch stream) ----
+            <pre><code class="language-python"># ---- SPOTIFY (only active during Twitch stream) ----
     # re-fetch the member's live state rather than relying on the event snapshot
     # discord can fire separate presence events for streaming and spotify, so after.activities
     # may not contain both at the same time, the live check guarantees accuracy

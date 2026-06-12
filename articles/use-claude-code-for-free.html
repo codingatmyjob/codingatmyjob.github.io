@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Use Claude Code for Free</title>
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+    <div id="binary-bg" aria-hidden="true"></div>
+
+    <main class="article-container">
+        <h1>Use Claude Code for Free</h1>
+        <div class="meta">
+            <time datetime="2026-06-12">June 12, 2026</time>
+        </div>
+        <div class="tags">
+            <span class="tag">Reference</span>
+            <span class="tag">Claude Code</span>
+            <span class="tag">OpenRouter</span>
+            <span class="tag">Windows</span>
+        </div>
+
+        <article>
+            <h2>What is Claude Code</h2>
+            <p>Claude Code is an AI assistant that runs in your terminal and can work on your behalf. It gives you the 
+                ability to prompt an LLM directly from your terminal, describing changes in plain English. 
+            </p>
+            <p>
+                Similar to cell phone minute charges in the mid-90s to early-2000s, Claude Code usage is expensive. It 
+                genuinely feels like you're being charged by the minute, and might need to take out a small loan. To combat 
+                this, there is a very simple solution; allow me to introduce <a href="https://openrouter.ai">OpenRouter</a>.
+            </p>
+            <p>
+                OpenRouter is an API aggregator that provides a single endpoint to access many LLMs, including numerous open source (free) models.
+                By pointing Claude Code at OpenRouter and using these free models, you can run Claude Code free of charge. All you need 
+                is an OpenRouter account and an API key. Below, I'm going to give step by step instructions on how to set this up on Windows. 
+            </p>
+            <p>
+                This method only provides ~50 free requests per day. If you need more, you can either purchase $10 worth of credits from OpenRouter, 
+                which increases your quota to ~1000 requests per day, or you can set up your own local instance of an open source model and point Claude Code to it. 
+                This tutorial will only cover the OpenRouter method, but I may write a follow-up article on how to set up a local instance in the future.
+            </p>
+
+            <h2>Setup</h2>
+
+            <ol>
+                <li>Install <a href="https://docs.anthropic.com/en/docs/claude-code">Claude Code</a> or type "npm install -g @anthropic-ai/claude-code" in your terminal.</li>
+                <li>Create a free <a href="https://openrouter.ai">OpenRouter</a> account and store off your API key. We will not be using paid models, but ensure you change 
+                the Credit Limit associated with your API key to 0. If you get a 402 error, remove this, and it will still work without incurring charges.</li>
+                <li>Open "Edit the system environment variables" from the Windows Start menu, click "Environment Variables", and add the following environment variables:</li>
+            </ol>
+            <table class="info-table" aria-label="Environment variable configuration">
+                <tbody>
+                    <tr>
+                        <th>Variable</th>
+                        <th>Value</th>
+                    </tr>
+                    <tr>
+                        <td>ANTHROPIC_AUTH_TOKEN</td>
+                        <td>your-openrouter-key</td>
+                    </tr>
+                    <tr>
+                        <td>ANTHROPIC_BASE_URL</td>
+                        <td>https://openrouter.ai/api</td>
+                    </tr>
+                    <tr>
+                        <td>ANTHROPIC_DEFAULT_SONNET_MODEL</td>
+                        <td>openrouter/free</td>
+                    </tr>
+                    <tr>
+                        <td>ANTHROPIC_DEFAULT_HAIKU_MODEL</td>
+                        <td>openrouter/free</td>
+                    </tr>
+                    <tr>
+                        <td>ANTHROPIC_DEFAULT_OPUS_MODEL</td>
+                        <td>openrouter/free</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h2>Launch Check</h2>
+            <p>From a PowerShell terminal in your project or the project's directory, type:</p>
+            <pre><code class="language-powershell">claude</code></pre>
+            <p>
+                The welcome screen should show your configured model name, not Anthropic Opus or Sonnet (in our case, openrouter/free).
+            </p>
+
+            <p>If the welcome screen still shows an Anthropic model, double check the variables in PowerShell:</p>
+            <pre><code class="language-powershell">$env:ANTHROPIC_BASE_URL="https://openrouter.ai/api"
+$env:ANTHROPIC_AUTH_TOKEN="your-openrouter-key"
+$env:ANTHROPIC_API_KEY=""
+$env:ANTHROPIC_DEFAULT_SONNET_MODEL="openrouter/free"
+$env:ANTHROPIC_DEFAULT_HAIKU_MODEL="openrouter/free"
+$env:ANTHROPIC_DEFAULT_OPUS_MODEL="openrouter/free"
+
+claude</code></pre>
+
+            <h2>Drawbacks and Limits</h2>
+            <p>
+                Using "openrouter/free" lets OpenRouter choose from a small <a href="https://openrouter.ai/openrouter/free">list of available models</a> instead of relying on a single one, 
+                cutting down on wait time. This inevitably results in inconsistent quality of responses due to different models being used. Not only that, 
+                but not every model supports the same features as the Anthropic models, so you may find that some features of Claude Code do not work.
+            </p>
+            <p>
+                To change your model to a specific one that supports the features you need, click <a href="https://openrouter.ai/models/?q=free">here</a> to view the available free models and their references.
+                Simply change the environment variables above to point to the model(s) you want to use. This may increase wait times.
+            </p>
+            <p>
+                Additionally, Claude Code can use multiple requests in a single prompt when performing advanced tasks like parsing file structures, or multi-step tasks. Here are the usage limits that apply to free models:
+            </p>
+            <ul>                                                                                                                                                                                 
+                <li>Up to 20 requests per minute</li>                                                                                                                                                
+                <li>Up to 50 requests per day if you have purchased less than $10 in credits</li>
+                <li>Up to 1000 requests per day if you have purchased at least $10 in credits</li>    
+                <li>Failed attempts still count toward the daily quota</li>
+            </ul> 
+            
+        </article>
+    </main>
+</body>
+</html>
