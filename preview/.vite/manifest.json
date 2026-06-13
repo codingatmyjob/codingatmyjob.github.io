@@ -1,0 +1,22 @@
+{
+  "_client-BctTKoVa.js": {
+    "file": "assets/client-BctTKoVa.js",
+    "name": "client",
+    "isDynamicEntry": true,
+    "imports": [
+      "index.html"
+    ]
+  },
+  "index.html": {
+    "file": "assets/app-BI9MQydQ.js",
+    "name": "app",
+    "src": "index.html",
+    "isEntry": true,
+    "dynamicImports": [
+      "_client-BctTKoVa.js"
+    ],
+    "css": [
+      "assets/app-BRzzoSkc.css"
+    ]
+  }
+}
