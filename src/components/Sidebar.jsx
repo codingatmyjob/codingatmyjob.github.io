@@ -74,7 +74,8 @@ export default function Sidebar({ isOpen, onClose }) {
           <div className="sidebar-bottom">
             <div className="sidebar-divider"></div>
             {(() => {
-              const isPreview = import.meta.env.BASE_URL === '/preview/' || location.pathname.startsWith('/preview');
+              const path = typeof window !== 'undefined' ? window.location.pathname : ''
+              const isPreview = import.meta.env.BASE_URL === '/preview/' || path.startsWith('/preview')
               return <>
                 <a href={isPreview ? '/' : '/preview/'} className="sidebar-section-label sidebar-env-label">You're On: {isPreview ? 'Preview' : 'Production'} ↗</a>
                 <span className="sidebar-section-label">Modified: {import.meta.env.VITE_BUILD_TIME ? (() => { const d = new Date(import.meta.env.VITE_BUILD_TIME); const day = String(d.getUTCDate()).padStart(2, '0'); const month = String(d.getUTCMonth() + 1).padStart(2, '0'); const hours = String(d.getUTCHours()).padStart(2, '0'); const minutes = String(d.getUTCMinutes()).padStart(2, '0'); return `${day}/${month} ${hours}:${minutes} UTC`; })() : 'dev'}</span>
