@@ -1,9 +1,9 @@
 import React, { useEffect, useState, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
-import ArticlesGrid from '../components/ArticlesGrid'
-import ArticlesControls from '../components/ArticlesControls'
-import Pagination from '../components/Pagination'
-import SearchBar from '../components/SearchBar'
+import ArticlesGrid from '../components/articles/ArticlesGrid'
+import ArticlesControls from '../components/articles/ArticlesControls'
+import Pagination from '../components/articles/Pagination'
+import SearchBar from '../components/articles/SearchBar'
 import { articlesData } from '../data/articles'
 
 const ROWS_PER_PAGE = 8
@@ -30,6 +30,10 @@ export default function Home() {
   const [availableTags, setAvailableTags] = useState([])
   const [searchQuery, setSearchQuery] = useState('')
   const [articleContents, setArticleContents] = useState(new Map())
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'instant' })
+  }, [])
 
   useEffect(() => {
     const handleResize = () => setItemsPerPage(getItemsPerPage())

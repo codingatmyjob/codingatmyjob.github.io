@@ -1,34 +1,38 @@
 import React from 'react'
 
 export default function Pagination({ currentPage, totalPages, onPageChange }){
+  const scrollTopInstant = () => {
+    requestAnimationFrame(() => {
+      window.scrollTo({ top: 0, behavior: 'instant' })
+    })
+  }
+
+  const handleFirst = ()=>{
+    if(currentPage !== 1){
+      onPageChange(1)
+      scrollTopInstant()
+    }
+  }
+
   const handlePrevious = ()=>{
     if(currentPage > 1){
-      onPageChange(currentPage - 1)
+      const nextPage = currentPage - 1
+      onPageChange(nextPage)
+      if(nextPage === 1) scrollTopInstant()
     }
   }
 
   const handleNext = ()=>{
     if(currentPage < totalPages){
       onPageChange(currentPage + 1)
-    }
-  }
-
-  const handlePageClick = (page)=>{
-    onPageChange(page)
-  }
-
-  const handleFirst = ()=>{
-    if(currentPage !== 1){
-      onPageChange(1)
-      requestAnimationFrame(()=>{
-        window.scrollTo({ top: 0, behavior: 'smooth' })
-      })
+      // scrollTopInstant()
     }
   }
 
   const handleLast = ()=>{
     if(currentPage !== totalPages){
       onPageChange(totalPages)
+      // scrollTopInstant()
     }
   }
 
