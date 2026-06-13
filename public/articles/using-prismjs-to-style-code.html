@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Using Prism.js to Style Code</title>
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+    <div id="binary-bg" aria-hidden="true"></div>
+
+    <main class="article-container">
+        <h1>Using Prism.js to Style Code</h1>
+        <div class="meta">
+            <time datetime="2026-06-19">June 19, 2026</time>
+        </div>
+        <div class="tags">
+            <span class="tag">Notes</span><span class="tag">JavaScript</span><span class="tag">Library</span>
+        </div>
+
+        <article>
+            <h2>What Is Prism.js</h2>
+            <p>
+                <a href="https://prismjs.com/" target="_blank" rel="noopener">Prism.js</a> is a lightweight
+                syntax highlighting library. When provided an HTML code block with a language class, it tokenizes
+                the source, wrapping each token in a span with a semantic class that your CSS theme colors.
+                It supports well over 200 languages through optional language components, so ship what you need.
+            </p>
+
+            <h2>How to Import</h2>
+            <p>
+                Install Prism.js via npm, then import the library and only the language components you need.
+            </p>
+<pre><code class="language-bash">npm install prismjs</code></pre>
+<pre><code class="language-js">import Prism from 'prismjs'
+import 'prismjs/components/prism-javascript'
+import 'prismjs/components/prism-python'
+// add more as needed</code></pre>
+            <p>
+                Prism has several themes you can import under <code>prismjs/themes/</code>, or write your
+                own token styles in CSS targeting ".token.*" classes, which is what I've done here stay compatible with light and dark themes on my site.
+            </p>
+            <p>
+                In a traditional static setup, Prism.js scans the DOM on page load and highlights any matching
+                code blocks. That only runs once, so if you inject, fetch, or generate new code
+                blocks afterwards, you need to trigger Prism again with <code>Prism.highlightAll()</code> (or
+                <code>Prism.highlightElement()</code> for a specific block). Also, each block still needs a valid
+                "language-*" class so Prism knows which syntax to apply. I break that down in the section below.
+            </p>
+
+            <h2>How It's Integrated Here</h2>
+            <p>
+                Articles on this site are static HTML files fetched and injected into the DOM at runtime.
+                Once article content loads, a useEffect in ArticlePage.jsx runs a function
+                that scans each code block and applies the appropriate syntax.
+            </p>
+            <p>
+                The following Prism components have been imported and are available in any article; Markup (HTML / XML), CSS, JavaScript &amp; JSX,
+                TypeScript &amp; TSX, JSON, Bash / Shell, PowerShell, Python, SQL, and YAML.
+            </p>
+            <p>
+                To highlight a block in an article with the appropriate language syntax, give the inner code element inside 
+                the <code>&lt;pre&gt;&lt;code&gt;</code> a "language-*"</code> class matching one of the above. For example:
+            </p>
+<pre><code class="language-html">&lt;pre&gt;&lt;code class="language-python"&gt;...&lt;/code&gt;&lt;/pre&gt;</code></pre>
+            <p>Which renders like this:</p>
+<pre><code class="language-python">def greet(name):
+    print(f"Hello, {name}")</code></pre>
+
+            <h2>Custom Language Aliases and Auto-Detection</h2>
+            <p>
+                Distinct from Prism.js, I've implemented a normalization function that maps various "language-*" aliases to the correct 
+                Prism language. I also created a small auto-detection function that infers the language code content, and a 
+                toolbar above the codeblock displaying the detected language, and a copy button.
+            </p>
+            <p>
+                Some of the aliases are defined below:
+            </p>
+            <table class="info-table" aria-label="Language aliases">
+                <tbody>
+                    <tr>
+                        <th>Alias</th>
+                        <th>Resolves To</th>
+                    </tr>
+                    <tr>
+                        <td>language-html</td>
+                        <td>markup</td>
+                    </tr>
+                    <tr>
+                        <td>language-sh</td>
+                        <td>bash</td>
+                    </tr>
+                    <tr>
+                        <td>language-ps1</td>
+                        <td>powershell</td>
+                    </tr>
+                    <tr>
+                        <td>language-yml</td>
+                        <td>yaml</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p>
+                If a code block has no language class attached, a small heuristic function <code>inferLanguageFromCode</code> 
+                scans the source and infers a best-guess language, catching plain HTML, PowerShell, 
+                shell, and JSON objects automatically.
+            </p>
+<pre><code class="language-js">########## ATTEMPT TO INFER LANGUAGE IF NOT EXPLICITLY PROVIDED ##########
+function inferLanguageFromCode(source) { 
+    const text = (source || '').trim()
+    if (!text) return ''
+    if (/<([a-z][\w-]*)[\s>]/i.test(text)) return 'markup'
+    if (/(^|\n)\s*\$env:/.test(text) || /\bGet-[A-Z]/.test(text)) return 'powershell'
+    if (/(^|\n)\s*(npm|pnpm|yarn|git|cd|ls|cat)\b/.test(text)) return 'bash'
+    if (/^\s*[\[{][\s\S]*[\]}]\s*$/.test(text) && /"\s*:/.test(text)) return 'json'
+    return ''
+}
+</code></pre>
+            <p>
+                Additionally, I've given each highlighted code block a toolbar above, with a language label and a copy button.
+                This is unique to my site and is handled in the <code>enhanceCodeBlocks</code> function in
+                <code>ArticlePage.jsx</code>. I think it's worth noting that Prism.js has a built-in toolbar and copy plugin. However, I wanted
+                more control over the styling and behavior, to match my site's aesthetic.
+            </p>
+        </article>
+    </main>
+</body>
+</html>

@@ -12,6 +12,10 @@
     <loc>https://codingatmyjob.github.io/sidebar/tag-guide</loc>
     <lastmod>2026-05-19</lastmod>
   </url>
+  <!-- <url>
+    <loc>https://codingatmyjob.github.io/articles/using-prismjs-to-style-code</loc>
+    <lastmod>2026-06-19</lastmod>
+  </url> -->
   <url>
     <loc>https://codingatmyjob.github.io/articles/use-claude-code-for-free</loc>
     <lastmod>2026-06-12</lastmod>
@@ -24,18 +28,18 @@
     <loc>https://codingatmyjob.github.io/articles/cruise-size-comparisons</loc>
     <lastmod>2026-06-05</lastmod>
   </url>
-  <url>
+  <!-- <url>
     <loc>https://codingatmyjob.github.io/articles/efficient-html-maps-with-pydeck</loc>
     <lastmod>2026-05-19</lastmod>
-  </url>
+  </url> -->
   <url>
     <loc>https://codingatmyjob.github.io/articles/passing-oci-foundations-associate</loc>
     <lastmod>2026-05-19</lastmod>
   </url>
-  <url>
+  <!-- <url>
     <loc>https://codingatmyjob.github.io/articles/noaa-tides-llm-chatbot-demo</loc>
     <lastmod>2026-05-16</lastmod>
-  </url>
+  </url> -->
   <url>
     <loc>https://codingatmyjob.github.io/articles/typeahead-demo</loc>
     <lastmod>2026-05-19</lastmod>

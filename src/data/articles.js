@@ -1,4 +1,17 @@
 export const articlesData = [
+  // // DONE - WAITING TO RELEASE
+  // {
+  //   id: 'using-prismjs-to-style-code',
+  //   path: 'articles/using-prismjs-to-style-code',
+  //   publishedAt: '2026-06-19',
+  //   date: 'June 19, 2026',
+  //   title: 'Using Prism.js to Style Code',
+  //   description: 'Integrating Prism.js, language aliases, heuristic language detection, and toolbar.',
+  //   tags: ['Notes', 'JavaScript', 'Library'],
+  //   imageSrc: 'images/cover/prismjs-logo.svg',
+  //   imageAlt: 'Using Prism.js',
+  //   imageStyle: { height: '85%', width: '85%' }
+  // },
   // // DRAFT -- NEED TO CREATE SMALL DEMO OR MAKE A REPO FOR VISUAL AID
   // {
   //   id: 'efficient-html-maps-with-pydeck',

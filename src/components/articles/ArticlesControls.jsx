@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import FilterPanel from './FilterPanel'
 
-export default function ArticlesControls({ tags=[], selected=[], onApply, onClear, sortOrder='newest', onSortChange, searchBar }){
+export default function ArticlesControls({ tags=[], selected=[], onApply, onClear, sortOrder='newest', onSortChange, searchBar, renderRightControl: renderViewControl /* Optional render prop for injecting a custom view control: renderViewControl('search' | 'controls') */ }){
   const [filterOpen, setFilterOpen] = useState(false)
   const [sortOpen, setSortOpen] = useState(false)
 
@@ -52,8 +52,15 @@ export default function ArticlesControls({ tags=[], selected=[], onApply, onClea
   return (
     <div className="articles-controls-wrapper">
       {searchBar && (
-        <div className="search-bar-container">
-          {searchBar}
+        <div className="search-controls-row">
+          <div className="search-bar-container">
+            {searchBar}
+          </div>
+          {renderViewControl && (
+            <div className="search-right-control">
+              {renderViewControl('search')}
+            </div>
+          )}
         </div>
       )}
       <div className="controls-row">
@@ -144,6 +151,12 @@ export default function ArticlesControls({ tags=[], selected=[], onApply, onClea
             onClear={()=>{onClear()}} 
           />
         </div>
+
+        {renderViewControl && (
+          <div className="controls-right-control">
+            {renderViewControl('controls')}
+          </div>
+        )}
       </div>
     </div>
   )

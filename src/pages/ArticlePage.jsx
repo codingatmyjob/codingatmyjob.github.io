@@ -32,12 +32,23 @@ function normalizeLanguage(raw) {
   return LANGUAGE_ALIASES[key] || key
 }
 
+function getLanguageLabel(language) {
+  if (!language) return 'text'
+  const key = language.toLowerCase()
+  if (key === 'javascript' || key === 'js') return 'JavaScript'
+  if (key === 'typescript' || key === 'ts') return 'TypeScript'
+  if (key === 'powershell' || key === 'ps1') return 'PowerShell'
+  if (key === 'markup') return 'Markup'
+  if (['css', 'json', 'sql', 'jsx', 'tsx', 'yaml', 'yml'].includes(key)) return key.toUpperCase()
+  return `${key.charAt(0).toUpperCase()}${key.slice(1)}`
+}
+
 function detectLanguageFromClasses(codeEl, preEl) {
   const match = `${codeEl.className} ${preEl.className}`.match(/(?:lang|language)-([a-z0-9-]+)/i)
   return normalizeLanguage(match ? match[1] : '')
 }
 
-function inferLanguageFromCode(source) {
+function inferLanguageFromCode(source) { //ATTEMPT TO INFER LANGUAGE IF NOT EXPLICITLY PROVIDED
   const text = (source || '').trim()
   if (!text) return ''
   if (/<([a-z][\w-]*)[\s>]/i.test(text)) return 'markup'
@@ -70,7 +81,7 @@ function mountCodeBlockToolbar(preEl, language, codeText) {
   toolbar.className = 'code-block-toolbar'
   const langLabel = document.createElement('span')
   langLabel.className = 'code-language'
-  langLabel.textContent = language || 'text'
+  langLabel.textContent = getLanguageLabel(language)
   const copyAction = document.createElement('button')
   copyAction.type = 'button'
   copyAction.className = 'code-copy-trigger'
