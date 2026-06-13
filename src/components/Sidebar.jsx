@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 
-export default function Sidebar({ isOpen, onClose, onOpenArticle, onHome }) {
-  const [isSmall, setIsSmall] = useState(window.innerWidth < 1278)
+export default function Sidebar({ isOpen, onClose }) {
+  const navigate = useNavigate()
+  const [isSmall, setIsSmall] = useState(typeof window !== 'undefined' ? window.innerWidth < 1278 : false)
 
   // Check if window is small (<1278px)
   useEffect(() => {
@@ -10,32 +12,14 @@ export default function Sidebar({ isOpen, onClose, onOpenArticle, onHome }) {
     return () => window.removeEventListener('resize', check)
   }, [])
 
-  // Handle title click for "Return Home"
-  useEffect(() => {
-    if (!isOpen || !isSmall) return
-    const el = document.querySelector('.sidebar-header-title .title a');
-    if (!el) return;
-    
-    const handler = function(e){
-      e.preventDefault();
-      window.dispatchEvent(new CustomEvent('returnHome'));
-    }
-    
-    el.addEventListener('click', handler);
-    return () => el.removeEventListener('click', handler)
-  }, [isOpen, isSmall])
   const handleMenuClick = (action) => {
+    onClose()
     if (action === 'home') {
-      onClose()
-      onHome()
+      navigate('/')
     } else if (action === 'about') {
-      onClose()
-      window.location.hash = '#/About'
+      navigate('/sidebar/About')
     } else if (action === 'tag-guide') {
-      onClose()
-      window.location.hash = '#/tag-guide'
-    } else {
-      onClose()
+      navigate('/sidebar/tag-guide')
     }
   }
 
@@ -52,7 +36,7 @@ export default function Sidebar({ isOpen, onClose, onOpenArticle, onHome }) {
         {isOpen && isSmall && (
           <div className="sidebar-header-title">
             <h2 className="title">
-              <a href="/" aria-label="Return Home">Tangent</a>
+              <a href="/" onClick={(e) => { e.preventDefault(); handleMenuClick('home') }} aria-label="Return Home">Tangent</a>
             </h2>
           </div>
         )}
@@ -74,13 +58,13 @@ export default function Sidebar({ isOpen, onClose, onOpenArticle, onHome }) {
               </svg>
               Home
             </a>
-            <a href="/#/About" className="sidebar-item" onClick={(e) => { e.preventDefault(); handleMenuClick('about'); }}>
+            <a href="/sidebar/About" className="sidebar-item" onClick={(e) => { e.preventDefault(); handleMenuClick('about'); }}>
               <svg className="sidebar-icon" viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true">
                 <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
               </svg>
               About Me
             </a>
-            <a href="/#/tag-guide" className="sidebar-item" onClick={(e) => { e.preventDefault(); handleMenuClick('tag-guide'); }}>
+            <a href="/sidebar/tag-guide" className="sidebar-item" onClick={(e) => { e.preventDefault(); handleMenuClick('tag-guide'); }}>
               <svg className="sidebar-icon" viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true">
                 <path d="M21.41 11.58l-9-9A2 2 0 0011 2H4a2 2 0 00-2 2v7a2 2 0 00.59 1.41l9 9a2 2 0 002.82 0l7-7a2 2 0 000-2.83zM6.5 8A1.5 1.5 0 118 6.5 1.5 1.5 0 016.5 8z"/>
               </svg>

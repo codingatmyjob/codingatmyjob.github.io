@@ -160,33 +160,10 @@ aside.sidebar {
   margin-top: auto;
 }
 
-.sidebar-header {
-  margin-bottom: 20px;
-  padding-bottom: 12px;
-  border-bottom: 1px solid var(--border);
-}
-
-.sidebar-title {
-  color: var(--text-primary);
-  font-size: 18px;
-  font-weight: 600;
-  margin: 0;
-}
-
 .sidebar-divider {
   height: 1px;
   background: var(--border);
   margin: 4px 0 20px 0;
-}
-
-.sidebar-section-title {
-  color: var(--text-primary);
-  font-size: 14px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  margin: 20px 0 8px 0;
-  opacity: 0.8;
 }
 
 .sidebar-section-label {
@@ -838,12 +815,6 @@ box-shadow:0 2px 8px var(--shadow);transition:transform .3s,box-shadow .3s;curso
 .article-image{height:180px;background:var(--border);display:flex;align-items:center;justify-content:center;text-align:center;border-radius:8px 8px 0 0;overflow:hidden;font-size: 16px;}
 .article-image img{width:100%;height:100%;object-fit:contain;object-position:center;display:block;border-radius:inherit;background:var(--border);}
 .article-card-image{width:100%;height:100%;object-fit:contain;object-position:center;display:block}
-.article-card-image--default{width:100%;height:100%}
-.article-card-image--oci{width:120%;height:120%}
-.article-card-image--typeahead{width:85%;height:85%}
-.article-card-image--traffic{width:100%;height:85%}
-.article-card-image--pokestock{width:90%;height:90%}
-.article-card-image--virtualbox{width:85%;height:85%}
 
 .article-content{padding:25px}
 .article-date{font-size:13px;color:#9aa;margin-bottom:4px}
@@ -972,6 +943,18 @@ border:1px solid var(--border);border-radius:12px;box-shadow:0 8px 30px rgba(0,0
 color:var(--text-primary);font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial;line-height:1.75;font-size:17px;z-index:4
 }
 .article-container > .back-link, #article-view .back-link{display:inline-block;margin-bottom:18px;background:transparent;border:1px solid var(--border);color:var(--text-primary);padding:8px 12px;border-radius:8px;cursor:pointer}
+
+#article-view .not-found-container{text-align:center;display:flex;flex-direction:column;align-items:center;gap:0;font-family:'Courier New',monospace;max-width:480px;border-left:none}
+#article-view .not-found-container::before{display:none}
+#article-view .not-found-code{font-size:clamp(5rem,18vw,7rem);font-weight:700;letter-spacing:-2px;line-height:1;margin-bottom:0.25rem;color:var(--text-primary)}
+#article-view .not-found-label{font-size:0.78rem;letter-spacing:0.2em;text-transform:uppercase;color:rgba(0,255,65,0.45);margin-bottom:0.6rem}
+[data-theme="light"] #article-view .not-found-label{color:rgba(54,54,54,0.5)}
+#article-view .not-found-container h1{font-size:1.3rem;font-weight:600;margin:0 0 0.75rem 0;line-height:1.2;letter-spacing:0}
+#article-view .not-found-container p{font-size:0.88rem;line-height:1.7;max-width:52ch;margin:0 0 2rem 0;color:rgba(0,255,65,0.45)}
+[data-theme="light"] #article-view .not-found-container p{color:rgba(54,54,54,0.5)}
+#article-view .not-found-container .home-btn{display:inline-block;padding:10px 22px;border:1px solid var(--border);border-radius:8px;background:transparent;color:var(--text-primary);font-family:inherit;font-size:0.875rem;cursor:pointer;text-decoration:none;transition:background 0.15s,box-shadow 0.15s}
+#article-view .not-found-container .home-btn:hover{background:var(--border);box-shadow:0 2px 8px var(--shadow)}
+
 @media (max-width:600px){.article-container{padding:20px 16px;}}
 .article-container h1{font-size:32px;margin:6px 0 6px;color:var(--text-primary);letter-spacing:-.2px}
 .article-container .meta,.article-container .tags{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-bottom:20px;color:rgba(255,255,255,0.8);font-size:13px}
@@ -988,7 +971,6 @@ color:var(--text-primary);font-family:system-ui,-apple-system,"Segoe UI",Roboto,
 .article-container article h2.collapsed:hover{opacity:0.8}
 .article-container article h3{font-size:18px;margin:18px 0 8px;color:var(--text-primary)}
 .article-container article img, .article-container article figure{max-width:100%;height:auto;display:block;margin:18px auto;border-radius:10px;box-shadow:0 8px 24px rgba(0,0,0,0.22)}
-.article-container article blockquote{border-left:4px solid var(--accent);margin:16px 0;padding:10px 14px;background:rgba(0,0,0,0.04);color:rgba(255,255,255,0.9);border-radius:6px}
 .article-container article :not(pre) > code{background:rgba(0,0,0,0.12);color:rgba(255,255,255,0.95);border-radius:6px;font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,"Roboto Mono",monospace;font-size:.92em;padding:0.14em 0.38em}
 
 .article-container article .code-block{margin:14px 0;border:1px solid rgba(0,0,0,0.18);border-radius:10px;overflow:hidden;background:rgba(0,0,0,0.16)}
@@ -1002,48 +984,29 @@ color:var(--text-primary);font-family:system-ui,-apple-system,"Segoe UI",Roboto,
 
 .article-container article pre[class*="language-"]{margin:0;padding:14px;overflow:auto;font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,"Roboto Mono",monospace;font-size:.9em;line-height:1.5;background:transparent}
 .article-container article pre[class*="language-"] > code{background:none;color:#edf7ef;padding:0;border-radius:0}
-
-.article-container article .token.comment,
-.article-container article .token.prolog,
-.article-container article .token.doctype,
-.article-container article .token.cdata{color:#7a9483}
-
-.article-container article .token.punctuation{color:#c8d5ca}
 .article-container article .token.property,
-.article-container article .token.tag,
-.article-container article .token.constant,
-.article-container article .token.symbol,
-.article-container article .token.deleted{color:#ff8d8d}
+.article-container article .token.tag{color:#ff8d8d}
 
-.article-container article .token.boolean,
+
 .article-container article .token.number{color:#ffd18a}
 
-.article-container article .token.selector,
-.article-container article .token.attr-name,
-.article-container article .token.string,
-.article-container article .token.char,
-.article-container article .token.builtin,
-.article-container article .token.inserted{color:#9de9b5}
 
-.article-container article .token.operator,
-.article-container article .token.entity,
+.article-container article .token.string{color:#9de9b5}
+
+
 .article-container article .token.url,
-.article-container article .language-css .token.string,
 .article-container article .style .token.string{color:#8bd6ff}
 
-.article-container article .token.atrule,
-.article-container article .token.attr-value,
+
 .article-container article .token.keyword{color:#8ab4ff}
 
-.article-container article .token.function,
-.article-container article .token.class-name{color:#d8a9ff}
+.article-container article .token.function{color:#d8a9ff}
 
 .article-container article .token.regex,
 .article-container article .token.important,
 .article-container article .token.variable{color:#ffd18a}
 
-.article-container article .token.important,
-.article-container article .token.bold{font-weight:700}
+.article-container article .token.important{font-weight:700}
 .article-container article .token.italic{font-style:italic}
 .article-container a{color:var(--accent);text-decoration:underline;text-underline-offset:3px}
 
@@ -1063,37 +1026,21 @@ color:var(--text-primary);font-family:system-ui,-apple-system,"Segoe UI",Roboto,
 [data-theme="light"] .article-container article .code-copy-trigger:hover{background:rgba(0,0,0,0.06);border-color:rgba(0,0,0,0.14);color:#23272f}
 [data-theme="light"] .article-container article .code-copy-trigger.copied{background:rgba(11,153,61,0.14);border-color:rgba(11,153,61,0.28);color:#0b7a34}
 [data-theme="light"] .article-container article pre[class*="language-"] > code{color:#22303a}
-[data-theme="light"] .article-container article .token.comment,
-[data-theme="light"] .article-container article .token.prolog,
-[data-theme="light"] .article-container article .token.doctype,
-[data-theme="light"] .article-container article .token.cdata{color:#7a828d}
-[data-theme="light"] .article-container article .token.punctuation{color:#4f5863}
 [data-theme="light"] .article-container article .token.property,
-[data-theme="light"] .article-container article .token.tag,
-[data-theme="light"] .article-container article .token.constant,
-[data-theme="light"] .article-container article .token.symbol,
-[data-theme="light"] .article-container article .token.deleted{color:#b63e3e}
-[data-theme="light"] .article-container article .token.boolean,
+[data-theme="light"] .article-container article .token.tag{color:#b63e3e}
+
 [data-theme="light"] .article-container article .token.number,
 [data-theme="light"] .article-container article .token.regex,
 [data-theme="light"] .article-container article .token.important,
 [data-theme="light"] .article-container article .token.variable{color:#9b5a00}
-[data-theme="light"] .article-container article .token.selector,
-[data-theme="light"] .article-container article .token.attr-name,
-[data-theme="light"] .article-container article .token.string,
-[data-theme="light"] .article-container article .token.char,
-[data-theme="light"] .article-container article .token.builtin,
-[data-theme="light"] .article-container article .token.inserted{color:#177245}
-[data-theme="light"] .article-container article .token.operator,
-[data-theme="light"] .article-container article .token.entity,
+
+[data-theme="light"] .article-container article .token.string{color:#177245}
+
 [data-theme="light"] .article-container article .token.url,
-[data-theme="light"] .article-container article .language-css .token.string,
 [data-theme="light"] .article-container article .style .token.string{color:#005f91}
-[data-theme="light"] .article-container article .token.atrule,
-[data-theme="light"] .article-container article .token.attr-value,
+
 [data-theme="light"] .article-container article .token.keyword{color:#3a52be}
-[data-theme="light"] .article-container article .token.function,
-[data-theme="light"] .article-container article .token.class-name{color:#6c3bb2}
+[data-theme="light"] .article-container article .token.function{color:#6c3bb2}
 [data-theme="light"] .command-title{color:var(--text-primary)}
 [data-theme="light"] .command-desc{color:#6f6f6f}
 

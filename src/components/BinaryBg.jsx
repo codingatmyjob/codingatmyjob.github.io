@@ -1,8 +1,10 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useRef } from 'react'
 
 export default function BinaryBg(){
+  const ref = useRef(null)
+
   useEffect(()=>{
-    const container = document.getElementById('binary-bg')
+    const container = ref.current
     if(!container) return
 
     let resizeTimer
@@ -37,5 +39,5 @@ export default function BinaryBg(){
     return ()=> window.removeEventListener('resize', onResize)
   },[])
 
-  return null
+  return <div id="binary-bg" aria-hidden="true" ref={ref} />
 }

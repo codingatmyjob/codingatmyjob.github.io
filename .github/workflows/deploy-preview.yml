@@ -26,7 +26,7 @@ jobs:
 
       - run: echo "VITE_BUILD_TIME=$(date -u +"%Y-%m-%dT%H:%M:%SZ")" >> $GITHUB_ENV
 
-      - run: npx vite build --base /preview/
+      - run: npx vite-react-ssg build --base /preview/
 
       - uses: peaceiris/actions-gh-pages@v4
         with:

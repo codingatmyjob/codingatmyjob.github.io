@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 function ThemeToggle() {
   const [theme, setTheme] = useState(() => {
@@ -11,7 +12,7 @@ function ThemeToggle() {
   useEffect(() => {
     const html = document.documentElement
     html.setAttribute('data-theme', theme)
-    localStorage.setItem('theme', theme)
+    if (typeof localStorage !== 'undefined') localStorage.setItem('theme', theme)
   }, [theme])
 
   const toggleTheme = () => {
@@ -26,20 +27,8 @@ function ThemeToggle() {
   )
 }
 
-export default function Header({ onOpenArticle, menuOpen, onMenuToggle }){
-  // Handle header title click for "Return Home"
-  useEffect(()=>{
-    const el = document.querySelector('header .title a');
-    if(!el) return;
-    
-    const handler = function(e){
-      e.preventDefault();
-      window.dispatchEvent(new CustomEvent('returnHome'));
-    }
-    
-    el.addEventListener('click', handler);
-    return ()=> el.removeEventListener('click', handler)
-  },[])
+export default function Header({ menuOpen, onMenuToggle }){
+  const navigate = useNavigate()
 
   // Close menu when clicking outside
   useEffect(()=>{
@@ -52,16 +41,6 @@ export default function Header({ onOpenArticle, menuOpen, onMenuToggle }){
     document.addEventListener('click', handleClick)
     return ()=> document.removeEventListener('click', handleClick)
   },[menuOpen, onMenuToggle])
-
-  const handleMenuClick = (action)=>{
-    onMenuToggle(false)
-    if(action === 'home'){
-      window.dispatchEvent(new CustomEvent('returnHome'));
-    } else if(action === 'about'){
-      // Open About Me as an article
-      if(onOpenArticle) onOpenArticle('sidebar/About.html');
-    }
-  }
 
   return (
     <>
@@ -77,7 +56,7 @@ export default function Header({ onOpenArticle, menuOpen, onMenuToggle }){
       </button>
 
       <h2 className="title">
-        <a href="/" aria-label="Return Home">Tangent</a>
+        <a href="/" onClick={(e) => { e.preventDefault(); navigate('/') }} aria-label="Return Home">Tangent</a>
       </h2>
 
       <div className="header-controls">

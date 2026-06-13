@@ -1,42 +1,26 @@
-import { useEffect } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 
 export default function ScrollTop(){
-  useEffect(()=>{
-    const id = 'scroll-top'
-    let btn = document.getElementById(id)
-    if(!btn){
-      btn = document.createElement('button')
-      btn.id = id
-      btn.className = 'scroll-top'
-      btn.setAttribute('aria-label','Scroll to top')
-      btn.textContent = '▲'
-      document.body.appendChild(btn)
-    }
+  const btnRef = useRef(null)
+  const [visible, setVisible] = useState(false)
 
-    // click handler
-    const onClick = ()=> {
-      window.scrollTo({ top: 0, behavior: 'smooth' })
-    }
-    btn.addEventListener('click', onClick)
+  useEffect(()=>{
+    const btn = btnRef.current
+    if (!btn) return
 
     const updateVisibility = ()=>{
       const articleOpen = document.body.classList.contains('article-open')
       const scrollTop = articleOpen ? document.documentElement.scrollTop : window.scrollY
-
-      const shouldShow = scrollTop > 200
-      btn.style.opacity = shouldShow ? '1' : '0'
-      btn.style.pointerEvents = shouldShow ? 'auto' : 'none'
+      setVisible(scrollTop > 200)
     }
 
     const position = ()=>{
       const articleContainer = document.querySelector('.article-container')
       const articleOpen = document.body.classList.contains('article-open')
-      
       if(articleContainer && articleOpen){
         const rect = articleContainer.getBoundingClientRect()
         const desiredLeft = Math.round(rect.right + 30)
         const btnWidth = btn.offsetWidth || 44
-        
         if(desiredLeft + btnWidth > window.innerWidth - 8){
           btn.style.removeProperty('--scroll-left')
           btn.style.setProperty('--scroll-right', '20px')
@@ -48,31 +32,36 @@ export default function ScrollTop(){
         btn.style.removeProperty('--scroll-left')
         btn.style.setProperty('--scroll-right', '20px')
       }
-      
       updateVisibility()
     }
 
-    const onResize = ()=> position()
-    const onScroll = ()=> updateVisibility()
-
     const obs = new MutationObserver(()=> position())
-    const articleView = document.getElementById('article-view')
-    if(articleView) obs.observe(articleView, { childList:true, subtree:true })
+    obs.observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ['class'] })
 
-    window.addEventListener('resize', onResize)
-    window.addEventListener('scroll', onScroll)
-    document.body.addEventListener('scroll', onScroll) // For when article is open
+    window.addEventListener('resize', position)
+    window.addEventListener('scroll', updateVisibility)
+    document.body.addEventListener('scroll', updateVisibility)
 
     position()
 
     return ()=>{
-      btn.removeEventListener('click', onClick)
-      window.removeEventListener('resize', onResize)
-      window.removeEventListener('scroll', onScroll)
-      document.body.removeEventListener('scroll', onScroll)
+      window.removeEventListener('resize', position)
+      window.removeEventListener('scroll', updateVisibility)
+      document.body.removeEventListener('scroll', updateVisibility)
       obs.disconnect()
     }
   },[])
 
-  return null
+  return (
+    <button
+      id="scroll-top"
+      className="scroll-top"
+      aria-label="Scroll to top"
+      ref={btnRef}
+      style={{ opacity: visible ? 1 : 0, pointerEvents: visible ? 'auto' : 'none' }}
+      onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+    >
+      ▲
+    </button>
+  )
 }

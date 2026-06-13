@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import { createPortal } from 'react-dom'
 import ArticleCard from './ArticleCard'
 
 // Calculate reading time based on full article content
@@ -77,15 +76,12 @@ export default function ArticlesGrid({ articles = [], onOpenArticle }){
     }
   },[articles, readingTimes])
 
-  const container = typeof document !== 'undefined' ? document.querySelector('.articles-grid') : null
-  if(!container) return null
-
   const itemsToShow = articles.map(item => ({
     ...item,
     readingTime: item.path ? readingTimes[item.path] ?? null : null
   }))
 
-  const content = (
+  return (
     <>
       {itemsToShow.length > 0 ? (
         itemsToShow.map(it=> (
@@ -104,6 +100,4 @@ export default function ArticlesGrid({ articles = [], onOpenArticle }){
       )}
     </>
   )
-
-  return createPortal(content, container)
 }
