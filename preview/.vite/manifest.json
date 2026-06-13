@@ -1,6 +1,6 @@
 {
-  "_client-BKRvuatk.js": {
-    "file": "assets/client-BKRvuatk.js",
+  "_client-CpcNZVYX.js": {
+    "file": "assets/client-CpcNZVYX.js",
     "name": "client",
     "isDynamicEntry": true,
     "imports": [
@@ -8,12 +8,12 @@
     ]
   },
   "index.html": {
-    "file": "assets/app-CdtpnwT1.js",
+    "file": "assets/app-aVCzdqeM.js",
     "name": "app",
     "src": "index.html",
     "isEntry": true,
     "dynamicImports": [
-      "_client-BKRvuatk.js"
+      "_client-CpcNZVYX.js"
     ],
     "css": [
       "assets/app-BRzzoSkc.css"
