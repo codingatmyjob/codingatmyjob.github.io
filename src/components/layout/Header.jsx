@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 
+function getInitialTheme() {
+  if (typeof window === 'undefined') return 'light'
+  const attr = document.documentElement.getAttribute('data-theme')
+  return attr === 'dark' ? 'dark' : 'light'
+}
+
 function ThemeToggle() {
-  const [theme, setTheme] = useState(() => {
-    if (typeof window !== 'undefined') {
-      return localStorage.getItem('theme') || 'dark'
-    }
-    return 'dark'
-  })
+  const [theme, setTheme] = useState(getInitialTheme)
 
   useEffect(() => {
     const html = document.documentElement
