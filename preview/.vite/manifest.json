@@ -1,6 +1,6 @@
 {
-  "_client-CpcNZVYX.js": {
-    "file": "assets/client-CpcNZVYX.js",
+  "_client-Cryafry4.js": {
+    "file": "assets/client-Cryafry4.js",
     "name": "client",
     "isDynamicEntry": true,
     "imports": [
@@ -8,12 +8,12 @@
     ]
   },
   "index.html": {
-    "file": "assets/app-aVCzdqeM.js",
+    "file": "assets/app-D4pXOdSx.js",
     "name": "app",
     "src": "index.html",
     "isEntry": true,
     "dynamicImports": [
-      "_client-CpcNZVYX.js"
+      "_client-Cryafry4.js"
     ],
     "css": [
       "assets/app-BRzzoSkc.css"
