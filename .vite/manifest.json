@@ -1,0 +1,22 @@
+{
+  "_client-C4ehETFc.js": {
+    "file": "assets/client-C4ehETFc.js",
+    "name": "client",
+    "isDynamicEntry": true,
+    "imports": [
+      "index.html"
+    ]
+  },
+  "index.html": {
+    "file": "assets/app-X1bXpUXN.js",
+    "name": "app",
+    "src": "index.html",
+    "isEntry": true,
+    "dynamicImports": [
+      "_client-C4ehETFc.js"
+    ],
+    "css": [
+      "assets/app-BRzzoSkc.css"
+    ]
+  }
+}
