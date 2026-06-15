@@ -543,11 +543,12 @@ function main() {
       .sort((a, b) => b.score - a.score)
 
     // Ranking policy:
-    // 1) Prefer items in the same thematic cluster.
-    // 2) Fill with cross-cluster items if needed.
+    // 1) Score in-cluster and cross-cluster candidates.
+    // 2) Combine all candidates, then globally sort by score descending.
     // 3) Keep only score-qualified results.
     // 4) Cap to a small fixed list for UI simplicity.
     const related = [...rankedPrimary, ...rankedFallback]
+      .sort((a, b) => b.score - a.score)
       .filter(item => item.score >= MIN_RELATED_SCORE)
       .slice(0, 8)
       .map(item => ({

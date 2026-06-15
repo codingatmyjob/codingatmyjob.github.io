@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generatedAt": "2026-06-15T22:13:45.364Z",
+  "generatedAt": "2026-06-15T22:50:29.499Z",
   "method": "tfidf+kmeans+cosine",
   "minRelatedScore": 0.1,
   "maxObservedScore": 0.546595,
@@ -15,16 +15,16 @@
           "score": 0.276262
         },
         {
+          "slug": "playing-in-traffic-and-heatmaps",
+          "score": 0.189486
+        },
+        {
           "slug": "typeahead-demo",
           "score": 0.110018
         },
         {
           "slug": "use-claude-code-for-free",
           "score": 0.104433
-        },
-        {
-          "slug": "playing-in-traffic-and-heatmaps",
-          "score": 0.189486
         },
         {
           "slug": "efficient-html-maps-with-pydeck",
@@ -135,12 +135,12 @@
       "cluster": 2,
       "related": [
         {
-          "slug": "playing-in-traffic-and-heatmaps",
-          "score": 0.110625
-        },
-        {
           "slug": "typeahead-demo",
           "score": 0.125167
+        },
+        {
+          "slug": "playing-in-traffic-and-heatmaps",
+          "score": 0.110625
         },
         {
           "slug": "creating-a-pokemon-stock-bot",
@@ -165,8 +165,16 @@
       "cluster": 2,
       "related": [
         {
+          "slug": "creating-a-pokemon-stock-bot",
+          "score": 0.189486
+        },
+        {
           "slug": "cruise-size-comparisons",
           "score": 0.189375
+        },
+        {
+          "slug": "typeahead-demo",
+          "score": 0.157776
         },
         {
           "slug": "efficient-html-maps-with-pydeck",
@@ -175,14 +183,6 @@
         {
           "slug": "noaa-tides-llm-chatbot-demo",
           "score": 0.110625
-        },
-        {
-          "slug": "creating-a-pokemon-stock-bot",
-          "score": 0.189486
-        },
-        {
-          "slug": "typeahead-demo",
-          "score": 0.157776
         },
         {
           "slug": "VirtualBox-Home-Lab-Setup",
@@ -202,10 +202,6 @@
       "cluster": 0,
       "related": [
         {
-          "slug": "creating-a-pokemon-stock-bot",
-          "score": 0.110018
-        },
-        {
           "slug": "cruise-size-comparisons",
           "score": 0.182944
         },
@@ -216,6 +212,10 @@
         {
           "slug": "noaa-tides-llm-chatbot-demo",
           "score": 0.125167
+        },
+        {
+          "slug": "creating-a-pokemon-stock-bot",
+          "score": 0.110018
         }
       ]
     },
