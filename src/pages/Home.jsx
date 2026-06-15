@@ -158,7 +158,7 @@ export default function Home() {
       <section className="site-intro" aria-labelledby="site-intro-title">
         <h1 id="site-intro-title">Tangent</h1>
         <p>
-          Tangent is a cybersecurity and data analyst blog that encapsulates random thoughts, experiments, and side projects that grew beyond the first idea.
+          Tangent is a cybersecurity and data science blog that encapsulates random thoughts, experiments, and side projects that grew beyond the first idea.
           Over time, these tangents build a real project portfolio with technical notes, project builds, experiments, reviews, and practical writeups.
         </p>
       </section>

@@ -178,7 +178,7 @@
             <p>GitHub Pages hosts a static frontend with JS React and Vite. It can't execute server-side code, so a separate Node.js backend on Fly.io handles the LLM calls, enforces rate limits, and keeps secrets hidden.</p>
             <p>When the user sends a message, Groq decides which tool to call but can't reach NOAA directly. It returns a specific instruction to the backend indicating the tool to use. 
                 The backend then fetches the data and sends it back to Groq to generate the final response which is streamed back to the user on the frontend.</p>
-            <pre><code>  Browser (GitHub Pages)
+                <pre><code class="language-text">  Browser (GitHub Pages)
           ↓ POST /chat
   Fly.io - Node.js backend
           ↓ message

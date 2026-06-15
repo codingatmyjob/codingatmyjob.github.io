@@ -1,3 +1,4 @@
+// .js over .json because we're using imageStyle objects and plain JSON would prevent this
 export const articlesData = [
   // // DONE - WAITING TO RELEASE
   // {
@@ -40,7 +41,7 @@ export const articlesData = [
     publishedAt: '2026-06-12',
     date: 'June 12, 2026',
     title: 'Use Claude Code for Free',
-    description: 'Reference for running Claude Code through OpenRouter\'s free models on Windows.',
+    description: 'Run Claude Code with free/local models. With tool-calling and context limits, is it doable?',
     tags: ['Reference', 'Claude Code', 'OpenRouter', 'Windows'],
     imageSrc: 'images/cover/claudecode.png',
     imageAlt: 'Use Claude Code for Free',

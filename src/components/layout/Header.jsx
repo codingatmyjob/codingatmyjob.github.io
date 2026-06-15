@@ -9,15 +9,38 @@ function getInitialTheme() {
 
 function ThemeToggle() {
   const [theme, setTheme] = useState(getInitialTheme)
+  const [hasUserTheme, setHasUserTheme] = useState(() => {
+    if (typeof localStorage === 'undefined') return false
+    return localStorage.getItem('theme') !== null
+  })
 
   useEffect(() => {
     const html = document.documentElement
     html.setAttribute('data-theme', theme)
-    if (typeof localStorage !== 'undefined') localStorage.setItem('theme', theme)
   }, [theme])
 
+  useEffect(() => {
+    if (typeof window === 'undefined' || hasUserTheme) return
+    const media = window.matchMedia('(prefers-color-scheme: dark)')
+    const applySystemTheme = () => setTheme(media.matches ? 'dark' : 'light')
+    applySystemTheme()
+
+    if (typeof media.addEventListener === 'function') {
+      media.addEventListener('change', applySystemTheme)
+      return () => media.removeEventListener('change', applySystemTheme)
+    }
+
+    media.addListener(applySystemTheme)
+    return () => media.removeListener(applySystemTheme)
+  }, [hasUserTheme])
+
   const toggleTheme = () => {
-    setTheme(prev => prev === 'light' ? 'dark' : 'light')
+    setHasUserTheme(true)
+    setTheme(prev => {
+      const next = prev === 'light' ? 'dark' : 'light'
+      if (typeof localStorage !== 'undefined') localStorage.setItem('theme', next)
+      return next
+    })
   }
 
   return (

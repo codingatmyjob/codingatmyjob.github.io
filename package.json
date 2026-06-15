@@ -4,8 +4,10 @@
   "private": true,
   "scripts": {
     "dev": "vite",
+    "prebuild": "npm run generate:related",
     "build": "vite-react-ssg build",
     "preview": "vite preview",
+    "generate:related": "node scripts/generate-related-articles.cjs",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d dist"
   },
