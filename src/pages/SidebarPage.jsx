@@ -450,7 +450,8 @@ async function hydrateGithubStats(root) {
 }
 
 export default function SidebarPage() {
-  const { rawHtml } = useLoaderData()
+  const loaderData = useLoaderData() || {}
+  const rawHtml = typeof loaderData.rawHtml === 'string' ? loaderData.rawHtml : ''
   const navigate = useNavigate()
   const ref = useRef(null)
 
