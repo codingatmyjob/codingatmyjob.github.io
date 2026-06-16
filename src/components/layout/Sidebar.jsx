@@ -18,6 +18,8 @@ export default function Sidebar({ isOpen, onClose }) {
       navigate('/')
     } else if (action === 'about') {
       navigate('/sidebar/About')
+    } else if (action === 'status-hub') {
+      navigate('/sidebar/status-hub')
     } else if (action === 'tag-guide') {
       navigate('/sidebar/tag-guide')
     }
@@ -63,6 +65,12 @@ export default function Sidebar({ isOpen, onClose }) {
                 <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
               </svg>
               About Me
+            </a>
+            <a href="/sidebar/status-hub" className="sidebar-item" onClick={(e) => { e.preventDefault(); handleMenuClick('status-hub'); }}>
+              <svg className="sidebar-icon" viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true">
+                <path d="M4 13h6V4H4v9zm0 7h6v-5H4v5zm8 0h8v-9h-8v9zm0-16v5h8V4h-8z"/>
+              </svg>
+              Status Hub
             </a>
             <a href="/sidebar/tag-guide" className="sidebar-item" onClick={(e) => { e.preventDefault(); handleMenuClick('tag-guide'); }}>
               <svg className="sidebar-icon" viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true">

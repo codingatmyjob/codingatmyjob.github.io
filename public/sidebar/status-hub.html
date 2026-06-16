@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Status Hub</title>
+    <meta name="description" content="Kibana-style status hub for Tangent project workstreams, backlog flow, and delivery metrics.">
+    <link rel="stylesheet" href="../style.css">
+    <style>
+        #article-view {
+            max-width: none !important;
+            width: 100%;
+            margin: 0;
+        }
+        #article-view .article-frame {
+            width: 100%;
+            max-width: none;
+            margin: 0;
+        }
+        .status-hub {
+            --status-text: #d7d9dc;
+            --status-muted: #a6adb5;
+            width: 100%;
+            max-width: none;
+            margin: 0;
+            margin-bottom: 0;
+            padding: 18px 20px 32px 20px;
+            background: transparent;
+            border: none;
+            box-shadow: none;
+            color: var(--status-text);
+        }
+        .status-hub > .back-link {
+            display: none;
+        }
+        .status-hub h1,
+        .status-hub h2,
+        .status-hub h3,
+        .status-hub p,
+        .status-hub li,
+        .status-hub td,
+        .status-hub strong,
+        .status-hub span {
+            color: var(--status-text);
+        }
+        .status-hero {
+            margin: 0 0 14px 0;
+            padding: 16px 18px;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            background: var(--bg-secondary);
+        }
+        .status-hero-title {
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 8px;
+        }
+        .status-hero-title h1 {
+            margin: 0;
+            font-size: clamp(1.3rem, 1.8vw, 2.1rem);
+        }
+        .status-hero-label {
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            opacity: 1;
+            color: var(--status-muted);
+        }
+        .status-hero p {
+            margin: 0;
+            opacity: 1;
+            color: var(--status-muted);
+        }
+        .status-kpis {
+            display: grid;
+            grid-template-columns: repeat(6, minmax(0, 1fr));
+            gap: 12px;
+            margin: 0 0 14px 0;
+        }
+        .status-kpi {
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 12px;
+            background: var(--bg-secondary);
+            min-height: 94px;
+        }
+        .status-kpi-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            gap: 8px;
+            margin-bottom: 6px;
+        }
+        .status-kpi-trend {
+            font-size: 0.72rem;
+            opacity: 1;
+            color: var(--status-muted);
+        }
+        .status-kpi-value {
+            display: block;
+            font-size: clamp(1.2rem, 2vw, 1.8rem);
+            line-height: 1.1;
+            font-weight: 700;
+        }
+        .status-kpi-label {
+            font-size: 0.72rem;
+            opacity: 1;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--status-muted);
+        }
+        .status-kpi-bar {
+            display: none;
+        }
+        .status-kpi-bar > span {
+            display: block;
+            height: 100%;
+            background: var(--accent);
+        }
+        .status-dashboard {
+            display: grid;
+            grid-template-columns: 2fr 1.25fr 1.25fr;
+            gap: 12px;
+            align-items: start;
+        }
+        .status-stack {
+            display: grid;
+            gap: 12px;
+            align-content: start;
+            grid-auto-rows: max-content;
+        }
+        .status-section {
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 12px;
+            background: var(--bg-secondary);
+        }
+        .status-section h3 {
+            margin: 0;
+            font-size: 0.94rem;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            opacity: 1;
+            color: var(--status-text);
+        }
+        .status-section-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 10px;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 8px;
+        }
+        .status-pill {
+            font-size: 0.68rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            border: 1px solid var(--border);
+            border-radius: 999px;
+            padding: 2px 7px;
+            opacity: 1;
+            color: var(--status-muted);
+        }
+        .status-grid-two {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            align-items: start;
+        }
+        .status-items {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: grid;
+            gap: 7px;
+        }
+        .status-item {
+            display: flex;
+            gap: 8px;
+            align-items: flex-start;
+            padding: 9px 10px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            background: var(--bg-primary);
+        }
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            margin-top: 6px;
+            border-radius: 50%;
+            flex: 0 0 8px;
+            background: var(--accent);
+        }
+        .status-dot.warn { background: #e2a33d; }
+        .status-dot.pause { background: #b06bff; }
+        .status-dot.done { background: #36cc8f; }
+        .status-item p {
+            margin: 0;
+            font-size: 0.9rem;
+        }
+        .status-item-meta {
+            display: block;
+            font-size: 0.74rem;
+            opacity: 1;
+            margin-top: 2px;
+            color: var(--status-muted);
+        }
+        .status-item-meta-link {
+            color: var(--status-muted);
+            text-decoration: underline;
+            text-underline-offset: 2px;
+        }
+        .status-item-meta-link:hover {
+            color: var(--status-text);
+        }
+        .status-mini-metrics {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 8px;
+        }
+        .status-mini {
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 8px;
+            background: var(--bg-primary);
+        }
+        .status-mini strong {
+            display: block;
+            font-size: 1rem;
+            line-height: 1.1;
+        }
+        .status-mini span {
+            font-size: 0.68rem;
+            text-transform: uppercase;
+            opacity: 1;
+            letter-spacing: 0.06em;
+            color: var(--status-muted);
+        }
+        .status-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.84rem;
+        }
+        .status-table th,
+        .status-table td {
+            text-align: left;
+            padding: 7px 6px;
+            border-bottom: 1px solid var(--border);
+        }
+        .status-table th {
+            font-size: 0.68rem;
+            text-transform: uppercase;
+            letter-spacing: 0.07em;
+            opacity: 1;
+            color: var(--status-muted);
+        }
+        .status-spark {
+            --velocity-gap: 3px;
+            display: grid;
+            grid-template-columns: repeat(12, minmax(0, 1fr));
+            align-items: end;
+            gap: var(--velocity-gap);
+            min-height: 72px;
+            padding: 6px 0 2px 0;
+        }
+        .status-spark-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 4px;
+        }
+        .status-spark-count {
+            font-size: 0.62rem;
+            color: var(--status-muted);
+            line-height: 1;
+            text-align: center;
+            min-height: 10px;
+        }
+        .status-spark-bar {
+            width: 100%;
+            border-radius: 4px 4px 2px 2px;
+            background: rgba(0,255,65,0.4);
+        }
+        .status-spark-bar.active {
+            background: var(--accent);
+        }
+        .status-spark-markers {
+            display: grid;
+            grid-template-columns: repeat(12, minmax(0, 1fr));
+            gap: var(--velocity-gap);
+            margin-top: 6px;
+            font-size: 0.62rem;
+            color: var(--status-muted);
+            text-align: center;
+        }
+        .status-spark-markers span {
+            opacity: 0.9;
+            white-space: nowrap;
+        }
+        .status-note {
+            font-size: 0.78rem;
+            opacity: 1;
+            margin-top: 8px;
+            color: var(--status-muted);
+        }
+        [data-theme="light"] .status-spark span,
+        [data-theme="light"] .status-kpi-bar > span {
+            background: rgba(80,80,80,0.65);
+        }
+        [data-theme="light"] .status-hub {
+            --status-text: #2d3136;
+            --status-muted: #4f5862;
+        }
+        @media (max-width: 1380px) {
+            .status-dashboard {
+                grid-template-columns: 1.6fr 1fr;
+            }
+            .status-stack:nth-child(3) {
+                grid-column: 1 / -1;
+            }
+        }
+        @media (max-width: 1080px) {
+            .status-hub {
+                width: 100%;
+            }
+            .status-kpis {
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+            }
+            .status-dashboard {
+                grid-template-columns: 1fr;
+            }
+        }
+        @media (max-width: 760px) {
+            .status-kpis {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+            .status-grid-two,
+            .status-mini-metrics {
+                grid-template-columns: 1fr;
+            }
+        }
+        @media (max-width: 520px) {
+            .status-hub {
+                width: 100%;
+                margin-top: 0;
+                padding: 10px 20px 32px 20px;
+            }
+            .status-kpis {
+                grid-template-columns: 1fr;
+            }
+            .status-kpi {
+                min-height: 80px;
+            }
+            .status-hero {
+                padding: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="binary-bg" aria-hidden="true"></div>
+
+    <main class="article-container status-hub" data-gh-owner="codingatmyjob" data-gh-repo="codingatmyjob.github.io" data-gh-production-workflow="deploy-production.yml">
+        <section class="status-hero">
+            <div class="status-hero-title">
+                <h1>Status Hub</h1>
+                <span class="status-hero-label">Live Project Telemetry</span>
+            </div>
+            <p>
+                Kibana-style board for tracking build activity, delivery health, ideas and orphans.
+            </p>
+        </section>
+
+        <section class="status-kpis" aria-label="status summary">
+            <div class="status-kpi">
+                <div class="status-kpi-top">
+                    <span class="status-kpi-value" data-gh-stat="stars">0</span>
+                    <span class="status-kpi-trend">GitHub signal</span>
+                </div>
+                <span class="status-kpi-label">Repo Stars</span>
+                <div class="status-kpi-bar"><span style="width: 45%"></span></div>
+            </div>
+            <div class="status-kpi">
+                <div class="status-kpi-top">
+                    <span class="status-kpi-value" data-gh-stat="forks">0</span>
+                    <span class="status-kpi-trend">Community reuse</span>
+                </div>
+                <span class="status-kpi-label">Repo Forks</span>
+                <div class="status-kpi-bar"><span style="width: 35%"></span></div>
+            </div>
+            <div class="status-kpi">
+                <div class="status-kpi-top">
+                    <span class="status-kpi-value" data-gh-stat="openIssues">0</span>
+                    <span class="status-kpi-trend">Workload surface</span>
+                </div>
+                <span class="status-kpi-label">Open Issues</span>
+                <div class="status-kpi-bar"><span style="width: 55%"></span></div>
+            </div>
+            <div class="status-kpi">
+                <div class="status-kpi-top">
+                    <span class="status-kpi-value" data-gh-stat="watchers">0</span>
+                    <span class="status-kpi-trend">Active subscribers</span>
+                </div>
+                <span class="status-kpi-label">Repo Watchers</span>
+                <div class="status-kpi-bar"><span style="width: 42%"></span></div>
+            </div>
+            <div class="status-kpi">
+                <div class="status-kpi-top">
+                    <span class="status-kpi-value" data-gh-stat="productionCommits">0</span>
+                    <span class="status-kpi-trend" data-gh-stat="productionTrend">0 vs prev 30d</span>
+                </div>
+                <span class="status-kpi-label">Production Commits (30d)</span>
+                <div class="status-kpi-bar"><span style="width: 93%"></span></div>
+            </div>
+            <div class="status-kpi">
+                <div class="status-kpi-top">
+                    <span class="status-kpi-value" data-gh-stat="commitVelocity">0/wk</span>
+                    <span class="status-kpi-trend" data-gh-stat="velocityTrend">Weekly commits</span>
+                </div>
+                <span class="status-kpi-label">Delivery Velocity</span>
+                <div class="status-kpi-bar"><span style="width: 57%"></span></div>
+            </div>
+        </section>
+
+        <section class="status-dashboard">
+            <div class="status-stack">
+                <section class="status-section" aria-labelledby="ideas-heading">
+                    <div class="status-section-head">
+                        <h3 id="ideas-heading">Ideas and Orphans</h3>
+                        <span class="status-pill">Label Driven</span>
+                    </div>
+                    <div class="status-grid-two">
+                        <ul class="status-items" data-gh-feed-ideas>
+                            <li class="status-item">
+                                <span class="status-dot" aria-hidden="true"></span>
+                                <p>
+                                    Loading ideas...
+                                    <span class="status-item-meta">Label: idea</span>
+                                </p>
+                            </li>
+                        </ul>
+                        <ul class="status-items" data-gh-feed-orphans>
+                            <li class="status-item">
+                                <span class="status-dot warn" aria-hidden="true"></span>
+                                <p>
+                                    Loading orphans...
+                                    <span class="status-item-meta">Label: orphan</span>
+                                </p>
+                            </li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="status-section" aria-labelledby="flow-heading">
+                    <div class="status-section-head">
+                        <h3 id="flow-heading">Recent Commit Activity</h3>
+                        <span class="status-pill">Live Feed</span>
+                    </div>
+                    <ul class="status-items" data-gh-feed-commits>
+                        <li class="status-item">
+                            <span class="status-dot" aria-hidden="true"></span>
+                            <p>
+                                Loading commit feed...
+                                <span class="status-item-meta">Fetching recent repository activity.</span>
+                            </p>
+                        </li>
+                    </ul>
+                </section>
+            </div>
+
+            <div class="status-stack">
+                <section class="status-section" aria-labelledby="velocity-heading">
+                    <div class="status-section-head">
+                        <h3 id="velocity-heading">Velocity</h3>
+                        <span class="status-pill">12 Weeks</span>
+                    </div>
+                    <div class="status-spark" data-gh-weekly-bars aria-label="12-week commit velocity">
+                        <div class="status-spark-item"><span class="status-spark-count">0</span><span class="status-spark-bar" style="height: 10px"></span></div>
+                        <div class="status-spark-item"><span class="status-spark-count">0</span><span class="status-spark-bar" style="height: 14px"></span></div>
+                        <div class="status-spark-item"><span class="status-spark-count">0</span><span class="status-spark-bar" style="height: 12px"></span></div>
+                        <div class="status-spark-item"><span class="status-spark-count">0</span><span class="status-spark-bar" style="height: 18px"></span></div>
+                        <div class="status-spark-item"><span class="status-spark-count">0</span><span class="status-spark-bar" style="height: 16px"></span></div>
+                        <div class="status-spark-item"><span class="status-spark-count">0</span><span class="status-spark-bar" style="height: 20px"></span></div>
+                        <div class="status-spark-item"><span class="status-spark-count">0</span><span class="status-spark-bar" style="height: 26px"></span></div>
+                        <div class="status-spark-item"><span class="status-spark-count">0</span><span class="status-spark-bar" style="height: 22px"></span></div>
+                        <div class="status-spark-item"><span class="status-spark-count">0</span><span class="status-spark-bar" style="height: 28px"></span></div>
+                        <div class="status-spark-item"><span class="status-spark-count">0</span><span class="status-spark-bar" style="height: 24px"></span></div>
+                        <div class="status-spark-item"><span class="status-spark-count">0</span><span class="status-spark-bar" style="height: 30px"></span></div>
+                        <div class="status-spark-item"><span class="status-spark-count">0</span><span class="status-spark-bar active" style="height: 34px"></span></div>
+                    </div>
+                    <div class="status-spark-markers" data-gh-week-labels aria-hidden="true">
+                        <span>-11w</span>
+                        <span>-10w</span>
+                        <span>-9w</span>
+                        <span>-8w</span>
+                        <span>-7w</span>
+                        <span>-6w</span>
+                        <span>-5w</span>
+                        <span>-4w</span>
+                        <span>-3w</span>
+                        <span>-2w</span>
+                        <span>-1w</span>
+                        <span>now</span>
+                    </div>
+                    <p class="status-note" data-gh-stat="velocitySummary">12-week total commit activity.</p>
+                </section>
+
+                <section class="status-section" aria-labelledby="operational-heading">
+                    <div class="status-section-head">
+                        <h3 id="operational-heading">Operational Metrics</h3>
+                        <span class="status-pill">Health</span>
+                    </div>
+                    <div class="status-mini-metrics">
+                        <div class="status-mini"><strong data-gh-stat="buildPassRate30d">--%</strong><span>Build Pass Rate (30d)</span></div>
+                        <div class="status-mini"><strong data-gh-stat="deploysMonth">--</strong><span>Deploys / Month</span></div>
+                        <div class="status-mini"><strong data-gh-stat="prMergeLag">--</strong><span>PR Merge Lag</span></div>
+                        <div class="status-mini"><strong data-gh-stat="orphansOpen">--</strong><span>Orphans Open</span></div>
+                        <div class="status-mini"><strong data-gh-stat="ideasOpen">--</strong><span>Ideas Open</span></div>
+                        <div class="status-mini"><strong data-gh-stat="onHoldCount">--</strong><span>On Hold</span></div>
+                    </div>
+                </section>
+
+                <section class="status-section" aria-labelledby="hold-heading">
+                    <div class="status-section-head">
+                        <h3 id="hold-heading">On Hold</h3>
+                        <span class="status-pill">Label Driven</span>
+                    </div>
+                    <ul class="status-items" data-gh-feed-blocked>
+                        <li class="status-item">
+                            <span class="status-dot pause" aria-hidden="true"></span>
+                            <p>
+                                Loading blocked/on-hold issues...
+                                <span class="status-item-meta">Labels: blocked, on-hold, on hold, needs-decision</span>
+                            </p>
+                        </li>
+                    </ul>
+                    <p class="status-note">Pinned On Hold Projects</p>
+                    <ul class="status-items" data-manual-on-hold>
+                        <li class="status-item">
+                            <span class="status-dot pause" aria-hidden="true"></span>
+                            <p>
+                                NOAA Tides LLM Chatbot Demo
+                                <span class="status-item-meta">Manual on-hold entry</span>
+                            </p>
+                        </li>
+                        <li class="status-item">
+                            <span class="status-dot pause" aria-hidden="true"></span>
+                            <p>
+                                Efficient HTML Maps with PyDeck
+                                <span class="status-item-meta">Manual on-hold entry</span>
+                            </p>
+                        </li>
+                    </ul>
+                </section>
+            </div>
+
+            <div class="status-stack">
+                <section class="status-section" aria-labelledby="completed-heading">
+                    <div class="status-section-head">
+                        <h3 id="completed-heading">Recently Completed</h3>
+                        <span class="status-pill">Shipped</span>
+                    </div>
+                    <ul class="status-items">
+                        <li class="status-item">
+                            <span class="status-dot done" aria-hidden="true"></span>
+                            <p>
+                                Status Hub launched and linked in sidebar.
+                                <span class="status-item-meta">Type: UI addition</span>
+                            </p>
+                        </li>
+                        <li class="status-item">
+                            <span class="status-dot done" aria-hidden="true"></span>
+                            <p>
+                                Related-articles generation integrated into build.
+                                <span class="status-item-meta">Type: data pipeline</span>
+                            </p>
+                        </li>
+                        <li class="status-item">
+                            <span class="status-dot done" aria-hidden="true"></span>
+                            <p>
+                                Converted legacy hash-routed SPA shell to Vite React SSG route generation.
+                                <span class="status-item-meta">Type: architecture migration</span>
+                            </p>
+                        </li>
+                        <li class="status-item">
+                            <span class="status-dot done" aria-hidden="true"></span>
+                            <p>
+                                Feature-based image folder normalization.
+                                <span class="status-item-meta">Type: refactor</span>
+                            </p>
+                        </li>
+                    </ul>
+                </section>
+
+                <section class="status-section" aria-labelledby="mix-heading">
+                    <div class="status-section-head">
+                        <h3 id="mix-heading">Deployment Activity</h3>
+                        <span class="status-pill">Production Workflow</span>
+                    </div>
+                    <ul class="status-items" data-gh-feed-deployments>
+                        <li class="status-item">
+                            <span class="status-dot" aria-hidden="true"></span>
+                            <p>
+                                Loading deploy-production workflow runs...
+                                <span class="status-item-meta">Recent production deploy history.</span>
+                            </p>
+                        </li>
+                    </ul>
+                </section>
+            </div>
+        </section>
+    </main>
+</body>
+</html>
