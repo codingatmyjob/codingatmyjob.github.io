@@ -17,6 +17,7 @@ export default defineConfig({
         ...articleSlugs.map(s => `/articles/${s}`),
         '/sidebar/About',
         '/sidebar/tag-guide',
+        '/sidebar/status-hub',
       ]
     }
   }
