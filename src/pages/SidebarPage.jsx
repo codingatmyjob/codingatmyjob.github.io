@@ -166,11 +166,38 @@ function buildWeeklyCommitBuckets(commits, weeks = 12) {
 }
 
 async function fetchGithubCommits(owner, repo, since) {
-  const data = await fetchGithubJsonCached(
-    `https://api.github.com/repos/${owner}/${repo}/commits?since=${encodeURIComponent(since)}&per_page=100&page=1`,
-    `${owner}/${repo}:commits:${since}`
-  )
-  return Array.isArray(data) ? data : []
+  const perPage = 100
+  const maxPages = 10
+  const cacheKey = `${owner}/${repo}:commits:${since}:paginated`
+  const cached = readCachedGithubData(cacheKey)
+  if (Array.isArray(cached)) return cached
+
+  const all = []
+
+  for (let page = 1; page <= maxPages; page += 1) {
+    try {
+      const res = await fetch(
+        `https://api.github.com/repos/${owner}/${repo}/commits?since=${encodeURIComponent(since)}&per_page=${perPage}&page=${page}`,
+        { headers: { Accept: 'application/vnd.github+json' } }
+      )
+
+      if (!res.ok) break
+
+      const data = await res.json()
+      if (!Array.isArray(data) || data.length === 0) break
+
+      all.push(...data)
+
+      const link = res.headers.get('link') || ''
+      const hasNext = /rel="next"/i.test(link)
+      if (!hasNext || data.length < perPage) break
+    } catch {
+      break
+    }
+  }
+
+  writeCachedGithubData(cacheKey, all)
+  return all
 }
 
 async function fetchRecentGithubCommits(owner, repo, perPage = 6) {
