@@ -1,10 +1,10 @@
 {
   "version": 1,
-  "generatedAt": "2026-06-16T04:01:07.660Z",
+  "generatedAt": "2026-06-17T21:57:14.855Z",
   "method": "tfidf+kmeans+cosine",
   "minRelatedScore": 0.1,
-  "maxObservedScore": 0.546595,
-  "articleCount": 15,
+  "maxObservedScore": 0.547306,
+  "articleCount": 16,
   "k": 3,
   "items": {
     "creating-a-pokemon-stock-bot": {
@@ -12,27 +12,27 @@
       "related": [
         {
           "slug": "discord-spotify-activity-tracker",
-          "score": 0.276262
+          "score": 0.27715
         },
         {
           "slug": "playing-in-traffic-and-heatmaps",
-          "score": 0.189486
+          "score": 0.191747
         },
         {
           "slug": "typeahead-demo",
-          "score": 0.110018
+          "score": 0.111339
         },
         {
           "slug": "use-claude-code-for-free",
-          "score": 0.104433
+          "score": 0.106021
         },
         {
           "slug": "efficient-html-maps-with-pydeck",
-          "score": 0.101156
+          "score": 0.101531
         },
         {
           "slug": "noaa-tides-llm-chatbot-demo",
-          "score": 0.100071
+          "score": 0.101524
         }
       ]
     },
@@ -41,11 +41,11 @@
       "related": [
         {
           "slug": "playing-in-traffic-and-heatmaps",
-          "score": 0.189375
+          "score": 0.190355
         },
         {
           "slug": "typeahead-demo",
-          "score": 0.182944
+          "score": 0.182557
         }
       ]
     },
@@ -54,11 +54,11 @@
       "related": [
         {
           "slug": "creating-a-pokemon-stock-bot",
-          "score": 0.276262
+          "score": 0.27715
         },
         {
           "slug": "playing-in-traffic-and-heatmaps",
-          "score": 0.100655
+          "score": 0.102543
         }
       ]
     },
@@ -67,15 +67,15 @@
       "related": [
         {
           "slug": "playing-in-traffic-and-heatmaps",
-          "score": 0.12298
+          "score": 0.125029
         },
         {
           "slug": "using-prismjs-to-style-code",
-          "score": 0.104233
+          "score": 0.105329
         },
         {
           "slug": "creating-a-pokemon-stock-bot",
-          "score": 0.101156
+          "score": 0.101531
         }
       ]
     },
@@ -84,15 +84,15 @@
       "related": [
         {
           "slug": "how-i-passed-security-plus",
-          "score": 0.546595
+          "score": 0.547306
         },
         {
           "slug": "passing-oci-foundations-associate",
-          "score": 0.28131
+          "score": 0.282871
         },
         {
           "slug": "VirtualBox-Home-Lab-Setup",
-          "score": 0.210289
+          "score": 0.211497
         }
       ]
     },
@@ -101,15 +101,15 @@
       "related": [
         {
           "slug": "how-i-passed-network-plus",
-          "score": 0.546595
+          "score": 0.547306
         },
         {
           "slug": "passing-oci-foundations-associate",
-          "score": 0.270753
+          "score": 0.271738
         },
         {
           "slug": "VirtualBox-Home-Lab-Setup",
-          "score": 0.208044
+          "score": 0.210131
         }
       ]
     },
@@ -118,7 +118,7 @@
       "related": [
         {
           "slug": "HTB-Command-Cheatsheet",
-          "score": 0.315427
+          "score": 0.317942
         }
       ]
     },
@@ -127,7 +127,7 @@
       "related": [
         {
           "slug": "HTB-Artificial-Writeup",
-          "score": 0.315427
+          "score": 0.317942
         }
       ]
     },
@@ -136,15 +136,15 @@
       "related": [
         {
           "slug": "typeahead-demo",
-          "score": 0.125167
+          "score": 0.12286
         },
         {
           "slug": "playing-in-traffic-and-heatmaps",
-          "score": 0.110625
+          "score": 0.113439
         },
         {
           "slug": "creating-a-pokemon-stock-bot",
-          "score": 0.100071
+          "score": 0.101524
         }
       ]
     },
@@ -153,11 +153,11 @@
       "related": [
         {
           "slug": "how-i-passed-network-plus",
-          "score": 0.28131
+          "score": 0.282871
         },
         {
           "slug": "how-i-passed-security-plus",
-          "score": 0.270753
+          "score": 0.271738
         }
       ]
     },
@@ -166,56 +166,56 @@
       "related": [
         {
           "slug": "creating-a-pokemon-stock-bot",
-          "score": 0.189486
+          "score": 0.191747
         },
         {
           "slug": "cruise-size-comparisons",
-          "score": 0.189375
+          "score": 0.190355
         },
         {
           "slug": "typeahead-demo",
-          "score": 0.157776
+          "score": 0.15914
         },
         {
           "slug": "efficient-html-maps-with-pydeck",
-          "score": 0.12298
+          "score": 0.125029
         },
         {
           "slug": "noaa-tides-llm-chatbot-demo",
-          "score": 0.110625
-        },
-        {
-          "slug": "VirtualBox-Home-Lab-Setup",
-          "score": 0.103741
+          "score": 0.113439
         },
         {
           "slug": "use-claude-code-for-free",
-          "score": 0.101671
+          "score": 0.104763
         },
         {
           "slug": "discord-spotify-activity-tracker",
-          "score": 0.100655
+          "score": 0.102543
         }
       ]
+    },
+    "traffic-live-object-detection": {
+      "cluster": 2,
+      "related": []
     },
     "typeahead-demo": {
       "cluster": 0,
       "related": [
         {
           "slug": "cruise-size-comparisons",
-          "score": 0.182944
+          "score": 0.182557
         },
         {
           "slug": "playing-in-traffic-and-heatmaps",
-          "score": 0.157776
+          "score": 0.15914
         },
         {
           "slug": "noaa-tides-llm-chatbot-demo",
-          "score": 0.125167
+          "score": 0.12286
         },
         {
           "slug": "creating-a-pokemon-stock-bot",
-          "score": 0.110018
+          "score": 0.111339
         }
       ]
     },
@@ -224,11 +224,11 @@
       "related": [
         {
           "slug": "creating-a-pokemon-stock-bot",
-          "score": 0.104433
+          "score": 0.106021
         },
         {
           "slug": "playing-in-traffic-and-heatmaps",
-          "score": 0.101671
+          "score": 0.104763
         }
       ]
     },
@@ -237,7 +237,7 @@
       "related": [
         {
           "slug": "efficient-html-maps-with-pydeck",
-          "score": 0.104233
+          "score": 0.105329
         }
       ]
     },
@@ -246,15 +246,11 @@
       "related": [
         {
           "slug": "how-i-passed-network-plus",
-          "score": 0.210289
+          "score": 0.211497
         },
         {
           "slug": "how-i-passed-security-plus",
-          "score": 0.208044
-        },
-        {
-          "slug": "playing-in-traffic-and-heatmaps",
-          "score": 0.103741
+          "score": 0.210131
         }
       ]
     }
