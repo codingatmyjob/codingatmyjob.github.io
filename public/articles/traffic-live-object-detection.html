@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Real-Time Traffic Object Detection with TensorFlow.js</title>
+  <link rel="stylesheet" href="../style.css" />
+  <style>
+    .traffic-detector-article {
+      max-width: 1200px;
+    }
+
+    .traffic-detector-shell {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      margin-top: 18px;
+    }
+
+    .traffic-stage {
+      position: relative;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      background: #050705;
+      min-height: 460px;
+    }
+
+    .traffic-video {
+      width: 100%;
+      height: 100%;
+      display: block;
+      background: #050705;
+      min-height: 460px;
+    }
+
+    .traffic-overlay {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+
+    .traffic-panel {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px;
+      background: rgba(0, 0, 0, 0.18);
+      align-self: stretch;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    .traffic-panel h2 {
+      font-size: 1.05rem;
+      margin: 0 0 14px 0 !important;
+      text-align: left;
+    }
+
+    .traffic-panel dl {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px 14px;
+      margin: 0;
+      width: 100%;
+    }
+
+    .traffic-panel dl > div {
+      min-width: 0;
+    }
+
+    .traffic-panel dt {
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.72);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .traffic-panel dd {
+      margin: 3px 0 0 0;
+      font-size: 14px;
+      color: var(--text-primary);
+      line-height: 1.4;
+      word-break: break-word;
+    }
+
+    .traffic-toggle {
+      margin-top: 14px;
+      width: 100%;
+      border: 1px solid var(--border);
+      background: var(--bg-secondary);
+      color: var(--text-primary);
+      border-radius: 8px;
+      padding: 10px 12px;
+      font-family: inherit;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .traffic-toggle:hover:not(:disabled) {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: var(--bg-primary);
+    }
+
+    .traffic-toggle:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .traffic-note {
+      margin: 12px 0 0 0;
+      font-size: 13px;
+      line-height: 1.5;
+      color: rgba(255, 255, 255, 0.72);
+    }
+
+    [data-theme="light"] .traffic-stage {
+      background: #d4d7db;
+    }
+
+    [data-theme="light"] .traffic-video {
+      background: #d4d7db;
+    }
+
+    [data-theme="light"] .traffic-panel {
+      background: rgba(0, 0, 0, 0.03);
+    }
+
+    [data-theme="light"] .traffic-panel dt {
+      color: rgba(54, 54, 54, 0.72);
+    }
+
+    [data-theme="light"] .traffic-note {
+      color: rgba(54, 54, 54, 0.72);
+    }
+
+    @media (max-width: 980px) {
+      .traffic-stage,
+      .traffic-video {
+        min-height: 260px;
+      }
+    }
+
+    @media (max-width: 700px) {
+      .traffic-panel dl {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="article-container traffic-detector-article">
+    <h1>Real-Time Traffic Object Detection with TensorFlow.js</h1>
+    <div class="meta">
+      <time datetime="2026-06-17">June 17, 2026</time>
+    </div>
+    <div class="tags">
+      <span class="tag">Project</span>
+      <span class="tag">JavaScript</span>
+      <span class="tag">TensorFlow.js</span>
+      <span class="tag">Library</span>
+    </div>
+
+    <article>
+      <h2>Overview</h2>
+      <p>
+        I recently decided I was going to give myself 10 days to study for and pass AI-900 before it gets retired June 30, 2026. 
+        I reached the computer vision section of study and thought it would be fun to try and build something lightweight in the browser.
+        There are hundreds of different methods for models and object detection, but I wanted to make something that I could display <i>here</i>.
+      </p>
+      <p>
+        Going into this I had absolutely zero experience with object detection but I had 2 main goals: 
+        <ol>
+          <li>Use a live traffic feed as my data source (don't care where from)</li>
+          <li>Run entirely client-side</li>
+        </ol>
+      </p>
+      <p>
+        What you see below is a TensorFlow.js object detection demonstration that runs fully in the browser. The HLS.js library enables a live HTTPS stream from the 
+        Iowa Department of Transportation. TensorFlow.js COCO-SSD (or Common Objects in Context Single Shot MultiBox Detection) is then 
+        used to run lightweight object detection on top of that live feed. There is no server-side API/backend and no OpenCV in this stack.
+      </p>
+
+      <h2>Live Feed</h2>
+
+      <div class="traffic-detector-shell" aria-label="Traffic object detection demo">
+        <div class="traffic-stage">
+          <video id="traffic-video" class="traffic-video" controls autoplay muted playsinline preload="metadata" crossorigin="anonymous"></video>
+          <canvas id="traffic-overlay" class="traffic-overlay" aria-hidden="true"></canvas>
+        </div>
+
+        <div class="traffic-panel" aria-label="Detection status panel">
+          <h2>Runtime Status</h2>
+
+          <dl>
+            <div>
+              <dt>Model</dt>
+              <dd id="status-model">Loading model...</dd>
+            </div>
+            <div>
+              <dt>Stream</dt>
+              <dd id="status-stream">Connecting stream...</dd>
+            </div>
+            <div>
+              <dt>Classes</dt>
+              <dd id="status-classes">car, truck, bus, motorcycle, person, bicycle</dd>
+            </div>
+            <div>
+              <dt>Currently detected</dt>
+              <dd id="status-count">0</dd>
+            </div>
+            <div>
+              <dt>Threshold</dt>
+              <dd id="status-threshold">40%</dd>
+            </div>
+            <div>
+              <dt>Inference FPS</dt>
+              <dd id="status-fps">0</dd>
+            </div>
+          </dl>
+        </div>
+      </div>
+      <h2>Challenges</h2>
+      <p>
+        Unlike past projects I think I did a better job of staying within the original scope! A lot of research went into actually finding an open feed 
+        that didn't require an API or some kind of proxy service to get around CORS. On top of that, these lightweight object detection models are very 
+        input sensitive (they require a high quality video, at a similar angle to what they were trained on). 
+      </p>
+      <p>
+        This meant even though I had multiple feeds that fit my criteria, I also need a camera angle that enabled the model to work properly. I ended up 
+        finding a feed from the Iowa DOT that sits directly over an intersection with a red light, pointed straight down onto the oncoming traffic below. 
+        This ended up being the best camera I could find that met the criteria. 
+      </p>
+      <p>
+        I found myself compromising on the model choice as well. I had 3 options available: 
+        <ul>
+          <li>lite_mobilenet_v2 - fastest but least accurate model</li>
+          <li>mobilenet_v1 - middle ground model where we sacrifice some accuracy for a noticeable boost in speed</li>
+          <li>mobilenet_v2 - the most accurate but also the slowest model</li>
+        </ul>
+      </p>
+      <p>
+        Even though mobilenet_v1 is the oldest of the models, it ended up being the best model for our use case. I saw a noticeable boost in accuracy over the 
+        lite version, and the mobilenet_v2 model was just too slow to be usable in a live feed scenario without a dedicated processor.
+      </p>
+      <p>
+        With a heavier model, or an actual backend to process video input, I could get this running with much higher accuracy. But constraints are constraints and I 
+        didn't want scope creep to take over this project.
+      </p>
+    </article>
+  </main>
+
+  <script>
+    {
+    function loadScript(src) {
+      return new Promise((resolve, reject) => {
+        const existing = document.querySelector(`script[data-lib-src="${src}"]`)
+        if (existing) {
+          existing.addEventListener('load', () => resolve(), { once: true })
+          existing.addEventListener('error', () => reject(new Error(`Failed to load ${src}`)), { once: true })
+          // If it is already loaded, resolve immediately.
+          if (existing.dataset.loaded === 'true') resolve()
+          return
+        }
+
+        const script = document.createElement('script')
+        script.src = src
+        script.async = true
+        script.dataset.libSrc = src
+        script.addEventListener('load', () => {
+          script.dataset.loaded = 'true'
+          resolve()
+        }, { once: true })
+        script.addEventListener('error', () => reject(new Error(`Failed to load ${src}`)), { once: true })
+        document.head.appendChild(script)
+      })
+    }
+
+    async function ensureLibraries() {
+      await loadScript('https://cdn.jsdelivr.net/npm/hls.js@1.6.12/dist/hls.min.js')
+      await loadScript('https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.22.0/dist/tf.min.js')
+      await loadScript('https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-backend-wasm@4.22.0/dist/tf-backend-wasm.min.js')
+      await loadScript('https://cdn.jsdelivr.net/npm/@tensorflow-models/coco-ssd@2.2.3/dist/coco-ssd.min.js')
+    }
+
+    // Iowa DOT CCTV: Cedar Rapids feed — https, CORS *, no auth
+    const TRAFFIC_HLS_URL = 'https://video3.iowadot.gov:8888/cedarrapids/dqtv19lb/playlist.m3u8'
+    const DETECTION_CLASS_ALLOWLIST = new Set(['car', 'truck', 'motorcycle'])
+    const DETECTION_MODEL_BASE = 'mobilenet_v1'
+    const USE_CLASS_ALLOWLIST = true
+    const DETECTION_SCORE_THRESHOLD = 0.40
+    const DETECTION_INTERVAL_MS = 200
+    const DETECTION_MAX_PREDICTIONS = 30
+    const DETECTION_INPUT_MAX_WIDTH = 640
+    const MAX_DISPLAYED_DETECTIONS = 20
+    const MAX_CAR_AREA_RATIO = 0.08
+
+    const BOX_COLORS = {
+      car: '#ffee00',
+      truck: '#ff8c00',
+      motorcycle: '#00c2ff'
+    }
+
+    const videoEl = document.getElementById('traffic-video')
+    const canvasEl = document.getElementById('traffic-overlay')
+
+    const modelStatusEl = document.getElementById('status-model')
+    const streamStatusEl = document.getElementById('status-stream')
+    const countStatusEl = document.getElementById('status-count')
+    const thresholdStatusEl = document.getElementById('status-threshold')
+    const fpsStatusEl = document.getElementById('status-fps')
+    const classesStatusEl = document.getElementById('status-classes')
+
+    const detectionCanvas = document.createElement('canvas')
+    const detectionCtx = detectionCanvas.getContext('2d', { willReadFrequently: true })
+
+    const modelCache = window.__trafficDemoModelCache || (window.__trafficDemoModelCache = { promise: null, base: '' })
+    let HlsLib = null
+    let tfLib = null
+    let cocoSsdLib = null
+
+    let hls = null
+    let model = null
+    let rafId = 0
+    let busy = false
+    let videoReady = false
+    let lastInferenceMs = 0
+    let lastFrameMs = performance.now()
+    let lastDetections = []
+
+    if (thresholdStatusEl) {
+      thresholdStatusEl.textContent = `${Math.round(DETECTION_SCORE_THRESHOLD * 100)}%`
+    }
+
+    function drawDetections(detections, width, height) {
+      const ctx = canvasEl.getContext('2d')
+      if (!ctx) return
+
+      canvasEl.width = width
+      canvasEl.height = height
+      ctx.clearRect(0, 0, width, height)
+
+      detections.forEach((item) => {
+        const color = BOX_COLORS[item.class] || '#00ff41'
+        const [x, y, w, h] = item.bbox
+        const label = `${item.class} ${Math.round(item.score * 100)}%`
+
+        ctx.lineWidth = 2
+        ctx.strokeStyle = color
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.45)'
+        ctx.strokeRect(x, y, w, h)
+
+        ctx.font = '600 14px "Courier New", monospace'
+        const textWidth = ctx.measureText(label).width + 16
+        const labelHeight = 24
+        const labelY = y > labelHeight + 4 ? y - labelHeight : y + 2
+
+        ctx.fillRect(x, labelY, textWidth, labelHeight)
+        ctx.fillStyle = color
+        ctx.fillText(label, x + 8, labelY + 16)
+      })
+    }
+
+    async function setupStream() {
+      if (!TRAFFIC_HLS_URL || TRAFFIC_HLS_URL.includes('example.com')) {
+        streamStatusEl.textContent = 'Set TRAFFIC_HLS_URL to your real .m3u8 stream URL'
+        return
+      }
+
+      if (videoEl.canPlayType('application/vnd.apple.mpegurl')) {
+        videoEl.src = TRAFFIC_HLS_URL
+        streamStatusEl.textContent = 'HLS connected (native playback)'
+        return
+      }
+
+      if (!HlsLib.isSupported()) {
+        streamStatusEl.textContent = 'HLS playback is not supported in this browser'
+        return
+      }
+
+      hls = new HlsLib({
+        enableWorker: true,
+        lowLatencyMode: true,
+        backBufferLength: 30
+      })
+
+      hls.loadSource(TRAFFIC_HLS_URL)
+      hls.attachMedia(videoEl)
+      hls.on(HlsLib.Events.MANIFEST_PARSED, () => {
+        streamStatusEl.textContent = 'HLS connected'
+      })
+      hls.on(HlsLib.Events.ERROR, (_event, data) => {
+        if (data && data.fatal) {
+          streamStatusEl.textContent = `Stream error: ${data.type || 'fatal error'}`
+        }
+      })
+    }
+
+    async function setupModel() {
+      try {
+        if (!modelCache.promise || modelCache.base !== DETECTION_MODEL_BASE) {
+          modelCache.base = DETECTION_MODEL_BASE
+          modelCache.promise = (async () => {
+            await tfLib.ready()
+            let backend = 'cpu'
+
+            if (tfLib.wasm && typeof tfLib.wasm.setWasmPaths === 'function') {
+              tfLib.wasm.setWasmPaths('https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-backend-wasm@4.22.0/dist/')
+            }
+
+            const wasmReady = await tfLib.setBackend('wasm').catch(() => false)
+            if (wasmReady) backend = 'wasm/cpu'
+            else {
+              const cpuReady = await tfLib.setBackend('cpu').catch(() => false)
+              if (!cpuReady) throw new Error('No supported TensorFlow inference engine found')
+            }
+
+            return cocoSsdLib.load({ base: DETECTION_MODEL_BASE })
+              .then((loadedModel) => ({ loadedModel, backend }))
+          })()
+        }
+
+        const { loadedModel, backend } = await modelCache.promise
+        model = loadedModel
+        modelStatusEl.textContent = `COCO-SSD ${DETECTION_MODEL_BASE}`
+      } catch (error) {
+        modelStatusEl.textContent = `Model failed: ${error?.message || 'unknown error'}`
+      }
+    }
+
+    function tick(nowMs) {
+      rafId = requestAnimationFrame(tick)
+
+      if (!videoReady || !model) return
+      if (!videoEl.videoWidth || !videoEl.videoHeight) return
+
+      // Redraw last detections every frame so boxes stay visible between inference runs
+      if (lastDetections.length > 0) {
+        drawDetections(lastDetections, videoEl.videoWidth, videoEl.videoHeight)
+      }
+
+      if (busy) return
+      if (nowMs - lastInferenceMs < DETECTION_INTERVAL_MS) return
+
+      busy = true
+      lastInferenceMs = nowMs
+
+      const sourceWidth = videoEl.videoWidth
+      const sourceHeight = videoEl.videoHeight
+      const scale = sourceWidth > DETECTION_INPUT_MAX_WIDTH ? (DETECTION_INPUT_MAX_WIDTH / sourceWidth) : 1
+      const inputWidth = Math.max(320, Math.round(sourceWidth * scale))
+      const inputHeight = Math.max(180, Math.round(sourceHeight * scale))
+
+      let detectionSource = videoEl
+      if (detectionCtx) {
+        if (detectionCanvas.width !== inputWidth) detectionCanvas.width = inputWidth
+        if (detectionCanvas.height !== inputHeight) detectionCanvas.height = inputHeight
+        detectionCtx.drawImage(videoEl, 0, 0, inputWidth, inputHeight)
+        detectionSource = detectionCanvas
+      }
+
+      model.detect(detectionSource, DETECTION_MAX_PREDICTIONS, DETECTION_SCORE_THRESHOLD).then((predictions) => {
+        const xScale = sourceWidth / inputWidth
+        const yScale = sourceHeight / inputHeight
+        const scaledPredictions = predictions.map((item) => ({
+          ...item,
+          bbox: [
+            item.bbox[0] * xScale,
+            item.bbox[1] * yScale,
+            item.bbox[2] * xScale,
+            item.bbox[3] * yScale
+          ]
+        }))
+
+        const filtered = scaledPredictions
+          .filter((item) => !USE_CLASS_ALLOWLIST || DETECTION_CLASS_ALLOWLIST.has(item.class))
+          .filter((item) => item.score >= DETECTION_SCORE_THRESHOLD)
+          .filter((item) => item.class !== 'car' || ((item.bbox[2] * item.bbox[3]) / (sourceWidth * sourceHeight)) <= MAX_CAR_AREA_RATIO)
+          .sort((a, b) => b.score - a.score)
+          .slice(0, MAX_DISPLAYED_DETECTIONS)
+
+        lastDetections = filtered
+        drawDetections(filtered, videoEl.videoWidth, videoEl.videoHeight)
+        countStatusEl.textContent = String(filtered.length)
+        classesStatusEl.textContent = USE_CLASS_ALLOWLIST
+          ? DETECTION_CLASS_ALLOWLIST.size
+            ? Array.from(DETECTION_CLASS_ALLOWLIST).join(', ')
+            : 'None'
+          : 'All COCO classes'
+
+        const delta = nowMs - lastFrameMs
+        if (delta > 0) {
+          fpsStatusEl.textContent = String(Math.round(1000 / delta))
+        }
+        lastFrameMs = nowMs
+      }).catch(() => {
+        streamStatusEl.textContent = 'Detection loop hit an error'
+      }).finally(() => {
+        busy = false
+      })
+    }
+
+    videoEl.addEventListener('loadeddata', () => {
+      videoReady = true
+      if (!streamStatusEl.textContent.includes('error')) {
+        streamStatusEl.textContent = 'Stream active'
+      }
+    })
+
+    videoEl.addEventListener('playing', () => {
+      videoReady = true
+      if (!streamStatusEl.textContent.includes('error')) {
+        streamStatusEl.textContent = 'Stream active'
+      }
+    })
+
+    ensureLibraries()
+      .then(() => {
+        HlsLib = window.Hls
+        tfLib = window.tf
+        cocoSsdLib = window.cocoSsd
+
+        if (!HlsLib || !tfLib || !cocoSsdLib) {
+          throw new Error('Required libraries failed to initialize')
+        }
+
+        return Promise.all([setupStream(), setupModel()])
+      })
+      .then(() => {
+        rafId = requestAnimationFrame(tick)
+      })
+      .catch((error) => {
+        streamStatusEl.textContent = `Init error: ${error?.message || 'unknown error'}`
+      })
+
+    window.addEventListener('beforeunload', () => {
+      cancelAnimationFrame(rafId)
+      if (hls) hls.destroy()
+    })
+    }
+  </script>
+</body>
+</html>

@@ -71,6 +71,16 @@
     }
     </script>
         <script>
+            // Recover path encoded by 404.html GitHub Pages SPA fallback
+            (function () {
+                var q = window.location.search;
+                if (q && q.indexOf('?r=') === 0) {
+                    var path = decodeURIComponent(q.slice(3));
+                    window.history.replaceState(null, null, path);
+                }
+            })();
+        </script>
+        <script>
             (function () {
                 try {
                     var saved = localStorage.getItem('theme')

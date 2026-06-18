@@ -1,18 +1,5 @@
 // .js over .json because we're using imageStyle objects and plain JSON would prevent this
 export const articlesData = [
-  // // DONE - WAITING TO RELEASE
-  // {
-  //   id: 'using-prismjs-to-style-code',
-  //   path: 'articles/using-prismjs-to-style-code',
-  //   publishedAt: '2026-06-19',
-  //   date: 'June 19, 2026',
-  //   title: 'Using Prism.js to Style Code',
-  //   description: 'Integrating Prism.js, language aliases, heuristic language detection, and toolbar.',
-  //   tags: ['Notes', 'JavaScript', 'Library'],
-  //   imageSrc: 'images/cover/prismjs-logo.svg',
-  //   imageAlt: 'Using Prism.js',
-  //   imageStyle: { height: '85%', width: '85%' }
-  // },
   // // DRAFT -- NEED TO CREATE SMALL DEMO OR MAKE A REPO FOR VISUAL AID
   // {
   //   id: 'efficient-html-maps-with-pydeck',
@@ -34,6 +21,30 @@ export const articlesData = [
   //   description: 'A Groq-powered chatbot demo that queries NOAA data using tool calling and a Node.js backend on Fly.io.',
   //   tags: ['Demo', 'LLM', 'Node.js', 'API'],
   //   imageLabel: 'NOAA Tides LLM Chatbot Demo'
+  // },
+  // // DONE - DO I EVEN WANT TO RELEASE THIS? MAYBE JUST A REPO? IT'S KINDA NEAT BUT NOT SURE IF IT'S WORTH A FULL ARTICLE
+  // {
+  //   id: 'traffic-live-object-detection',
+  //   path: 'articles/traffic-live-object-detection',
+  //   publishedAt: '2026-06-26',
+  //   date: 'June 26, 2026',
+  //   title: 'Traffic Object Detection with TensorFlow.js',
+  //   description: 'Live traffic feed with client-side COCO-SSD detection.',
+  //   tags: ['Project', 'JavaScript', 'TensorFlow.js', 'Library'],
+  //   imageLabel: 'Traffic Object Detection'
+  // },
+  // // DONE - WAITING TO RELEASE
+  // {
+  //   id: 'using-prismjs-to-style-code',
+  //   path: 'articles/using-prismjs-to-style-code',
+  //   publishedAt: '2026-06-19',
+  //   date: 'June 19, 2026',
+  //   title: 'Using Prism.js to Style Code',
+  //   description: 'Integrating Prism.js, language aliases, heuristic language detection, and toolbar.',
+  //   tags: ['Notes', 'JavaScript', 'Prism.js', 'Library'],
+  //   imageSrc: 'images/cover/prismjs-logo.svg',
+  //   imageAlt: 'Using Prism.js',
+  //   imageStyle: { height: '85%', width: '85%' }
   // },
   {
     id: 'use-claude-code-for-free',

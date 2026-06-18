@@ -144,10 +144,15 @@ function extractHeadStyles(rawHtml) {
   return styleMatches.map(m => m[1]).filter(Boolean)
 }
 
-// Extract inline <script> bodies (no src attr) — skip during SSR
+// Extract inline <script> tags (no src attr) and preserve type (module/classic)
 function extractInlineScripts(rawHtml) {
-  const matches = [...rawHtml.matchAll(/<script(?![^>]*\bsrc\b)[^>]*>([\s\S]*?)<\/script>/gi)]
-  return matches.map(m => m[1]).filter(Boolean)
+  if (typeof DOMParser === 'undefined') return []
+  const doc = new DOMParser().parseFromString(rawHtml, 'text/html')
+  const scripts = Array.from(doc.querySelectorAll('script:not([src])'))
+  return scripts.map((script) => ({
+    code: script.textContent || '',
+    type: (script.getAttribute('type') || '').trim().toLowerCase()
+  })).filter(({ code }) => code.trim())
 }
 
 export default function ArticlePage() {
@@ -165,14 +170,20 @@ export default function ArticlePage() {
   useEffect(() => {
     const el = ref.current
     if (!el) return
+    const injectedScripts = []
 
     // Re-execute inline scripts (cruise comparisons interactive demo, etc.)
     if (rawHtml) {
-      extractInlineScripts(rawHtml).forEach(src => {
-        if (!src.trim()) return
+      extractInlineScripts(rawHtml).forEach(({ code, type }) => {
         try {
-          // eslint-disable-next-line no-new-func
-          new Function(src)()
+          const scriptEl = document.createElement('script')
+          if (type && type !== 'text/javascript' && type !== 'application/javascript') {
+            scriptEl.type = type
+          }
+          scriptEl.textContent = code
+          scriptEl.setAttribute('data-article-inline-script', 'true')
+          el.appendChild(scriptEl)
+          injectedScripts.push(scriptEl)
         } catch (e) {
           console.warn('Article script error:', e)
         }
@@ -216,6 +227,7 @@ export default function ArticlePage() {
     window.scrollTo({ top: 0, behavior: 'instant' })
 
     return () => {
+      injectedScripts.forEach((scriptEl) => scriptEl.remove())
       document.body.classList.remove('article-open')
     }
   }, [mainHtml, rawHtml])
