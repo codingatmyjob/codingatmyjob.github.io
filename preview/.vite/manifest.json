@@ -1,6 +1,6 @@
 {
-  "_client-f6LAlMet.js": {
-    "file": "assets/client-f6LAlMet.js",
+  "_client-Bui_XpNx.js": {
+    "file": "assets/client-Bui_XpNx.js",
     "name": "client",
     "isDynamicEntry": true,
     "imports": [
@@ -8,12 +8,12 @@
     ]
   },
   "index.html": {
-    "file": "assets/app-Dhg3WYVg.js",
+    "file": "assets/app-Botd68aO.js",
     "name": "app",
     "src": "index.html",
     "isEntry": true,
     "dynamicImports": [
-      "_client-f6LAlMet.js"
+      "_client-Bui_XpNx.js"
     ],
     "css": [
       "assets/app-C38yPq_B.css"
