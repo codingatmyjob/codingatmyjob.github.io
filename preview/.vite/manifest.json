@@ -1,6 +1,6 @@
 {
-  "_client-Bui_XpNx.js": {
-    "file": "assets/client-Bui_XpNx.js",
+  "_client-BeRnHaKQ.js": {
+    "file": "assets/client-BeRnHaKQ.js",
     "name": "client",
     "isDynamicEntry": true,
     "imports": [
@@ -8,15 +8,15 @@
     ]
   },
   "index.html": {
-    "file": "assets/app-Botd68aO.js",
+    "file": "assets/app-BVuyZjOG.js",
     "name": "app",
     "src": "index.html",
     "isEntry": true,
     "dynamicImports": [
-      "_client-Bui_XpNx.js"
+      "_client-BeRnHaKQ.js"
     ],
     "css": [
-      "assets/app-C38yPq_B.css"
+      "assets/app-V_pJChQe.css"
     ]
   }
 }
