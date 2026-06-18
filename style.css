@@ -1198,6 +1198,65 @@ li{margin:4px 0}
 
 [data-theme="light"] .tag{background:var(--accent) !important;color:var(--bg-primary) !important;border-color:rgba(0,0,0,0.06)}
 [data-theme="light"] .article-date{color:var(--accent) !important}
+
+/* Sharper global corner profile for interactive UI and content surfaces. */
+:where(
+  .menu-toggle,
+  .sidebar-close-toggle,
+  .sidebar-item,
+  .theme-toggle,
+  .filter-toggle,
+  .search-input-wrapper,
+  .search-clear,
+  .sort-toggle,
+  .sort-dropdown,
+  #articles-controls-root .filter-toggle,
+  #articles-controls-root .filter-panel,
+  #articles-controls-root .tag-filter-list .filter-item,
+  #articles-controls-root .filter-clear-btn,
+  .article-card,
+  .article-container,
+  .article-container > .back-link,
+  #article-view .back-link,
+  .pagination,
+  .pagination-btn,
+  .related-carousel,
+  .related-carousel-card,
+  .article-container article .article-link,
+  .article-container article .code-block,
+  .article-container article .code-copy-trigger,
+  .tag,
+  .article-container .meta .tag
+) {
+  border-radius: 6px !important;
+  background-clip: padding-box;
+}
+
+/* Keep nested tile backgrounds aligned with card corner profile. */
+.article-card .article-image {
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
+  background-clip: padding-box;
+}
+
+/* Let the parent card control all corner clipping to avoid seam artifacts. */
+.article-card,
+.related-carousel-card {
+  overflow: hidden;
+  background-clip: padding-box;
+}
+
+.article-card .article-image,
+.article-card .article-image img,
+.article-card .article-card-image {
+  border-radius: 0 !important;
+}
+
+.related-carousel-card .related-carousel-image-shell,
+.related-carousel-card .related-carousel-image {
+  border-radius: 0 !important;
+  background-clip: padding-box;
+}
 [data-theme="light"] .reading-time{color:#666 !important}
 [data-theme="light"] .article-description{color:#6f6f6f}
 

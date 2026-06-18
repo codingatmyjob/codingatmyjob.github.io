@@ -18,17 +18,6 @@ function formatNumber(value) {
   return new Intl.NumberFormat().format(value)
 }
 
-function formatDateTime(value) {
-  if (!value) return 'n/a'
-  const d = new Date(value)
-  if (Number.isNaN(d.getTime())) return 'n/a'
-  return d.toLocaleString(undefined, {
-    year: 'numeric',
-    month: 'short',
-    day: '2-digit'
-  })
-}
-
 function formatShortDate(value) {
   if (!value) return 'n/a'
   const d = new Date(value)
@@ -62,6 +51,36 @@ function hasLabel(issue, pattern) {
     const name = (typeof label === 'string' ? label : label?.name || '').toLowerCase()
     return pattern.test(name)
   })
+}
+
+function extractTypeTags(issue) {
+  const labels = Array.isArray(issue?.labels) ? issue.labels : []
+  const typeValues = labels
+    .map((label) => (typeof label === 'string' ? label : label?.name || '').trim())
+    .filter((name) => /^type\s*:/i.test(name))
+    .flatMap((name) => name.replace(/^type\s*:/i, '').split(','))
+    .map((value) => value.trim().replace(/-/g, ' '))
+    .filter(Boolean)
+
+  return [...new Set(typeValues)]
+}
+
+function normalizeGithubLabelColor(value) {
+  if (typeof value !== 'string') return ''
+  const raw = value.trim().replace(/^#/, '')
+  if (!/^[0-9a-fA-F]{6}$/.test(raw)) return ''
+  return `#${raw.toLowerCase()}`
+}
+
+function getIssueLabelColor(issue, pattern) {
+  const labels = Array.isArray(issue?.labels) ? issue.labels : []
+  for (const label of labels) {
+    const name = (typeof label === 'string' ? label : label?.name || '').toLowerCase()
+    if (!pattern.test(name)) continue
+    const color = normalizeGithubLabelColor(typeof label === 'string' ? '' : label?.color)
+    if (color) return color
+  }
+  return ''
 }
 
 function escapeHtml(str) {
@@ -134,8 +153,10 @@ function renderFeedItems(root, selector, items, fallbackText, dotClass = '') {
     return
   }
 
-  node.innerHTML = items.map(({ title, meta, commitSha, commitUrl }) => {
+  node.innerHTML = items.map(({ title, meta, commitSha, commitUrl, dotColor }) => {
     const safeCommitUrl = sanitizeGithubUrl(commitUrl)
+    const safeDotColor = normalizeGithubLabelColor(dotColor)
+    const dotStyle = safeDotColor ? ` style="background:${escapeHtml(safeDotColor)}"` : ''
     const commitLink = (safeCommitUrl && commitSha)
       ? `<a class="status-item-meta-link" href="${escapeHtml(safeCommitUrl)}" target="_blank" rel="noopener noreferrer">${escapeHtml(commitSha)}</a>`
       : ''
@@ -143,7 +164,7 @@ function renderFeedItems(root, selector, items, fallbackText, dotClass = '') {
       ? `<span class="status-item-meta">${commitLink}${commitLink && meta ? ' • ' : ''}${meta ? escapeHtml(meta) : ''}</span>`
       : ''
 
-    return `<li class="status-item"><span class="status-dot ${dotClass}" aria-hidden="true"></span><p>${escapeHtml(title)}${metaLine}</p></li>`
+    return `<li class="status-item"><span class="status-dot ${dotClass}"${dotStyle} aria-hidden="true"></span><p>${escapeHtml(title)}${metaLine}</p></li>`
   }).join('')
 }
 
@@ -225,12 +246,50 @@ async function fetchClosedPullRequests(owner, repo) {
   return Array.isArray(data) ? data : []
 }
 
+async function fetchGithubIssues(owner, repo, state = 'open') {
+  const perPage = 100
+  const maxPages = 10
+  const cacheKey = `${owner}/${repo}:issues:${state}:paginated`
+  const cached = readCachedGithubData(cacheKey)
+
+  const all = []
+
+  for (let page = 1; page <= maxPages; page += 1) {
+    try {
+      const res = await fetch(
+        `https://api.github.com/repos/${owner}/${repo}/issues?state=${encodeURIComponent(state)}&per_page=${perPage}&page=${page}`,
+        { headers: { Accept: 'application/vnd.github+json' } }
+      )
+
+      if (!res.ok) break
+
+      const data = await res.json()
+      if (!Array.isArray(data) || data.length === 0) break
+
+      all.push(...data)
+
+      const link = res.headers.get('link') || ''
+      const hasNext = /rel="next"/i.test(link)
+      if (!hasNext || data.length < perPage) break
+    } catch {
+      break
+    }
+  }
+
+  if (all.length) {
+    writeCachedGithubData(cacheKey, all)
+    return all
+  }
+
+  return Array.isArray(cached) ? cached : []
+}
+
 async function fetchOpenIssues(owner, repo) {
-  const data = await fetchGithubJsonCached(
-    `https://api.github.com/repos/${owner}/${repo}/issues?state=open&per_page=30`,
-    `${owner}/${repo}:issues:open`
-  )
-  return Array.isArray(data) ? data : []
+  return fetchGithubIssues(owner, repo, 'open')
+}
+
+async function fetchClosedIssues(owner, repo) {
+  return fetchGithubIssues(owner, repo, 'closed')
 }
 
 async function fetchRepoDetails(owner, repo) {
@@ -254,13 +313,14 @@ async function hydrateGithubStats(root) {
   const since = new Date(Date.now() - (weeks * 7 * 24 * 60 * 60 * 1000)).toISOString()
 
   try {
-    const [repoDataResult, commitsResult, recentCommitsResult, workflowRunsResult, closedPullRequestsResult, openIssuesResult] = await Promise.allSettled([
+    const [repoDataResult, commitsResult, recentCommitsResult, workflowRunsResult, closedPullRequestsResult, openIssuesResult, closedIssuesResult] = await Promise.allSettled([
       fetchRepoDetails(owner, repo),
       fetchGithubCommits(owner, repo, since),
       fetchRecentGithubCommits(owner, repo, 12),
       fetchWorkflowRuns(owner, repo, productionWorkflow),
       fetchClosedPullRequests(owner, repo),
-      fetchOpenIssues(owner, repo)
+      fetchOpenIssues(owner, repo),
+      fetchClosedIssues(owner, repo)
     ])
 
     const repoData = repoDataResult.status === 'fulfilled' ? repoDataResult.value : {}
@@ -269,12 +329,12 @@ async function hydrateGithubStats(root) {
     const workflowRuns = workflowRunsResult.status === 'fulfilled' ? workflowRunsResult.value : []
     const closedPullRequests = closedPullRequestsResult.status === 'fulfilled' ? closedPullRequestsResult.value : []
     const openIssuesRaw = openIssuesResult.status === 'fulfilled' ? openIssuesResult.value : []
+    const closedIssuesRaw = closedIssuesResult.status === 'fulfilled' ? closedIssuesResult.value : []
 
     const data = repoData && typeof repoData === 'object' ? repoData : {}
     const weeklyBuckets = Array.isArray(commits) ? buildWeeklyCommitBuckets(commits, weeks) : Array(weeks).fill(0)
     const total12w = weeklyBuckets.reduce((sum, n) => sum + n, 0)
     const avgPerWeek = total12w / weeks
-    const maxWeek = Math.max(...weeklyBuckets, 0)
     const lastWeek = weeklyBuckets[weeks - 1] ?? 0
     const prevWeek = weeklyBuckets[weeks - 2] ?? 0
     const delta = lastWeek - prevWeek
@@ -344,26 +404,32 @@ async function hydrateGithubStats(root) {
     const ideaLabel = /(^|\s|-)idea(s)?($|\s|-)/
     const orphanLabel = /(^|\s|-)orphan(s)?($|\s|-)/
     const blockedLabel = /blocked|on-hold|on hold|needs-decision/
+    const completedLabel = /(^|\s|-)complet(ed|e)($|\s|-)|shipped/
+    
     const ideasOpen = openIssues.filter((issue) => hasLabel(issue, ideaLabel))
     const orphansOpen = openIssues.filter((issue) => hasLabel(issue, orphanLabel))
     const blockedOpen = openIssues.filter((issue) => hasLabel(issue, blockedLabel))
-
-    const manualOnHoldCount = root.querySelectorAll('[data-manual-on-hold] .status-item').length
+    
+    const closedIssues = Array.isArray(closedIssuesRaw)
+      ? closedIssuesRaw.filter((issue) => !issue.pull_request)
+      : []
+    const completedIssues = closedIssues
+      .filter((issue) => hasLabel(issue, completedLabel))
+      .sort((a, b) => Date.parse(b?.closed_at || '') - Date.parse(a?.closed_at || ''))
 
     const values = {
       stars: formatNumber(data.stargazers_count ?? 0),
-      forks: formatNumber(data.forks_count ?? 0),
+      closedIssues: formatNumber(closedIssues.length),
       openIssues: formatNumber(data.open_issues_count ?? 0),
       watchers: formatNumber(data.subscribers_count ?? data.watchers_count ?? 0),
-      updated: formatDateTime(data.pushed_at),
       productionCommits: formatNumber(productionCommits),
       productionTrend,
       buildPassRate30d,
       deploysMonth,
       prMergeLag: formatDurationDays(medianMergeLag),
       orphansOpen: formatNumber(orphansOpen.length),
-      ideasOpen: formatNumber(ideasOpen.length + 3),
-      onHoldCount: formatNumber(blockedOpen.length + manualOnHoldCount),
+      ideasOpen: formatNumber(ideasOpen.length),
+      onHoldCount: formatNumber(blockedOpen.length),
       commitVelocity: `${avgPerWeek.toFixed(1)}/wk`,
       velocityTrend: trend,
       velocitySummary: `12-week total: ${formatNumber(total12w)} commits.`
@@ -399,7 +465,7 @@ async function hydrateGithubStats(root) {
       : (Array.isArray(recentCommits) ? recentCommits : [])
 
     const commitsFeed = commitFeedSource
-      .slice(0, 6)
+      .slice(0, 5)
       .map((commit) => {
         const lines = (commit?.commit?.message || 'Untitled commit')
           .split('\n')
@@ -415,46 +481,62 @@ async function hydrateGithubStats(root) {
         }
       })
 
-    const seededIdeas = [
-      {
-        title: 'Google SEO Article',
-        meta: 'Seeded idea'
-      },
-      {
-        title: 'Tile view toggle for the home page',
-        meta: 'Seeded idea'
-      },
-      {
-        title: 'Article + separate repo for generate-related-articles script',
-        meta: 'Seeded idea'
-      }
-    ]
-
     const githubIdeas = ideasOpen
       .slice(0, 5)
-      .map((issue) => ({
-        title: `#${issue.number} ${issue.title || 'Untitled idea'}`,
-        meta: `opened ${formatShortDate(issue.created_at)} • ${issue.user?.login || 'unknown'}`
-      }))
+      .map((issue) => {
+        const typeTags = extractTypeTags(issue)
+        const typeSuffix = typeTags.length ? ` • ${typeTags.join(', ')}` : ''
+        const dotColor = getIssueLabelColor(issue, ideaLabel)
+        return {
+          title: issue.title || 'Untitled idea',
+          meta: `opened ${formatShortDate(issue.created_at)}${typeSuffix}`,
+          dotColor
+        }
+      })
 
-    const ideasFeed = [...seededIdeas, ...githubIdeas].slice(0, 8)
+    const ideasFeed = githubIdeas.slice(0, 5)
 
     const orphansFeed = orphansOpen
       .slice(0, 5)
-      .map((issue) => ({
-        title: `#${issue.number} ${issue.title || 'Untitled orphan'}`,
-        meta: `updated ${formatShortDate(issue.updated_at)} • unowned candidate`
-      }))
+      .map((issue) => {
+        const typeTags = extractTypeTags(issue)
+        const typeSuffix = typeTags.length ? ` • ${typeTags.join(', ')}` : ''
+        const dotColor = getIssueLabelColor(issue, orphanLabel)
+        return {
+          title: issue.title || 'Untitled orphan',
+          meta: `updated ${formatShortDate(issue.updated_at)}${typeSuffix}`,
+          dotColor
+        }
+      })
 
     const blockedFeed = blockedOpen
       .slice(0, 5)
-      .map((issue) => ({
-        title: `#${issue.number} ${issue.title || 'Blocked issue'}`,
-        meta: `labelled blocked • ${formatShortDate(issue.updated_at)}`
-      }))
+      .map((issue) => {
+        const typeTags = extractTypeTags(issue)
+        const typeSuffix = typeTags.length ? ` • ${typeTags.join(', ')}` : ''
+        const dotColor = getIssueLabelColor(issue, blockedLabel)
+        return {
+          title: issue.title || 'Blocked issue',
+          meta: `marked on hold ${formatShortDate(issue.updated_at)}${typeSuffix}`,
+          dotColor
+        }
+      })
+
+    const completedFeed = completedIssues
+      .slice(0, 5)
+      .map((issue) => {
+        const typeTags = extractTypeTags(issue)
+        const typeText = typeTags.length ? typeTags.join(', ') : 'shipped'
+        const dotColor = getIssueLabelColor(issue, completedLabel)
+        return {
+          title: issue.title || 'Completed',
+          meta: `closed ${formatShortDate(issue.closed_at)} • ${typeText}`,
+          dotColor
+        }
+      })
 
     const deploymentFeed = Array.isArray(workflowRuns)
-      ? workflowRuns.slice(0, 6).map((run) => {
+      ? workflowRuns.slice(0, 5).map((run) => {
         const fullSha = run?.head_sha || ''
         return {
           title: `${(run?.conclusion || run?.status || 'unknown').toUpperCase()} • ${run?.display_title || run?.name || 'Deploy run'}`,
@@ -469,6 +551,7 @@ async function hydrateGithubStats(root) {
     renderFeedItems(root, '[data-gh-feed-ideas]', ideasFeed, 'No open ideas found. Add label: idea.')
     renderFeedItems(root, '[data-gh-feed-orphans]', orphansFeed, 'No open orphans found.', 'warn')
     renderFeedItems(root, '[data-gh-feed-blocked]', blockedFeed, 'No GitHub on-hold issues are currently open.', 'pause')
+    renderFeedItems(root, '[data-gh-feed-completed]', completedFeed, 'No completed items found.')
     renderFeedItems(root, '[data-gh-feed-deployments]', deploymentFeed, 'No deployment activity found.')
   } catch (error) {
     console.error('Status Hub hydration failed:', error)
@@ -502,7 +585,7 @@ export default function SidebarPage() {
       if (backBtn) backBtn.removeEventListener('click', onBack)
       document.body.classList.remove('article-open')
     }
-  }, [mainHtml])
+  }, [mainHtml, navigate])
 
   return (
     <div id="article-view">

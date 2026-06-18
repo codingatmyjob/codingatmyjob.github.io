@@ -47,7 +47,8 @@
             margin: 0 0 14px 0;
             padding: 16px 18px;
             border: 1px solid var(--border);
-            border-radius: 12px;
+            border-radius: 8px;
+            background-clip: padding-box;
             background: var(--bg-secondary);
         }
         .status-hero-title {
@@ -81,7 +82,8 @@
         }
         .status-kpi {
             border: 1px solid var(--border);
-            border-radius: 12px;
+            border-radius: 8px;
+            background-clip: padding-box;
             padding: 12px;
             background: var(--bg-secondary);
             min-height: 94px;
@@ -133,7 +135,8 @@
         }
         .status-section {
             border: 1px solid var(--border);
-            border-radius: 12px;
+            border-radius: 8px;
+            background-clip: padding-box;
             padding: 12px;
             background: var(--bg-secondary);
         }
@@ -159,7 +162,7 @@
             text-transform: uppercase;
             letter-spacing: 0.08em;
             border: 1px solid var(--border);
-            border-radius: 999px;
+            border-radius: 12px;
             padding: 2px 7px;
             opacity: 1;
             color: var(--status-muted);
@@ -179,17 +182,19 @@
         }
         .status-item {
             display: flex;
-            gap: 8px;
-            align-items: flex-start;
+            gap: 12px;
+            align-items: center;
             padding: 9px 10px;
-            border-radius: 8px;
+            border-radius: 6px;
+            background-clip: padding-box;
             border: 1px solid var(--border);
             background: var(--bg-primary);
         }
         .status-dot {
             width: 8px;
             height: 8px;
-            margin-top: 6px;
+            margin-top: 0;
+            margin-inline: 2px;
             border-radius: 50%;
             flex: 0 0 8px;
             background: var(--accent);
@@ -223,7 +228,8 @@
         }
         .status-mini {
             border: 1px solid var(--border);
-            border-radius: 8px;
+            border-radius: 6px;
+            background-clip: padding-box;
             padding: 8px;
             background: var(--bg-primary);
         }
@@ -363,6 +369,12 @@
 <body>
     <div id="binary-bg" aria-hidden="true"></div>
 
+    <!-- =====================================================
+        Dynamic content is loaded from GitHub issues/workflows.
+        Use labels: idea, orphan, blocked/on-hold/needs-decision,
+        completed/shipped, and optional type:* labels.
+        ===================================================== -->
+
     <main class="article-container status-hub" data-gh-owner="codingatmyjob" data-gh-repo="codingatmyjob.github.io" data-gh-production-workflow="deploy-production.yml">
         <section class="status-hero">
             <div class="status-hero-title">
@@ -371,7 +383,7 @@
             </div>
             <p>
                 Kibana style board for tracking commit activity, delivery health, and development trends throughout the repository.
-                Monitor throughput, and keep ideas, orphaned items, and on hold issues visible in a single compact dashboard.
+                Monitor throughput and keep ideas, orphaned items, and on hold issues visible.
             </p>
         </section>
 
@@ -386,10 +398,10 @@
             </div>
             <div class="status-kpi">
                 <div class="status-kpi-top">
-                    <span class="status-kpi-value" data-gh-stat="forks">0</span>
-                    <span class="status-kpi-trend">Community reuse</span>
+                    <span class="status-kpi-value" data-gh-stat="watchers">0</span>
+                    <span class="status-kpi-trend">Active subscribers</span>
                 </div>
-                <span class="status-kpi-label">Repo Forks</span>
+                <span class="status-kpi-label">Repo Watchers</span>
                 <div class="status-kpi-bar"><span style="width: 35%"></span></div>
             </div>
             <div class="status-kpi">
@@ -402,10 +414,10 @@
             </div>
             <div class="status-kpi">
                 <div class="status-kpi-top">
-                    <span class="status-kpi-value" data-gh-stat="watchers">0</span>
-                    <span class="status-kpi-trend">Active subscribers</span>
+                    <span class="status-kpi-value" data-gh-stat="closedIssues">0</span>
+                    <span class="status-kpi-trend">Issue history</span>
                 </div>
-                <span class="status-kpi-label">Repo Watchers</span>
+                <span class="status-kpi-label">Closed Issues</span>
                 <div class="status-kpi-bar"><span style="width: 42%"></span></div>
             </div>
             <div class="status-kpi">
@@ -430,29 +442,18 @@
             <div class="status-stack">
                 <section class="status-section" aria-labelledby="ideas-heading">
                     <div class="status-section-head">
-                        <h3 id="ideas-heading">Ideas and Orphans</h3>
+                        <h3 id="ideas-heading">Ideas</h3>
                         <span class="status-pill">Label Driven</span>
                     </div>
-                    <div class="status-grid-two">
-                        <ul class="status-items" data-gh-feed-ideas>
-                            <li class="status-item">
-                                <span class="status-dot" aria-hidden="true"></span>
-                                <p>
-                                    Loading ideas...
-                                    <span class="status-item-meta">Label: idea</span>
-                                </p>
-                            </li>
-                        </ul>
-                        <ul class="status-items" data-gh-feed-orphans>
-                            <li class="status-item">
-                                <span class="status-dot warn" aria-hidden="true"></span>
-                                <p>
-                                    Loading orphans...
-                                    <span class="status-item-meta">Label: orphan</span>
-                                </p>
-                            </li>
-                        </ul>
-                    </div>
+                    <ul class="status-items" data-gh-feed-ideas>
+                        <li class="status-item">
+                            <span class="status-dot" aria-hidden="true"></span>
+                            <p>
+                                Loading ideas...
+                                <span class="status-item-meta">Label: idea</span>
+                            </p>
+                        </li>
+                    </ul>
                 </section>
 
                 <section class="status-section" aria-labelledby="flow-heading">
@@ -538,20 +539,19 @@
                             </p>
                         </li>
                     </ul>
-                    <p class="status-note">Pinned On Hold Projects</p>
-                    <ul class="status-items" data-manual-on-hold>
+                </section>
+
+                <section class="status-section" aria-labelledby="orphans-heading">
+                    <div class="status-section-head">
+                        <h3 id="orphans-heading">Orphans</h3>
+                        <span class="status-pill">Label Driven</span>
+                    </div>
+                    <ul class="status-items" data-gh-feed-orphans>
                         <li class="status-item">
-                            <span class="status-dot pause" aria-hidden="true"></span>
+                            <span class="status-dot warn" aria-hidden="true"></span>
                             <p>
-                                NOAA Tides LLM Chatbot Demo
-                                <span class="status-item-meta">Manual on-hold entry</span>
-                            </p>
-                        </li>
-                        <li class="status-item">
-                            <span class="status-dot pause" aria-hidden="true"></span>
-                            <p>
-                                Efficient HTML Maps with PyDeck
-                                <span class="status-item-meta">Manual on-hold entry</span>
+                                Loading orphans...
+                                <span class="status-item-meta">Label: orphan</span>
                             </p>
                         </li>
                     </ul>
@@ -561,36 +561,15 @@
             <div class="status-stack">
                 <section class="status-section" aria-labelledby="completed-heading">
                     <div class="status-section-head">
-                        <h3 id="completed-heading">Recently Completed</h3>
-                        <span class="status-pill">Shipped</span>
+                        <h3 id="completed-heading">Recently Closed</h3>
+                        <span class="status-pill">Label Driven</span>
                     </div>
-                    <ul class="status-items">
+                    <ul class="status-items" data-gh-feed-completed>
                         <li class="status-item">
                             <span class="status-dot done" aria-hidden="true"></span>
                             <p>
-                                Status Hub launched and linked in sidebar.
-                                <span class="status-item-meta">Type: UI addition</span>
-                            </p>
-                        </li>
-                        <li class="status-item">
-                            <span class="status-dot done" aria-hidden="true"></span>
-                            <p>
-                                Related-articles generation integrated into build.
-                                <span class="status-item-meta">Type: data pipeline</span>
-                            </p>
-                        </li>
-                        <li class="status-item">
-                            <span class="status-dot done" aria-hidden="true"></span>
-                            <p>
-                                Converted legacy hash-routed SPA shell to Vite React SSG route generation.
-                                <span class="status-item-meta">Type: architecture migration</span>
-                            </p>
-                        </li>
-                        <li class="status-item">
-                            <span class="status-dot done" aria-hidden="true"></span>
-                            <p>
-                                Feature-based image folder normalization.
-                                <span class="status-item-meta">Type: refactor</span>
+                                Loading closed items...
+                                <span class="status-item-meta">Labels: completed, shipped, type:*</span>
                             </p>
                         </li>
                     </ul>
@@ -598,7 +577,7 @@
 
                 <section class="status-section" aria-labelledby="mix-heading">
                     <div class="status-section-head">
-                        <h3 id="mix-heading">Deployment Activity</h3>
+                        <h3 id="mix-heading">Recent Deployment Activity</h3>
                         <span class="status-pill">Production Workflow</span>
                     </div>
                     <ul class="status-items" data-gh-feed-deployments>
