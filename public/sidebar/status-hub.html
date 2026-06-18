@@ -338,6 +338,10 @@
             .status-dashboard {
                 grid-template-columns: 1fr;
             }
+            /* Mobile order: col2 first, col3 second, col1 last */
+            .status-stack:nth-child(2) { order: 1; }
+            .status-stack:nth-child(3) { order: 2; }
+            .status-stack:nth-child(1) { order: 3; }
         }
         @media (max-width: 760px) {
             .status-kpis {
