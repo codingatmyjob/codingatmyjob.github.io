@@ -29,6 +29,49 @@
             border: none;
             box-shadow: none;
             color: var(--status-text);
+            position: relative;
+            min-height: calc(100vh - 96px);
+        }
+        .status-hub.is-loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: calc(100vh - 96px);
+        }
+        .status-hub.is-loading > :not(.status-hub-loader) {
+            display: none;
+        }
+        .status-hub-loader {
+            display: none;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            border: 3px solid var(--border);
+            border-top-color: var(--accent);
+            animation: status-spin 0.85s linear infinite;
+        }
+        .status-hub-loader-wrap {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        .status-hub-loader-text {
+            font-size: 0.84rem;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            color: var(--status-muted);
+        }
+        .status-hub.is-loading .status-hub-loader {
+            display: block;
+        }
+        .status-hub.is-loading .status-hub-loader-wrap {
+            display: flex;
+        }
+        @keyframes status-spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
         }
         .status-hub > .back-link {
             display: none;
@@ -380,6 +423,10 @@
         ===================================================== -->
 
     <main class="article-container status-hub" data-gh-owner="codingatmyjob" data-gh-repo="codingatmyjob.github.io" data-gh-production-workflow="deploy-production.yml">
+        <div class="status-hub-loader-wrap" role="status" aria-live="polite" aria-label="Loading status hub">
+            <div class="status-hub-loader-text">Loading dependencies...</div>
+            <div class="status-hub-loader"></div>
+        </div>
         <section class="status-hero">
             <div class="status-hero-title">
                 <h1>Status Hub</h1>

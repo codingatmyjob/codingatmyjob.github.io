@@ -23,18 +23,18 @@ export const articlesData = [
   //   imageLabel: 'NOAA Tides LLM Chatbot Demo'
   // },
   // DONE - DO I EVEN WANT TO RELEASE THIS? MAYBE JUST A REPO? IT'S KINDA NEAT BUT NOT SURE IF IT'S WORTH A FULL ARTICLE
-  {
-    id: 'traffic-live-object-detection',
-    path: 'articles/traffic-live-object-detection',
-    publishedAt: '2026-06-26',
-    date: 'June 26, 2026',
-    title: 'Traffic Object Detection with TensorFlow.js',
-    description: 'Live traffic feed with client-side COCO-SSD detection.',
-    tags: ['Project', 'JavaScript', 'TensorFlow.js', 'Library'],
-    imageSrc: 'images/cover/coco-ssd-detection.png',
-    imageAlt: 'Traffic Object Detection',
-    imageStyle: { height: '85%', width: '85%' }
-  },
+  // {
+  //   id: 'traffic-live-object-detection',
+  //   path: 'articles/traffic-live-object-detection',
+  //   publishedAt: '2026-06-26',
+  //   date: 'June 26, 2026',
+  //   title: 'Traffic Object Detection with TensorFlow.js',
+  //   description: 'Live traffic feed with client-side COCO-SSD detection.',
+  //   tags: ['Project', 'JavaScript', 'TensorFlow.js', 'Library'],
+  //   imageSrc: 'images/cover/TensorFlow_cover.svg',
+  //   imageAlt: 'Traffic Object Detection',
+  //   imageStyle: { height: '95%', width: '95%' }
+  // },
   {
     id: 'using-prismjs-to-style-code',
     path: 'articles/using-prismjs-to-style-code',

@@ -574,18 +574,30 @@ export default function SidebarPage() {
 
   useEffect(() => {
     const backBtn = ref.current?.querySelector('#ssg-back-btn')
+    const statusHubNode = isStatusHub ? ref.current?.querySelector('.status-hub') : null
     const onBack = () => navigate('/')
     if (backBtn) backBtn.addEventListener('click', onBack)
 
-    hydrateGithubStats(ref.current)
+    let cancelled = false
+    if (statusHubNode) statusHubNode.classList.add('is-loading')
+
+    ;(async () => {
+      try {
+        await hydrateGithubStats(ref.current)
+      } finally {
+        if (!cancelled && statusHubNode) statusHubNode.classList.remove('is-loading')
+      }
+    })()
 
     document.body.classList.add('article-open')
     window.scrollTo({ top: 0, behavior: 'instant' })
     return () => {
+      cancelled = true
+      if (statusHubNode) statusHubNode.classList.remove('is-loading')
       if (backBtn) backBtn.removeEventListener('click', onBack)
       document.body.classList.remove('article-open')
     }
-  }, [mainHtml, navigate])
+  }, [isStatusHub, mainHtml, navigate])
 
   return (
     <div id="article-view">
