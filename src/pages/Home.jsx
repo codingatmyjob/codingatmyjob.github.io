@@ -12,9 +12,10 @@ const SITE_TITLE = 'Tangent | Cybersecurity & Data Science Blog'
 const SITE_DESCRIPTION = 'A cybersecurity and data science blog with technical notes, project builds, experiments, reviews, and practical writeups, that together form a practical project portfolio.'
 
 const ROWS_PER_PAGE = 8
+const DEFAULT_ITEMS_PER_PAGE = 4 * ROWS_PER_PAGE
 
 const getItemsPerPage = () => {
-  if (typeof window === 'undefined') return 4 * ROWS_PER_PAGE
+  if (typeof window === 'undefined') return DEFAULT_ITEMS_PER_PAGE
   const width = window.innerWidth
   let columns = 4
   if (width <= 768) columns = 1
@@ -30,7 +31,7 @@ export default function Home() {
   const [selected, setSelected] = useState([])
   const [sortOrder, setSortOrder] = useState('newest')
   const [currentPage, setCurrentPage] = useState(1)
-  const [itemsPerPage, setItemsPerPage] = useState(getItemsPerPage())
+  const [itemsPerPage, setItemsPerPage] = useState(DEFAULT_ITEMS_PER_PAGE)
   const [availableTags, setAvailableTags] = useState([])
   const [searchQuery, setSearchQuery] = useState('')
   const [articleContents, setArticleContents] = useState(new Map())
@@ -41,6 +42,7 @@ export default function Home() {
 
   useEffect(() => {
     const handleResize = () => setItemsPerPage(getItemsPerPage())
+    handleResize()
     window.addEventListener('resize', handleResize)
     return () => window.removeEventListener('resize', handleResize)
   }, [])
