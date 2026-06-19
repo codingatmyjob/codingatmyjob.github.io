@@ -1,5 +1,26 @@
-import React, { useEffect, useRef } from 'react'
-import { useLoaderData, useNavigate } from 'react-router-dom'
+import React, { useEffect, useMemo, useRef } from 'react'
+import { useLoaderData, useNavigate, useParams } from 'react-router-dom'
+import { Head } from 'vite-react-ssg'
+
+const SITE_ORIGIN = 'https://codingatmyjob.github.io'
+
+const SIDEBAR_META = {
+  About: {
+    title: 'About Me',
+    description: 'About Connor, a networking and security practitioner who also works in data analytics, and the creator of Tangent.',
+    type: 'profile'
+  },
+  'tag-guide': {
+    title: 'Tag Guide',
+    description: 'How tags work on Tangent and what each tag means.',
+    type: 'article'
+  },
+  'status-hub': {
+    title: 'Status Hub',
+    description: 'Kibana-style status hub for Tangent project workstreams, backlog flow, and delivery metrics.',
+    type: 'website'
+  }
+}
 
 function extractMainHtml(rawHtml) {
   const match = rawHtml.match(/(<main[^>]*>[\s\S]*<\/main>)/i)
@@ -564,6 +585,7 @@ export default function SidebarPage() {
   const rawHtml = typeof loaderData.rawHtml === 'string' ? loaderData.rawHtml : ''
   const navigate = useNavigate()
   const ref = useRef(null)
+  const { page = '' } = useParams()
 
   const rawMain = rawHtml ? extractMainHtml(rawHtml) : ''
   const isStatusHub = /status-hub/.test(rawMain)
@@ -571,6 +593,19 @@ export default function SidebarPage() {
     ? rawMain
     : rawMain.replace(/(<main[^>]*>)/i, '$1<button class="back-link" id="ssg-back-btn">← Return Home</button>')
   const headStyles = rawHtml ? extractHeadStyles(rawHtml) : []
+  const pageMeta = useMemo(() => {
+    const fallbackTitle = page
+      ? page
+          .replace(/[-_]/g, ' ')
+          .replace(/\b\w/g, (char) => char.toUpperCase())
+      : 'Sidebar'
+    return SIDEBAR_META[page] || {
+      title: fallbackTitle,
+      description: `${fallbackTitle} on Tangent.`,
+      type: 'website'
+    }
+  }, [page])
+  const canonicalUrl = `${SITE_ORIGIN}/sidebar/${page}.html`
 
   useEffect(() => {
     const backBtn = ref.current?.querySelector('#ssg-back-btn')
@@ -601,6 +636,20 @@ export default function SidebarPage() {
 
   return (
     <div id="article-view">
+      <Head>
+        <title>{`${pageMeta.title} | Tangent`}</title>
+        <meta name="description" content={pageMeta.description} />
+        <link rel="canonical" href={canonicalUrl} />
+        <meta property="og:type" content={pageMeta.type} />
+        <meta property="og:title" content={`${pageMeta.title} | Tangent`} />
+        <meta property="og:description" content={pageMeta.description} />
+        <meta property="og:url" content={canonicalUrl} />
+        <meta property="og:image" content={`${SITE_ORIGIN}/images/cover/og-image.png`} />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={`${pageMeta.title} | Tangent`} />
+        <meta name="twitter:description" content={pageMeta.description} />
+        <meta name="twitter:image" content={`${SITE_ORIGIN}/images/cover/og-image.png`} />
+      </Head>
       <div className="article-frame" ref={ref}>
         {headStyles.map((css, i) => (
           <style key={i} dangerouslySetInnerHTML={{ __html: css }} />

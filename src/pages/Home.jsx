@@ -1,10 +1,15 @@
 import React, { useEffect, useState, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { Head } from 'vite-react-ssg'
 import ArticlesGrid from '../components/articles/ArticlesGrid'
 import ArticlesControls from '../components/articles/ArticlesControls'
 import Pagination from '../components/articles/Pagination'
 import SearchBar from '../components/articles/SearchBar'
 import { articlesData } from '../data/articles'
+
+const SITE_ORIGIN = 'https://codingatmyjob.github.io'
+const SITE_TITLE = 'Tangent | Cybersecurity & Data Science Blog'
+const SITE_DESCRIPTION = 'A cybersecurity and data science blog with technical notes, project builds, experiments, reviews, and practical writeups, that together form a practical project portfolio.'
 
 const ROWS_PER_PAGE = 8
 
@@ -155,6 +160,59 @@ export default function Home() {
 
   return (
     <section className="content-area">
+      <Head>
+        <title>{SITE_TITLE}</title>
+        <meta name="description" content={SITE_DESCRIPTION} />
+        <link rel="canonical" href={SITE_ORIGIN} />
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content={SITE_TITLE} />
+        <meta property="og:description" content={SITE_DESCRIPTION} />
+        <meta property="og:url" content={SITE_ORIGIN} />
+        <meta property="og:image" content={`${SITE_ORIGIN}/images/cover/og-image.png`} />
+        <meta property="og:image:alt" content="Tangent cybersecurity and data science blog preview image" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={SITE_TITLE} />
+        <meta name="twitter:description" content={SITE_DESCRIPTION} />
+        <meta name="twitter:image" content={`${SITE_ORIGIN}/images/cover/og-image.png`} />
+        <script type="application/ld+json">
+          {JSON.stringify({
+            '@context': 'https://schema.org',
+            '@graph': [
+              {
+                '@type': 'WebSite',
+                '@id': SITE_ORIGIN,
+                url: SITE_ORIGIN,
+                name: 'Tangent',
+                description: 'A cybersecurity and data science blog with technical notes, project builds, experiments, reviews, and practical writeups, that form a functional project portfolio.',
+                inLanguage: 'en'
+              },
+              {
+                '@type': 'Person',
+                '@id': `${SITE_ORIGIN}/sidebar/About.html`,
+                name: 'Connor',
+                url: `${SITE_ORIGIN}/sidebar/About.html`,
+                sameAs: [
+                  'https://github.com/codingatmyjob',
+                  'https://www.credly.com/users/connor-rasmussen.58b75ec0/badges#credly',
+                  'https://app.hackthebox.com/profile/2578864'
+                ]
+              },
+              {
+                '@type': 'Blog',
+                name: 'Tangent',
+                description: 'A cybersecurity and data science blog with technical notes, project builds, experiments, reviews, and practical writeups, that form a functional project portfolio.',
+                inLanguage: 'en',
+                publisher: {
+                  '@id': `${SITE_ORIGIN}/sidebar/About.html`
+                },
+                isPartOf: {
+                  '@id': SITE_ORIGIN
+                }
+              }
+            ]
+          })}
+        </script>
+      </Head>
       <section className="site-intro" aria-labelledby="site-intro-title">
         <h1 id="site-intro-title">Tangent</h1>
         <p>

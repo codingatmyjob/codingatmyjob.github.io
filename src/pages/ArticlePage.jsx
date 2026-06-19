@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { useLoaderData, useNavigate, useParams } from 'react-router-dom'
+import { Head } from 'vite-react-ssg'
 import { articlesData } from '../data/articles'
 import { RelatedArticlesCarousel } from '../components/articles/RelatedArticlesCarousel'
 import Prism from 'prismjs'
@@ -16,6 +17,8 @@ import 'prismjs/components/prism-powershell'
 import 'prismjs/components/prism-python'
 import 'prismjs/components/prism-sql'
 import 'prismjs/components/prism-yaml'
+
+const SITE_ORIGIN = 'https://codingatmyjob.github.io'
 
 const LANGUAGE_ALIASES = {
   html: 'markup',
@@ -162,6 +165,21 @@ export default function ArticlePage() {
   const ref = useRef(null)
   const [relatedSlugs, setRelatedSlugs] = useState(/** @type {{slug:string,score:number,maxScore:number}[]} */ ([]))
 
+  const articleMeta = useMemo(() => {
+    const article = articlesData.find((item) => item.id === slug || item.path === `articles/${slug}` || item.path === `articles/${slug}.html`)
+    const fallbackTitle = slug
+      ? slug
+          .replace(/[-_]/g, ' ')
+          .replace(/\b\w/g, (char) => char.toUpperCase())
+      : 'Article'
+    return {
+      title: article?.title || fallbackTitle,
+      description: article?.description || 'Technical notes, project builds, experiments, reviews, and practical writeups from Tangent.',
+      canonical: `${SITE_ORIGIN}/articles/${slug}.html`,
+      image: article?.imageSrc ? `${SITE_ORIGIN}/${article.imageSrc}` : `${SITE_ORIGIN}/images/cover/og-image.png`
+    }
+  }, [slug])
+
   const rawMain = rawHtml ? extractMainHtml(rawHtml) : ''
   // Inject the back button as the first child inside <main ...>
   const mainHtml = rawMain.replace(/(<main[^>]*>)/i, '$1<button class="back-link" id="ssg-back-btn">← Return Home</button>')
@@ -279,6 +297,20 @@ export default function ArticlePage() {
 
   return (
     <div id="article-view">
+      <Head>
+        <title>{`${articleMeta.title} | Tangent`}</title>
+        <meta name="description" content={articleMeta.description} />
+        <link rel="canonical" href={articleMeta.canonical} />
+        <meta property="og:type" content="article" />
+        <meta property="og:title" content={`${articleMeta.title} | Tangent`} />
+        <meta property="og:description" content={articleMeta.description} />
+        <meta property="og:url" content={articleMeta.canonical} />
+        <meta property="og:image" content={articleMeta.image} />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={`${articleMeta.title} | Tangent`} />
+        <meta name="twitter:description" content={articleMeta.description} />
+        <meta name="twitter:image" content={articleMeta.image} />
+      </Head>
       <div className="article-frame" ref={ref}>
         {headStyles.map((css, i) => (
           <style key={i} dangerouslySetInnerHTML={{ __html: css }} />
