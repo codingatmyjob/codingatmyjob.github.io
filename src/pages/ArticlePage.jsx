@@ -232,6 +232,17 @@ export default function ArticlePage() {
     }
   }, [mainHtml, rawHtml])
 
+  // Force a hard reload when leaving the TF article so WASM workers and model
+  // weights don't stay resident in memory for the rest of the session.
+  useEffect(() => {
+    if (slug !== 'traffic-live-object-detection') return
+    console.log('[TF article] mounted — TensorFlow.js/COCO-SSD will initialize')
+    return () => {
+      console.log('[TF article] unmounted — forcing hard reload to clear WASM workers and model weights')
+      window.location.assign(import.meta.env.BASE_URL || '/')
+    }
+  }, [slug])
+
   useEffect(() => {
     let cancelled = false
 

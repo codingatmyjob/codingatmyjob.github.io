@@ -22,30 +22,31 @@ export const articlesData = [
   //   tags: ['Demo', 'LLM', 'Node.js', 'API'],
   //   imageLabel: 'NOAA Tides LLM Chatbot Demo'
   // },
-  // // DONE - DO I EVEN WANT TO RELEASE THIS? MAYBE JUST A REPO? IT'S KINDA NEAT BUT NOT SURE IF IT'S WORTH A FULL ARTICLE
-  // {
-  //   id: 'traffic-live-object-detection',
-  //   path: 'articles/traffic-live-object-detection',
-  //   publishedAt: '2026-06-26',
-  //   date: 'June 26, 2026',
-  //   title: 'Traffic Object Detection with TensorFlow.js',
-  //   description: 'Live traffic feed with client-side COCO-SSD detection.',
-  //   tags: ['Project', 'JavaScript', 'TensorFlow.js', 'Library'],
-  //   imageLabel: 'Traffic Object Detection'
-  // },
-  // // DONE - WAITING TO RELEASE
-  // {
-  //   id: 'using-prismjs-to-style-code',
-  //   path: 'articles/using-prismjs-to-style-code',
-  //   publishedAt: '2026-06-19',
-  //   date: 'June 19, 2026',
-  //   title: 'Using Prism.js to Style Code',
-  //   description: 'Integrating Prism.js, language aliases, heuristic language detection, and toolbar.',
-  //   tags: ['Notes', 'JavaScript', 'Prism.js', 'Library'],
-  //   imageSrc: 'images/cover/prismjs-logo.svg',
-  //   imageAlt: 'Using Prism.js',
-  //   imageStyle: { height: '85%', width: '85%' }
-  // },
+  // DONE - DO I EVEN WANT TO RELEASE THIS? MAYBE JUST A REPO? IT'S KINDA NEAT BUT NOT SURE IF IT'S WORTH A FULL ARTICLE
+  {
+    id: 'traffic-live-object-detection',
+    path: 'articles/traffic-live-object-detection',
+    publishedAt: '2026-06-26',
+    date: 'June 26, 2026',
+    title: 'Traffic Object Detection with TensorFlow.js',
+    description: 'Live traffic feed with client-side COCO-SSD detection.',
+    tags: ['Project', 'JavaScript', 'TensorFlow.js', 'Library'],
+    imageSrc: 'images/cover/coco-ssd-detection.png',
+    imageAlt: 'Traffic Object Detection',
+    imageStyle: { height: '85%', width: '85%' }
+  },
+  {
+    id: 'using-prismjs-to-style-code',
+    path: 'articles/using-prismjs-to-style-code',
+    publishedAt: '2026-06-19',
+    date: 'June 19, 2026',
+    title: 'Using Prism.js to Style Code',
+    description: 'Integrating Prism.js, language aliases, heuristic language detection, and toolbar.',
+    tags: ['Notes', 'JavaScript', 'Prism.js', 'Library'],
+    imageSrc: 'images/cover/prismjs-logo.svg',
+    imageAlt: 'Using Prism.js',
+    imageStyle: { height: '85%', width: '85%' }
+  },
   {
     id: 'use-claude-code-for-free',
     path: 'articles/use-claude-code-for-free',

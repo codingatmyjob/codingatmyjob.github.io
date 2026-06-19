@@ -403,19 +403,23 @@
         if (!modelCache.promise || modelCache.base !== DETECTION_MODEL_BASE) {
           modelCache.base = DETECTION_MODEL_BASE
           modelCache.promise = (async () => {
-            await tfLib.ready()
             let backend = 'cpu'
 
+            // Set WASM paths and backend before tf.ready() so TF never
+            // attempts WebGL initialisation (which logs noisy failures).
             if (tfLib.wasm && typeof tfLib.wasm.setWasmPaths === 'function') {
               tfLib.wasm.setWasmPaths('https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-backend-wasm@4.22.0/dist/')
             }
 
             const wasmReady = await tfLib.setBackend('wasm').catch(() => false)
-            if (wasmReady) backend = 'wasm/cpu'
-            else {
+            if (wasmReady) {
+              backend = 'wasm/cpu'
+            } else {
               const cpuReady = await tfLib.setBackend('cpu').catch(() => false)
               if (!cpuReady) throw new Error('No supported TensorFlow inference engine found')
             }
+
+            await tfLib.ready()
 
             return cocoSsdLib.load({ base: DETECTION_MODEL_BASE })
               .then((loadedModel) => ({ loadedModel, backend }))
