@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react'
+import React, { useEffect, useState, useCallback, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Head } from 'vite-react-ssg'
 import ArticlesGrid from '../components/articles/ArticlesGrid'
@@ -27,7 +27,6 @@ export default function Home() {
   const navigate = useNavigate()
   const allArticles = articlesData
   const [filteredArticles, setFilteredArticles] = useState(articlesData)
-  const [sortedArticles, setSortedArticles] = useState([])
   const [selected, setSelected] = useState([])
   const [sortOrder, setSortOrder] = useState('newest')
   const [currentPage, setCurrentPage] = useState(1)
@@ -121,8 +120,8 @@ export default function Home() {
     setAvailableTags(Array.from(tagsFromFiltered).sort())
   }, [filteredArticles])
 
-  useEffect(() => {
-    const sorted = [...filteredArticles].sort((a, b) => {
+  const sortedArticles = useMemo(() => {
+    return [...filteredArticles].sort((a, b) => {
       if (sortOrder === 'a-z' || sortOrder === 'z-a') {
         const titleA = (a.title || '').toLowerCase()
         const titleB = (b.title || '').toLowerCase()
@@ -131,7 +130,6 @@ export default function Home() {
       const getDate = (article) => article.publishedAt ? new Date(article.publishedAt) : new Date('2099-12-31')
       return sortOrder === 'newest' ? getDate(b) - getDate(a) : getDate(a) - getDate(b)
     })
-    setSortedArticles(sorted)
   }, [filteredArticles, sortOrder])
 
   const applyFilter = useCallback((selTags) => { setSelected(selTags); setCurrentPage(1) }, [])
