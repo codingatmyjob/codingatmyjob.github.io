@@ -1,6 +1,6 @@
 {
-  "_client-BeRnHaKQ.js": {
-    "file": "assets/client-BeRnHaKQ.js",
+  "_client-BTzwY_ow.js": {
+    "file": "assets/client-BTzwY_ow.js",
     "name": "client",
     "isDynamicEntry": true,
     "imports": [
@@ -8,12 +8,12 @@
     ]
   },
   "index.html": {
-    "file": "assets/app-BVuyZjOG.js",
+    "file": "assets/app-BoSt-GES.js",
     "name": "app",
     "src": "index.html",
     "isEntry": true,
     "dynamicImports": [
-      "_client-BeRnHaKQ.js"
+      "_client-BTzwY_ow.js"
     ],
     "css": [
       "assets/app-V_pJChQe.css"
