@@ -1,0 +1,291 @@
+{
+  "version": 1,
+  "generatedAt": "2026-06-19T04:01:03.073Z",
+  "method": "tfidf+kmeans+cosine",
+  "minRelatedScore": 0.1,
+  "maxObservedScore": 0.546141,
+  "articleCount": 16,
+  "k": 3,
+  "items": {
+    "HTB-Artificial-Writeup": {
+      "cluster": 0,
+      "related": [
+        {
+          "slug": "HTB-Command-Cheatsheet",
+          "score": 0.316512
+        },
+        {
+          "slug": "traffic-live-object-detection",
+          "score": 0.107876
+        }
+      ]
+    },
+    "HTB-Command-Cheatsheet": {
+      "cluster": 0,
+      "related": [
+        {
+          "slug": "HTB-Artificial-Writeup",
+          "score": 0.316512
+        }
+      ]
+    },
+    "VirtualBox-Home-Lab-Setup": {
+      "cluster": 2,
+      "related": [
+        {
+          "slug": "how-i-passed-network-plus",
+          "score": 0.212589
+        },
+        {
+          "slug": "how-i-passed-security-plus",
+          "score": 0.212203
+        }
+      ]
+    },
+    "creating-a-pokemon-stock-bot": {
+      "cluster": 1,
+      "related": [
+        {
+          "slug": "discord-spotify-activity-tracker",
+          "score": 0.277015
+        },
+        {
+          "slug": "playing-in-traffic-and-heatmaps",
+          "score": 0.187011
+        },
+        {
+          "slug": "typeahead-demo",
+          "score": 0.109706
+        },
+        {
+          "slug": "use-claude-code-for-free",
+          "score": 0.102554
+        },
+        {
+          "slug": "efficient-html-maps-with-pydeck",
+          "score": 0.101557
+        }
+      ]
+    },
+    "cruise-size-comparisons": {
+      "cluster": 0,
+      "related": [
+        {
+          "slug": "playing-in-traffic-and-heatmaps",
+          "score": 0.189051
+        },
+        {
+          "slug": "typeahead-demo",
+          "score": 0.181908
+        },
+        {
+          "slug": "traffic-live-object-detection",
+          "score": 0.126855
+        }
+      ]
+    },
+    "discord-spotify-activity-tracker": {
+      "cluster": 1,
+      "related": [
+        {
+          "slug": "creating-a-pokemon-stock-bot",
+          "score": 0.277015
+        },
+        {
+          "slug": "playing-in-traffic-and-heatmaps",
+          "score": 0.101757
+        }
+      ]
+    },
+    "efficient-html-maps-with-pydeck": {
+      "cluster": 0,
+      "related": [
+        {
+          "slug": "playing-in-traffic-and-heatmaps",
+          "score": 0.124469
+        },
+        {
+          "slug": "using-prismjs-to-style-code",
+          "score": 0.10401
+        },
+        {
+          "slug": "creating-a-pokemon-stock-bot",
+          "score": 0.101557
+        }
+      ]
+    },
+    "how-i-passed-network-plus": {
+      "cluster": 2,
+      "related": [
+        {
+          "slug": "how-i-passed-security-plus",
+          "score": 0.546141
+        },
+        {
+          "slug": "passing-oci-foundations-associate",
+          "score": 0.281511
+        },
+        {
+          "slug": "VirtualBox-Home-Lab-Setup",
+          "score": 0.212589
+        }
+      ]
+    },
+    "how-i-passed-security-plus": {
+      "cluster": 2,
+      "related": [
+        {
+          "slug": "how-i-passed-network-plus",
+          "score": 0.546141
+        },
+        {
+          "slug": "passing-oci-foundations-associate",
+          "score": 0.272518
+        },
+        {
+          "slug": "VirtualBox-Home-Lab-Setup",
+          "score": 0.212203
+        }
+      ]
+    },
+    "noaa-tides-llm-chatbot-demo": {
+      "cluster": 0,
+      "related": [
+        {
+          "slug": "typeahead-demo",
+          "score": 0.125721
+        },
+        {
+          "slug": "playing-in-traffic-and-heatmaps",
+          "score": 0.107912
+        }
+      ]
+    },
+    "passing-oci-foundations-associate": {
+      "cluster": 2,
+      "related": [
+        {
+          "slug": "how-i-passed-network-plus",
+          "score": 0.281511
+        },
+        {
+          "slug": "how-i-passed-security-plus",
+          "score": 0.272518
+        }
+      ]
+    },
+    "playing-in-traffic-and-heatmaps": {
+      "cluster": 1,
+      "related": [
+        {
+          "slug": "cruise-size-comparisons",
+          "score": 0.189051
+        },
+        {
+          "slug": "creating-a-pokemon-stock-bot",
+          "score": 0.187011
+        },
+        {
+          "slug": "traffic-live-object-detection",
+          "score": 0.174995
+        },
+        {
+          "slug": "typeahead-demo",
+          "score": 0.156981
+        },
+        {
+          "slug": "efficient-html-maps-with-pydeck",
+          "score": 0.124469
+        },
+        {
+          "slug": "noaa-tides-llm-chatbot-demo",
+          "score": 0.107912
+        },
+        {
+          "slug": "discord-spotify-activity-tracker",
+          "score": 0.101757
+        },
+        {
+          "slug": "use-claude-code-for-free",
+          "score": 0.101737
+        }
+      ]
+    },
+    "traffic-live-object-detection": {
+      "cluster": 0,
+      "related": [
+        {
+          "slug": "playing-in-traffic-and-heatmaps",
+          "score": 0.174995
+        },
+        {
+          "slug": "use-claude-code-for-free",
+          "score": 0.136658
+        },
+        {
+          "slug": "cruise-size-comparisons",
+          "score": 0.126855
+        },
+        {
+          "slug": "using-prismjs-to-style-code",
+          "score": 0.125211
+        },
+        {
+          "slug": "HTB-Artificial-Writeup",
+          "score": 0.107876
+        }
+      ]
+    },
+    "typeahead-demo": {
+      "cluster": 0,
+      "related": [
+        {
+          "slug": "cruise-size-comparisons",
+          "score": 0.181908
+        },
+        {
+          "slug": "playing-in-traffic-and-heatmaps",
+          "score": 0.156981
+        },
+        {
+          "slug": "noaa-tides-llm-chatbot-demo",
+          "score": 0.125721
+        },
+        {
+          "slug": "creating-a-pokemon-stock-bot",
+          "score": 0.109706
+        }
+      ]
+    },
+    "use-claude-code-for-free": {
+      "cluster": 0,
+      "related": [
+        {
+          "slug": "traffic-live-object-detection",
+          "score": 0.136658
+        },
+        {
+          "slug": "creating-a-pokemon-stock-bot",
+          "score": 0.102554
+        },
+        {
+          "slug": "playing-in-traffic-and-heatmaps",
+          "score": 0.101737
+        }
+      ]
+    },
+    "using-prismjs-to-style-code": {
+      "cluster": 1,
+      "related": [
+        {
+          "slug": "traffic-live-object-detection",
+          "score": 0.125211
+        },
+        {
+          "slug": "efficient-html-maps-with-pydeck",
+          "score": 0.10401
+        }
+      ]
+    }
+  }
+}
