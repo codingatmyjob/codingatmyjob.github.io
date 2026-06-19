@@ -1,6 +1,6 @@
 {
-  "_client-DMatXAlb.js": {
-    "file": "assets/client-DMatXAlb.js",
+  "_client-SwZk_AiY.js": {
+    "file": "assets/client-SwZk_AiY.js",
     "name": "client",
     "isDynamicEntry": true,
     "imports": [
@@ -8,12 +8,12 @@
     ]
   },
   "index.html": {
-    "file": "assets/app-OpvADyeM.js",
+    "file": "assets/app-Bu1v6We8.js",
     "name": "app",
     "src": "index.html",
     "isEntry": true,
     "dynamicImports": [
-      "_client-DMatXAlb.js"
+      "_client-SwZk_AiY.js"
     ],
     "css": [
       "assets/app-V_pJChQe.css"
