@@ -1,4 +1,5 @@
 {
+  "\u0000/home/runner/work/codingatmyjob.github.io/codingatmyjob.github.io/node_modules/invariant/browser.js?commonjs-es-import": [],
   "\u0000/home/runner/work/codingatmyjob.github.io/codingatmyjob.github.io/node_modules/prismjs/components/prism-python.js?commonjs-es-import": [],
   "\u0000/home/runner/work/codingatmyjob.github.io/codingatmyjob.github.io/node_modules/prismjs/components/prism-python.js?commonjs-exports": [],
   "\u0000/home/runner/work/codingatmyjob.github.io/codingatmyjob.github.io/node_modules/prismjs/components/prism-typescript.js?commonjs-es-import": [],
@@ -9,13 +10,14 @@
   "\u0000/home/runner/work/codingatmyjob.github.io/codingatmyjob.github.io/node_modules/prop-types/index.js?commonjs-module": [],
   "\u0000/home/runner/work/codingatmyjob.github.io/codingatmyjob.github.io/node_modules/react-dom/cjs/react-dom.production.min.js?commonjs-exports": [],
   "\u0000/home/runner/work/codingatmyjob.github.io/codingatmyjob.github.io/node_modules/react-dom/client.js?commonjs-es-import": [
-    "/preview/assets/client-SwZk_AiY.js"
+    "/preview/assets/client-lgw8K7dy.js"
   ],
   "\u0000/home/runner/work/codingatmyjob.github.io/codingatmyjob.github.io/node_modules/react-dom/client.js?commonjs-exports": [
-    "/preview/assets/client-SwZk_AiY.js"
+    "/preview/assets/client-lgw8K7dy.js"
   ],
   "\u0000/home/runner/work/codingatmyjob.github.io/codingatmyjob.github.io/node_modules/react-dom/index.js?commonjs-es-import": [],
   "\u0000/home/runner/work/codingatmyjob.github.io/codingatmyjob.github.io/node_modules/react-dom/index.js?commonjs-module": [],
+  "\u0000/home/runner/work/codingatmyjob.github.io/codingatmyjob.github.io/node_modules/react-fast-compare/index.js?commonjs-es-import": [],
   "\u0000/home/runner/work/codingatmyjob.github.io/codingatmyjob.github.io/node_modules/react/cjs/react-jsx-runtime.production.min.js?commonjs-exports": [],
   "\u0000/home/runner/work/codingatmyjob.github.io/codingatmyjob.github.io/node_modules/react/cjs/react.production.min.js?commonjs-exports": [],
   "\u0000/home/runner/work/codingatmyjob.github.io/codingatmyjob.github.io/node_modules/react/index.js?commonjs-es-import": [],
@@ -24,11 +26,13 @@
   "\u0000/home/runner/work/codingatmyjob.github.io/codingatmyjob.github.io/node_modules/react/jsx-runtime.js?commonjs-module": [],
   "\u0000/home/runner/work/codingatmyjob.github.io/codingatmyjob.github.io/node_modules/scheduler/cjs/scheduler.production.min.js?commonjs-exports": [],
   "\u0000/home/runner/work/codingatmyjob.github.io/codingatmyjob.github.io/node_modules/scheduler/index.js?commonjs-module": [],
+  "\u0000/home/runner/work/codingatmyjob.github.io/codingatmyjob.github.io/node_modules/shallowequal/index.js?commonjs-es-import": [],
   "\u0000commonjsHelpers.js": [],
   "\u0000vite/modulepreload-polyfill.js": [],
   "\u0000vite/preload-helper.js": [],
   "index.html": [],
   "node_modules/@remix-run/router/dist/router.js": [],
+  "node_modules/invariant/browser.js": [],
   "node_modules/prismjs/components/prism-bash.js": [],
   "node_modules/prismjs/components/prism-clike.js": [],
   "node_modules/prismjs/components/prism-css.js": [],
@@ -48,9 +52,10 @@
   "node_modules/prop-types/lib/ReactPropTypesSecret.js": [],
   "node_modules/react-dom/cjs/react-dom.production.min.js": [],
   "node_modules/react-dom/client.js": [
-    "/preview/assets/client-SwZk_AiY.js"
+    "/preview/assets/client-lgw8K7dy.js"
   ],
   "node_modules/react-dom/index.js": [],
+  "node_modules/react-fast-compare/index.js": [],
   "node_modules/react-helmet-async/lib/index.module.js": [],
   "node_modules/react-router-dom/dist/index.js": [],
   "node_modules/react-router/dist/index.js": [],
@@ -60,9 +65,11 @@
   "node_modules/react/jsx-runtime.js": [],
   "node_modules/scheduler/cjs/scheduler.production.min.js": [],
   "node_modules/scheduler/index.js": [],
+  "node_modules/shallowequal/index.js": [],
   "node_modules/vite-react-ssg/dist/index.mjs": [],
   "node_modules/vite-react-ssg/dist/shared/vite-react-ssg.BhGKpaqQ.mjs": [],
   "node_modules/vite-react-ssg/dist/shared/vite-react-ssg.C6pK7rvr.mjs": [],
+  "node_modules/vite-react-ssg/dist/shared/vite-react-ssg.CoMLbIiW.mjs": [],
   "node_modules/vite-react-ssg/dist/shared/vite-react-ssg.DTTf7HZy.mjs": [],
   "src/components/articles/ArticleCard.jsx": [],
   "src/components/articles/ArticlesControls.jsx": [],
