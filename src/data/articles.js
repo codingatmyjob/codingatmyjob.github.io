@@ -22,19 +22,30 @@ export const articlesData = [
   //   tags: ['Demo', 'LLM', 'Node.js', 'API'],
   //   imageLabel: 'NOAA Tides LLM Chatbot Demo'
   // },
-  // DONE - DO I EVEN WANT TO RELEASE THIS? MAYBE JUST A REPO? IT'S KINDA NEAT BUT NOT SURE IF IT'S WORTH A FULL ARTICLE
-  // {
-  //   id: 'traffic-live-object-detection',
-  //   path: 'articles/traffic-live-object-detection',
-  //   publishedAt: '2026-06-26',
-  //   date: 'June 26, 2026',
-  //   title: 'Traffic Object Detection with TensorFlow.js',
-  //   description: 'Live traffic feed with client-side COCO-SSD detection.',
-  //   tags: ['Project', 'JavaScript', 'TensorFlow.js', 'Library'],
-  //   imageSrc: 'images/cover/TensorFlow_cover.svg',
-  //   imageAlt: 'Traffic Object Detection',
-  //   imageStyle: { height: '95%', width: '95%' }
-  // },
+    {
+    id: 'how-i-passed-azure-ai-fundamentals',
+    path: 'articles/how-i-passed-azure-ai-fundamentals',
+    publishedAt: '2026-06-26',
+    date: 'June 26, 2026',
+    title: 'How I passed Microsoft Azure AI Fundamentals',
+    description: 'Azure AI Fundamentals AI-900 review, study resources used, exam-day tips, and upcoming test changes.',
+    tags: ['Cert', 'AI'],
+    imageSrc: 'images/cover/ai-900.svg',
+    imageAlt: 'How I passed Microsoft Azure AI Fundamentals',
+    imageStyle: { height: '95%', width: '95%' }
+  },
+  {
+    id: 'traffic-live-object-detection',
+    path: 'articles/traffic-live-object-detection',
+    publishedAt: '2026-06-26',
+    date: 'June 26, 2026',
+    title: 'Traffic Object Detection with TensorFlow.js',
+    description: 'Live traffic feed with client-side COCO-SSD detection.',
+    tags: ['Project', 'JavaScript', 'TensorFlow.js', 'Library'],
+    imageSrc: 'images/cover/TensorFlow_cover.svg',
+    imageAlt: 'Traffic Object Detection',
+    imageStyle: { height: '95%', width: '95%' }
+  },
   {
     id: 'using-prismjs-to-style-code',
     path: 'articles/using-prismjs-to-style-code',
