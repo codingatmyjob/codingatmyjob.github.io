@@ -1,10 +1,18 @@
 # codingatmyjob.github.io
 
-A personal project portfolio and technical blog built with React and Vite.
+Personal blog for project writeups, certification reviews, and interactive demos.
+
+View live: https://codingatmyjob.github.io/
 
 ## Purpose
 
-Portfolio documents the learning process. Each article captures a project, tool, or exam, including what worked, what didn't, and the reasoning behind decisions. Topics span Python automation, JavaScript web apps, numerous certifications, security (CompTIA, HTB),AI-assisted tooling, and more. Interactive demos are embedded where relevant, allowing the user to work hands-on with content and not just read theory.
+This site is a public facing project portfolio. Each post focuses on practical execution: what was built, why certain decisions were made, tradeoffs encountered, and what changed after testing in real usage. Instead of only documenting outcomes, articles capture process and iteration across:
+
+- JavaScript web app experiments and UI patterns
+- Python automation and bot workflows
+- Security/CTF notes and lab writeups
+- Certification prep breakdowns
+- AI-assisted tooling and local model workflows
 
 ## Stack
 
@@ -13,25 +21,78 @@ Portfolio documents the learning process. Each article captures a project, tool,
 | UI | React 18 + React Router 6 |
 | Static generation | vite-react-ssg |
 | Build tool | Vite |
-| Styling | Plain CSS with CSS variables |
+| Styling | Plain CSS |
 | Code highlighting | Prism.js |
 | Deployment | GitHub Pages via `gh-pages` |
 
+## Techniques Used
+
+The repo utilizes static-first patterns, with build-time computation to keep runtime fast:
+
+- Static route generation with `vite-react-ssg` for article pages.
+- Build-time related article recommendations using tokenization + TF-IDF weighting.
+- Cosine similarity with followon processing for recommendation scoring.
+- K-means clustering to narrow candidate related-article pools.
+- Compact JSON recommendation index consumed client-side for instant lookups.
+- Saturating score transform for user-friendly `% match` display in the related carousel.
+- Prism.js integration for code formatting in static HTML article content.
+
+## Related Articles System
+
+Related links are generated ahead of time and shipped as static JSON.
+
+### Pipeline
+
+1. Source HTML is read from `public/articles`.
+2. Title, tags, and body text are extracted and normalized.
+3. Weighted TF-IDF vectors are built per article (title/tag/body weights).
+4. Vectors are clustered and ranked by similarity.
+5. Results are written to `public/data/related-articles.json`.
+
+### Runtime Behavior
+
+- Article pages load recommendations from `public/data/related-articles.json`.
+- The related carousel resolves recommendation slugs against article metadata.
+- A bounded, scrollable card track displays the strongest matches.
+
+### Commands
+
+```bash
+npm run generate:related
+```
+
+Regenerates the recommendation index only.
+
+```bash
+npm run build
+```
+
+Runs `prebuild` (including related generation), then builds the static site.
+
+## Local Development
+
+```bash
+npm install
+npm run dev
+```
+
 ## Deployment
 
-There are two environments, both hosted on GitHub Pages:
+Two environments are hosted on GitHub Pages:
 
 | Environment | URL | Branch | Trigger |
 |---|---|---|---|
-| Production | `codingatmyjob.github.io/` | `main` | `npm run deploy` |
-| Preview | `codingatmyjob.github.io/preview/` | `preview` | push to `preview` branch |
+| Production | `https://codingatmyjob.github.io/` | `main` | `npm run deploy` |
+| Preview | `https://codingatmyjob.github.io/preview/` | `preview` | push to `preview` |
 
-**Production** - deploys manually via the `gh-pages` npm package:
+### Production
 
 ```bash
 npm run deploy
 ```
 
-This builds with `vite-react-ssg build` (base `/`), generates static HTML for all routes, then publishes `dist/` to the `gh-pages` branch.
+Builds with base `/` and publishes `dist/` to `gh-pages`.
 
-**Preview** - deploys automatically via GitHub Actions (`.github/workflows/deploy-preview.yml`) on any push to the `preview` branch. The build uses `--base /preview/` so all routes and assets resolve correctly under the subdirectory.
+### Preview
+
+Preview deploy runs from GitHub Actions on the `preview` branch with base `/preview/`.
