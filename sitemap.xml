@@ -16,10 +16,14 @@
     <loc>https://codingatmyjob.github.io/sidebar/status-hub.html</loc>
     <lastmod>2026-06-18</lastmod>
   </url>
-  <!-- <url>
+    <url>
+    <loc>https://codingatmyjob.github.io/articles/how-i-passed-azure-ai-fundamentals</loc>
+    <lastmod>2026-06-26</lastmod>
+  </url>
+  <url>
     <loc>https://codingatmyjob.github.io/articles/traffic-live-object-detection</loc>
-    <lastmod>2026-06-18</lastmod>
-  </url> -->
+    <lastmod>2026-06-26</lastmod>
+  </url>
   <url>
     <loc>https://codingatmyjob.github.io/articles/using-prismjs-to-style-code.html</loc>
     <lastmod>2026-06-19</lastmod>
@@ -78,6 +82,6 @@
   </url>
   <url>
     <loc>https://codingatmyjob.github.io/articles/how-i-passed-network-plus.html</loc>
-    <lastmod>2026-05-19</lastmod>
+    <lastmod>2026-06-26</lastmod>
   </url>
 </urlset>
