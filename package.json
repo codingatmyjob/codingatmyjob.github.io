@@ -6,6 +6,7 @@
     "dev": "vite",
     "prebuild": "npm run generate:related",
     "build": "vite-react-ssg build",
+    "build:ci": "npm run generate:related && vite-react-ssg build",
     "preview": "vite preview",
     "generate:related": "node scripts/generate-related-articles.cjs",
     "predeploy": "npm run build",
