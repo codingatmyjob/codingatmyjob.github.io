@@ -1,11 +1,46 @@
 {
-  "version": 1,
-  "generatedAt": "2026-06-27T19:16:52.440Z",
+  "version": 2,
+  "generatedAt": "2026-06-27T19:28:28.963Z",
   "method": "tfidf+kmeans+cosine",
   "minRelatedScore": 0.1,
   "maxObservedScore": 0.508568,
   "articleCount": 17,
   "k": 3,
+  "clusters": [
+    {
+      "id": 0,
+      "size": 12,
+      "tags": [
+        "project",
+        "javascript",
+        "python",
+        "api",
+        "webapp",
+        "discord"
+      ]
+    },
+    {
+      "id": 1,
+      "size": 3,
+      "tags": [
+        "cert",
+        "networking",
+        "security",
+        "project",
+        "vm",
+        "siem"
+      ]
+    },
+    {
+      "id": 2,
+      "size": 2,
+      "tags": [
+        "cert",
+        "ai",
+        "cloud"
+      ]
+    }
+  ],
   "items": {
     "creating-a-pokemon-stock-bot": {
       "cluster": 0,

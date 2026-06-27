@@ -383,6 +383,65 @@ function kmeans(vectors, k, iterations = 16) {
 }
 
 /**
+ * Return top entries by numeric value from a map-like structure.
+ *
+ * @param {Map<string, number>} map
+ * @param {number} limit
+ * @returns {string[]}
+ */
+function topTerms(map, limit) {
+  return [...map.entries()]
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, limit)
+    .map(([term]) => term)
+}
+
+/**
+ * Build per-cluster summary metadata for JSON output.
+ *
+ * For each cluster we include:
+ * - size: number of articles
+ * - tags: most common explicit article tags
+ *
+ * @param {Array<{tags:string[], vector:Map<string, number>}>} docs
+ * @param {number[]} assignments
+ * @param {number} k
+ * @returns {Array<{id:number, size:number, tags:string[]}>}
+ */
+function summarizeClusters(docs, assignments, k) {
+  return Array.from({ length: k }, (_, clusterId) => {
+    const clusterDocIndices = assignments
+      .map((assignedId, index) => ({ assignedId, index }))
+      .filter(entry => entry.assignedId === clusterId)
+      .map(entry => entry.index)
+
+    if (!clusterDocIndices.length) {
+      return {
+        id: clusterId,
+        size: 0,
+        tags: []
+      }
+    }
+
+    const tagFreq = new Map()
+
+    for (const index of clusterDocIndices) {
+      for (const rawTag of docs[index].tags) {
+        const tag = (rawTag || '').trim().toLowerCase()
+        if (!tag) continue
+        tagFreq.set(tag, (tagFreq.get(tag) || 0) + 1)
+      }
+    }
+
+    return {
+      id: clusterId,
+      size: clusterDocIndices.length,
+      tags: topTerms(tagFreq, 6)
+    }
+  })
+}
+
+/**
  * Compute final relatedness score between two documents.
  *
  * Formula:
@@ -512,6 +571,7 @@ function main() {
   const vectors = docs.map(doc => doc.vector)
   const k = pickK(docs.length)
   const { assignments } = kmeans(vectors, k)
+  const clusters = summarizeClusters(docs, assignments, k)
 
   // Keep score list for output metadata used by UI normalization.
   const allScores = []
@@ -569,13 +629,14 @@ function main() {
   // `maxObservedScore` is included to support UI-side percentage transforms
   // without requiring hard-coded constants in the frontend.
   const output = {
-    version: 1,
+    version: 2,
     generatedAt: new Date().toISOString(),
     method: 'tfidf+kmeans+cosine',
     minRelatedScore: MIN_RELATED_SCORE,
     maxObservedScore: Number(maxScore.toFixed(6)),
     articleCount: docs.length,
     k,
+    clusters,
     items: perArticle
   }
 
