@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>HTTP QUERY Method</title>
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+    <div id="binary-bg" aria-hidden="true"></div>
+
+    <main class="article-container">
+        <h1>HTTP QUERY Method</h1>
+        <div class="meta">
+            <time datetime="2026-07-06">July 06, 2026</time>
+        </div>
+        <div class="tags">
+            <span class="tag">Notes</span><span class="tag">HTTP</span><span class="tag">RFC</span><span class="tag">API</span>
+        </div>
+
+        <article>
+            <h2>Introducing HTTP QUERY</h2>
+            <p>Unless your name is Patrick Star and you live under a rock, you've probably heard about the newly standardized 
+                HTTP QUERY method (<a href="https://datatracker.ietf.org/doc/html/rfc10008">RFC 10008</a>). I've seen about 3-4 articles or posts referencing it so far, but nothing comprehensive.</p>
+            <p>
+                RFC 10008 formally defines QUERY as a new HTTP method for safe, read-only requests that need more 
+                structure than a plain URL query string can conveniently support. The idea is not to replace GET or POST, 
+                but to give read-heavy APIs a more precise choice when neither of the older methods is suitable for the situation.
+            </p>
+
+            <p>
+                HTTP method choice affects many things; safety, idempotency, retry behavior, caching, and how 
+                clients, proxies, and gateways should interpret the request. Here are the semantics of QUERY 
+                as defined in <a href="https://datatracker.ietf.org/doc/html/rfc10008#section-2">Section 2 of 
+                RFC 10008</a>, and how it stacks up to other methods.
+            </p>
+
+            <h2>How QUERY Differs from GET and POST</h2>
+            <table class="info-table" aria-label="GET vs QUERY vs POST">
+                <tbody>
+                    <tr>
+                        <th>Method</th>
+                        <th>Primary role</th>
+                        <th>Safety<sup><a href="#fn-safe">1</a></sup> / idempotency<sup><a href="#fn-idempotent">2</a></sup></th>
+                        <th>Body support<sup><a href="#fn-body">3</a></sup></th>
+                    </tr>
+                    <tr>
+                        <td>GET</td>
+                        <td>Simple retrieval</td>
+                        <td>Safe + idempotent</td>
+                        <td>Usually no body; inputs in the URL</td>
+                    </tr>
+                    <tr>
+                        <td>QUERY</td>
+                        <td>Structured read-only lookup</td>
+                        <td>Safe + idempotent</td>
+                        <td>Body-capable for richer criteria</td>
+                    </tr>
+                    <tr>
+                        <td>POST</td>
+                        <td>Actions and submissions</td>
+                        <td>Not safe by default</td>
+                        <td>Body-capable, but not read-only</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <ol>
+                <li id="fn-safe">Safe: the request is intended to read data without changing server state.</li>
+                <li id="fn-idempotent">Idempotent: repeated identical requests leave the server in the same end state as a single request.</li>
+                <li id="fn-body">Body: the method can accept structured input in the request body instead of URL parameters.</li>
+            </ol>
+
+            <h2>Why This New Method Was Necessary</h2>
+            <p>
+                In practice, teams often stretch GET past its intended use once filter sets get large, nested, or
+                too complicated for a query string. The common workaround is to switch to POST, since it accepts a
+                body, but that complicates the request when the intention is actually read-only. QUERY exists to 
+                bridge the gap, allowing reads to utilize a body without sacrificing their safety guarantees.
+            </p>
+
+            <p>
+                This is a significant change, which will likely take years to be adopted and see in the wild. QUERY changes 
+                how we think about requests, and provides a clean mechanism for read-only operations with many criteria,
+                in an age where data is increasingly complex and interconnected.
+            </p>
+
+            <h2>Takeaways from the official RFC:</h2>
+            <ul>
+                <li>QUERY is meant to be used for complex, read-only requests.</li>
+                <li>Send a valid Content-Type on QUERY request bodies.</li>
+                <li>Handle negotiation errors like 415 and 406; reject unsupported request Content-Types with 415, and unsatisfiable Accept headers with 406.</li>
+                <li>Expect CORS preflight for browser-based QUERY calls.</li>
+            </ul>
+
+            <h2>References</h2>
+            <ul>
+                <li><a class="article-link" href="https://datatracker.ietf.org/doc/html/rfc10008" target="_blank" rel="noopener">RFC 10008 on IETF Datatracker</a></li>
+                <li><a class="article-link" href="https://www.rfc-editor.org/rfc/rfc10008" target="_blank" rel="noopener">RFC Editor publication page</a></li>
+            </ul>
+        </article>
+    </main>
+</body>
+</html>
