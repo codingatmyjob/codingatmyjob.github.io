@@ -25,8 +25,8 @@ export const articlesData = [
   {
     id: 'new-http-query-method',
     path: 'articles/new-http-query-method',
-    publishedAt: '2026-07-10',
-    date: 'July 10, 2026',
+    publishedAt: '2026-07-07',
+    date: 'July 07, 2026',
     title: 'HTTP QUERY Method',
     description: 'Exploring the newly standardized HTTP QUERY request method (RFC 10008), why it was necessary, and how it differs from GET and POST.',
     tags: ['Notes', 'HTTP', 'API'],
