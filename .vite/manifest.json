@@ -1,0 +1,22 @@
+{
+  "_client-D66e0_Hk.js": {
+    "file": "assets/client-D66e0_Hk.js",
+    "name": "client",
+    "isDynamicEntry": true,
+    "imports": [
+      "index.html"
+    ]
+  },
+  "index.html": {
+    "file": "assets/app-64kzEuEq.js",
+    "name": "app",
+    "src": "index.html",
+    "isEntry": true,
+    "dynamicImports": [
+      "_client-D66e0_Hk.js"
+    ],
+    "css": [
+      "assets/app-V_pJChQe.css"
+    ]
+  }
+}
