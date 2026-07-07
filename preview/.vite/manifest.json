@@ -1,0 +1,22 @@
+{
+  "_client-CFihd2LJ.js": {
+    "file": "assets/client-CFihd2LJ.js",
+    "name": "client",
+    "isDynamicEntry": true,
+    "imports": [
+      "index.html"
+    ]
+  },
+  "index.html": {
+    "file": "assets/app-BCtbjBmT.js",
+    "name": "app",
+    "src": "index.html",
+    "isEntry": true,
+    "dynamicImports": [
+      "_client-CFihd2LJ.js"
+    ],
+    "css": [
+      "assets/app-V_pJChQe.css"
+    ]
+  }
+}
