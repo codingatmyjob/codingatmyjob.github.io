@@ -6,8 +6,8 @@ import ArticlesControls from '../components/articles/ArticlesControls'
 import Pagination from '../components/articles/Pagination'
 import SearchBar from '../components/articles/SearchBar'
 import { articlesData } from '../data/articles'
+import { getSiteUrl } from '../siteUrls'
 
-const SITE_ORIGIN = 'https://codingatmyjob.github.io'
 const SITE_TITLE = 'Tangent | Cybersecurity & Data Science Blog'
 const SITE_DESCRIPTION = 'A cybersecurity and data science blog with technical notes, project builds, experiments, reviews, and practical writeups, that together form a practical project portfolio.'
 
@@ -157,40 +157,43 @@ export default function Home() {
   const totalPages = Math.ceil(sortedArticles.length / itemsPerPage)
   const startIndex = (currentPage - 1) * itemsPerPage
   const currentArticles = sortedArticles.slice(startIndex, startIndex + itemsPerPage)
+  const siteUrl = getSiteUrl()
+  const aboutUrl = getSiteUrl('sidebar/About.html')
+  const ogImageUrl = getSiteUrl('images/cover/og-image.png')
 
   return (
     <section className="content-area">
       <Head>
         <title>{SITE_TITLE}</title>
         <meta name="description" content={SITE_DESCRIPTION} />
-        <link rel="canonical" href={SITE_ORIGIN} />
+        <link rel="canonical" href={siteUrl} />
         <meta property="og:type" content="website" />
         <meta property="og:title" content={SITE_TITLE} />
         <meta property="og:description" content={SITE_DESCRIPTION} />
-        <meta property="og:url" content={SITE_ORIGIN} />
-        <meta property="og:image" content={`${SITE_ORIGIN}/images/cover/og-image.png`} />
+        <meta property="og:url" content={siteUrl} />
+        <meta property="og:image" content={ogImageUrl} />
         <meta property="og:image:alt" content="Tangent cybersecurity and data science blog preview image" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={SITE_TITLE} />
         <meta name="twitter:description" content={SITE_DESCRIPTION} />
-        <meta name="twitter:image" content={`${SITE_ORIGIN}/images/cover/og-image.png`} />
+        <meta name="twitter:image" content={ogImageUrl} />
         <script type="application/ld+json">
           {JSON.stringify({
             '@context': 'https://schema.org',
             '@graph': [
               {
                 '@type': 'WebSite',
-                '@id': SITE_ORIGIN,
-                url: SITE_ORIGIN,
+                '@id': siteUrl,
+                url: siteUrl,
                 name: 'Tangent',
                 description: 'A cybersecurity and data science blog with technical notes, project builds, experiments, reviews, and practical writeups, that form a functional project portfolio.',
                 inLanguage: 'en'
               },
               {
                 '@type': 'Person',
-                '@id': `${SITE_ORIGIN}/sidebar/About.html`,
+                '@id': aboutUrl,
                 name: 'Connor',
-                url: `${SITE_ORIGIN}/sidebar/About.html`,
+                url: aboutUrl,
                 sameAs: [
                   'https://github.com/codingatmyjob',
                   'https://www.credly.com/users/connor-rasmussen.58b75ec0/badges#credly',
@@ -203,10 +206,10 @@ export default function Home() {
                 description: 'A cybersecurity and data science blog with technical notes, project builds, experiments, reviews, and practical writeups, that form a functional project portfolio.',
                 inLanguage: 'en',
                 publisher: {
-                  '@id': `${SITE_ORIGIN}/sidebar/About.html`
+                  '@id': aboutUrl
                 },
                 isPartOf: {
-                  '@id': SITE_ORIGIN
+                  '@id': siteUrl
                 }
               }
             ]

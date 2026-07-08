@@ -1,8 +1,7 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Head } from 'vite-react-ssg'
-
-const SITE_ORIGIN = 'https://codingatmyjob.github.io'
+import { getSiteUrl } from '../siteUrls'
 
 export default function ErrorPage() {
   const navigate = useNavigate()
@@ -12,7 +11,7 @@ export default function ErrorPage() {
       <Head>
         <title>404 | Tangent</title>
         <meta name="robots" content="noindex,follow" />
-        <link rel="canonical" href={SITE_ORIGIN} />
+        <link rel="canonical" href={getSiteUrl()} />
       </Head>
       <div className="article-frame">
         <main className="article-container not-found-container">

@@ -1,8 +1,7 @@
 import React, { useEffect, useMemo, useRef } from 'react'
 import { useLoaderData, useNavigate, useParams } from 'react-router-dom'
 import { Head } from 'vite-react-ssg'
-
-const SITE_ORIGIN = 'https://codingatmyjob.github.io'
+import { getSiteUrl } from '../siteUrls'
 
 const SIDEBAR_META = {
   About: {
@@ -605,7 +604,8 @@ export default function SidebarPage() {
       type: 'website'
     }
   }, [page])
-  const canonicalUrl = `${SITE_ORIGIN}/sidebar/${page}.html`
+  const canonicalUrl = getSiteUrl(`sidebar/${page}.html`)
+  const ogImageUrl = getSiteUrl('images/cover/og-image.png')
 
   useEffect(() => {
     const backBtn = ref.current?.querySelector('#ssg-back-btn')
@@ -644,11 +644,11 @@ export default function SidebarPage() {
         <meta property="og:title" content={`${pageMeta.title} | Tangent`} />
         <meta property="og:description" content={pageMeta.description} />
         <meta property="og:url" content={canonicalUrl} />
-        <meta property="og:image" content={`${SITE_ORIGIN}/images/cover/og-image.png`} />
+        <meta property="og:image" content={ogImageUrl} />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={`${pageMeta.title} | Tangent`} />
         <meta name="twitter:description" content={pageMeta.description} />
-        <meta name="twitter:image" content={`${SITE_ORIGIN}/images/cover/og-image.png`} />
+        <meta name="twitter:image" content={ogImageUrl} />
       </Head>
       <div className="article-frame" ref={ref}>
         {headStyles.map((css, i) => (

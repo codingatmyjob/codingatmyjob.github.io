@@ -3,6 +3,7 @@ import { useLoaderData, useNavigate, useParams } from 'react-router-dom'
 import { Head } from 'vite-react-ssg'
 import { articlesData } from '../data/articles'
 import { RelatedArticlesCarousel } from '../components/articles/RelatedArticlesCarousel'
+import { getSiteUrl } from '../siteUrls'
 import Prism from 'prismjs'
 import 'prismjs/components/prism-markup'
 import 'prismjs/components/prism-css'
@@ -17,8 +18,6 @@ import 'prismjs/components/prism-powershell'
 import 'prismjs/components/prism-python'
 import 'prismjs/components/prism-sql'
 import 'prismjs/components/prism-yaml'
-
-const SITE_ORIGIN = 'https://codingatmyjob.github.io'
 
 const LANGUAGE_ALIASES = {
   html: 'markup',
@@ -175,8 +174,8 @@ export default function ArticlePage() {
     return {
       title: article?.title || fallbackTitle,
       description: article?.description || 'Technical notes, project builds, experiments, reviews, and practical writeups from Tangent.',
-      canonical: `${SITE_ORIGIN}/articles/${slug}.html`,
-      image: article?.imageSrc ? `${SITE_ORIGIN}/${article.imageSrc}` : `${SITE_ORIGIN}/images/cover/og-image.png`
+      canonical: getSiteUrl(`articles/${slug}.html`),
+      image: article?.imageSrc ? getSiteUrl(article.imageSrc) : getSiteUrl('images/cover/og-image.png')
     }
   }, [slug])
 
