@@ -23,6 +23,16 @@ export const articlesData = [
   //   imageLabel: 'NOAA Tides LLM Chatbot Demo'
   // },
   {
+    id: 'how-i-built-a-related-articles-recommender',
+    path: 'articles/how-i-built-a-related-articles-recommender',
+    publishedAt: '2026-07-17',
+    date: 'July 17, 2026',
+    title: 'How I built a Related Articles Recommender',
+    description: 'A lightweight related articles engine for a static blog using similarity scoring.',
+    tags: ['Notes', 'JavaScript'],
+    imageLabel: 'Related Articles Recommender'
+  },
+  {
     id: 'new-http-query-method',
     path: 'articles/new-http-query-method',
     publishedAt: '2026-07-07',

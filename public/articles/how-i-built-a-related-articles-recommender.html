@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>How I Built a Related Articles Recommender</title>
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+    <div id="binary-bg" aria-hidden="true"></div>
+
+    <main class="article-container">
+        <h1>How I Built a Related Articles Recommender</h1>
+        <div class="meta">
+            <time datetime="2026-07-17">July 17, 2026</time>
+        </div>
+        <div class="tags">
+            <span class="tag">Notes</span><span class="tag">JavaScript</span>
+        </div>
+
+        <article>
+            <h2>Overview</h2>
+            <p>
+                When I started building this blog, I did not have any intentions of turning it into something large. 
+                However, as I built it out, I realized the ability to show related articles would be a nice feature and add an 
+                element of discoverability. I wanted each article to show genuinely useful "related" links without 
+                adding a clunky backend service. Since this is a static site, the clean solution was to do all 
+                recommendation work at build time and ship a small JSON lookup file. 
+            </p>
+            
+            <p>
+                A coworker suggested I try k-means clustering, so I did the research and implemented a 
+                TF-IDF + k-means + cosine similarity approach. In plain terms, TF-IDF scores how important
+                each word is in a specific article compared to the full article set, k-means groups articles
+                into topical buckets, and cosine similarity measures how close two article vectors are by angle.
+                The result is a lightweight engine that generates recommendations at build time and works great for my static blog.
+            </p>
+
+            <p>
+                There are no external dependencies, no additional libraries, and 
+                no runtime cost, and the recommendations are consistent and relevant.
+            </p>
+
+            <section class="process-section" aria-labelledby="generating-related-articles-process">
+            <h2 id="generating-related-articles-process">Generating Related Articles Process</h2>
+            <p>
+                The article generation process runs in five major phases.
+            </p>
+
+            <h3>Phase 1: Parse, Normalize, and Tokenize Article Content</h3>
+            <p>
+                The script that generates the recommendations scans every article, loads each HTML file, and extracts three elements:
+                Title, tags, and article body text. It strips HTML, normalizes text, removes stopwords, and tokenizes the remaining content.
+            </p>
+            <p>
+                Those tokens are converted into weighted term frequencies so curated metadata matters more than raw body text.
+            </p>
+<pre><code class="language-js">// Weighted frequencies used in the script:
+// - title: 1.5x (strong intent signal)
+// - tags: 2x (curated metadata)
+// - body: 1x (broad context)
+mergeWeightedFrequency(weightedFreq, titleFreq, 1.5)
+mergeWeightedFrequency(weightedFreq, tagFreq, 2)
+mergeWeightedFrequency(weightedFreq, bodyFreq, 1)</code></pre>
+
+            <h3>Phase 2: Build Weighted TF-IDF Vectors</h3>
+            <p>
+                After weighted term frequencies are built, the script calculates smoothed IDF and creates
+                a TF-IDF vector for each article. Vectors are L2-normalized (scaled to length 1), so cosine 
+                similarity is just a dot product, which means multiplying matching values in both vectors and 
+                summing them into one similarity score.
+            </p>
+            <p>
+                Example: If two articles both use words like "tensorflow", "model", and "inference",
+                their normalized vectors line up and produce a higher dot product. If they use different
+                terms, the dot product is lower, so they are less likely to be recommended together.
+            </p>
+
+<pre><code class="language-js">const idf = Math.log((1 + totalDocs) / (1 + df)) + 1
+vec.set(token, tf * idf)
+doc.vector = l2Normalize(vec)</code></pre>
+
+            <h3>Phase 3: Cluster by Topic with K-Means</h3>
+            <p>
+                The script also runs cosine-based k-means clustering. Cluster count is determined with a simple calculation 
+                based on the number of articles. The result is a cluster ID for each article, and
+                then recommendations prioritize/default same-cluster candidates before using cross-cluster fallback.
+            </p>
+<pre><code class="language-js">function pickK(count) {
+  if (count &lt;= 3) return Math.max(1, count)
+  const k = Math.round(Math.sqrt(count / 2))
+  return Math.max(2, Math.min(8, k))
+}</code></pre>
+
+            <h3>Phase 4: Score, Rank, and Filter Recommendations</h3>
+            <p>
+                Candidate ranking uses a combined score: semantic cosine overlap plus a small tag-overlap boost.
+                This gives semantic matching first, while still rewarding explicit shared tags.
+                As the content is already divided into distinct 'types', I wanted a way to give a small boost to 
+                articles that share tags, and are naturally similar. So, I added a 0.2 * Jaccard similarity term to the score.
+            </p>
+<pre><code class="language-js">score = cosine(vectorA, vectorB) + 0.2 * jaccard(tagsA, tagsB)</code></pre>
+            <p>
+                Candidates from the same cluster are considered first, then cross-cluster candidates are used as fallback.
+                Everything is ranked by score descending so the best overall matches surface first.
+            </p>
+
+            <p>
+                In the current implementation, only results with score >= 0.11 are kept (which will be increased 
+                as we add more articles and there are more naturally occurring matches), and each article is capped to 8 related entries.
+            </p>
+
+            <h3>Phase 5: Output to JSON</h3>
+            <p>
+                The generator outputs to a JSON file. Each article slug maps to a cluster ID
+                and a ranked related list with scores. The JSON file includes metadata and associated information for internal purposes; build time, methods, scores, 
+                clusters, and tags found in each cluster for easy identification of trends and where articles fall.
+            </p>
+<pre><code class="language-json">{
+  "version": 2,
+  "method": "tfidf+kmeans+cosine",
+  "minRelatedScore": 0.11,
+  "maxObservedScore": 0.428571,
+  "items": {
+    "some-article-slug": {
+      "cluster": 1,
+      "related": [
+        { "slug": "another-article", "score": 0.251337 }
+      ]
+    }
+  }
+}</code></pre>
+
+            </section>
+
+            <h2>Tunable Parameters</h2>
+            <p>
+                There are several parameters I can adjust to fine-tune article recommendations:
+            </p>
+            <ul>
+                <li>Minimum related score to tighten or loosen match quality.</li>
+                <li>Title/tag/body weights to control influences.</li>
+                <li>Number of clusters k-means should use.</li>
+                <li>Max related articles per article (currently 8), to keep the UI clean.</li>
+            </ul>
+
+            <h2>Saturation Curved Match Percentage</h2>
+            <p>
+                Raw similarity scores are useful for ranking and internal metrics/debugging, but when attempting to convey relevance to a user, they aren't 
+                very helpful. A linear percentile conversion like this can cause dissimilar articles to appear similar and keep scores too close together. 
+                To make the scores more distinct while keeping them believable, I created an exponential saturation curved approach so lower and mid-range scores spread 
+                out naturally while high scores will have diminishing returns as they approach (but do not hit) 100%.
+            </p>
+<pre><code class="language-js">function scoreToMatchPercent(score) {
+    // Saturating transform: approaches 100 without actually reaching it.
+    const tau = 0.35
+    const scaled = 100 * (1 - Math.exp(-score / tau))
+    return Math.min(99, Math.max(0, Math.round(scaled)))
+}</code></pre>
+            <p>
+                I cap at 99% on purpose so no recommendation looks absolutely certain (nor will it ever hit 99%, the articles would have to be identical). This 
+                keeps the UI believable, avoids overconfident and misleading labels, and gives better visual separation in the related articles carousel.
+            </p>
+        </article>
+    </main>
+</body>
+</html>

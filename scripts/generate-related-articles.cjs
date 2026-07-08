@@ -74,8 +74,8 @@ const OUTPUT_FILE = path.join(ROOT, 'public', 'data', 'related-articles.json')
 
 // Minimum relatedness score required for an article to be included in output.
 // This score uses a custom scale from this file's formula (not a literal percent).
-// Example: 0.08 means include only pairs with score >= 0.08.
-const MIN_RELATED_SCORE = 0.1
+// Example: 0.15 means include only pairs with score >= 0.15.
+const MIN_RELATED_SCORE = 0.11
 
 /**
  * Basic stopword list to reduce noise.
