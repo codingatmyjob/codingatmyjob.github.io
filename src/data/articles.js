@@ -30,7 +30,9 @@ export const articlesData = [
     title: 'How I built a Related Articles Recommender',
     description: 'A lightweight related articles engine for a static blog using similarity scoring.',
     tags: ['Notes', 'JavaScript'],
-    imageLabel: 'Related Articles Recommender'
+    imageSrc: 'images/cover/tf_idf_cover.svg',
+    imageAlt: 'Related Articles Recommender',
+    imageStyle: { height: '95%', width: '95%' }
   },
   {
     id: 'new-http-query-method',
