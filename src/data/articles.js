@@ -28,7 +28,7 @@ export const articlesData = [
     publishedAt: '2026-07-17',
     date: 'July 17, 2026',
     title: 'How I built a Related Articles Recommender',
-    description: 'A lightweight related articles engine for a static blog using similarity scoring.',
+    description: 'Tangent\'s related articles recommender, algorithms, and implementation details.',
     tags: ['Notes', 'JavaScript'],
     imageSrc: 'images/cover/tf_idf_cover.svg',
     imageAlt: 'Related Articles Recommender',

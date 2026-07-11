@@ -21,24 +21,24 @@
         <article>
             <h2>Overview</h2>
             <p>
-                When I started building this blog, I did not have any intentions of turning it into something large. 
-                However, as I built it out, I realized the ability to show related articles would be a nice feature and add an 
-                element of discoverability. I wanted each article to show genuinely useful "related" links without 
-                adding a clunky backend service. Since this is a static site, the clean solution was to do all 
-                recommendation work at build time and ship a small JSON lookup file. 
+                When I first started building this website, it was originally meant to be a project portfolio. It was 
+                made to share my certifications, projects, and achievements. Eventually I reached a point where the website itself became a project, and a place I could 
+                essentially turn into a living resume. Now, nearly everything I do professionally is documented here, 
+                and I wanted to make it easy for visitors (and myself) to find related content. 
             </p>
             
             <p>
                 A coworker suggested I try k-means clustering, so I did the research and implemented a 
                 TF-IDF + k-means + cosine similarity approach. In plain terms, TF-IDF scores how important
                 each word is in a specific article compared to the full article set, k-means groups articles
-                into topical buckets, and cosine similarity measures how close two article vectors are by angle.
-                The result is a lightweight engine that generates recommendations at build time and works great for my static blog.
+                into topical buckets, and cosine similarity measures how close two article vectors are to each other.
             </p>
 
             <p>
-                There are no external dependencies, no additional libraries, and 
-                no runtime cost, and the recommendations are consistent and relevant.
+                The result was discoverability without the need for search, and without adding a clunky backend service. 
+                There are no external dependencies, no additional libraries, and the recommendations are consistent, and relevant. 
+                All recommendation processing is performed at build time and shipped as a small JSON lookup file. Now every time an article 
+                is added, updated, or removed and changes are pushed, the site gets rebuilt and recommendations are automatically updated.
             </p>
 
             <section class="process-section" aria-labelledby="generating-related-articles-process">
