@@ -1,5 +1,7 @@
+import { readTimesByPath } from './readTimes'
+
 // .js over .json because we're using imageStyle objects and plain JSON would prevent this
-export const articlesData = [
+const baseArticlesData = [
   // // DRAFT -- NEED TO CREATE SMALL DEMO OR MAKE A REPO FOR VISUAL AID
   // {
   //   id: 'efficient-html-maps-with-pydeck',
@@ -52,7 +54,7 @@ export const articlesData = [
     publishedAt: '2026-06-26',
     date: 'June 26, 2026',
     title: 'How I passed Microsoft Azure AI Fundamentals',
-    description: 'Azure AI Fundamentals AI-900 review, study resources used, exam-day tips, and upcoming test changes.',
+    description: 'AI-900 review, study resources used, exam-day tips, and upcoming test changes.',
     tags: ['Cert', 'AI'],
     imageSrc: 'images/cover/ai-900.svg',
     imageAlt: 'How I passed Microsoft Azure AI Fundamentals',
@@ -220,3 +222,8 @@ export const articlesData = [
     imageClassName: 'article-card-image--default'
   }
 ]
+
+export const articlesData = baseArticlesData.map(article => ({
+  ...article,
+  readingTime: article.path ? (readTimesByPath[article.path] ?? null) : null
+}))

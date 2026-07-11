@@ -1,0 +1,21 @@
+export const readTimesByPath = {
+  "articles/HTB-Artificial-Writeup": "8 min",
+  "articles/HTB-Command-Cheatsheet": "25 min",
+  "articles/VirtualBox-Home-Lab-Setup": "3 min",
+  "articles/creating-a-pokemon-stock-bot": "13 min",
+  "articles/cruise-size-comparisons": "5 min",
+  "articles/discord-spotify-activity-tracker": "7 min",
+  "articles/efficient-html-maps-with-pydeck": "2 min",
+  "articles/how-i-built-a-related-articles-recommender": "8 min",
+  "articles/how-i-passed-azure-ai-fundamentals": "3 min",
+  "articles/how-i-passed-network-plus": "2 min",
+  "articles/how-i-passed-security-plus": "2 min",
+  "articles/new-http-query-method": "3 min",
+  "articles/noaa-tides-llm-chatbot-demo": "4 min",
+  "articles/passing-oci-foundations-associate": "3 min",
+  "articles/playing-in-traffic-and-heatmaps": "12 min",
+  "articles/traffic-live-object-detection": "3 min",
+  "articles/typeahead-demo": "4 min",
+  "articles/use-claude-code-for-free": "7 min",
+  "articles/using-prismjs-to-style-code": "7 min"
+}

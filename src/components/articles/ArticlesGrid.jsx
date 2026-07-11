@@ -1,85 +1,8 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import ArticleCard from './ArticleCard'
 
-// Calculate reading time based on full article content
-const calculateReadingTime = async (path) => {
-  if(!path) return null
-
-  try {
-    const isRemote = /^https?:\/\//i.test(path)
-    const viteBase = (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.BASE_URL) ? import.meta.env.BASE_URL : '/'
-    const urlToFetch = isRemote
-      ? path
-      : path.startsWith('/')
-        ? new URL(path, location.origin).href
-        : new URL(path, location.origin + viteBase).href
-
-    const response = await fetch(urlToFetch, { cache: 'no-store' })
-    if(!response.ok) return null
-    const htmlText = await response.text()
-    const tempDiv = document.createElement('div')
-    tempDiv.innerHTML = htmlText
-    
-    // Get the article content
-    const articleEl = tempDiv.querySelector('article')
-    if(!articleEl) return null
-    
-    // Count words in text content
-    const textContent = articleEl.textContent || ''
-    const words = textContent.trim().split(/\s+/).filter(Boolean).length
-    
-    // If there's barely any content, it's probably a placeholder
-    if(words < 10) return null
-    
-    // Count code blocks for additional time
-    const codeBlocks = articleEl.querySelectorAll('code, pre').length
-    
-    // Average reading speed: 200 words per minute
-    // Add 15 seconds per code block for comprehension
-    const minutes = Math.ceil((words / 200) + (codeBlocks * 0.25))
-    
-    return minutes < 1 ? '< 1 min' : `${minutes} min`
-  } catch(err) {
-    return null
-  }
-}
-
 export default function ArticlesGrid({ articles = [], onOpenArticle }){
-  const [readingTimes, setReadingTimes] = useState({})
-
-  useEffect(()=>{
-    if(articles.length === 0) return
-
-    let cancelled = false
-
-    const uncached = articles.filter(item => item.path && readingTimes[item.path] === undefined)
-    if(uncached.length === 0) return
-
-    Promise.all(
-      uncached.map(async (item) => ({
-        path: item.path,
-        readingTime: await calculateReadingTime(item.path)
-      }))
-    ).then(results => {
-      if(cancelled) return
-      setReadingTimes(prev => {
-        const next = { ...prev }
-        results.forEach(({ path, readingTime }) => {
-          next[path] = readingTime
-        })
-        return next
-      })
-    })
-
-    return ()=> {
-      cancelled = true
-    }
-  },[articles, readingTimes])
-
-  const itemsToShow = articles.map(item => ({
-    ...item,
-    readingTime: item.path ? readingTimes[item.path] ?? null : null
-  }))
+  const itemsToShow = articles
 
   return (
     <>
