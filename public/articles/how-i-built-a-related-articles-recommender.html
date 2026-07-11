@@ -28,10 +28,11 @@
             </p>
             
             <p>
-                A coworker suggested I try k-means clustering, so I did the research and implemented a 
-                TF-IDF + k-means + cosine similarity approach. In plain terms, TF-IDF scores how important
-                each word is in a specific article compared to the full article set, k-means groups articles
-                into topical buckets, and cosine similarity measures how close two article vectors are to each other.
+                A coworker suggested I try k-means clustering (that's all she said), so I did the research and implemented a 
+                TF-IDF + k-means + cosine similarity approach. A single script handles the workflow: TF-IDF scores 
+                how important each word is to an article relative to the rest, k-means groups articles into topical 
+                clusters, and cosine similarity ranks how closely related articles are to each other. The output 
+                is a small JSON file that maps and ranks each article and its related articles.
             </p>
 
             <p>
