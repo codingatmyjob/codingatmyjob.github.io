@@ -1,6 +1,6 @@
 {
-  "_client-CSnnOaoe.js": {
-    "file": "assets/client-CSnnOaoe.js",
+  "_client-DL8-sS61.js": {
+    "file": "assets/client-DL8-sS61.js",
     "name": "client",
     "isDynamicEntry": true,
     "imports": [
@@ -8,12 +8,12 @@
     ]
   },
   "index.html": {
-    "file": "assets/app-Dv7sUcXZ.js",
+    "file": "assets/app-C1TYgKWN.js",
     "name": "app",
     "src": "index.html",
     "isEntry": true,
     "dynamicImports": [
-      "_client-CSnnOaoe.js"
+      "_client-DL8-sS61.js"
     ],
     "css": [
       "assets/app-CyA0zXmS.css"
