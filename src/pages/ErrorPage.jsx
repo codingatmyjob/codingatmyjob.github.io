@@ -1,11 +1,8 @@
 import React from 'react'
-import { useNavigate } from 'react-router-dom'
 import { Head } from 'vite-react-ssg'
 import { getSiteUrl } from '../siteUrls'
 
 export default function ErrorPage() {
-  const navigate = useNavigate()
-
   return (
     <div id="article-view">
       <Head>
@@ -21,9 +18,6 @@ export default function ErrorPage() {
           <p>
             The page you're looking for doesn't exist or was moved.
           </p>
-          <button type="button" className="home-btn" onClick={() => navigate('/')}>
-            ← Return Home
-          </button>
         </main>
       </div>
     </div>

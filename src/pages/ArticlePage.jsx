@@ -180,14 +180,22 @@ export default function ArticlePage() {
   }, [slug])
 
   const rawMain = rawHtml ? extractMainHtml(rawHtml) : ''
-  // Inject the back button as the first child inside <main ...>
-  const mainHtml = rawMain.replace(/(<main[^>]*>)/i, '$1<button class="back-link" id="ssg-back-btn">← Return Home</button>')
+  const mainHtml = rawMain.replace(
+    /(<main[^>]*>)/i,
+    '$1<div class="article-home-nav"><a class="article-home-btn" href="/" aria-label="Return home"><span class="article-home-btn-icon" aria-hidden="true">&larr;</span><span>Return Home</span></a></div>'
+  )
   const headStyles = rawHtml ? extractHeadStyles(rawHtml) : []
 
   useEffect(() => {
     const el = ref.current
     if (!el) return
     const injectedScripts = []
+    const homeBtn = el.querySelector('.article-home-btn')
+    const onHomeClick = (event) => {
+      event.preventDefault()
+      navigate('/')
+    }
+    if (homeBtn) homeBtn.addEventListener('click', onHomeClick)
 
     // Re-execute inline scripts (cruise comparisons interactive demo, etc.)
     if (rawHtml) {
@@ -236,18 +244,15 @@ export default function ArticlePage() {
 
     enhanceCodeBlocks(el)
 
-    // Wire up the injected back button
-    const backBtn = el.querySelector('#ssg-back-btn')
-    if (backBtn) backBtn.addEventListener('click', () => navigate('/'))
-
     document.body.classList.add('article-open')
     window.scrollTo({ top: 0, behavior: 'instant' })
 
     return () => {
+      if (homeBtn) homeBtn.removeEventListener('click', onHomeClick)
       injectedScripts.forEach((scriptEl) => scriptEl.remove())
       document.body.classList.remove('article-open')
     }
-  }, [mainHtml, rawHtml])
+  }, [mainHtml, rawHtml, navigate])
 
   // Force a hard reload when leaving the TF article so WASM workers and model
   // weights don't stay resident in memory for the rest of the session.

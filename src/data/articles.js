@@ -24,6 +24,18 @@ const baseArticlesData = [
   //   tags: ['Demo', 'LLM', 'Node.js', 'API'],
   //   imageLabel: 'NOAA Tides LLM Chatbot Demo'
   // },
+  // {
+  //   id: 'prompt-injection-demo',
+  //   path: 'articles/prompt-injection-demo',
+  //   publishedAt: '2026-07-24',
+  //   date: 'July 24, 2026',
+  //   title: 'Prompt Injection Demo',
+  //   description: 'Demo using Hugging Face to demonstrate a type of Direct Prompt Injection; System Prompt Extraction.',
+  //   tags: ['Demo', 'AI', 'Security'],
+  //   imageSrc: 'images/cover/hf-logo.svg',
+  //   imageAlt: 'Prompt Injection Demo',
+  //   imageStyle: { height: '95%', width: '95%' }
+  // },
   {
     id: 'how-i-built-a-related-articles-recommender',
     path: 'articles/how-i-built-a-related-articles-recommender',
@@ -91,7 +103,7 @@ const baseArticlesData = [
     date: 'June 12, 2026',
     title: 'Use Claude Code for Free',
     description: 'Run Claude Code with free/local models. With tool-calling and context limits, is it doable?',
-    tags: ['Reference', 'Claude Code', 'OpenRouter', 'Windows'],
+    tags: ['Reference', 'Claude Code', 'AI', 'Windows'],
     imageSrc: 'images/cover/claudecode.png',
     imageAlt: 'Use Claude Code for Free',
     imageStyle: {height: '85%', width: '85%'}

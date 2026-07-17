@@ -15,10 +15,13 @@ export default function ScrollTop(){
     }
 
     const position = ()=>{
-      const articleContainer = document.querySelector('.article-container')
       const articleOpen = document.body.classList.contains('article-open')
-      if(articleContainer && articleOpen){
-        const rect = articleContainer.getBoundingClientRect()
+      const articleContainer = document.querySelector('.article-container')
+      const homeContainer = document.querySelector('#articles-view')
+      const anchor = articleOpen ? articleContainer : homeContainer
+
+      if(anchor){
+        const rect = anchor.getBoundingClientRect()
         const desiredLeft = Math.round(rect.right + 30)
         const btnWidth = btn.offsetWidth || 44
         if(desiredLeft + btnWidth > window.innerWidth - 8){

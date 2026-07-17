@@ -17,7 +17,7 @@
         <div class="tags">
             <span class="tag">Reference</span>
             <span class="tag">Claude Code</span>
-            <span class="tag">OpenRouter</span>
+            <span class="tag">AI</span>
             <span class="tag">Windows</span>
         </div>
 
@@ -28,8 +28,8 @@
             </p>
             <p>
                 Similar to cell phone minute charges in the mid-90s to early-2000s, Claude Code usage is expensive. It 
-                genuinely feels like you're being charged by the minute, and might need to take out a small loan. To combat 
-                this, there is a very simple solution; allow me to introduce <a href="https://openrouter.ai">OpenRouter</a>.
+                genuinely feels like you're being charged by the minute, and might need to take out a small loan. There are a few things you can do to combat 
+                this (hosted models, cheaper inference, etc), I'm trying a simple solution; <a href="https://openrouter.ai">OpenRouter</a>.
             </p>
             <p>
                 OpenRouter is an API aggregator that provides a single endpoint to access many LLMs, including numerous open source (free) models.
@@ -45,37 +45,37 @@
             <h2>Update (As of 15 June 2026)</h2>
             <p>
                 After testing this method, and multiple others, I would not expect great results from most free or local models with coding agents or assistants <i>yet</i>.
-                While the technology is quickly improving, open source solutions still have limitations. There was a distinct issue with tool calling and file traversal 
-                that appears because these open source models do not provide input in the way Anthropic expects it. After diagnosing my issue, 
+                While the technology is quickly improving, free open source solutions still have major limitations. There were distinct issues with tool calling and file traversal 
+                because these open source models do not provide input in the way Anthropic expects it. After diagnosing the issue, 
                 I attempted to try something similar with a series of locally hosted models, and even attempted to use CCR Claude Code Router proxy with all 
                 open source model/Claude Code combinations to no avail.
             </p>
             <p>
-                To escape OpenRouter purgatory, I tested three different locally hosted Qwen models across three agent/assistants; Claude Code, Cline, and Continue. 
+                To escape OpenRouter and incompatibility purgatory, I tested three different locally hosted Qwen models across three agents; Claude Code, Cline, and Continue. 
                 The overall experience was wildly inconsistent. Just for reference, I have an RTX 3070 with 8GB of VRAM, an AMD Ryzen 7 5800X, and 32GB of DDR4. 
-                I thought this was enough, but it's time for an upgrade.
+                I thought this was enough, but AI says it's time for an upgrade.
             </p>
             <p>
                 Starting with Qwen3-Coder, which was the largest model I tried, the experience made me fear for my poor GPU. I did not have the overhead to run this efficiently, 
-                it quickly maxed out my GPU's VRAM, and lacked the ability to call tools with Claude Code. I then tried to 
+                it quickly maxed out my GPU's VRAM, and the model lacked the ability to call tools with Claude Code. I then tried to 
                 use this model with Continue, and Cline. I ran into similar issues with the context window being too large or too small for the agents or my GPU, and still 
                 lacked the tool calling that Claude natively provides.
             </p>
             <p>
-                I was actually pleasantly surprised with Qwen 2.5 7B, which fit comfortably within my GPU's VRAM. This model provided some tool calling and had a decent 
-                context window size. However, the quality of responses was inconsistent, and having to manually provide file content as context grew old fast. My least favorite
-                interaction was when the model entered a planning loop. It would repeatedly ask for context for an issue, I would provide it, and then it would repeat over and over like groundhog day. 
+                I was actually pleasantly surprised with Qwen-2.5-7B, which fit comfortably within my GPU's VRAM. This model provided some tool calling and had a decent 
+                context window size. However, the quality of responses was inconsistent, and having to manually provide file content as context was tedious. My least favorite
+                interaction was when the model entered a planning loop. It would repeatedly ask for context for an issue, I would provide it, and then it would repeat like groundhog day. 
                 I was able to break out of this loop temporarily by forcing an action, but it would very quickly revert to the planning loop, even in act mode. 
             </p>
             <p>
-                I then tried a combination of Qwen 2.5 7B and Qwen Coder 1.5B. I used 2.5 for general purpose and 1.5 for autocomplete. This combination worked pretty well, and 
-                was for a brief while usable. 1.5B I think is great for autocomplete and is probably all you need for it. 
+                I then tried a combination of Qwen-2.5-7B and Qwen-Coder-1.5B. I used 2.5 for general purpose and 1.5 for autocomplete. This combination worked pretty well, and
+                was for a brief while usable. I think 1.5B is great for autocomplete and is probably all you need for it. 
                 Then I encountered the planning loop issue... again... on 2.5B, and it was inescapable. 
             </p>
             <p>
                 To recap: My biggest issues were open source models missing tool-calling support, weak codebase/file traversal, and hardware limitations when attempting to run locally.
-                To avoid VRAM limits, I had to reduce context window size, which hurt usefulness on larger tasks. A reliable non-paid agent is hard to find right now, 
-                but I am continuing to test new options and I will keep this article updated, and provide alternative solutions as I discover them.
+                To avoid VRAM limits, I had to reduce context window size, which hurt usefulness on larger tasks. I'm sure there are reliable local solutions, but not many that provide the features I want with my current hardware constraints. 
+                I am continuing to test new options and I will provide alternative solutions as I discover them in new articles.
             </p>
 
             <h2>Setup</h2>

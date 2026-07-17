@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useRef } from 'react'
-import { useLoaderData, useNavigate, useParams } from 'react-router-dom'
+import { useLoaderData, useParams } from 'react-router-dom'
 import { Head } from 'vite-react-ssg'
 import { getSiteUrl } from '../siteUrls'
 
@@ -582,15 +582,12 @@ async function hydrateGithubStats(root) {
 export default function SidebarPage() {
   const loaderData = useLoaderData() || {}
   const rawHtml = typeof loaderData.rawHtml === 'string' ? loaderData.rawHtml : ''
-  const navigate = useNavigate()
   const ref = useRef(null)
   const { page = '' } = useParams()
 
   const rawMain = rawHtml ? extractMainHtml(rawHtml) : ''
   const isStatusHub = /status-hub/.test(rawMain)
-  const mainHtml = isStatusHub
-    ? rawMain
-    : rawMain.replace(/(<main[^>]*>)/i, '$1<button class="back-link" id="ssg-back-btn">← Return Home</button>')
+  const mainHtml = rawMain
   const headStyles = rawHtml ? extractHeadStyles(rawHtml) : []
   const pageMeta = useMemo(() => {
     const fallbackTitle = page
@@ -608,10 +605,7 @@ export default function SidebarPage() {
   const ogImageUrl = getSiteUrl('images/cover/og-image.png')
 
   useEffect(() => {
-    const backBtn = ref.current?.querySelector('#ssg-back-btn')
     const statusHubNode = isStatusHub ? ref.current?.querySelector('.status-hub') : null
-    const onBack = () => navigate('/')
-    if (backBtn) backBtn.addEventListener('click', onBack)
 
     let cancelled = false
     if (statusHubNode) statusHubNode.classList.add('is-loading')
@@ -629,10 +623,9 @@ export default function SidebarPage() {
     return () => {
       cancelled = true
       if (statusHubNode) statusHubNode.classList.remove('is-loading')
-      if (backBtn) backBtn.removeEventListener('click', onBack)
       document.body.classList.remove('article-open')
     }
-  }, [isStatusHub, mainHtml, navigate])
+  }, [isStatusHub, mainHtml])
 
   return (
     <div id="article-view">

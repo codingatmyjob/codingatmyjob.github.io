@@ -12,15 +12,14 @@ const SITE_TITLE = 'Tangent | Cybersecurity & Data Science Blog'
 const SITE_DESCRIPTION = 'A cybersecurity and data science blog with technical notes, project builds, experiments, reviews, and practical writeups, that together form a practical project portfolio.'
 
 const ROWS_PER_PAGE = 8
-const DEFAULT_ITEMS_PER_PAGE = 4 * ROWS_PER_PAGE
+const DEFAULT_ITEMS_PER_PAGE = 3 * ROWS_PER_PAGE
 
 const getItemsPerPage = () => {
   if (typeof window === 'undefined') return DEFAULT_ITEMS_PER_PAGE
   const width = window.innerWidth
-  let columns = 4
+  let columns = 3
   if (width <= 768) columns = 1
   else if (width <= 900) columns = 2
-  else if (width <= 1278) columns = 3
   return columns * ROWS_PER_PAGE
 }
 
@@ -54,9 +53,10 @@ export default function Home() {
 
     try {
       const viteBase = (typeof import.meta !== 'undefined' && import.meta.env?.BASE_URL) ? import.meta.env.BASE_URL : '/'
-      const urlToFetch = article.path.startsWith('/')
-        ? new URL(article.path, location.origin).href
-        : new URL(article.path, location.origin + viteBase).href
+      const rawArticlePath = article.path.endsWith('.html') ? article.path : `${article.path}.html`
+      const urlToFetch = rawArticlePath.startsWith('/')
+        ? new URL(rawArticlePath, location.origin).href
+        : new URL(rawArticlePath, location.origin + viteBase).href
 
       const response = await fetch(urlToFetch, { cache: 'no-store' })
       if (!response.ok) throw new Error(response.status)
@@ -155,6 +155,14 @@ export default function Home() {
   }, [navigate])
 
   const totalPages = Math.ceil(sortedArticles.length / itemsPerPage)
+
+  useEffect(() => {
+    const maxPage = Math.max(1, totalPages)
+    if (currentPage > maxPage) {
+      setCurrentPage(maxPage)
+    }
+  }, [currentPage, totalPages])
+
   const startIndex = (currentPage - 1) * itemsPerPage
   const currentArticles = sortedArticles.slice(startIndex, startIndex + itemsPerPage)
   const siteUrl = getSiteUrl()

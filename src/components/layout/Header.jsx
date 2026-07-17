@@ -44,9 +44,25 @@ function ThemeToggle() {
   }
 
   return (
-    <button className="theme-toggle" onClick={toggleTheme}>
-      <div className="switch"></div>
-      <span id="theme-icon">{theme === 'dark' ? 'Dark Mode' : 'Light Mode'}</span>
+    <button
+      className={`theme-toggle theme-toggle-${theme}`}
+      onClick={toggleTheme}
+      aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
+      aria-pressed={theme === 'dark'}
+    >
+      <span className="theme-toggle-glyph" aria-hidden="true">
+        {theme === 'dark' ? (
+          <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/>
+          </svg>
+        ) : (
+          <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <circle cx="12" cy="12" r="4"/>
+            <path d="M12 2v2m0 16v2m10-10h-2M4 12H2m17.07 7.07-1.41-1.41M6.34 6.34 4.93 4.93m14.14 0-1.41 1.41M6.34 17.66l-1.41 1.41"/>
+          </svg>
+        )}
+      </span>
+      <span className="theme-toggle-text">{theme === 'dark' ? 'Dark' : 'Light'}</span>
     </button>
   )
 }
