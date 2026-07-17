@@ -10,10 +10,10 @@
   "\u0000/home/runner/work/codingatmyjob.github.io/codingatmyjob.github.io/node_modules/prop-types/index.js?commonjs-module": [],
   "\u0000/home/runner/work/codingatmyjob.github.io/codingatmyjob.github.io/node_modules/react-dom/cjs/react-dom.production.min.js?commonjs-exports": [],
   "\u0000/home/runner/work/codingatmyjob.github.io/codingatmyjob.github.io/node_modules/react-dom/client.js?commonjs-es-import": [
-    "/assets/client-D66e0_Hk.js"
+    "/assets/client-B5Tm7nTT.js"
   ],
   "\u0000/home/runner/work/codingatmyjob.github.io/codingatmyjob.github.io/node_modules/react-dom/client.js?commonjs-exports": [
-    "/assets/client-D66e0_Hk.js"
+    "/assets/client-B5Tm7nTT.js"
   ],
   "\u0000/home/runner/work/codingatmyjob.github.io/codingatmyjob.github.io/node_modules/react-dom/index.js?commonjs-es-import": [],
   "\u0000/home/runner/work/codingatmyjob.github.io/codingatmyjob.github.io/node_modules/react-dom/index.js?commonjs-module": [],
@@ -52,7 +52,7 @@
   "node_modules/prop-types/lib/ReactPropTypesSecret.js": [],
   "node_modules/react-dom/cjs/react-dom.production.min.js": [],
   "node_modules/react-dom/client.js": [
-    "/assets/client-D66e0_Hk.js"
+    "/assets/client-B5Tm7nTT.js"
   ],
   "node_modules/react-dom/index.js": [],
   "node_modules/react-fast-compare/index.js": [],
@@ -84,11 +84,13 @@
   "src/components/layout/ScrollTop.jsx": [],
   "src/components/layout/Sidebar.jsx": [],
   "src/data/articles.js": [],
+  "src/data/readTimes.js": [],
   "src/main.jsx": [],
   "src/pages/ArticlePage.jsx": [],
   "src/pages/ErrorPage.jsx": [],
   "src/pages/Home.jsx": [],
   "src/pages/SidebarPage.jsx": [],
   "src/routes.jsx": [],
+  "src/siteUrls.js": [],
   "style.css": []
 }
