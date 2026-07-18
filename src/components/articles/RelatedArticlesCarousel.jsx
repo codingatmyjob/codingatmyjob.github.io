@@ -43,18 +43,21 @@ export function RelatedArticlesCarousel({ currentSlug, relatedData = [], allArti
     if (!cards.length) return
 
     const currentLeft = node.scrollLeft
-    const tolerance = 2
+    const offsets = cards.map(card => card.offsetLeft)
 
-    let targetLeft = currentLeft
-
-    if (direction > 0) {
-      const nextCard = cards.find(card => card.offsetLeft > currentLeft + tolerance)
-      targetLeft = nextCard ? nextCard.offsetLeft : node.scrollWidth - node.clientWidth
-    } else {
-      const previousCards = cards.filter(card => card.offsetLeft < currentLeft - tolerance)
-      const previousCard = previousCards.length ? previousCards[previousCards.length - 1] : null
-      targetLeft = previousCard ? previousCard.offsetLeft : 0
+    // Find the card currently closest to the viewport start, then move exactly one card.
+    let currentIndex = 0
+    let smallestDistance = Number.POSITIVE_INFINITY
+    for (let i = 0; i < offsets.length; i += 1) {
+      const distance = Math.abs(offsets[i] - currentLeft)
+      if (distance < smallestDistance) {
+        smallestDistance = distance
+        currentIndex = i
+      }
     }
+
+    const nextIndex = Math.max(0, Math.min(offsets.length - 1, currentIndex + direction))
+    const targetLeft = offsets[nextIndex]
 
     node.scrollTo({ left: targetLeft, behavior: 'smooth' })
   }
