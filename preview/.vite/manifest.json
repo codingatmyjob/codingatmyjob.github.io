@@ -1,6 +1,6 @@
 {
-  "_client-2rJrEakp.js": {
-    "file": "assets/client-2rJrEakp.js",
+  "_client-KHoX05jp.js": {
+    "file": "assets/client-KHoX05jp.js",
     "name": "client",
     "isDynamicEntry": true,
     "imports": [
@@ -8,12 +8,12 @@
     ]
   },
   "index.html": {
-    "file": "assets/app-DVsF_Lku.js",
+    "file": "assets/app-QDYVuAK7.js",
     "name": "app",
     "src": "index.html",
     "isEntry": true,
     "dynamicImports": [
-      "_client-2rJrEakp.js"
+      "_client-KHoX05jp.js"
     ],
     "css": [
       "assets/app-CyA0zXmS.css"
