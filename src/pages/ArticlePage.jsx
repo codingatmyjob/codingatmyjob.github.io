@@ -267,6 +267,7 @@ export default function ArticlePage() {
 
   useEffect(() => {
     let cancelled = false
+    setRelatedSlugs([])
 
     const loadRelated = async () => {
       try {

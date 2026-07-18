@@ -1,4 +1,6 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react'
+import React, { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
+
+const useIsomorphicLayoutEffect = typeof window !== 'undefined' ? useLayoutEffect : useEffect
 
 function slugFromPath(path) {
   if (!path) return ''
@@ -64,12 +66,25 @@ export function RelatedArticlesCarousel({ currentSlug, relatedData = [], allArti
     node.scrollTo({ left: targetLeft, behavior: 'smooth' })
   }
 
-  useEffect(() => {
+  useIsomorphicLayoutEffect(() => {
     const node = trackRef.current
     if (!node) return
 
-    node.scrollLeft = 0
-  }, [currentSlug])
+    const reset = () => {
+      node.scrollLeft = 0
+    }
+
+    reset()
+    const raf1 = window.requestAnimationFrame(reset)
+    const raf2 = window.requestAnimationFrame(reset)
+    const timer = window.setTimeout(reset, 120)
+
+    return () => {
+      window.cancelAnimationFrame(raf1)
+      window.cancelAnimationFrame(raf2)
+      window.clearTimeout(timer)
+    }
+  }, [currentSlug, relatedItems.length])
 
   useEffect(() => {
     const node = trackRef.current
