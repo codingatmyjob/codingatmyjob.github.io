@@ -38,8 +38,25 @@ export function RelatedArticlesCarousel({ currentSlug, relatedData = [], allArti
   const scrollByAmount = (direction) => {
     const node = trackRef.current
     if (!node) return
-    const amount = Math.max(node.clientWidth * 0.75, 240)
-    node.scrollBy({ left: direction * amount, behavior: 'smooth' })
+
+    const cards = Array.from(node.querySelectorAll('.related-carousel-card'))
+    if (!cards.length) return
+
+    const currentLeft = node.scrollLeft
+    const tolerance = 2
+
+    let targetLeft = currentLeft
+
+    if (direction > 0) {
+      const nextCard = cards.find(card => card.offsetLeft > currentLeft + tolerance)
+      targetLeft = nextCard ? nextCard.offsetLeft : node.scrollWidth - node.clientWidth
+    } else {
+      const previousCards = cards.filter(card => card.offsetLeft < currentLeft - tolerance)
+      const previousCard = previousCards.length ? previousCards[previousCards.length - 1] : null
+      targetLeft = previousCard ? previousCard.offsetLeft : 0
+    }
+
+    node.scrollTo({ left: targetLeft, behavior: 'smooth' })
   }
 
   useEffect(() => {
