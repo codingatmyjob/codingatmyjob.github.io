@@ -44,7 +44,7 @@ export function RelatedArticlesCarousel({ currentSlug, relatedData = [], allArti
 
     const currentLeft = node.scrollLeft
     const epsilon = 4
-    const offsets = cards.map(card => Math.round(card.offsetLeft))
+    const offsets = cards.map(card => Math.round(card.offsetLeft - node.offsetLeft))
 
     let targetLeft = currentLeft
     if (direction > 0) {
