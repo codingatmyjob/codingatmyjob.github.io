@@ -321,6 +321,7 @@ export default function ArticlePage() {
         ))}
         <div dangerouslySetInnerHTML={{ __html: mainHtml }} />
         <RelatedArticlesCarousel
+          key={slug}
           currentSlug={slug}
           relatedData={relatedSlugs}
           allArticles={articlesData}
