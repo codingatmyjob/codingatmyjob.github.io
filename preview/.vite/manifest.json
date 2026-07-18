@@ -1,6 +1,6 @@
 {
-  "_client-iAqDoRT9.js": {
-    "file": "assets/client-iAqDoRT9.js",
+  "_client-ZiVGsNkc.js": {
+    "file": "assets/client-ZiVGsNkc.js",
     "name": "client",
     "isDynamicEntry": true,
     "imports": [
@@ -8,12 +8,12 @@
     ]
   },
   "index.html": {
-    "file": "assets/app-CCLgxPmg.js",
+    "file": "assets/app-Zi0aVJjp.js",
     "name": "app",
     "src": "index.html",
     "isEntry": true,
     "dynamicImports": [
-      "_client-iAqDoRT9.js"
+      "_client-ZiVGsNkc.js"
     ],
     "css": [
       "assets/app-CyA0zXmS.css"
