@@ -43,24 +43,33 @@ export function RelatedArticlesCarousel({ currentSlug, relatedData = [], allArti
     if (!cards.length) return
 
     const currentLeft = node.scrollLeft
-    const offsets = cards.map(card => card.offsetLeft)
+    const epsilon = 4
+    const offsets = cards.map(card => Math.round(card.offsetLeft))
 
-    // Find the card currently closest to the viewport start, then move exactly one card.
-    let currentIndex = 0
-    let smallestDistance = Number.POSITIVE_INFINITY
-    for (let i = 0; i < offsets.length; i += 1) {
-      const distance = Math.abs(offsets[i] - currentLeft)
-      if (distance < smallestDistance) {
-        smallestDistance = distance
-        currentIndex = i
-      }
+    let targetLeft = currentLeft
+    if (direction > 0) {
+      const nextOffset = offsets.find(offset => offset > currentLeft + epsilon)
+      targetLeft = typeof nextOffset === 'number' ? nextOffset : node.scrollWidth - node.clientWidth
+    } else {
+      const previousOffsets = offsets.filter(offset => offset < currentLeft - epsilon)
+      targetLeft = previousOffsets.length ? previousOffsets[previousOffsets.length - 1] : 0
     }
 
-    const nextIndex = Math.max(0, Math.min(offsets.length - 1, currentIndex + direction))
-    const targetLeft = offsets[nextIndex]
+    // Fallback in case layout reports duplicate offsets during transitions.
+    if (targetLeft === currentLeft && offsets.length > 1) {
+      const stride = Math.max(1, offsets[1] - offsets[0])
+      targetLeft = Math.max(0, Math.min(node.scrollWidth - node.clientWidth, currentLeft + (direction * stride)))
+    }
 
     node.scrollTo({ left: targetLeft, behavior: 'smooth' })
   }
+
+  useEffect(() => {
+    const node = trackRef.current
+    if (!node) return
+
+    node.scrollLeft = 0
+  }, [currentSlug])
 
   useEffect(() => {
     const node = trackRef.current
@@ -73,6 +82,7 @@ export function RelatedArticlesCarousel({ currentSlug, relatedData = [], allArti
     }
 
     updateArrowState()
+    const raf = window.requestAnimationFrame(updateArrowState)
     node.addEventListener('scroll', updateArrowState, { passive: true })
     window.addEventListener('resize', updateArrowState)
 
@@ -83,6 +93,7 @@ export function RelatedArticlesCarousel({ currentSlug, relatedData = [], allArti
     }
 
     return () => {
+      window.cancelAnimationFrame(raf)
       node.removeEventListener('scroll', updateArrowState)
       window.removeEventListener('resize', updateArrowState)
       if (observer) observer.disconnect()
