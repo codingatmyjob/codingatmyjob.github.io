@@ -24,18 +24,18 @@ const baseArticlesData = [
   //   tags: ['Demo', 'LLM', 'Node.js', 'API'],
   //   imageLabel: 'NOAA Tides LLM Chatbot Demo'
   // },
-  // {
-  //   id: 'prompt-injection-demo',
-  //   path: 'articles/prompt-injection-demo',
-  //   publishedAt: '2026-07-24',
-  //   date: 'July 24, 2026',
-  //   title: 'Prompt Injection Demo',
-  //   description: 'Demo using Hugging Face to demonstrate a type of Direct Prompt Injection; System Prompt Extraction.',
-  //   tags: ['Demo', 'AI', 'Security'],
-  //   imageSrc: 'images/cover/hf-logo.svg',
-  //   imageAlt: 'Prompt Injection Demo',
-  //   imageStyle: { height: '95%', width: '95%' }
-  // },
+  {
+    id: 'prompt-injection-demo',
+    path: 'articles/prompt-injection-demo',
+    publishedAt: '2026-07-24',
+    date: 'July 24, 2026',
+    title: 'Prompt Injection Demo',
+    description: 'Demo using Hugging Face to demonstrate a type of Direct Prompt Injection; System Prompt Extraction.',
+    tags: ['Demo', 'AI', 'Security'],
+    imageSrc: 'images/cover/hf-logo.svg',
+    imageAlt: 'Prompt Injection Demo',
+    imageStyle: { height: '95%', width: '95%' }
+  },
   {
     id: 'how-i-built-a-related-articles-recommender',
     path: 'articles/how-i-built-a-related-articles-recommender',
@@ -131,15 +131,15 @@ const baseArticlesData = [
     imageLabel: 'Cruise Size Comparisons'
   },
   {
-    id: 'passing-oci-foundations-associate',
-    path: 'articles/passing-oci-foundations-associate',
+    id: 'how-i-passed-oci-foundations-associate',
+    path: 'articles/how-i-passed-oci-foundations-associate',
     publishedAt: '2026-05-15',
     date: 'May 15, 2026',
-    title: 'Passing OCI Foundations Associate',
+    title: 'How I Passed OCI Foundations Associate',
     description: 'An OCI Foundations Associate review, and opinions on the Oracle course.',
     tags: ['Cert', 'Cloud'],
     imageSrc: 'images/cover/OCI25FNDCFA.png',
-    imageAlt: 'Passing OCI Foundations Associate'
+    imageAlt: 'How I Passed OCI Foundations Associate'
   },
   {
     id: 'typeahead-demo',

@@ -17,6 +17,60 @@
       margin-top: 18px;
     }
 
+    .traffic-card {
+      margin: 0;
+      padding: 18px;
+      background: rgba(128, 128, 128, 0.12);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+    }
+
+    .article-container .traffic-card > h2 {
+      margin: 0 0 10px 0 !important;
+    }
+
+    [data-theme="light"] .traffic-card {
+      background: rgba(0, 0, 0, 0.05);
+    }
+
+    .traffic-stats {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+      margin: 10px 0 12px;
+    }
+
+    .traffic-stat {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 9px 10px;
+      background: rgba(0, 0, 0, 0.14);
+    }
+
+    .traffic-stat-label {
+      display: block;
+      font-size: 11px;
+      color: rgba(255, 255, 255, 0.72);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 4px;
+    }
+
+    .traffic-stat-value {
+      display: block;
+      font-size: 14px;
+      color: var(--text-primary);
+      line-height: 1.3;
+      word-break: break-word;
+    }
+
+    .traffic-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 8px;
+    }
+
     .traffic-stage {
       position: relative;
       border: 1px solid var(--border);
@@ -26,10 +80,34 @@
       min-height: 460px;
     }
 
+    .traffic-stage-fullscreen-btn {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      z-index: 2;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 30px;
+      height: 30px;
+      padding: 0;
+      border-radius: 6px;
+      background: rgba(5, 7, 5, 0.66);
+      backdrop-filter: blur(4px);
+    }
+
+    .traffic-stage-fullscreen-btn svg {
+      width: 16px;
+      height: 16px;
+      display: block;
+      pointer-events: none;
+    }
+
     .traffic-video {
       width: 100%;
       height: 100%;
       display: block;
+      object-fit: contain;
       background: #050705;
       min-height: 460px;
     }
@@ -56,6 +134,18 @@
       font-size: 1.05rem;
       margin: 0 0 14px 0 !important;
       text-align: left;
+    }
+
+    .traffic-panel h3 {
+      font-size: 0.95rem;
+      margin: 14px 0 10px 0 !important;
+      text-align: left;
+      color: rgba(255, 255, 255, 0.9);
+      letter-spacing: 0.02em;
+    }
+
+    .traffic-hidden {
+      display: none !important;
     }
 
     .traffic-panel dl {
@@ -86,22 +176,21 @@
     }
 
     .traffic-toggle {
-      margin-top: 14px;
-      width: 100%;
+      width: auto;
       border: 1px solid var(--border);
       background: var(--bg-secondary);
       color: var(--text-primary);
       border-radius: 8px;
-      padding: 10px 12px;
+      padding: 9px 14px;
       font-family: inherit;
+      font-size: 0.9rem;
       cursor: pointer;
-      transition: all 0.2s;
+      transition: transform 0.15s, filter 0.15s, background 0.2s;
     }
 
     .traffic-toggle:hover:not(:disabled) {
-      background: var(--accent);
-      border-color: var(--accent);
-      color: var(--bg-primary);
+      transform: translateY(-1px);
+      background: var(--border);
     }
 
     .traffic-toggle:disabled {
@@ -109,11 +198,23 @@
       cursor: not-allowed;
     }
 
+    .traffic-toggle-primary {
+      background: var(--accent);
+      color: var(--bg-primary);
+      border-color: var(--accent);
+      font-weight: 700;
+    }
+
+    .traffic-toggle-primary:hover:not(:disabled) {
+      filter: brightness(1.08);
+      background: var(--accent);
+    }
+
     .traffic-note {
-      margin: 12px 0 0 0;
-      font-size: 13px;
-      line-height: 1.5;
-      color: rgba(255, 255, 255, 0.72);
+      margin: 8px 0 0 0;
+      font-size: 0.82rem;
+      min-height: 1.2em;
+      opacity: 0.75;
     }
 
     [data-theme="light"] .traffic-stage {
@@ -124,12 +225,41 @@
       background: #d4d7db;
     }
 
+    .traffic-stage:fullscreen,
+    .traffic-stage:-webkit-full-screen {
+      width: 100vw;
+      height: 100vh;
+      max-width: none;
+      border-radius: 0;
+      border: none;
+      background: #000;
+    }
+
+    .traffic-stage:fullscreen .traffic-video,
+    .traffic-stage:-webkit-full-screen .traffic-video {
+      min-height: 100vh;
+      height: 100vh;
+      background: #000;
+    }
+
     [data-theme="light"] .traffic-panel {
       background: rgba(0, 0, 0, 0.03);
     }
 
     [data-theme="light"] .traffic-panel dt {
       color: rgba(54, 54, 54, 0.72);
+    }
+
+    [data-theme="light"] .traffic-stat {
+      background: rgba(255, 255, 255, 0.38);
+    }
+
+    [data-theme="light"] .traffic-stat-label {
+      color: rgba(54, 54, 54, 0.72);
+    }
+
+    [data-theme="light"] .traffic-panel h3 {
+      color: rgba(22, 22, 22, 0.86);
     }
 
     [data-theme="light"] .traffic-note {
@@ -141,9 +271,17 @@
       .traffic-video {
         min-height: 260px;
       }
+
+      .traffic-stats {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
     }
 
     @media (max-width: 700px) {
+      .traffic-stats {
+        grid-template-columns: 1fr;
+      }
+
       .traffic-panel dl {
         grid-template-columns: 1fr;
       }
@@ -177,50 +315,54 @@
           <li>Run entirely client-side</li>
         </ol>
       </p>
+
+      <h2>Live Feed</h2>
       <p>
-        What you see below is a TensorFlow.js object detection demonstration that runs fully in the browser. The HLS.js library enables 
+        Below is a TensorFlow.js object detection demonstration that runs fully in the browser. The HLS.js library enables 
         a live HTTPS stream sourced from the Iowa Department of Transportation. That stream is then fed into the TensorFlow.js COCO-SSD 
         (Common Objects in Context Single Shot MultiBox Detection) model, which runs lightweight object detection directly in the browser. 
       </p>
-
-      <h2>Live Feed</h2>
+      <p>Click the "Load Live Feed" button to load required libraries and start viewing the live feed with object detection.</p>
 
       <div class="traffic-detector-shell" aria-label="Traffic object detection demo">
-        <div class="traffic-stage">
-          <video id="traffic-video" class="traffic-video" controls autoplay muted playsinline preload="metadata" crossorigin="anonymous"></video>
-          <canvas id="traffic-overlay" class="traffic-overlay" aria-hidden="true"></canvas>
-        </div>
+        <section class="traffic-card" aria-label="Traffic runtime card">
+          <h2>Status</h2>
+          <div class="traffic-stats" aria-label="Runtime quick stats">
+            <div class="traffic-stat">
+              <span class="traffic-stat-label">Model</span>
+              <span id="quick-model" class="traffic-stat-value">Not loaded</span>
+            </div>
+            <div class="traffic-stat">
+              <span class="traffic-stat-label">Backend</span>
+              <span id="quick-backend" class="traffic-stat-value">Pending</span>
+            </div>
+            <div class="traffic-stat">
+              <span class="traffic-stat-label">Stream</span>
+              <span id="quick-stream" class="traffic-stat-value">Not connected</span>
+            </div>
+            <div class="traffic-stat">
+              <span class="traffic-stat-label">Inference FPS</span>
+              <span id="quick-fps" class="traffic-stat-value">0</span>
+            </div>
+          </div>
+          <div id="traffic-actions" class="traffic-actions">
+            <button id="load-traffic-btn" class="traffic-toggle traffic-toggle-primary" type="button">Load Live Feed</button>
+          </div>
 
-        <div class="traffic-panel" aria-label="Detection status panel">
-          <h2>Runtime Status</h2>
-          <dl>
-            <div>
-              <dt>Model</dt>
-              <dd id="status-model">Loading model...</dd>
+          <div id="traffic-stage-wrap" class="traffic-hidden">
+            <div id="traffic-stage" class="traffic-stage">
+              <video id="traffic-video" class="traffic-video" controls controlslist="nofullscreen" disablepictureinpicture autoplay muted playsinline preload="metadata" crossorigin="anonymous"></video>
+              <canvas id="traffic-overlay" class="traffic-overlay" aria-hidden="true"></canvas>
+              <button id="traffic-fullscreen-btn" class="traffic-toggle traffic-stage-fullscreen-btn" type="button" aria-label="Fullscreen feed" title="Fullscreen feed">
+                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                  <path fill="currentColor" d="M4 9V4h5v2H6v3H4zm10-5h6v6h-2V6h-4V4zM4 15h2v3h3v2H4v-5zm14 3v-3h2v5h-5v-2h3z" />
+                </svg>
+              </button>
             </div>
-            <div>
-              <dt>Stream</dt>
-              <dd id="status-stream">Connecting stream...</dd>
-            </div>
-            <div>
-              <dt>Classes</dt>
-              <dd id="status-classes">car, truck, bus, motorcycle, person, bicycle</dd>
-            </div>
-            <div>
-              <dt>Currently detected</dt>
-              <dd id="status-count">0</dd>
-            </div>
-            <div>
-              <dt>Threshold</dt>
-              <dd id="status-threshold">40%</dd>
-            </div>
-            <div>
-              <dt>Inference FPS</dt>
-              <dd id="status-fps">0</dd>
-            </div>
-          </dl>
-        </div>
+          </div>
+        </section>
       </div>
+
       <h2>Challenges</h2>
       <p>
         Unlike past projects I think I did a better job of staying within the original scope! A lot of research went into actually finding an open feed 
@@ -245,8 +387,17 @@
         lite version, and the mobilenet_v2 model was just too slow to be usable in a live feed scenario without a dedicated processor.
       </p>
       <p>
-        With a heavier model, or an actual backend to process video input, I could get this running with much higher accuracy. But constraints are constraints and I 
-        didn't want scope creep to take over this project.
+        I also had to include an inference fallback based on device hardware; WebGL -&gt; WASM -&gt; CPU. WebGL is picked with the highest priority when a device has a GPU/hardware acceleration enabled,
+        WASM is the fallback for browsers where WebGL is unavailable, and CPU last so the demo still runs even in constrained environments.
+      </p>
+      <p>
+        Finally, I had difficulty accounting for fullscreen. If a user tried to use the native fullscreen button, the object detection didn't follow. 
+        I had to make sure the fullscreen functionality applied to the video <i>and</i> canvas elements, and not just the video like the native button did.
+      </p>
+      <h2>Final Thoughts</h2>
+      <p>
+        With a heavier model, or an actual backend to process inference/video input, I could get this working with much higher speed and accuracy. But, constraints are constraints and I 
+        didn't want scope creep to take over the project.
       </p>
     </article>
   </main>
@@ -288,11 +439,13 @@
     const TRAFFIC_HLS_URL = 'https://video3.iowadot.gov:8888/cedarrapids/dqtv19lb/playlist.m3u8'
     const DETECTION_CLASS_ALLOWLIST = new Set(['car', 'truck', 'motorcycle'])
     const DETECTION_MODEL_BASE = 'mobilenet_v1'
+    const DEFAULT_BACKEND_PREFERENCE = 'auto'
+    const IS_MOBILE_DEVICE = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent)
     const USE_CLASS_ALLOWLIST = true
     const DETECTION_SCORE_THRESHOLD = 0.40
-    const DETECTION_INTERVAL_MS = 200
+    const DETECTION_INTERVAL_MS = IS_MOBILE_DEVICE ? 300 : 200
     const DETECTION_MAX_PREDICTIONS = 30
-    const DETECTION_INPUT_MAX_WIDTH = 640
+    const DETECTION_INPUT_MAX_WIDTH = IS_MOBILE_DEVICE ? 480 : 640
     const MAX_DISPLAYED_DETECTIONS = 20
     const MAX_CAR_AREA_RATIO = 0.08
 
@@ -305,12 +458,15 @@
     const videoEl = document.getElementById('traffic-video')
     const canvasEl = document.getElementById('traffic-overlay')
 
-    const modelStatusEl = document.getElementById('status-model')
-    const streamStatusEl = document.getElementById('status-stream')
-    const countStatusEl = document.getElementById('status-count')
-    const thresholdStatusEl = document.getElementById('status-threshold')
-    const fpsStatusEl = document.getElementById('status-fps')
-    const classesStatusEl = document.getElementById('status-classes')
+    const loadProjectBtn = document.getElementById('load-traffic-btn')
+    const actionsEl = document.getElementById('traffic-actions')
+    const stageEl = document.getElementById('traffic-stage')
+    const stageWrapEl = document.getElementById('traffic-stage-wrap')
+    const fullscreenBtnEl = document.getElementById('traffic-fullscreen-btn')
+    const quickModelEl = document.getElementById('quick-model')
+    const quickStreamEl = document.getElementById('quick-stream')
+    const quickBackendEl = document.getElementById('quick-backend')
+    const quickFpsEl = document.getElementById('quick-fps')
 
     const detectionCanvas = document.createElement('canvas')
     const detectionCtx = detectionCanvas.getContext('2d', { willReadFrequently: true })
@@ -328,9 +484,116 @@
     let lastInferenceMs = 0
     let lastFrameMs = performance.now()
     let lastDetections = []
+    let projectInitializing = false
+    let projectReady = false
+    let currentStreamStatus = 'Not connected'
+    let cleanupComplete = false
 
-    if (thresholdStatusEl) {
-      thresholdStatusEl.textContent = `${Math.round(DETECTION_SCORE_THRESHOLD * 100)}%`
+    function setModelStatus(value) {
+      if (quickModelEl) quickModelEl.textContent = value
+    }
+
+    function setStreamStatus(value) {
+      currentStreamStatus = value
+      if (quickStreamEl) quickStreamEl.textContent = value
+    }
+
+    function setBackendStatus(value) {
+      if (quickBackendEl) quickBackendEl.textContent = value
+    }
+
+    function setFpsStatus(value) {
+      if (quickFpsEl) quickFpsEl.textContent = value
+    }
+
+    function revealStage() {
+      if (stageWrapEl) {
+        stageWrapEl.classList.remove('traffic-hidden')
+      }
+    }
+
+    async function toggleStageFullscreen() {
+      if (!stageEl) return
+
+      if (document.fullscreenElement === stageEl) {
+        await document.exitFullscreen?.()
+        return
+      }
+
+      if (stageEl.requestFullscreen) {
+        await stageEl.requestFullscreen().catch(() => {})
+      }
+    }
+
+    function updateFullscreenButtonLabel() {
+      if (!fullscreenBtnEl) return
+      const isFullscreen = document.fullscreenElement === stageEl
+      const label = isFullscreen ? 'Exit fullscreen' : 'Fullscreen feed'
+      fullscreenBtnEl.setAttribute('aria-label', label)
+      fullscreenBtnEl.setAttribute('title', label)
+    }
+
+    function clearOverlay() {
+      const ctx = canvasEl.getContext('2d')
+      if (!ctx) return
+      ctx.clearRect(0, 0, canvasEl.width, canvasEl.height)
+    }
+
+    function cleanupTrafficProject() {
+      if (cleanupComplete) return
+      cleanupComplete = true
+
+      cancelAnimationFrame(rafId)
+      rafId = 0
+      busy = false
+      videoReady = false
+      lastInferenceMs = 0
+      lastDetections = []
+
+      if (hls) {
+        hls.destroy()
+        hls = null
+      }
+
+      if (videoEl) {
+        videoEl.pause()
+        videoEl.removeAttribute('src')
+        videoEl.load()
+      }
+
+      if (model && typeof model.dispose === 'function') {
+        model.dispose()
+      }
+
+      model = null
+      modelCache.promise = null
+      modelCache.base = ''
+      clearOverlay()
+    }
+
+    function resolveBackendOrder(preference) {
+      if (preference === 'webgl') return ['webgl', 'wasm', 'cpu']
+      if (preference === 'wasm') return ['wasm', 'cpu', 'webgl']
+      if (preference === 'cpu') return ['cpu', 'wasm', 'webgl']
+      return ['webgl', 'wasm', 'cpu']
+    }
+
+    async function setPreferredBackend() {
+      const backendOrder = resolveBackendOrder(DEFAULT_BACKEND_PREFERENCE)
+
+      if (tfLib.wasm && typeof tfLib.wasm.setWasmPaths === 'function') {
+        tfLib.wasm.setWasmPaths('https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-backend-wasm@4.22.0/dist/')
+      }
+
+      for (const backendName of backendOrder) {
+        const backendReady = await tfLib.setBackend(backendName).catch(() => false)
+        if (backendReady) {
+          await tfLib.ready()
+          return backendName
+        }
+      }
+
+      throw new Error('No supported TensorFlow inference engine found')
     }
 
     function drawDetections(detections, width, height) {
@@ -364,18 +627,18 @@
 
     async function setupStream() {
       if (!TRAFFIC_HLS_URL || TRAFFIC_HLS_URL.includes('example.com')) {
-        streamStatusEl.textContent = 'Set TRAFFIC_HLS_URL to your real .m3u8 stream URL'
+        setStreamStatus('Set TRAFFIC_HLS_URL to your real .m3u8 stream URL')
         return
       }
 
       if (videoEl.canPlayType('application/vnd.apple.mpegurl')) {
         videoEl.src = TRAFFIC_HLS_URL
-        streamStatusEl.textContent = 'HLS connected (native playback)'
+        setStreamStatus('HLS connected (native playback)')
         return
       }
 
       if (!HlsLib.isSupported()) {
-        streamStatusEl.textContent = 'HLS playback is not supported in this browser'
+        setStreamStatus('HLS playback is not supported in this browser')
         return
       }
 
@@ -388,37 +651,22 @@
       hls.loadSource(TRAFFIC_HLS_URL)
       hls.attachMedia(videoEl)
       hls.on(HlsLib.Events.MANIFEST_PARSED, () => {
-        streamStatusEl.textContent = 'HLS connected'
+        setStreamStatus('HLS connected')
       })
       hls.on(HlsLib.Events.ERROR, (_event, data) => {
         if (data && data.fatal) {
-          streamStatusEl.textContent = `Stream error: ${data.type || 'fatal error'}`
+          setStreamStatus(`Stream error: ${data.type || 'fatal error'}`)
         }
       })
     }
 
     async function setupModel() {
       try {
-        if (!modelCache.promise || modelCache.base !== DETECTION_MODEL_BASE) {
-          modelCache.base = DETECTION_MODEL_BASE
+        const cacheKey = `${DETECTION_MODEL_BASE}:${DEFAULT_BACKEND_PREFERENCE}`
+        if (!modelCache.promise || modelCache.base !== cacheKey) {
+          modelCache.base = cacheKey
           modelCache.promise = (async () => {
-            let backend = 'cpu'
-
-            // Set WASM paths and backend before tf.ready() so TF never
-            // attempts WebGL initialisation (which logs noisy failures).
-            if (tfLib.wasm && typeof tfLib.wasm.setWasmPaths === 'function') {
-              tfLib.wasm.setWasmPaths('https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-backend-wasm@4.22.0/dist/')
-            }
-
-            const wasmReady = await tfLib.setBackend('wasm').catch(() => false)
-            if (wasmReady) {
-              backend = 'wasm/cpu'
-            } else {
-              const cpuReady = await tfLib.setBackend('cpu').catch(() => false)
-              if (!cpuReady) throw new Error('No supported TensorFlow inference engine found')
-            }
-
-            await tfLib.ready()
+            const backend = await setPreferredBackend()
 
             return cocoSsdLib.load({ base: DETECTION_MODEL_BASE })
               .then((loadedModel) => ({ loadedModel, backend }))
@@ -427,9 +675,11 @@
 
         const { loadedModel, backend } = await modelCache.promise
         model = loadedModel
-        modelStatusEl.textContent = `COCO-SSD ${DETECTION_MODEL_BASE}`
+        setModelStatus(`COCO-SSD ${DETECTION_MODEL_BASE}`)
+        setBackendStatus(backend.toUpperCase())
       } catch (error) {
-        modelStatusEl.textContent = `Model failed: ${error?.message || 'unknown error'}`
+        setModelStatus(`Model failed: ${error?.message || 'unknown error'}`)
+        setBackendStatus('Unavailable')
       }
     }
 
@@ -486,20 +736,14 @@
 
         lastDetections = filtered
         drawDetections(filtered, videoEl.videoWidth, videoEl.videoHeight)
-        countStatusEl.textContent = String(filtered.length)
-        classesStatusEl.textContent = USE_CLASS_ALLOWLIST
-          ? DETECTION_CLASS_ALLOWLIST.size
-            ? Array.from(DETECTION_CLASS_ALLOWLIST).join(', ')
-            : 'None'
-          : 'All COCO classes'
 
         const delta = nowMs - lastFrameMs
         if (delta > 0) {
-          fpsStatusEl.textContent = String(Math.round(1000 / delta))
+          setFpsStatus(String(Math.round(1000 / delta)))
         }
         lastFrameMs = nowMs
       }).catch(() => {
-        streamStatusEl.textContent = 'Detection loop hit an error'
+        setStreamStatus('Detection loop hit an error')
       }).finally(() => {
         busy = false
       })
@@ -507,20 +751,39 @@
 
     videoEl.addEventListener('loadeddata', () => {
       videoReady = true
-      if (!streamStatusEl.textContent.includes('error')) {
-        streamStatusEl.textContent = 'Stream active'
+      revealStage()
+      if (!currentStreamStatus.includes('error')) {
+        setStreamStatus('Stream active')
       }
     })
 
     videoEl.addEventListener('playing', () => {
       videoReady = true
-      if (!streamStatusEl.textContent.includes('error')) {
-        streamStatusEl.textContent = 'Stream active'
+      revealStage()
+      if (!currentStreamStatus.includes('error')) {
+        setStreamStatus('Stream active')
       }
     })
 
-    ensureLibraries()
-      .then(() => {
+    async function initializeTrafficProject() {
+      if (projectInitializing || projectReady) return
+
+      cleanupComplete = false
+
+      projectInitializing = true
+      if (loadProjectBtn) {
+        loadProjectBtn.disabled = true
+        loadProjectBtn.textContent = 'Loading...'
+      }
+
+      setModelStatus('Loading model...')
+      setStreamStatus('Connecting stream...')
+      setBackendStatus('Selecting...')
+      setFpsStatus('0')
+
+      try {
+        await ensureLibraries()
+
         HlsLib = window.Hls
         tfLib = window.tf
         cocoSsdLib = window.cocoSsd
@@ -529,19 +792,40 @@
           throw new Error('Required libraries failed to initialize')
         }
 
-        return Promise.all([setupStream(), setupModel()])
-      })
-      .then(() => {
-        rafId = requestAnimationFrame(tick)
-      })
-      .catch((error) => {
-        streamStatusEl.textContent = `Init error: ${error?.message || 'unknown error'}`
-      })
+        await Promise.all([setupStream(), setupModel()])
 
-    window.addEventListener('beforeunload', () => {
-      cancelAnimationFrame(rafId)
-      if (hls) hls.destroy()
-    })
+        if (!rafId) {
+          rafId = requestAnimationFrame(tick)
+        }
+
+        projectReady = true
+        if (actionsEl) {
+          actionsEl.classList.add('traffic-hidden')
+        }
+      } catch (error) {
+        setStreamStatus(`Init error: ${error?.message || 'unknown error'}`)
+        if (!model) setModelStatus('Model failed to load')
+        if (loadProjectBtn) {
+          loadProjectBtn.disabled = false
+          loadProjectBtn.textContent = 'Load Live Feed'
+        }
+      } finally {
+        projectInitializing = false
+      }
+    }
+
+    if (loadProjectBtn) {
+      loadProjectBtn.addEventListener('click', initializeTrafficProject)
+    }
+
+    if (fullscreenBtnEl) {
+      fullscreenBtnEl.addEventListener('click', toggleStageFullscreen)
+    }
+
+    document.addEventListener('fullscreenchange', updateFullscreenButtonLabel)
+
+    window.addEventListener('pagehide', cleanupTrafficProject)
+    window.addEventListener('beforeunload', cleanupTrafficProject)
     }
   </script>
 </body>

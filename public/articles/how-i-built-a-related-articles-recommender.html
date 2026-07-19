@@ -21,25 +21,25 @@
         <article>
             <h2>Overview</h2>
             <p>
-                When I first started building this website, it was originally meant to be a project portfolio. It was 
-                made to share my certifications, projects, and achievements. Eventually I reached a point where the website itself became a project, and a place I could 
-                essentially turn into a living resume. Now, nearly everything I do professionally is documented here, 
-                and I wanted to make it easy for visitors (and myself) to find related content. 
+                When I first started this site, it was meant to be a simple project portfolio I could refer back to.
+                Eventually it reached a point where the website itself became a project, and a place I could 
+                turn into a living resume. Now, nearly everything I do professionally outside of work is documented here, 
+                and I wanted to make it easy for visitors (and myself) to find related content when viewing articles.
             </p>
             
             <p>
-                A coworker suggested I try k-means clustering (that's all she said), so I did the research and implemented a 
-                TF-IDF + k-means + cosine similarity approach. A single script handles the workflow: TF-IDF scores 
-                how important each word is to an article relative to the rest, k-means groups articles into topical 
-                clusters, and cosine similarity ranks how closely related articles are to each other. The output 
-                is a small JSON file that maps and ranks each article and its related articles.
+                I briefly talked about this problem at work and a coworker suggested I try k-means clustering (that's all she said). 
+                Following a brief research period, I implemented a TF-IDF + k-means + cosine similarity approach. A single script 
+                handles scoring and storing relationships: TF-IDF scores how important each word is to an article relative to the 
+                rest, k-means groups articles into topical clusters, and cosine similarity ranks how closely related articles are 
+                to each other. The output is a small JSON file that maps and ranks each article and its related articles.
             </p>
 
             <p>
-                The result was discoverability without the need for search, and without adding a clunky backend service. 
-                There are no external dependencies, no additional libraries, and the recommendations are consistent, and relevant. 
-                All recommendation processing is performed at build time and shipped as a small JSON lookup file. Now every time an article 
-                is added, updated, or removed and changes are pushed, the site gets rebuilt and recommendations are automatically updated.
+                The result was discoverability without the need for search, and without adding a backend service (that is super 
+                important, trying to do as much as I can without a server). There are no external dependencies, no additional 
+                libraries, and recommendations are consistent and relevant. All recommendation processing is performed at build 
+                time. Every time an article is added, updated, or removed and the website is rebuilt, recommendations are automatically updated.
             </p>
 
             <section class="process-section" aria-labelledby="generating-related-articles-process">
