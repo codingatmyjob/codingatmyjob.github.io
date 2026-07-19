@@ -1,6 +1,6 @@
 {
-  "_client-CMPlTNWg.js": {
-    "file": "assets/client-CMPlTNWg.js",
+  "_client-DAumQxyT.js": {
+    "file": "assets/client-DAumQxyT.js",
     "name": "client",
     "isDynamicEntry": true,
     "imports": [
@@ -8,12 +8,12 @@
     ]
   },
   "index.html": {
-    "file": "assets/app-CMzCzLVw.js",
+    "file": "assets/app-DLP4iTSE.js",
     "name": "app",
     "src": "index.html",
     "isEntry": true,
     "dynamicImports": [
-      "_client-CMPlTNWg.js"
+      "_client-DAumQxyT.js"
     ],
     "css": [
       "assets/app-CGKBIQMn.css"
