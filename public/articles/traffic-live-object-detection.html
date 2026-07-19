@@ -242,6 +242,24 @@
       background: #000;
     }
 
+    .traffic-stage.traffic-stage-pseudo-fullscreen {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      width: 100vw;
+      height: 100vh;
+      max-width: none;
+      border-radius: 0;
+      border: none;
+      background: #000;
+    }
+
+    .traffic-stage.traffic-stage-pseudo-fullscreen .traffic-video {
+      min-height: 100vh;
+      height: 100vh;
+      background: #000;
+    }
+
     [data-theme="light"] .traffic-panel {
       background: rgba(0, 0, 0, 0.03);
     }
@@ -394,10 +412,16 @@
         Finally, I had difficulty accounting for fullscreen. If a user tried to use the native fullscreen button, the object detection didn't follow. 
         I had to make sure the fullscreen functionality applied to the video <i>and</i> canvas elements, and not just the video like the native button did.
       </p>
+      
       <h2>Final Thoughts</h2>
+      <p>I think there's something to be said about training data vs real world application, especially for computer vision tasks. This is a lightweight model limited to only 80 detectable object classes.
+        That being said, these lightweight models tend to be very sensitive to input data, and aren't robust or powerful enough to handle all scenarios: a motorcycle might only be detected from the side 
+        view and won't be detected from the front or back, a semi might be misclassified up as a bus, a traffic cone might fit the profile of a person (true story, I had to remove the person class). To 
+        put it simply, object detection is only as robust and as accurate as the training and input data allow.
+      </p>
       <p>
-        With a heavier model, or an actual backend to process inference/video input, I could get this working with much higher speed and accuracy. But, constraints are constraints and I 
-        didn't want scope creep to take over the project.
+        There are a number of things that could improve object detection accuracy. If the camera view was closer and street-side like the highly contentious Flock ALPR cameras, or I wired a backend to 
+        handle a heavier model and process inference, I could have gotten this working with much higher accuracy. But, constraints are constraints and I didn't want scope creep to take over the project. 
       </p>
     </article>
   </main>
@@ -437,7 +461,12 @@
 
     // Iowa DOT CCTV: Cedar Rapids feed — https, CORS *, no auth
     const TRAFFIC_HLS_URL = 'https://video3.iowadot.gov:8888/cedarrapids/dqtv19lb/playlist.m3u8'
-    const DETECTION_CLASS_ALLOWLIST = new Set(['car', 'truck', 'motorcycle'])
+    const DETECTION_CLASS_ALLOWLIST = new Set([
+      'car',
+      'motorcycle',
+      'bus',
+      'truck',
+    ])
     const DETECTION_MODEL_BASE = 'mobilenet_v1'
     const DEFAULT_BACKEND_PREFERENCE = 'auto'
     const IS_MOBILE_DEVICE = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent)
@@ -488,6 +517,7 @@
     let projectReady = false
     let currentStreamStatus = 'Not connected'
     let cleanupComplete = false
+    let pseudoFullscreenActive = false
 
     function setModelStatus(value) {
       if (quickModelEl) quickModelEl.textContent = value
@@ -515,19 +545,65 @@
     async function toggleStageFullscreen() {
       if (!stageEl) return
 
-      if (document.fullscreenElement === stageEl) {
-        await document.exitFullscreen?.()
+      if (pseudoFullscreenActive) {
+        exitPseudoFullscreen()
+        updateFullscreenButtonLabel()
         return
       }
 
-      if (stageEl.requestFullscreen) {
-        await stageEl.requestFullscreen().catch(() => {})
+      const fullscreenElement = document.fullscreenElement || document.webkitFullscreenElement
+      if (fullscreenElement === stageEl) {
+        if (document.exitFullscreen) {
+          await document.exitFullscreen().catch(() => {})
+        } else if (document.webkitExitFullscreen) {
+          document.webkitExitFullscreen()
+        }
+        return
       }
+
+      let enteredNativeFullscreen = false
+
+      if (stageEl.requestFullscreen) {
+        await stageEl.requestFullscreen().then(() => {
+          enteredNativeFullscreen = true
+        }).catch(() => {})
+      } else if (stageEl.webkitRequestFullscreen) {
+        stageEl.webkitRequestFullscreen()
+        enteredNativeFullscreen = true
+      }
+
+      if (!enteredNativeFullscreen) {
+        // iOS often blocks element fullscreen requests unless they target <video>.
+        if (videoEl && typeof videoEl.webkitEnterFullscreen === 'function') {
+          try {
+            videoEl.webkitEnterFullscreen()
+            return
+          } catch (_error) {
+            // Fall through to pseudo-fullscreen mode if native fullscreen is unavailable.
+          }
+        }
+        enterPseudoFullscreen()
+      }
+    }
+
+    function enterPseudoFullscreen() {
+      if (!stageEl || pseudoFullscreenActive) return
+      pseudoFullscreenActive = true
+      stageEl.classList.add('traffic-stage-pseudo-fullscreen')
+      document.body.style.overflow = 'hidden'
+    }
+
+    function exitPseudoFullscreen() {
+      if (!stageEl || !pseudoFullscreenActive) return
+      pseudoFullscreenActive = false
+      stageEl.classList.remove('traffic-stage-pseudo-fullscreen')
+      document.body.style.overflow = ''
     }
 
     function updateFullscreenButtonLabel() {
       if (!fullscreenBtnEl) return
-      const isFullscreen = document.fullscreenElement === stageEl
+      const fullscreenElement = document.fullscreenElement || document.webkitFullscreenElement
+      const isFullscreen = fullscreenElement === stageEl || pseudoFullscreenActive
       const label = isFullscreen ? 'Exit fullscreen' : 'Fullscreen feed'
       fullscreenBtnEl.setAttribute('aria-label', label)
       fullscreenBtnEl.setAttribute('title', label)
@@ -536,12 +612,39 @@
     function clearOverlay() {
       const ctx = canvasEl.getContext('2d')
       if (!ctx) return
+      ctx.setTransform(1, 0, 0, 1, 0, 0)
       ctx.clearRect(0, 0, canvasEl.width, canvasEl.height)
+    }
+
+    function getRenderedVideoRect() {
+      if (!stageEl || !videoEl.videoWidth || !videoEl.videoHeight) return null
+
+      const stageWidth = stageEl.clientWidth
+      const stageHeight = stageEl.clientHeight
+      if (!stageWidth || !stageHeight) return null
+
+      const widthScale = stageWidth / videoEl.videoWidth
+      const heightScale = stageHeight / videoEl.videoHeight
+      const scale = Math.min(widthScale, heightScale)
+
+      const width = videoEl.videoWidth * scale
+      const height = videoEl.videoHeight * scale
+
+      return {
+        stageWidth,
+        stageHeight,
+        x: (stageWidth - width) / 2,
+        y: (stageHeight - height) / 2,
+        width,
+        height
+      }
     }
 
     function cleanupTrafficProject() {
       if (cleanupComplete) return
       cleanupComplete = true
+
+      exitPseudoFullscreen()
 
       cancelAnimationFrame(rafId)
       rafId = 0
@@ -596,32 +699,56 @@
       throw new Error('No supported TensorFlow inference engine found')
     }
 
-    function drawDetections(detections, width, height) {
+    function drawDetections(detections, sourceWidth, sourceHeight) {
       const ctx = canvasEl.getContext('2d')
       if (!ctx) return
 
-      canvasEl.width = width
-      canvasEl.height = height
-      ctx.clearRect(0, 0, width, height)
+      const renderRect = getRenderedVideoRect()
+      if (!renderRect) {
+        clearOverlay()
+        return
+      }
+
+      const dpr = window.devicePixelRatio || 1
+      const targetCanvasWidth = Math.max(1, Math.round(renderRect.stageWidth * dpr))
+      const targetCanvasHeight = Math.max(1, Math.round(renderRect.stageHeight * dpr))
+
+      if (canvasEl.width !== targetCanvasWidth) canvasEl.width = targetCanvasWidth
+      if (canvasEl.height !== targetCanvasHeight) canvasEl.height = targetCanvasHeight
+
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
+      ctx.clearRect(0, 0, renderRect.stageWidth, renderRect.stageHeight)
+
+      const xRatio = renderRect.width / sourceWidth
+      const yRatio = renderRect.height / sourceHeight
+
+      if (!detections || detections.length === 0) return
 
       detections.forEach((item) => {
         const color = BOX_COLORS[item.class] || '#00ff41'
         const [x, y, w, h] = item.bbox
+        const drawX = renderRect.x + (x * xRatio)
+        const drawY = renderRect.y + (y * yRatio)
+        const drawW = w * xRatio
+        const drawH = h * yRatio
         const label = `${item.class} ${Math.round(item.score * 100)}%`
+        const labelFontSize = IS_MOBILE_DEVICE ? 11 : 14
+        const labelHorizontalPadding = IS_MOBILE_DEVICE ? 4 : 6
+        const labelHeight = IS_MOBILE_DEVICE ? 18 : 20
+        const labelTextBaselineOffset = IS_MOBILE_DEVICE ? 12 : 14
 
         ctx.lineWidth = 2
         ctx.strokeStyle = color
         ctx.fillStyle = 'rgba(0, 0, 0, 0.45)'
-        ctx.strokeRect(x, y, w, h)
+        ctx.strokeRect(drawX, drawY, drawW, drawH)
 
-        ctx.font = '600 14px "Courier New", monospace'
-        const textWidth = ctx.measureText(label).width + 16
-        const labelHeight = 24
-        const labelY = y > labelHeight + 4 ? y - labelHeight : y + 2
+        ctx.font = `600 ${labelFontSize}px "Courier New", monospace`
+        const textWidth = ctx.measureText(label).width + (labelHorizontalPadding * 2)
+        const labelY = drawY > labelHeight + 4 ? drawY - labelHeight : drawY + 2
 
-        ctx.fillRect(x, labelY, textWidth, labelHeight)
+        ctx.fillRect(drawX, labelY, textWidth, labelHeight)
         ctx.fillStyle = color
-        ctx.fillText(label, x + 8, labelY + 16)
+        ctx.fillText(label, drawX + labelHorizontalPadding, labelY + labelTextBaselineOffset)
       })
     }
 
@@ -823,6 +950,14 @@
     }
 
     document.addEventListener('fullscreenchange', updateFullscreenButtonLabel)
+    document.addEventListener('webkitfullscreenchange', updateFullscreenButtonLabel)
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && pseudoFullscreenActive) {
+        exitPseudoFullscreen()
+        updateFullscreenButtonLabel()
+      }
+    })
 
     window.addEventListener('pagehide', cleanupTrafficProject)
     window.addEventListener('beforeunload', cleanupTrafficProject)

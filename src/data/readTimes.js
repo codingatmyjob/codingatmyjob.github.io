@@ -15,7 +15,7 @@ export const readTimesByPath = {
   "articles/noaa-tides-llm-chatbot-demo": "4 min",
   "articles/playing-in-traffic-and-heatmaps": "12 min",
   "articles/prompt-injection-demo": "4 min",
-  "articles/traffic-live-object-detection": "3 min",
+  "articles/traffic-live-object-detection": "4 min",
   "articles/typeahead-demo": "4 min",
   "articles/use-claude-code-for-free": "7 min",
   "articles/using-prismjs-to-style-code": "7 min"

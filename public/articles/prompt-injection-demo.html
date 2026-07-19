@@ -448,16 +448,21 @@
         leaking sensitive data, spreading misinformation, or worse."  Essentially, an application says "follow these rules," and an attacker says "do this instead." 
         If the model follows the attacker's instructions, it can lead to a number of unintended consequences.
       </p>
+      <p>
+        These consequences scale with what the model has access to, and what it can do. A support chatbot might be manipulated into providing incorrect information, 
+        answering unrelated questions, or performing unintended actions (like writing code, and cost the company money). An Agent with access to a database, email, or 
+        other tools could be manipulated into sending or forwarding sensitive emails, deleting data, etc.
+      </p>
 
       <h2>System Prompt Extraction</h2>
       <p>
-        Prompt injection is not one single technique, instead it's a class encompassing a variety of attack patterns; OWASP lists it as the most critical threat in the 
-        LLM Top 10 (LLM01). Within that class, attacks split into two branches: <strong>direct injection</strong>, where the malicious input comes straight from the user's 
-        own message, and indirect injection, where it's ingested via content the model processes.
+        Prompt injection is not one single technique, instead it's a class encompassing a variety of attack patterns; The Open Worldwide Application Security Project (OWASP) 
+        lists it as the most critical threat in its LLM Top 10 (LLM01). Within the prompt injection class, attacks split into two branches: <strong>direct injection</strong>, 
+        where the malicious input comes straight from the user's own message, and indirect injection, where it's ingested via content the model processes.
       </p>
       <p>
-        System prompt extraction is the specific technique we will be attempting in this demo, and it is one of the most common direct injection techniques. It targets the 
-        model's behavioral instructions directly, and if successful, can expose internal policy, workflow details, guardrails, or enough information for an attacker to craft 
+        System prompt extraction is one of the most common direct injection techniques, and it's the technique we will be attempting in this demo. It targets the 
+        model's behavioral instructions directly. If successful, the attack can expose internal policy, workflow details, guardrails, or enough information for an attacker to craft 
         stronger follow-up attacks.
       </p>
       <p>
@@ -466,7 +471,7 @@
 
       <h2>Interactive Demo</h2>
       <p>
-        In this lab, we utilize Hugging Face to load in and run a lightweight generative model. The model acts as an AI assistant that has been 
+        In this demo, we utilize Hugging Face to load in and run a lightweight generative model. The model acts as an AI assistant that has been 
         given a protected value, and explicitly told not to disclose that value. The setup is intentionally simple so you can see instruction failures clearly, try 
         different attack patterns, and run through as many iterations as you want with the reset button. 
       </p>
@@ -599,6 +604,7 @@
       let requestCounter = 0;
       const pending = new Map();
       let environmentReady = false;
+      let environmentInitializing = false;
 
       function applyTheme(t) {
         document.documentElement.setAttribute("data-theme", t === "light" ? "light" : "");
@@ -745,6 +751,7 @@
 
           if (data.type === "ready") {
             environmentReady = true;
+            environmentInitializing = false;
             loadEnvBtn.disabled = true;
             loaderCard.classList.add("pit-hidden");
             landingCard.classList.add("pit-hidden");
@@ -779,6 +786,7 @@
               return;
             }
 
+            environmentInitializing = false;
             loaderCard.classList.add("pit-hidden");
             loaderCard.classList.remove("is-loading");
             webgpuWarning.classList.remove("pit-hidden");
@@ -786,6 +794,16 @@
             loadEnvBtn.disabled = false;
             setBusy(false);
           }
+        };
+
+        worker.onerror = function() {
+          environmentInitializing = false;
+          loaderCard.classList.add("pit-hidden");
+          loaderCard.classList.remove("is-loading");
+          webgpuWarning.classList.remove("pit-hidden");
+          webgpuWarning.textContent = "Worker crashed during initialization. Please try loading again.";
+          loadEnvBtn.disabled = false;
+          setBusy(false);
         };
 
         return worker;
@@ -800,9 +818,19 @@
       }
 
       async function initializeEnvironment() {
+        if (environmentReady || environmentInitializing) {
+          return;
+        }
+
+        environmentInitializing = true;
+        loadEnvBtn.disabled = true;
+        setBusy(true);
         webgpuWarning.classList.add("pit-hidden");
 
         if (!navigator.gpu) {
+          environmentInitializing = false;
+          loadEnvBtn.disabled = false;
+          setBusy(false);
           webgpuWarning.classList.remove("pit-hidden");
           webgpuWarning.textContent = "This demo requires a WebGPU-enabled browser like Chrome or Edge.";
           return;
@@ -816,21 +844,25 @@
         }
 
         if (!adapter) {
+          environmentInitializing = false;
+          loadEnvBtn.disabled = false;
+          setBusy(false);
           webgpuWarning.classList.remove("pit-hidden");
           webgpuWarning.textContent = "No available WebGPU adapters were found in this browser session. Enable hardware acceleration in Chrome (Settings > System), update GPU drivers, and relaunch Chrome. If needed, run Chrome with --enable-unsafe-webgpu.";
           return;
         }
 
-        loadEnvBtn.disabled = true;
         loaderCard.classList.remove("pit-hidden");
         loaderCard.classList.add("is-loading");
 
         try {
           createWorker().postMessage({ type: "init", model: MODEL_ID });
         } catch (error) {
+          environmentInitializing = false;
           webgpuWarning.classList.remove("pit-hidden");
           webgpuWarning.textContent = "Model initialization failed. Confirm WebGPU is available and reload the page.";
           loadEnvBtn.disabled = false;
+          setBusy(false);
           loaderCard.classList.remove("is-loading");
           loaderCard.classList.add("pit-hidden");
         }
@@ -881,9 +913,12 @@
 
       function buildBinaryBg() {
         const container = document.getElementById("binary-bg");
-        if (!container) return;
+        if (!container || container.dataset.initialized === "true") return;
+        container.dataset.initialized = "true";
 
-        const cols = Math.floor(window.innerWidth / 18);
+        const reducedMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        const columnWidth = window.innerWidth <= 700 ? 28 : 18;
+        const cols = Math.max(8, Math.floor(window.innerWidth / columnWidth));
         for (let i = 0; i < cols; i += 1) {
           const span = document.createElement("span");
           span.className = "bit";
@@ -896,6 +931,13 @@
             "animation-duration:" + duration + "s," + duration + "s",
             "animation-delay:" + delay + "s," + delay + "s",
           ].join(";");
+
+          if (reducedMotion) {
+            span.style.setProperty("animation", "none");
+            span.textContent = Math.random() > 0.5 ? "1" : "0";
+            container.appendChild(span);
+            continue;
+          }
 
           function tick() {
             span.textContent = Math.random() > 0.5 ? "1" : "0";
