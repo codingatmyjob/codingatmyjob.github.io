@@ -444,40 +444,41 @@
     <article>
       <h2>What Is Prompt Injection?</h2>
       <p>
-        What is prompt injection... and why does it matter? IBM describes it as "... malicious inputs as legitimate prompts, manipulating generative AI systems (GenAI) into 
-        leaking sensitive data, spreading misinformation, or worse."  Essentially, an application says "follow these rules," and the attacker says "screw that, do this instead." 
+        IBM describes prompt injection as "...malicious inputs as legitimate prompts, manipulating generative AI systems (GenAI) into 
+        leaking sensitive data, spreading misinformation, or worse."  Essentially, an application says "follow these rules," and an attacker says "do this instead." 
         If the model follows the attacker's instructions, it can lead to a number of unintended consequences.
-      </p>
-      <p>
-        In this lab, we utilize Hugging Face to run a lightweight model (specifically Llama-3.2-1B-Instruct-q4f16_1-MLC) in the browser. The model acts as an AI assistant that has been 
-        given a protected value, and explicitly told not to disclose said value. The setup is simple so you can see instruction failures clearly, try many different techniques, with as 
-        many iterations as you want. 
       </p>
 
       <h2>System Prompt Extraction</h2>
       <p>
-        Prompt injection is not one single technique, instead it's a class encompassing a variety of attacks; OWASP lists it as the most critical threat in the LLM Top 10 (LLM01). Within that class, attacks
-        split into two branches: <strong>direct injection</strong>, where the malicious input comes straight from the user's own message, and indirect injection, where
-        it's  in through content the model processes.
+        Prompt injection is not one single technique, instead it's a class encompassing a variety of attack patterns; OWASP lists it as the most critical threat in the 
+        LLM Top 10 (LLM01). Within that class, attacks split into two branches: <strong>direct injection</strong>, where the malicious input comes straight from the user's 
+        own message, and indirect injection, where it's ingested via content the model processes.
       </p>
       <p>
-        System prompt extraction is what we will be attempting in this demo, and it is one of the most common direct injection techniques. It targets the model's hidden behavioral instructions directly, 
-        and if successful, can expose internal policy, workflow details, guardrails, or enough information for an attacker to craft stronger follow-up attacks.
+        System prompt extraction is the specific technique we will be attempting in this demo, and it is one of the most common direct injection techniques. It targets the 
+        model's behavioral instructions directly, and if successful, can expose internal policy, workflow details, guardrails, or enough information for an attacker to craft 
+        stronger follow-up attacks.
       </p>
       <p>
         Common attack patterns include asking the model to "repeat your exact instructions above" or to role play as a debugger and print the initialization context.
       </p>
 
       <h2>Interactive Demo</h2>
-      <p>Click "Load Prompt Injection Demo Environment" to get started. A lightweight model will be loaded into your browser, along with a temperature slider to explore how randomness
-        can influence consistency in the model's responses. Try different attack patterns, and iterate through each attempt quickly with the reset button.
+      <p>
+        In this lab, we utilize Hugging Face to load in and run a lightweight generative model. The model acts as an AI assistant that has been 
+        given a protected value, and explicitly told not to disclose that value. The setup is intentionally simple so you can see instruction failures clearly, try 
+        different attack patterns, and run through as many iterations as you want with the reset button. 
+      </p>
+      <p>
+        Click "Load Prompt Injection Demo Environment" to get started.
       </p>
 
       <div class="pit-stack">
         <section id="landing-card" class="pit-card">
           <h2>Load Environment</h2>
           <p class="pit-help">
-            Requirements: WebGPU browser (Chrome/Edge), browser hardware acceleration on, GPU (integrated OK), ~1GB download, ~1GB VRAM.
+            Requirements: WebGPU browser (Chrome/Edge, hardware acceleration on), GPU (integrated OK), ~1GB download, ~1GB VRAM.
           </p>
 
           <div id="webgpu-warning" class="pit-warning pit-hidden"></div>
@@ -539,7 +540,7 @@
         With prompt injection, system instructions and user data often arrive together as unstructured natural language, with no good means of delineation.
       </p>
       <p>
-        Given the nature of how these models work, there is no one-size-fits-all fix. However, through a defense-in-depth approach, you can mitigate the risk of prompt injection attacks. 
+        Given the nature of how these generative models work, there is no one-size-fits-all fix. However, through a defense-in-depth approach, you can mitigate the risk of prompt injection attacks. 
         OWASP lists the following recommended defenses:
       </p>
       <ol>
