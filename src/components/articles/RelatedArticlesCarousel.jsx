@@ -1,6 +1,21 @@
 import React, { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
+import { Link } from 'react-router-dom'
 
 const useIsomorphicLayoutEffect = typeof window !== 'undefined' ? useLayoutEffect : useEffect
+
+function pathToRoute(path) {
+  if (!path) return '/'
+  if (path.startsWith('articles/') || path.startsWith('/articles/')) {
+    const slug = path.replace(/^\/?(articles\/)/, '').replace(/\.html$/, '')
+    return `/articles/${slug}`
+  }
+  if (path.startsWith('sidebar/') || path.startsWith('/sidebar/')) {
+    const page = path.replace(/^\/?(sidebar\/)/, '').replace(/\.html$/, '')
+    return `/sidebar/${page}`
+  }
+  const clean = path.replace(/\.html$/, '')
+  return `/${clean}`
+}
 
 function slugFromPath(path) {
   if (!path) return ''
@@ -14,7 +29,7 @@ function scoreToMatchPercent(score) {
   return Math.min(99, Math.max(0, Math.round(scaled)))
 }
 
-export function RelatedArticlesCarousel({ currentSlug, relatedData = [], allArticles = [], onOpenArticle }) {
+export function RelatedArticlesCarousel({ currentSlug, relatedData = [], allArticles = [] }) {
   const trackRef = useRef(null)
   const [canScrollLeft, setCanScrollLeft] = useState(false)
   const [canScrollRight, setCanScrollRight] = useState(false)
@@ -154,10 +169,10 @@ export function RelatedArticlesCarousel({ currentSlug, relatedData = [], allArti
 
       <div className="related-carousel-track" ref={trackRef}>
         {relatedItems.map(item => (
-          <article
+          <Link
             key={item.id || item.path || item.title}
+            to={pathToRoute(item.path)}
             className="related-carousel-card"
-            onClick={() => onOpenArticle && onOpenArticle(item.path)}
           >
             <div className="related-carousel-image-shell">
               {item.imageSrc ? (
@@ -177,13 +192,13 @@ export function RelatedArticlesCarousel({ currentSlug, relatedData = [], allArti
               <div className="related-carousel-meta">
                 <p className="related-carousel-date">{item.date}</p>
               </div>
-              <h3 className="related-carousel-title">{item.title}</h3>
+              <h3 className="related-carousel-title" style={{ color: 'var(--text-primary)' }}>{item.title}</h3>
               <p className="related-carousel-description">{item.description}</p>
               {item.matchScore ? (
                 <span className="related-carousel-match-pill">{scoreToMatchPercent(item.matchScore)}% match</span>
               ) : null}
             </div>
-          </article>
+          </Link>
         ))}
       </div>
     </section>

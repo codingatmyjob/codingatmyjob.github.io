@@ -1,98 +1,88 @@
 # codingatmyjob.github.io
 
-Personal blog for project writeups, certification reviews, and interactive demos.
+This is my Cybersecurity + Data Science blog, and I occasionally go deep on AI experiments.
 
-View live: https://codingatmyjob.github.io/
+Most posts are project writeups, cert retrospectives, security notes, and interactive demos.
 
-## Purpose
+Live site: https://codingatmyjob.github.io/
 
-This site is a public facing project portfolio. Each post focuses on practical execution: what was built, why certain decisions were made, tradeoffs encountered, and what changed after testing in real usage. Instead of only documenting outcomes, articles capture process and iteration across:
+## What I Write About
 
-- JavaScript web app experiments and UI patterns
-- Python automation and bot workflows
-- Security/CTF notes and lab writeups
-- Certification prep breakdowns
-- AI-assisted tooling and local model workflows
+- Cybersecurity writeups, labs, and practical command references
+- Data science and data-heavy project breakdowns
+- AI notes, model/tooling experiments, and security implications
+- Certification retrospectives and study strategy
 
-## Stack
+## How The Site Is Served
 
-| Layer | Technology |
-|---|---|
-| UI | React 18 + React Router 6 |
-| Static generation | vite-react-ssg |
-| Build tool | Vite |
-| Styling | Plain CSS |
-| Code highlighting | Prism.js |
-| Deployment | GitHub Pages via `gh-pages` |
+Short version: static content files + React app shell + build-time metadata generation.
 
-## Techniques Used
+- Routes are defined in `src/routes.jsx` (`/`, `/articles/:slug`, `/sidebar/:page`).
+- Article files are plain HTML in `public/articles/*.html`.
+- Sidebar pages are plain HTML in `public/sidebar/*.html`.
+- During static generation, loaders read those files from disk.
+- In browser runtime, loaders fetch `articles/<slug>.html` or `sidebar/<page>.html`.
 
-The repo utilizes static-first patterns, with build-time computation to keep runtime fast:
+I keep content authoring simple (HTML files), while React handles navigation, metadata, and UI behavior.
 
-- Static route generation with `vite-react-ssg` for article pages.
-- Build-time related article recommendations using tokenization + TF-IDF weighting.
-- Cosine similarity with followon processing for recommendation scoring.
-- K-means clustering to narrow candidate related-article pools.
-- Compact JSON recommendation index consumed client-side for instant lookups.
-- Saturating score transform for user-friendly `% match` display in the related carousel.
-- Prism.js integration for code formatting in static HTML article content.
+## Build-Time Data Products
 
-## Related Articles System
+I generate two JSON artifacts at build time and ship both with the site:
 
-Related links are generated ahead of time and shipped as static JSON.
+- `scripts/generate-related-articles.cjs` -> `public/data/related-articles.json`
+- `scripts/generate-read-times.cjs` -> `public/data/read-times.json`
 
-### Pipeline
+At runtime, `src/pages/ArticlePage.jsx` reads related-article output, and read-time data is merged into article metadata for cards and article UI.
 
-1. Source HTML is read from `public/articles`.
-2. Title, tags, and body text are extracted and normalized.
-3. Weighted TF-IDF vectors are built per article (title/tag/body weights).
-4. Vectors are clustered and ranked by similarity.
-5. Results are written to `public/data/related-articles.json`.
+## Build and Deployment
 
-### Runtime Behavior
+`npm run build` runs both generators first, then `vite-react-ssg build`, and outputs deployable static assets to `dist/`.
 
-- Article pages load recommendations from `public/data/related-articles.json`.
-- The related carousel resolves recommendation slugs against article metadata.
-- A bounded, scrollable card track displays the strongest matches.
+GitHub Actions publishes `dist/` to GitHub Pages:
 
-### Commands
+- Production: `https://codingatmyjob.github.io`
+- Preview: `https://codingatmyjob.github.io/preview/`
 
-```bash
-npm run generate:related
-```
-
-Regenerates the recommendation index only.
-
-```bash
-npm run build
-```
-
-Runs `prebuild` (including related generation), then builds the static site.
-
-## Local Development
+## Commands
 
 ```bash
 npm install
 npm run dev
 ```
 
-## Deployment
+Run local dev server.
 
-Two environments are hosted on GitHub Pages:
+```bash
+npm run generate:related
+```
 
-| Environment | URL | Branch | Trigger |
-|---|---|---|---|
-| Production | `https://codingatmyjob.github.io/` | `main` | `npm run deploy` |
-| Preview | `https://codingatmyjob.github.io/preview/` | `preview` | push to `preview` |
+Rebuild related-articles output only.
 
-### Production
+```bash
+npm run generate:read-times
+```
+
+Rebuild read-time metadata only.
+
+```bash
+npm run build
+```
+
+Generate JSON data products + static deploy output.
 
 ```bash
 npm run deploy
 ```
 
-Builds with base `/` and publishes `dist/` to `gh-pages`.
+Publish with `gh-pages` CLI.
 
-### Preview
+## Stack (Minimal on Purpose)
 
-Preview deploy runs from GitHub Actions on the `preview` branch with base `/preview/`.
+I intentionally keep the stack close to static-web fundamentals:
+
+- React + React Router for structure and navigation
+- Vite + vite-react-ssg for fast static builds
+- Plain CSS for styling control
+- Prism.js for syntax highlighting
+
+No always-on backend needed. Build-time generation + static hosting handles the core experience.

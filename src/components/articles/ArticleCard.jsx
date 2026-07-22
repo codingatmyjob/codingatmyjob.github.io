@@ -1,6 +1,21 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 
-export default function ArticleCard({ item, onOpenArticle }){
+function pathToRoute(path) {
+  if (!path) return '/'
+  if (path.startsWith('articles/') || path.startsWith('/articles/')) {
+    const slug = path.replace(/^\/?(articles\/)/, '').replace(/\.html$/, '')
+    return `/articles/${slug}`
+  }
+  if (path.startsWith('sidebar/') || path.startsWith('/sidebar/')) {
+    const page = path.replace(/^\/?(sidebar\/)/, '').replace(/\.html$/, '')
+    return `/sidebar/${page}`
+  }
+  const clean = path.replace(/\.html$/, '')
+  return `/${clean}`
+}
+
+export default function ArticleCard({ item }){
   const {
     path,
     title,
@@ -19,25 +34,13 @@ export default function ArticleCard({ item, onOpenArticle }){
     ? import.meta.env.BASE_URL + imageSrc
     : imageSrc
 
-  const handleClick = (e)=>{
-    // don't intercept clicks on links inside the card
-    if(e.target && e.target.closest && e.target.closest('a')) return
-    if(!path) return
-    onOpenArticle && onOpenArticle(path)
-  }
-
-  const onKey = (e)=>{
-    if(e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleClick(e) }
-  }
+  const to = pathToRoute(path)
 
   return (
-    <div
+    <Link
+      to={to}
       className="article-card"
       data-path={path}
-      role="button"
-      tabIndex={0}
-      onClick={handleClick}
-      onKeyDown={onKey}
     >
       <div className="article-image">
         {imageSrc ? (
@@ -63,6 +66,6 @@ export default function ArticleCard({ item, onOpenArticle }){
           ))}
         </div>
       </div>
-    </div>
+    </Link>
   )
 }

@@ -1,14 +1,14 @@
 import React from 'react'
 import ArticleCard from './ArticleCard'
 
-export default function ArticlesGrid({ articles = [], onOpenArticle }){
+export default function ArticlesGrid({ articles = [] }){
   const itemsToShow = articles
 
   return (
     <>
       {itemsToShow.length > 0 ? (
         itemsToShow.map(it=> (
-          <ArticleCard key={it.id || it.path || it.title} item={it} onOpenArticle={onOpenArticle} />
+          <ArticleCard key={it.id || it.path || it.title} item={it} />
         ))
       ) : (
         <div className="no-results">

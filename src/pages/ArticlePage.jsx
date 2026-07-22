@@ -179,10 +179,12 @@ export default function ArticlePage() {
     }
   }, [slug])
 
+  const SHARE_ICON_SVG = `<svg class="article-share-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>`
+
   const rawMain = rawHtml ? extractMainHtml(rawHtml) : ''
   const mainHtml = rawMain.replace(
     /(<main[^>]*>)/i,
-    '$1<div class="article-home-nav"><a class="article-home-btn" href="/" aria-label="Return home"><span class="article-home-btn-icon" aria-hidden="true">&larr;</span><span>Return Home</span></a></div>'
+    `$1<div class="article-home-nav"><a class="article-home-btn" href="/" aria-label="Return home"><span class="article-home-btn-icon" aria-hidden="true">&larr;</span><span>Return Home</span></a><button type="button" class="article-share-btn" aria-label="Share article">${SHARE_ICON_SVG}<span class="article-share-btn-text">Share</span></button></div>`
   )
   const headStyles = rawHtml ? extractHeadStyles(rawHtml) : []
 
@@ -196,6 +198,36 @@ export default function ArticlePage() {
       navigate('/')
     }
     if (homeBtn) homeBtn.addEventListener('click', onHomeClick)
+
+    const shareBtn = el.querySelector('.article-share-btn')
+    const onShareClick = async () => {
+      try {
+        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
+        if (isMobile && navigator.share) {
+          await navigator.share({
+            title: articleMeta.title,
+            text: articleMeta.description,
+            url: articleMeta.canonical
+          })
+          return
+        }
+        const cleanUrl = articleMeta.canonical.replace(/\.html$/, '')
+        await copyText(cleanUrl)
+        if (shareBtn) {
+          const textSpan = shareBtn.querySelector('.article-share-btn-text')
+          shareBtn.classList.add('copied')
+          if (textSpan) textSpan.textContent = 'Copied!'
+          window.setTimeout(() => {
+            shareBtn.classList.remove('copied')
+            if (textSpan) textSpan.textContent = 'Share'
+          }, 1500)
+        }
+      } catch (error) {
+        if (error?.name === 'AbortError') return
+        console.warn('Share failed:', error)
+      }
+    }
+    if (shareBtn) shareBtn.addEventListener('click', onShareClick)
 
     // Re-execute inline scripts (cruise comparisons interactive demo, etc.)
     if (rawHtml) {
@@ -249,10 +281,11 @@ export default function ArticlePage() {
 
     return () => {
       if (homeBtn) homeBtn.removeEventListener('click', onHomeClick)
+      if (shareBtn) shareBtn.removeEventListener('click', onShareClick)
       injectedScripts.forEach((scriptEl) => scriptEl.remove())
       document.body.classList.remove('article-open')
     }
-  }, [mainHtml, rawHtml, navigate])
+  }, [mainHtml, rawHtml, navigate, articleMeta])
 
   // Force a hard reload when leaving the TF article so WASM workers and model
   // weights don't stay resident in memory for the rest of the session.

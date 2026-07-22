@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useCallback, useMemo } from 'react'
-import { useNavigate } from 'react-router-dom'
 import { Head } from 'vite-react-ssg'
 import ArticlesGrid from '../components/articles/ArticlesGrid'
 import ArticlesControls from '../components/articles/ArticlesControls'
@@ -23,24 +22,57 @@ const getItemsPerPage = () => {
   return columns * ROWS_PER_PAGE
 }
 
+const getUrlSearchParams = () => {
+  if (typeof window === 'undefined') return new URLSearchParams()
+  return new URLSearchParams(window.location.search)
+}
+
 export default function Home() {
-  const navigate = useNavigate()
-  const allArticles = articlesData
-  const [filteredArticles, setFilteredArticles] = useState(articlesData)
-  const [selected, setSelected] = useState([])
-  const [sortOrder, setSortOrder] = useState('newest')
+  const [searchParams, setSearchParams] = useState(getUrlSearchParams)
+
+  const searchQuery = searchParams.get('q') || ''
+  const selected = useMemo(() => {
+    const tagsParam = searchParams.get('tags') || ''
+    return tagsParam ? tagsParam.split(',').filter(Boolean) : []
+  }, [searchParams])
+  const sortOrder = useMemo(() => {
+    const sort = searchParams.get('sort') || 'newest'
+    return ['newest', 'oldest', 'a-z', 'z-a'].includes(sort) ? sort : 'newest'
+  }, [searchParams])
+
   const [currentPage, setCurrentPage] = useState(1)
+  const [filteredArticles, setFilteredArticles] = useState(articlesData)
   const [itemsPerPage, setItemsPerPage] = useState(DEFAULT_ITEMS_PER_PAGE)
+  const [isPageSizeReady, setIsPageSizeReady] = useState(false)
   const [availableTags, setAvailableTags] = useState([])
-  const [searchQuery, setSearchQuery] = useState('')
   const [articleContents, setArticleContents] = useState(new Map())
 
-  useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'instant' })
+  const updateSearchParams = useCallback((update) => {
+    setSearchParams(current => {
+      const next = new URLSearchParams(current)
+      update(next)
+
+      if (typeof window !== 'undefined') {
+        const query = next.toString()
+        const url = `${window.location.pathname}${query ? `?${query}` : ''}${window.location.hash}`
+        window.history.replaceState(null, '', url)
+      }
+
+      return next
+    })
   }, [])
 
   useEffect(() => {
-    const handleResize = () => setItemsPerPage(getItemsPerPage())
+    const syncFromBrowserHistory = () => setSearchParams(getUrlSearchParams())
+    window.addEventListener('popstate', syncFromBrowserHistory)
+    return () => window.removeEventListener('popstate', syncFromBrowserHistory)
+  }, [])
+
+  useEffect(() => {
+    const handleResize = () => {
+      setItemsPerPage(getItemsPerPage())
+      setIsPageSizeReady(true)
+    }
     handleResize()
     window.addEventListener('resize', handleResize)
     return () => window.removeEventListener('resize', handleResize)
@@ -100,10 +132,10 @@ export default function Home() {
 
   useEffect(() => {
     const applyFilters = async () => {
-      let filtered = allArticles
+      let filtered = articlesData
       if (selected.length > 0) {
         const tagsLC = selected.map(s => s.toLowerCase())
-        filtered = allArticles.filter(article => {
+        filtered = articlesData.filter(article => {
           const articleTagsLC = article.tags.map(t => t.toLowerCase())
           return tagsLC.every(tag => articleTagsLC.includes(tag))
         })
@@ -114,7 +146,7 @@ export default function Home() {
       setFilteredArticles(filtered)
     }
     applyFilters()
-  }, [selected, allArticles, searchQuery, searchArticles])
+  }, [selected, searchQuery, searchArticles])
 
   useEffect(() => {
     const tagsFromFiltered = new Set()
@@ -134,34 +166,53 @@ export default function Home() {
     })
   }, [filteredArticles, sortOrder])
 
-  const applyFilter = useCallback((selTags) => { setSelected(selTags); setCurrentPage(1) }, [])
-  const clearFilter = useCallback(() => { setSelected([]); setCurrentPage(1) }, [])
-  const handleSortChange = useCallback((order) => { setSortOrder(order); setCurrentPage(1) }, [])
-  const handleSearch = useCallback((query) => { setSearchQuery(query); setCurrentPage(1) }, [])
+  const applyFilter = useCallback((selTags) => {
+    updateSearchParams(next => {
+      if (selTags.length > 0) next.set('tags', selTags.join(','))
+      else next.delete('tags')
+    })
+    setCurrentPage(1)
+  }, [updateSearchParams])
 
-  const openArticle = useCallback((path) => {
-    if (!path) return
-    // Convert file paths to routes: articles/slug.html → /articles/slug, sidebar/page.html → /sidebar/page
-    if (path.startsWith('articles/') || path.startsWith('/articles/')) {
-      const slug = path.replace(/^\/?(articles\/)/, '').replace(/\.html$/, '')
-      navigate(`/articles/${slug}`)
-    } else if (path.startsWith('sidebar/') || path.startsWith('/sidebar/')) {
-      const page = path.replace(/^\/?(sidebar\/)/, '').replace(/\.html$/, '')
-      navigate(`/sidebar/${page}`)
-    } else {
-      const clean = path.replace(/\.html$/, '')
-      navigate(`/${clean}`)
+  const clearFilter = useCallback(() => {
+    updateSearchParams(next => {
+      next.delete('tags')
+    })
+    setCurrentPage(1)
+  }, [updateSearchParams])
+
+  const handleSortChange = useCallback((order) => {
+    updateSearchParams(next => {
+      if (order !== 'newest') next.set('sort', order)
+      else next.delete('sort')
+    })
+    setCurrentPage(1)
+  }, [updateSearchParams])
+
+  const handleSearch = useCallback((query) => {
+    updateSearchParams(next => {
+      if (query.trim()) next.set('q', query.trim())
+      else next.delete('q')
+    })
+    setCurrentPage(1)
+  }, [updateSearchParams])
+
+  const handlePageChange = useCallback((page) => {
+    setCurrentPage(page)
+    if (typeof window !== 'undefined') {
+      window.scrollTo({ top: 0, behavior: 'instant' })
     }
-  }, [navigate])
+  }, [])
 
   const totalPages = Math.ceil(sortedArticles.length / itemsPerPage)
 
   useEffect(() => {
+    if (!isPageSizeReady) return
     const maxPage = Math.max(1, totalPages)
     if (currentPage > maxPage) {
       setCurrentPage(maxPage)
     }
-  }, [currentPage, totalPages])
+  }, [isPageSizeReady, totalPages, currentPage])
 
   const startIndex = (currentPage - 1) * itemsPerPage
   const currentArticles = sortedArticles.slice(startIndex, startIndex + itemsPerPage)
@@ -224,13 +275,6 @@ export default function Home() {
           })}
         </script>
       </Head>
-      <section className="site-intro" aria-labelledby="site-intro-title">
-        <h1 id="site-intro-title">Tangent</h1>
-        <p>
-          Tangent is a cybersecurity and data science blog that encapsulates random thoughts, experiments, and side projects that grew beyond the first idea.
-          Over time, these tangents build a real project portfolio with technical notes, project builds, experiments, reviews, and practical writeups.
-        </p>
-      </section>
 
       <div id="articles-view">
         <div className="articles-controls">
@@ -242,18 +286,18 @@ export default function Home() {
             onClear={clearFilter}
             sortOrder={sortOrder}
             onSortChange={handleSortChange}
-            searchBar={<SearchBar onSearch={handleSearch} />}
+            searchBar={<SearchBar value={searchQuery} onChange={handleSearch} />}
           />
           </div>
         </div>
         <div className="articles-grid">
-          <ArticlesGrid articles={currentArticles} onOpenArticle={openArticle} />
+          <ArticlesGrid articles={currentArticles} />
         </div>
         {totalPages > 1 && (
           <Pagination
             currentPage={currentPage}
             totalPages={totalPages}
-            onPageChange={setCurrentPage}
+            onPageChange={handlePageChange}
           />
         )}
       </div>

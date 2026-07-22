@@ -1,31 +1,36 @@
 import React, { useState, useEffect } from 'react'
 
-export default function SearchBar({ onSearch, placeholder = "Search articles..." }) {
-  const [query, setQuery] = useState('')
+export default function SearchBar({ value = '', onChange, placeholder = "Search articles..." }) {
+  const [query, setQuery] = useState(value)
   const [isLoading, setIsLoading] = useState(false)
+
+  useEffect(() => {
+    setQuery(value)
+  }, [value])
 
   // Debounce search to avoid too many searches while typing
   useEffect(() => {
     if (!query.trim()) {
       setIsLoading(false)
-      onSearch('')
+      onChange && onChange('')
       return
     }
 
+    setIsLoading(true)
     const timer = setTimeout(() => {
-      onSearch(query.trim())
+      onChange && onChange(query.trim())
       setIsLoading(false)
     }, 500)
 
     return () => {
       clearTimeout(timer)
     }
-  }, [query, onSearch])
+  }, [query, onChange])
 
   const handleClear = () => {
     setQuery('')
     setIsLoading(false)
-    onSearch('')
+    onChange && onChange('')
   }
 
   return (
