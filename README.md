@@ -71,10 +71,28 @@ npm run build
 Generate JSON data products + static deploy output.
 
 ```bash
+npm run lint
+```
+
+Run baseline lint checks for build scripts, test files, and core config.
+
+```bash
+npm run test
+```
+
+Run unit tests for build-time metadata generators.
+
+```bash
 npm run deploy
 ```
 
 Publish with `gh-pages` CLI.
+
+## CI and Monitoring
+
+- `.github/workflows/ci.yml` runs lint, tests, and `build:ci` on pushes and pull requests.
+- `.github/workflows/deploy-production.yml` and `.github/workflows/deploy-preview.yml` now gate deploys on lint + tests.
+- `.github/workflows/monitoring-basics.yml` runs scheduled uptime checks for production and preview every 6 hours.
 
 ## Stack (Minimal on Purpose)
 

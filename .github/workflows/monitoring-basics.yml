@@ -1,0 +1,36 @@
+name: Monitoring Basics
+
+on:
+  schedule:
+    - cron: '0 */6 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  uptime-check:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        target:
+          - name: production
+            url: https://codingatmyjob.github.io/
+          - name: preview
+            url: https://codingatmyjob.github.io/preview/
+
+    steps:
+      - name: Check site availability
+        run: |
+          echo "Checking ${{ matrix.target.name }} at ${{ matrix.target.url }}"
+          status_code=$(curl -sS -o /tmp/page.html -w "%{http_code}" "${{ matrix.target.url }}")
+          if [ "$status_code" -lt 200 ] || [ "$status_code" -ge 400 ]; then
+            echo "Unexpected HTTP status: $status_code"
+            exit 1
+          fi
+          if ! grep -qi "<html" /tmp/page.html; then
+            echo "Response does not appear to be HTML"
+            exit 1
+          fi
+          echo "${{ matrix.target.name }} is healthy (HTTP $status_code)"

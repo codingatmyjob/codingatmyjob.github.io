@@ -79,4 +79,18 @@ function main() {
   console.log(`Generated ${OUTPUT_FILE} and ${OUTPUT_JS_FILE} (${resolved}/${total} resolved)`)
 }
 
-main()
+if (require.main === module) {
+  main()
+}
+
+module.exports = {
+  extractArticleHtml,
+  stripHtml,
+  calculateReadTime,
+  main,
+  constants: {
+    AVERAGE_WPM,
+    CODE_BLOCK_MINUTES,
+    MIN_WORD_THRESHOLD,
+  }
+}

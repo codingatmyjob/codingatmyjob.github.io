@@ -647,4 +647,31 @@ function main() {
 }
 
 // Script entrypoint.
-main()
+if (require.main === module) {
+  main()
+}
+
+module.exports = {
+  stripHtml,
+  normalizeText,
+  tokenize,
+  frequency,
+  mergeWeightedFrequency,
+  getTitle,
+  getTags,
+  cosine,
+  l2Normalize,
+  meanVector,
+  jaccard,
+  pickK,
+  initCentroids,
+  kmeans,
+  topTerms,
+  summarizeClusters,
+  scorePair,
+  ensureParentDir,
+  main,
+  constants: {
+    MIN_RELATED_SCORE,
+  }
+}
