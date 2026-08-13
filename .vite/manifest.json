@@ -1,6 +1,6 @@
 {
-  "_client-AXMSMfca.js": {
-    "file": "assets/client-AXMSMfca.js",
+  "_client-DlrNH45s.js": {
+    "file": "assets/client-DlrNH45s.js",
     "name": "client",
     "isDynamicEntry": true,
     "imports": [
@@ -8,12 +8,12 @@
     ]
   },
   "index.html": {
-    "file": "assets/app-CBwucCql.js",
+    "file": "assets/app-pF25PLHh.js",
     "name": "app",
     "src": "index.html",
     "isEntry": true,
     "dynamicImports": [
-      "_client-AXMSMfca.js"
+      "_client-DlrNH45s.js"
     ],
     "css": [
       "assets/app-CCqYiuhX.css"
