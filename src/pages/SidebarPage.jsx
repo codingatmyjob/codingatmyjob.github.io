@@ -59,10 +59,10 @@ function formatWeekdayDate(value) {
   })
 }
 
-function formatDurationDays(value) {
+function formatDurationMinutes(value) {
   if (!Number.isFinite(value)) return '--'
-  if (value < 1) return `${Math.round(value * 24)}h`
-  return `${value.toFixed(1)}d`
+  if (value < 60) return `${value.toFixed(1)}m`
+  return `${(value / 60).toFixed(1)}h`
 }
 
 function hasLabel(issue, pattern) {
@@ -329,16 +329,17 @@ async function hydrateGithubStats(root) {
   const owner = host?.getAttribute('data-gh-owner') || 'codingatmyjob'
   const repo = host?.getAttribute('data-gh-repo') || 'codingatmyjob.github.io'
   const productionWorkflow = host?.getAttribute('data-gh-production-workflow') || 'deploy-production.yml'
+  const ciWorkflow = host?.getAttribute('data-gh-ci-workflow') || 'ci.yml'
   const weeks = 12
   const since = new Date(Date.now() - (weeks * 7 * 24 * 60 * 60 * 1000)).toISOString()
 
   try {
-    const [repoDataResult, commitsResult, recentCommitsResult, workflowRunsResult, closedPullRequestsResult, openIssuesResult, closedIssuesResult] = await Promise.allSettled([
+    const [repoDataResult, commitsResult, recentCommitsResult, workflowRunsResult, ciWorkflowRunsResult, openIssuesResult, closedIssuesResult] = await Promise.allSettled([
       fetchRepoDetails(owner, repo),
       fetchGithubCommits(owner, repo, since),
       fetchRecentGithubCommits(owner, repo, 12),
       fetchWorkflowRuns(owner, repo, productionWorkflow),
-      fetchClosedPullRequests(owner, repo),
+      fetchWorkflowRuns(owner, repo, ciWorkflow),
       fetchOpenIssues(owner, repo),
       fetchClosedIssues(owner, repo)
     ])
@@ -347,7 +348,7 @@ async function hydrateGithubStats(root) {
     const commits = commitsResult.status === 'fulfilled' ? commitsResult.value : []
     const recentCommits = recentCommitsResult.status === 'fulfilled' ? recentCommitsResult.value : []
     const workflowRuns = workflowRunsResult.status === 'fulfilled' ? workflowRunsResult.value : []
-    const closedPullRequests = closedPullRequestsResult.status === 'fulfilled' ? closedPullRequestsResult.value : []
+    const ciWorkflowRuns = ciWorkflowRunsResult.status === 'fulfilled' ? ciWorkflowRunsResult.value : []
     const openIssuesRaw = openIssuesResult.status === 'fulfilled' ? openIssuesResult.value : []
     const closedIssuesRaw = closedIssuesResult.status === 'fulfilled' ? closedIssuesResult.value : []
 
@@ -397,25 +398,28 @@ async function hydrateGithubStats(root) {
       : '--%'
     const deploysMonth = formatNumber(last30Runs.length)
 
-    const mergedPulls = Array.isArray(closedPullRequests)
-      ? closedPullRequests.filter((pr) => {
-        const merged = Date.parse(pr?.merged_at || '')
-        return !Number.isNaN(merged) && merged >= last30Cutoff
+    const ciRunsLast30 = Array.isArray(ciWorkflowRuns)
+      ? ciWorkflowRuns.filter((run) => {
+        const ts = Date.parse(run?.created_at || '')
+        return !Number.isNaN(ts) && ts >= last30Cutoff && run?.status === 'completed'
       })
       : []
 
-    const mergeLags = mergedPulls
-      .map((pr) => {
-        const created = Date.parse(pr?.created_at || '')
-        const merged = Date.parse(pr?.merged_at || '')
-        if (Number.isNaN(created) || Number.isNaN(merged) || merged < created) return null
-        return (merged - created) / dayMs
+    const ciPassRate30d = ciRunsLast30.length
+      ? `${Math.round((ciRunsLast30.filter((run) => run?.conclusion === 'success').length / ciRunsLast30.length) * 100)}%`
+      : '--%'
+
+    const ciDurationsMinutes = ciRunsLast30
+      .map((run) => {
+        const started = Date.parse(run?.run_started_at || run?.created_at || '')
+        const ended = Date.parse(run?.updated_at || '')
+        if (Number.isNaN(started) || Number.isNaN(ended) || ended < started) return null
+        return (ended - started) / (60 * 1000)
       })
       .filter((v) => v !== null)
-      .sort((a, b) => a - b)
 
-    const medianMergeLag = mergeLags.length
-      ? mergeLags[Math.floor(mergeLags.length / 2)]
+    const ciAvgRuntimeMinutes = ciDurationsMinutes.length
+      ? (ciDurationsMinutes.reduce((sum, mins) => sum + mins, 0) / ciDurationsMinutes.length)
       : NaN
 
     const openIssues = Array.isArray(openIssuesRaw)
@@ -446,8 +450,8 @@ async function hydrateGithubStats(root) {
       productionTrend,
       buildPassRate30d,
       deploysMonth,
-      prMergeLag: formatDurationDays(medianMergeLag),
-      orphansOpen: formatNumber(orphansOpen.length),
+      ciPassRate30d,
+      ciAvgRuntime30d: formatDurationMinutes(ciAvgRuntimeMinutes),
       ideasOpen: formatNumber(ideasOpen.length),
       onHoldCount: formatNumber(blockedOpen.length),
       commitVelocity: `${avgPerWeek.toFixed(1)}/wk`,
