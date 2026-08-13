@@ -24,6 +24,18 @@ const baseArticlesData = [
   //   tags: ['Demo', 'LLM', 'Node.js', 'API'],
   //   imageLabel: 'NOAA Tides LLM Chatbot Demo'
   // },
+  // {
+  //   id: 'studying-for-dp-800-part-1',
+  //   path: 'articles/studying-for-dp-800-part-1',
+  //   publishedAt: '2026-08-07',
+  //   date: 'August 07, 2026',
+  //   title: 'Microsoft DP-800: Part 1',
+  //   description: 'Kicking off a DP-800 study series with the overarching plan, and mini-project ideas.',
+  //   tags: ['Cert', 'AI', 'Databases', 'SQL'],
+  //   imageSrc: 'images/cover/microsoft-certified-associate-badge.svg',
+  //   imageAlt: 'Studying for Microsoft DP-800: Part 1',
+  //   imageStyle: { height: '95%', width: '95%' }
+  // },
   {
     id: 'prompt-injection-demo',
     path: 'articles/prompt-injection-demo',
