@@ -1,6 +1,6 @@
 {
-  "_client-6t-fX6eu.js": {
-    "file": "assets/client-6t-fX6eu.js",
+  "_client-BaEP6-yc.js": {
+    "file": "assets/client-BaEP6-yc.js",
     "name": "client",
     "isDynamicEntry": true,
     "imports": [
@@ -8,12 +8,12 @@
     ]
   },
   "index.html": {
-    "file": "assets/app-_KO07uLX.js",
+    "file": "assets/app-BrWjiz5m.js",
     "name": "app",
     "src": "index.html",
     "isEntry": true,
     "dynamicImports": [
-      "_client-6t-fX6eu.js"
+      "_client-BaEP6-yc.js"
     ],
     "css": [
       "assets/app-CCqYiuhX.css"
