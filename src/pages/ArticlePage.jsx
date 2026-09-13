@@ -293,8 +293,9 @@ export default function ArticlePage() {
     if (slug !== 'traffic-live-object-detection') return
     console.log('[TF article] mounted — TensorFlow.js/COCO-SSD will initialize')
     return () => {
+      // Reload whatever page the router already navigated to, instead of forcing the user back to home.
       console.log('[TF article] unmounted — forcing hard reload to clear WASM workers and model weights')
-      window.location.assign(import.meta.env.BASE_URL || '/')
+      window.location.assign(window.location.href)
     }
   }, [slug])
 
