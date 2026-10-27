@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>SQL Essentials</title>
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+    <div id="binary-bg" aria-hidden="true"></div>
+
+    <main class="article-container">
+        <h1>SQL Essentials</h1>
+        <div class="meta">
+            <time datetime="2026-10-10">October 10, 2026</time>
+        </div>
+        <div class="tags">
+            <span class="tag">Reference</span><span class="tag">SQL</span><span class="tag">Databases</span>
+        </div>
+
+        <article>
+            <p>
+                SQL can look like a lot at first, but I find most everyday queries are built from a small set of
+                familiar pieces. This is a quick tour of the ones I reach for most, using a simple <code>users</code>
+                table for examples. Swap in the table and column names from your own database.
+            </p>
+
+            <h2>Start with a SELECT</h2>
+<pre><code class="language-sql">-- Select only the columns you need
+SELECT username, email
+FROM users;
+
+-- Filter, sort, and limit results
+SELECT username, created_at
+FROM users
+WHERE active = TRUE
+ORDER BY created_at DESC
+LIMIT 10;</code></pre>
+            <ul>
+                <li>I name the columns I need instead of reaching for <code>*</code>; it keeps the result focused and makes it easier to see what the query is doing.</li>
+                <li><code>WHERE</code> filters the rows. Combine conditions with <code>AND</code> or <code>OR</code>, and use operators like <code>=</code>, <code>&lt;&gt;</code>, <code>&gt;</code>, and <code>&lt;</code>.</li>
+                <li><code>ORDER BY</code> sorts the result; add <code>DESC</code> to reverse the order. I use a row limit while exploring so a query doesn't return more than I need.</li>
+                <li>One small SQL surprise: missing values need <code>IS NULL</code> or <code>IS NOT NULL</code>. Comparing with <code>= NULL</code> won't work as expected.</li>
+                <li>The example uses <code>LIMIT</code>, supported by PostgreSQL, MySQL, and SQLite. SQL Server commonly uses <code>TOP</code> or <code>OFFSET ... FETCH</code> instead.</li>
+            </ul>
+
+            <h2>Combine and Summarize Rows</h2>
+<pre><code class="language-sql">-- Join matching rows from two tables
+SELECT users.username, orders.total
+FROM users
+JOIN orders ON orders.user_id = users.id;
+
+-- Count rows by status
+SELECT status, COUNT(*) AS order_count
+FROM orders
+GROUP BY status
+HAVING COUNT(*) &gt; 1;</code></pre>
+            <ul>
+                <li>I use a <code>JOIN</code> when the information I need lives across related tables. Here, each order's <code>user_id</code> matches a user's <code>id</code>.</li>
+                <li>Use <code>LEFT JOIN</code> when you want every row from the first table, including rows with no match in the second.</li>
+                <li><code>COUNT</code>, <code>SUM</code>, and <code>AVG</code> summarize values. <code>GROUP BY</code> makes one summary per group, and <code>HAVING</code> filters those groups.</li>
+                <li><code>AS</code> gives the result column a name that's easier to read.</li>
+            </ul>
+
+            <h2>Add and Change Data</h2>
+<pre><code class="language-sql">-- Add a row, listing the target columns
+INSERT INTO users (username, email, active)
+VALUES ('alex', 'alex@example.com', TRUE);
+
+-- Change selected rows
+UPDATE users
+SET email = 'alex.new@example.com'
+WHERE username = 'alex';
+
+-- Remove selected rows
+DELETE FROM users
+WHERE username = 'alex';</code></pre>
+            <ul>
+                <li><code>INSERT</code> adds a row. Listing the target columns makes it clear which value goes where.</li>
+                <li><code>UPDATE</code> changes matching rows, while <code>DELETE</code> removes them. In both cases, <code>WHERE</code> is what keeps the change scoped to the rows you intended.</li>
+                <li>Before I run either one, I double-check that condition. Without <code>WHERE</code>, every row in the table is changed or removed.</li>
+            </ul>
+
+            <h2>Transactions</h2>
+<pre><code class="language-sql">BEGIN;
+
+UPDATE accounts
+SET balance = balance - 25
+WHERE id = 1;
+
+UPDATE accounts
+SET balance = balance + 25
+WHERE id = 2;
+
+COMMIT;
+-- Use ROLLBACK instead of COMMIT to cancel the transaction</code></pre>
+            <p>
+                Transactions let me treat a few related changes as one unit: either commit them together or roll them
+                back. That is useful for work like transferring money, where both sides need to update. Check how your
+                database client handles transactions; some tools commit statements automatically.
+            </p>
+
+            <h2>Create a Table</h2>
+<pre><code class="language-sql">CREATE TABLE tasks (
+    id INTEGER PRIMARY KEY,
+    title VARCHAR(200) NOT NULL,
+    done BOOLEAN DEFAULT FALSE,
+    created_at TIMESTAMP
+);</code></pre>
+            <p>
+                I use <code>CREATE TABLE</code> to define the columns and the kinds of values they can hold.
+                <code>PRIMARY KEY</code> identifies each row, <code>NOT NULL</code> requires a value, and
+                <code>DEFAULT</code> fills one in when an insert leaves it out. Types and auto-generated key syntax
+                differ between databases, so check the docs for the one you're using.
+            </p>
+        </article>
+    </main>
+</body>
+</html>

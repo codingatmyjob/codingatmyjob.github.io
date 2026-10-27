@@ -364,6 +364,40 @@ ${{<%[%'"}}%\</code></pre>
             </div>
             </div>
 
+            <h2>SQL Basics</h2>
+            <div class="section-content">
+
+            <div class="command-section">
+                <div class="command-title">Query and Change Data</div>
+                <pre><code class="language-sql">-- Read selected columns, filter rows, and sort results
+SELECT username, email
+FROM users
+WHERE active = TRUE
+ORDER BY username;
+
+-- Add a row
+INSERT INTO users (username, email)
+VALUES ('alex', 'alex@example.com');
+
+-- Update specific rows; choose a key that identifies the intended row
+UPDATE users
+SET email = 'alex.new@example.com'
+WHERE username = 'alex';
+
+-- Delete specific rows; check the WHERE condition before running
+DELETE FROM users
+WHERE username = 'alex';</code></pre>
+                <div class="command-desc">
+                    <ul>
+                        <li><code>SELECT</code> reads rows; use <code>WHERE</code> to filter and <code>ORDER BY</code> to sort.</li>
+                        <li><code>INSERT</code> adds a row. Name the target columns so the values are clear and correctly ordered.</li>
+                        <li><code>UPDATE</code> and <code>DELETE</code> change data. Without a <code>WHERE</code> condition, they affect every row in the table.</li>
+                        <li>Boolean literals and row-limiting syntax vary between database systems.</li>
+                    </ul>
+                </div>
+            </div>
+            </div>
+
             <h2>SQL Injection</h2>
             <div class="section-content">
 
