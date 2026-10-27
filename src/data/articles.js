@@ -2,26 +2,6 @@ import { readTimesByPath } from './readTimes'
 
 // .js over .json because we're using imageStyle objects and plain JSON would prevent this
 const baseArticlesData = [
-  {
-    id: 'git-essentials',
-    path: 'articles/git-essentials',
-    publishedAt: '2026-10-08',
-    date: 'October 08, 2026',
-    title: 'Git Essentials',
-    description: 'A practical Git cheatsheet for everyday commands, shortcuts, undoing changes, and common workflows.',
-    tags: ['Reference', 'Git', 'Development'],
-    imageLabel: 'Git Essentials'
-  },
-  {
-    id: 'sql-essentials',
-    path: 'articles/sql-essentials',
-    publishedAt: '2026-10-10',
-    date: 'October 10, 2026',
-    title: 'SQL Essentials',
-    description: 'A practical introduction to querying, joining, adding, and updating data with everyday SQL commands.',
-    tags: ['Reference', 'SQL', 'Databases'],
-    imageLabel: 'SQL Essentials'
-  },
   // // DRAFT -- NEED TO CREATE SMALL DEMO OR MAKE A REPO FOR VISUAL AID
   // {
   //   id: 'efficient-html-maps-with-pydeck',

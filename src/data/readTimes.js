@@ -1,6 +1,6 @@
 export const readTimesByPath = {
   "articles/HTB-Artificial-Writeup": "8 min",
-  "articles/HTB-Command-Cheatsheet": "25 min",
+  "articles/HTB-Command-Cheatsheet": "28 min",
   "articles/VirtualBox-Home-Lab-Setup": "3 min",
   "articles/creating-a-pokemon-stock-bot": "13 min",
   "articles/cruise-size-comparisons": "5 min",
