@@ -104,6 +104,7 @@ if (background) {
 }
 
 if (scrollTopButton) {
+  const safeRight = 'max(20px, env(safe-area-inset-right, 0px))'
   const updateScrollTop = () => {
     const articleContainer = document.querySelector('.article-container')
     const homeContainer = document.querySelector('#articles-view')
@@ -113,19 +114,19 @@ if (scrollTopButton) {
       const desiredLeft = Math.round(rect.right + 30)
       if (desiredLeft + (scrollTopButton.offsetWidth || 44) > window.innerWidth - 8) {
         scrollTopButton.style.removeProperty('--scroll-left')
-        scrollTopButton.style.setProperty('--scroll-right', '20px')
+        scrollTopButton.style.setProperty('--scroll-right', safeRight)
       } else {
         scrollTopButton.style.setProperty('--scroll-left', `${desiredLeft}px`)
         scrollTopButton.style.removeProperty('--scroll-right')
       }
     } else {
       scrollTopButton.style.removeProperty('--scroll-left')
-      scrollTopButton.style.setProperty('--scroll-right', '20px')
+      scrollTopButton.style.setProperty('--scroll-right', safeRight)
     }
-    const scrollPosition = document.body.classList.contains('article-open')
-      ? document.documentElement.scrollTop
-      : window.scrollY
-    scrollTopButton.hidden = scrollPosition <= 200
+    const scrollPosition = Math.max(window.scrollY, document.documentElement.scrollTop, document.body.scrollTop)
+    const isVisible = scrollPosition > 200
+    scrollTopButton.hidden = !isVisible
+    scrollTopButton.classList.toggle('is-visible', isVisible)
   }
   window.addEventListener('resize', updateScrollTop)
   window.addEventListener('scroll', updateScrollTop)
