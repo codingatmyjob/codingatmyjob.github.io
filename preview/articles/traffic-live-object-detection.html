@@ -447,7 +447,10 @@
           script.dataset.loaded = 'true'
           resolve()
         }, { once: true })
-        script.addEventListener('error', () => reject(new Error(`Failed to load ${src}`)), { once: true })
+        script.addEventListener('error', () => {
+          script.remove()
+          reject(new Error(`Failed to load ${src}`))
+        }, { once: true })
         document.head.appendChild(script)
       })
     }
@@ -659,10 +662,21 @@
       }
 
       if (videoEl) {
+        videoEl.removeEventListener('loadeddata', handleVideoLoadedData)
+        videoEl.removeEventListener('playing', handleVideoPlaying)
         videoEl.pause()
         videoEl.removeAttribute('src')
         videoEl.load()
       }
+
+      document.removeEventListener('fullscreenchange', updateFullscreenButtonLabel)
+      document.removeEventListener('webkitfullscreenchange', updateFullscreenButtonLabel)
+      document.removeEventListener('keydown', handleDocumentKeydown)
+      window.removeEventListener('pagehide', cleanupTrafficProject)
+      window.removeEventListener('beforeunload', cleanupTrafficProject)
+
+      if (loadProjectBtn?.onclick === initializeTrafficProject) loadProjectBtn.onclick = null
+      if (fullscreenBtnEl?.onclick === toggleStageFullscreen) fullscreenBtnEl.onclick = null
 
       if (model && typeof model.dispose === 'function') {
         model.dispose()
@@ -672,6 +686,10 @@
       modelCache.promise = null
       modelCache.base = ''
       clearOverlay()
+
+      if (window.__trafficDemoCleanup === cleanupTrafficProject) {
+        delete window.__trafficDemoCleanup
+      }
     }
 
     function resolveBackendOrder(preference) {
@@ -801,6 +819,10 @@
         }
 
         const { loadedModel, backend } = await modelCache.promise
+        if (cleanupComplete) {
+          loadedModel.dispose()
+          return
+        }
         model = loadedModel
         setModelStatus(`COCO-SSD ${DETECTION_MODEL_BASE}`)
         setBackendStatus(backend.toUpperCase())
@@ -876,21 +898,31 @@
       })
     }
 
-    videoEl.addEventListener('loadeddata', () => {
+    function handleVideoLoadedData() {
       videoReady = true
       revealStage()
       if (!currentStreamStatus.includes('error')) {
         setStreamStatus('Stream active')
       }
-    })
+    }
 
-    videoEl.addEventListener('playing', () => {
+    function handleVideoPlaying() {
       videoReady = true
       revealStage()
       if (!currentStreamStatus.includes('error')) {
         setStreamStatus('Stream active')
       }
-    })
+    }
+
+    function handleDocumentKeydown(event) {
+      if (event.key === 'Escape' && pseudoFullscreenActive) {
+        exitPseudoFullscreen()
+        updateFullscreenButtonLabel()
+      }
+    }
+
+    videoEl.addEventListener('loadeddata', handleVideoLoadedData)
+    videoEl.addEventListener('playing', handleVideoPlaying)
 
     async function initializeTrafficProject() {
       if (projectInitializing || projectReady) return
@@ -910,6 +942,7 @@
 
       try {
         await ensureLibraries()
+        if (cleanupComplete) return
 
         HlsLib = window.Hls
         tfLib = window.tf
@@ -920,6 +953,7 @@
         }
 
         await Promise.all([setupStream(), setupModel()])
+        if (cleanupComplete) return
 
         if (!rafId) {
           rafId = requestAnimationFrame(tick)
@@ -947,14 +981,9 @@
 
     document.addEventListener('fullscreenchange', updateFullscreenButtonLabel)
     document.addEventListener('webkitfullscreenchange', updateFullscreenButtonLabel)
+    document.addEventListener('keydown', handleDocumentKeydown)
 
-    document.addEventListener('keydown', (event) => {
-      if (event.key === 'Escape' && pseudoFullscreenActive) {
-        exitPseudoFullscreen()
-        updateFullscreenButtonLabel()
-      }
-    })
-
+    window.__trafficDemoCleanup = cleanupTrafficProject
     window.addEventListener('pagehide', cleanupTrafficProject)
     window.addEventListener('beforeunload', cleanupTrafficProject)
     }
