@@ -6,6 +6,7 @@ copyFileSync(
   resolve(clientDirectory, '__spa-fallback.html'),
   resolve(clientDirectory, '404.html')
 )
+copyFileSync(resolve('style.css'), resolve(clientDirectory, 'style.css'))
 
 const basePath = (process.env.VITE_BASE_PATH || '/').replace(/^\/+|\/+$/g, '')
 if (basePath) {

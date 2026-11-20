@@ -301,25 +301,29 @@ export default function ArticlePage() {
     return () => {
       if (homeBtn) homeBtn.removeEventListener('click', onHomeClick)
       if (shareBtn) shareBtn.removeEventListener('click', onShareClick)
+      if (slug === 'traffic-live-object-detection' && typeof window.__trafficDemoCleanup === 'function') {
+        window.__trafficDemoCleanup()
+      }
       injectedScripts.forEach((scriptEl) => scriptEl.remove())
       document.body.classList.remove('article-open')
     }
-  }, [mainHtml, rawHtml, navigate, articleMeta])
+  }, [mainHtml, rawHtml, navigate, articleMeta, slug])
 
-  // Force a hard reload when leaving the TF article so WASM workers and model
-  // weights don't stay resident in memory for the rest of the session.
   useEffect(() => {
     if (slug !== 'traffic-live-object-detection') return
+
     if (trafficReloadTimer.current !== null) {
       window.clearTimeout(trafficReloadTimer.current)
       trafficReloadTimer.current = null
     }
-    console.log('[TF article] mounted — TensorFlow.js/COCO-SSD will initialize')
+
     return () => {
-      // Reload whatever page the router already navigated to, instead of forcing the user back to home.
-      console.log('[TF article] unmounted — forcing hard reload to clear WASM workers and model weights')
       trafficReloadTimer.current = window.setTimeout(() => {
-        window.location.assign(window.location.href)
+        const destination = new URL(window.location.href)
+        if (destination.pathname !== '/' && !destination.pathname.endsWith('/')) {
+          destination.pathname += '/'
+        }
+        window.location.assign(destination.href)
         trafficReloadTimer.current = null
       }, 0)
     }
