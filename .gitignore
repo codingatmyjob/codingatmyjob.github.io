@@ -7,3 +7,4 @@ dist/
 .env.local
 .env.*.local
 .vscode/
+.github/copilot*.md

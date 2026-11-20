@@ -473,6 +473,12 @@ body::-webkit-scrollbar-thumb,body.article-open::-webkit-scrollbar-thumb{backgro
   min-height: 20px;
 }
 
+.search-input::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+  appearance: none;
+  display: none;
+}
+
 .search-input::placeholder {
   color: var(--text-primary);
 }
@@ -1214,11 +1220,11 @@ display:inline-block;color:var(--accent);background:color-mix(in srgb, var(--bg-
 [data-theme="light"] .related-carousel{background:transparent;box-shadow:0 4px 12px rgba(25,36,54,0.1)}
 [data-theme="light"] .related-carousel-card{background:color-mix(in srgb, var(--bg-secondary) 94%, #cdd3dd 6%);border-color:color-mix(in srgb, var(--border) 78%, rgba(39,54,78,0.14))}
 [data-theme="light"] .article-card{background:color-mix(in srgb, var(--bg-secondary) 95%, #cdd3dd 5%);border-color:color-mix(in srgb, var(--border) 78%, rgba(39,54,78,0.14))}
-[data-theme="dark"] :is(.article-card,.related-carousel-card):hover{border-color:#2a3850}
+[data-theme="dark"] :is(.article-card,.related-carousel-card){border-color:var(--border)}
+[data-theme="dark"] :is(.article-card,.related-carousel-card):hover{box-shadow:0 4px 8px var(--shadow),0 0 0 1px color-mix(in srgb, var(--accent) 12%, transparent);border-color:color-mix(in srgb, var(--border) 50%, var(--accent) 50%)}
 [data-theme="light"] .article-container{background:color-mix(in srgb, var(--bg-secondary) 94%, #ccd2db 6%);border-color:color-mix(in srgb, var(--border) 80%, rgba(39,54,78,0.16));box-shadow:0 6px 16px rgba(25,36,54,0.1)}
 [data-theme="light"] .article-image,[data-theme="light"] .article-image img,[data-theme="light"] .related-carousel-image-shell{background:color-mix(in srgb, var(--border) 60%, #c4cbd6)}
-[data-theme="light"] .article-card:hover{box-shadow:0 4px 8px var(--shadow),0 0 0 1px rgba(0,0,0,0.16);border-color:rgba(0,0,0,0.2)}
-[data-theme="light"] .related-carousel-card:hover{transform:translateY(-5px);box-shadow:0 4px 8px var(--shadow),0 0 0 1px rgba(0,0,0,0.16);border-color:rgba(0,0,0,0.2)}
+[data-theme="light"] :is(.article-card,.related-carousel-card):hover{box-shadow:0 4px 8px var(--shadow),0 0 0 1px color-mix(in srgb, var(--accent) 12%, transparent);border-color:color-mix(in srgb, var(--border) 50%, var(--accent) 50%)}
 [data-theme="light"] .related-carousel-date{color:var(--accent)}
 [data-theme="light"] .related-carousel-description{color:#6f6f6f}
 [data-theme="light"] .related-carousel-track{scrollbar-color:var(--border) rgba(0,0,0,0.06)}

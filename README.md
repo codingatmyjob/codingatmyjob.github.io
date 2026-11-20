@@ -21,7 +21,7 @@ Short version: Astro-generated static pages + build-time metadata generation.
 - Article files are plain HTML in `public/articles/*.html`.
 - Sidebar pages are plain HTML in `public/sidebar/*.html`.
 - Astro reads those files at build time and emits a static page for each one.
-- Browser interactions are small progressive-enhancement scripts; the site shell does not hydrate as one React application.
+- Browser interactions are small progressive-enhancement scripts; the site shell stays static and does not hydrate as a client-side application.
 
 I keep content authoring simple (HTML files), while Astro handles page generation and metadata.
 
