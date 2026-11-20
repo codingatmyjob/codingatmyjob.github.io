@@ -1,0 +1,1 @@
+const r="https://codingatmyjob.github.io";function i(t){if(!t.trim())return"/";const n=t.startsWith("/")?t:`/${t}`;return n.endsWith("/")?n:`${n}/`}function o(){return typeof import.meta<"u"?i("/"):"/"}function s(t=""){const n=String(t||"").replace(/^\/+/,""),e=new URL(o(),`${r}/`).href;return new URL(n,e).href}export{s as g};
