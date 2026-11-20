@@ -37,6 +37,18 @@ const baseArticlesData = [
   //   imageStyle: { height: '95%', width: '95%' }
   // },
   {
+    id: 'how-fit-am-i',
+    path: 'articles/how-fit-am-i',
+    publishedAt: '2026-11-20',
+    date: 'November 20, 2026',
+    title: 'How Fit Am I?',
+    description: 'Explore your relative fitness with an interactive demo built on 800K+ race results.',
+    tags: ['Demo', 'Data Science', 'WebApp', 'Python'],
+    imageSrc: 'images/cover/how-fit-am-i.svg',
+    imageAlt: 'Waving black and white checkered flags on crossed gray poles above the 89th percentile text.',
+    imageStyle: { height: '95%', width: '95%' }
+  },
+  {
     id: 'prompt-injection-demo',
     path: 'articles/prompt-injection-demo',
     publishedAt: '2026-07-24',

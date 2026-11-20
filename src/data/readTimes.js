@@ -6,6 +6,7 @@ export const readTimesByPath = {
   "articles/cruise-size-comparisons": "5 min",
   "articles/discord-spotify-activity-tracker": "7 min",
   "articles/efficient-html-maps-with-pydeck": "2 min",
+  "articles/how-fit-am-i": "9 min",
   "articles/how-i-built-a-related-articles-recommender": "8 min",
   "articles/how-i-passed-azure-ai-fundamentals": "3 min",
   "articles/how-i-passed-network-plus": "3 min",
