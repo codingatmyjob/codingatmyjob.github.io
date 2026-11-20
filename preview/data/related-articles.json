@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generatedAt": "2026-11-20T02:09:40.161Z",
+  "generatedAt": "2026-11-20T02:19:12.732Z",
   "method": "tfidf+kmeans+cosine",
   "minRelatedScore": 0.11,
   "maxObservedScore": 0.531153,
@@ -89,7 +89,7 @@
         },
         {
           "slug": "how-fit-am-i",
-          "score": 0.123013
+          "score": 0.122595
         }
       ]
     },
@@ -137,15 +137,15 @@
       "related": [
         {
           "slug": "typeahead-demo",
-          "score": 0.206263
+          "score": 0.206209
         },
         {
           "slug": "playing-in-traffic-and-heatmaps",
-          "score": 0.12408
+          "score": 0.123565
         },
         {
           "slug": "creating-a-pokemon-stock-bot",
-          "score": 0.123013
+          "score": 0.122595
         }
       ]
     },
@@ -309,7 +309,7 @@
         },
         {
           "slug": "how-fit-am-i",
-          "score": 0.12408
+          "score": 0.123565
         },
         {
           "slug": "efficient-html-maps-with-pydeck",
@@ -393,7 +393,7 @@
       "related": [
         {
           "slug": "how-fit-am-i",
-          "score": 0.206263
+          "score": 0.206209
         },
         {
           "slug": "cruise-size-comparisons",
