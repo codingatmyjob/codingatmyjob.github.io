@@ -2,6 +2,25 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
+  <script>
+    (function () {
+      try {
+        var saved = localStorage.getItem('theme')
+        var systemPrefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        document.documentElement.setAttribute('data-theme', saved || (systemPrefersDark ? 'dark' : 'light'))
+      } catch (error) {
+        document.documentElement.setAttribute('data-theme', 'light')
+      }
+    })()
+  </script>
+  <style>
+    html, body { min-height: 100%; margin: 0; background: #090d14; color: #d8dde4; }
+    body { font-family: 'Courier New', monospace; }
+    [data-theme="light"] { background: #c9cbce; color: #2c3646; }
+    [data-theme="light"] body {
+      background: radial-gradient(120% 95% at 50% -25%, rgba(88, 104, 128, 0.12) 0%, rgba(88, 104, 128, 0) 60%), linear-gradient(180deg, #ced2d8 0%, #c9cbce 46%, #bcc1ca 100%);
+    }
+  </style>
   <meta http-equiv="refresh" content="0;url=/preview/articles/studying-for-dp-800-part-1/">
   <link rel="canonical" href="/preview/articles/studying-for-dp-800-part-1/">
   <title>Redirecting</title>
