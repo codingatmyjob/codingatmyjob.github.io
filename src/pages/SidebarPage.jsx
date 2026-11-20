@@ -42,7 +42,7 @@ export function meta({ params }) {
   return createPageMeta({
     title: `${pageMeta.title} | Tangent`,
     description: pageMeta.description,
-    canonical: getSiteUrl(`sidebar/${params.page || ''}.html`),
+    canonical: getSiteUrl(`sidebar/${params.page || ''}/`),
     image: getSiteUrl('images/cover/og-image.png'),
     type: pageMeta.type
   })

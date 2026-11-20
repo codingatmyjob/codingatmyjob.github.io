@@ -169,7 +169,7 @@ function getArticleMeta(slug) {
   return {
     title: article?.title || fallbackTitle,
     description: article?.description || 'Technical notes, project builds, experiments, reviews, and practical writeups from Tangent.',
-    canonical: getSiteUrl(`articles/${slug}.html`),
+    canonical: getSiteUrl(`articles/${slug}/`),
     image: article?.imageSrc ? getSiteUrl(article.imageSrc) : getSiteUrl('images/cover/og-image.png')
   }
 }
