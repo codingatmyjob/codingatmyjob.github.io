@@ -1,10 +1,10 @@
 import React, { useEffect, useState, useCallback, useMemo } from 'react'
-import { Head } from 'vite-react-ssg'
 import ArticlesGrid from '../components/articles/ArticlesGrid'
 import ArticlesControls from '../components/articles/ArticlesControls'
 import Pagination from '../components/articles/Pagination'
 import SearchBar from '../components/articles/SearchBar'
 import { articlesData } from '../data/articles'
+import { createPageMeta } from '../routeMeta'
 import { getSiteUrl } from '../siteUrls'
 
 const SITE_TITLE = 'Tangent | Cybersecurity & Data Science Blog'
@@ -12,6 +12,60 @@ const SITE_DESCRIPTION = 'A cybersecurity and data science blog with technical n
 
 const ROWS_PER_PAGE = 8
 const DEFAULT_ITEMS_PER_PAGE = 3 * ROWS_PER_PAGE
+
+export function meta() {
+  const siteUrl = getSiteUrl()
+  const aboutUrl = getSiteUrl('sidebar/About.html')
+  const ogImageUrl = getSiteUrl('images/cover/og-image.png')
+
+  return [
+    ...createPageMeta({
+      title: SITE_TITLE,
+      description: SITE_DESCRIPTION,
+      canonical: siteUrl,
+      image: ogImageUrl,
+      imageAlt: 'Tangent cybersecurity and data science blog preview image'
+    }),
+    {
+      'script:ld+json': {
+        '@context': 'https://schema.org',
+        '@graph': [
+          {
+            '@type': 'WebSite',
+            '@id': siteUrl,
+            url: siteUrl,
+            name: 'Tangent',
+            description: 'A cybersecurity and data science blog with technical notes, project builds, experiments, reviews, and practical writeups, that form a functional project portfolio.',
+            inLanguage: 'en'
+          },
+          {
+            '@type': 'Person',
+            '@id': aboutUrl,
+            name: 'Connor',
+            url: aboutUrl,
+            sameAs: [
+              'https://github.com/codingatmyjob',
+              'https://www.credly.com/users/connor-rasmussen.58b75ec0/badges#credly',
+              'https://app.hackthebox.com/profile/2578864'
+            ]
+          },
+          {
+            '@type': 'Blog',
+            name: 'Tangent',
+            description: 'A cybersecurity and data science blog with technical notes, project builds, experiments, reviews, and practical writeups, that form a functional project portfolio.',
+            inLanguage: 'en',
+            publisher: {
+              '@id': aboutUrl
+            },
+            isPartOf: {
+              '@id': siteUrl
+            }
+          }
+        ]
+      }
+    }
+  ]
+}
 
 const getItemsPerPage = () => {
   if (typeof window === 'undefined') return DEFAULT_ITEMS_PER_PAGE
@@ -216,66 +270,8 @@ export default function Home() {
 
   const startIndex = (currentPage - 1) * itemsPerPage
   const currentArticles = sortedArticles.slice(startIndex, startIndex + itemsPerPage)
-  const siteUrl = getSiteUrl()
-  const aboutUrl = getSiteUrl('sidebar/About.html')
-  const ogImageUrl = getSiteUrl('images/cover/og-image.png')
-
   return (
     <section className="content-area">
-      <Head>
-        <title>{SITE_TITLE}</title>
-        <meta name="description" content={SITE_DESCRIPTION} />
-        <link rel="canonical" href={siteUrl} />
-        <meta property="og:type" content="website" />
-        <meta property="og:title" content={SITE_TITLE} />
-        <meta property="og:description" content={SITE_DESCRIPTION} />
-        <meta property="og:url" content={siteUrl} />
-        <meta property="og:image" content={ogImageUrl} />
-        <meta property="og:image:alt" content="Tangent cybersecurity and data science blog preview image" />
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content={SITE_TITLE} />
-        <meta name="twitter:description" content={SITE_DESCRIPTION} />
-        <meta name="twitter:image" content={ogImageUrl} />
-        <script type="application/ld+json">
-          {JSON.stringify({
-            '@context': 'https://schema.org',
-            '@graph': [
-              {
-                '@type': 'WebSite',
-                '@id': siteUrl,
-                url: siteUrl,
-                name: 'Tangent',
-                description: 'A cybersecurity and data science blog with technical notes, project builds, experiments, reviews, and practical writeups, that form a functional project portfolio.',
-                inLanguage: 'en'
-              },
-              {
-                '@type': 'Person',
-                '@id': aboutUrl,
-                name: 'Connor',
-                url: aboutUrl,
-                sameAs: [
-                  'https://github.com/codingatmyjob',
-                  'https://www.credly.com/users/connor-rasmussen.58b75ec0/badges#credly',
-                  'https://app.hackthebox.com/profile/2578864'
-                ]
-              },
-              {
-                '@type': 'Blog',
-                name: 'Tangent',
-                description: 'A cybersecurity and data science blog with technical notes, project builds, experiments, reviews, and practical writeups, that form a functional project portfolio.',
-                inLanguage: 'en',
-                publisher: {
-                  '@id': aboutUrl
-                },
-                isPartOf: {
-                  '@id': siteUrl
-                }
-              }
-            ]
-          })}
-        </script>
-      </Head>
-
       <div id="articles-view">
         <div className="articles-controls">
           <div id="articles-controls-root">

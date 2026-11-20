@@ -1,15 +1,17 @@
 import React from 'react'
-import { Head } from 'vite-react-ssg'
 import { getSiteUrl } from '../siteUrls'
+
+export function meta() {
+  return [
+    { title: '404 | Tangent' },
+    { name: 'robots', content: 'noindex,follow' },
+    { tagName: 'link', rel: 'canonical', href: getSiteUrl() }
+  ]
+}
 
 export default function ErrorPage() {
   return (
     <div id="article-view">
-      <Head>
-        <title>404 | Tangent</title>
-        <meta name="robots" content="noindex,follow" />
-        <link rel="canonical" href={getSiteUrl()} />
-      </Head>
       <div className="article-frame">
         <main className="article-container not-found-container">
           <div className="not-found-code">404</div>

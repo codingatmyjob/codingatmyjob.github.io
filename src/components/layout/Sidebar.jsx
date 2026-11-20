@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Link } from 'react-router'
 
 export default function Sidebar({ isOpen, onClose }) {
-  const navigate = useNavigate()
   const [isSmall, setIsSmall] = useState(typeof window !== 'undefined' ? window.innerWidth < 1278 : false)
 
   // Check if window is small (<1278px)
@@ -11,19 +10,6 @@ export default function Sidebar({ isOpen, onClose }) {
     window.addEventListener('resize', check)
     return () => window.removeEventListener('resize', check)
   }, [])
-
-  const handleMenuClick = (action) => {
-    onClose()
-    if (action === 'home') {
-      navigate('/')
-    } else if (action === 'about') {
-      navigate('/sidebar/About')
-    } else if (action === 'status-hub') {
-      navigate('/sidebar/status-hub')
-    } else if (action === 'tag-guide') {
-      navigate('/sidebar/tag-guide')
-    }
-  }
 
   return (
     <>
@@ -38,7 +24,7 @@ export default function Sidebar({ isOpen, onClose }) {
         {isOpen && isSmall && (
           <div className="sidebar-header-title">
             <h2 className="title">
-              <a href="/" onClick={(e) => { e.preventDefault(); handleMenuClick('home') }} aria-label="Return Home">Tangent</a>
+              <Link to="/" onClick={onClose} aria-label="Return Home">Tangent</Link>
             </h2>
           </div>
         )}
@@ -54,30 +40,30 @@ export default function Sidebar({ isOpen, onClose }) {
               </svg>
             </button>
             <div className="sidebar-divider"></div>
-            <a href="/" className="sidebar-item" onClick={(e) => { e.preventDefault(); handleMenuClick('home'); }}>
+            <Link to="/" className="sidebar-item" onClick={onClose}>
               <svg className="sidebar-icon" viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true">
                 <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
               </svg>
               Home
-            </a>
-            <a href="/sidebar/About" className="sidebar-item" onClick={(e) => { e.preventDefault(); handleMenuClick('about'); }}>
+            </Link>
+            <Link to="/sidebar/About" className="sidebar-item" onClick={onClose}>
               <svg className="sidebar-icon" viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true">
                 <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
               </svg>
               About Me
-            </a>
-            <a href="/sidebar/status-hub" className="sidebar-item" onClick={(e) => { e.preventDefault(); handleMenuClick('status-hub'); }}>
+            </Link>
+            <Link to="/sidebar/status-hub" className="sidebar-item" onClick={onClose}>
               <svg className="sidebar-icon" viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true">
                 <path d="M4 13h6V4H4v9zm0 7h6v-5H4v5zm8 0h8v-9h-8v9zm0-16v5h8V4h-8z"/>
               </svg>
               Status Hub
-            </a>
-            <a href="/sidebar/tag-guide" className="sidebar-item" onClick={(e) => { e.preventDefault(); handleMenuClick('tag-guide'); }}>
+            </Link>
+            <Link to="/sidebar/tag-guide" className="sidebar-item" onClick={onClose}>
               <svg className="sidebar-icon" viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true">
                 <path d="M21.41 11.58l-9-9A2 2 0 0011 2H4a2 2 0 00-2 2v7a2 2 0 00.59 1.41l9 9a2 2 0 002.82 0l7-7a2 2 0 000-2.83zM6.5 8A1.5 1.5 0 118 6.5 1.5 1.5 0 016.5 8z"/>
               </svg>
               Tag Guide
-            </a>
+            </Link>
           </div>
           <div className="sidebar-bottom">
             <div className="sidebar-divider"></div>

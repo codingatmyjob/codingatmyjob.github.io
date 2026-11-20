@@ -1,28 +1,32 @@
 import React, { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
-
-function getInitialTheme() {
-  if (typeof window === 'undefined') return 'light'
-  const attr = document.documentElement.getAttribute('data-theme')
-  return attr === 'dark' ? 'dark' : 'light'
-}
+import { Link } from 'react-router'
 
 function ThemeToggle() {
-  const [theme, setTheme] = useState(getInitialTheme)
-  const [hasUserTheme, setHasUserTheme] = useState(() => {
-    if (typeof localStorage === 'undefined') return false
-    return localStorage.getItem('theme') !== null
-  })
+  const [theme, setTheme] = useState('light')
+  const [hasUserTheme, setHasUserTheme] = useState(false)
+  const [themeReady, setThemeReady] = useState(false)
 
   useEffect(() => {
+    const attr = document.documentElement.getAttribute('data-theme')
+    setTheme(attr === 'dark' ? 'dark' : 'light')
+    setHasUserTheme(localStorage.getItem('theme') !== null)
+    setThemeReady(true)
+  }, [])
+
+  useEffect(() => {
+    if (!themeReady) return
     const html = document.documentElement
     html.setAttribute('data-theme', theme)
-  }, [theme])
+  }, [theme, themeReady])
 
   useEffect(() => {
-    if (typeof window === 'undefined' || hasUserTheme) return
+    if (!themeReady || hasUserTheme) return
     const media = window.matchMedia('(prefers-color-scheme: dark)')
-    const applySystemTheme = () => setTheme(media.matches ? 'dark' : 'light')
+    const applySystemTheme = () => {
+      const next = media.matches ? 'dark' : 'light'
+      document.documentElement.setAttribute('data-theme', next)
+      setTheme(next)
+    }
     applySystemTheme()
 
     if (typeof media.addEventListener === 'function') {
@@ -32,15 +36,14 @@ function ThemeToggle() {
 
     media.addListener(applySystemTheme)
     return () => media.removeListener(applySystemTheme)
-  }, [hasUserTheme])
+  }, [hasUserTheme, themeReady])
 
   const toggleTheme = () => {
+    const next = theme === 'light' ? 'dark' : 'light'
+    localStorage.setItem('theme', next)
+    document.documentElement.setAttribute('data-theme', next)
     setHasUserTheme(true)
-    setTheme(prev => {
-      const next = prev === 'light' ? 'dark' : 'light'
-      if (typeof localStorage !== 'undefined') localStorage.setItem('theme', next)
-      return next
-    })
+    setTheme(next)
   }
 
   return (
@@ -68,8 +71,6 @@ function ThemeToggle() {
 }
 
 export default function Header({ menuOpen, onMenuToggle }){
-  const navigate = useNavigate()
-
   // Close menu when clicking outside
   useEffect(()=>{
     if(!menuOpen) return
@@ -96,7 +97,7 @@ export default function Header({ menuOpen, onMenuToggle }){
       </button>
 
       <h2 className="title">
-        <a href="/" onClick={(e) => { e.preventDefault(); navigate('/') }} aria-label="Return Home">Tangent</a>
+        <Link to="/" aria-label="Return Home">Tangent</Link>
       </h2>
 
       <div className="header-controls">

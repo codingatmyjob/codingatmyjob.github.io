@@ -941,13 +941,9 @@
       }
     }
 
-    if (loadProjectBtn) {
-      loadProjectBtn.addEventListener('click', initializeTrafficProject)
-    }
+    if (loadProjectBtn) loadProjectBtn.onclick = initializeTrafficProject
 
-    if (fullscreenBtnEl) {
-      fullscreenBtnEl.addEventListener('click', toggleStageFullscreen)
-    }
+    if (fullscreenBtnEl) fullscreenBtnEl.onclick = toggleStageFullscreen
 
     document.addEventListener('fullscreenchange', updateFullscreenButtonLabel)
     document.addEventListener('webkitfullscreenchange', updateFullscreenButtonLabel)

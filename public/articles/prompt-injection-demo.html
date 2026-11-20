@@ -953,14 +953,14 @@
       buildBinaryBg();
 
       if (themeToggle) {
-        themeToggle.addEventListener("click", function() {
+        themeToggle.onclick = function() {
           applyTheme(currentTheme === "dark" ? "light" : "dark");
-        });
+        };
       }
 
-      loadEnvBtn.addEventListener("click", initializeEnvironment);
-      sendBtn.addEventListener("click", sendCurrentMessage);
-      resetBtn.addEventListener("click", resetEnvironment);
+      loadEnvBtn.onclick = initializeEnvironment;
+      sendBtn.onclick = sendCurrentMessage;
+      resetBtn.onclick = resetEnvironment;
 
       if (temperatureSlider && temperatureValue) {
         const syncTemperatureLabel = () => {
@@ -970,14 +970,14 @@
           temperatureValue.textContent = value.toFixed(1);
         };
         syncTemperatureLabel();
-        temperatureSlider.addEventListener("input", syncTemperatureLabel);
+        temperatureSlider.oninput = syncTemperatureLabel;
       }
 
-      chatInput.addEventListener("keydown", function(event) {
+      chatInput.onkeydown = function(event) {
         if (event.key === "Enter") {
           sendCurrentMessage();
         }
-      });
+      };
     })();
   </script>
 </body>

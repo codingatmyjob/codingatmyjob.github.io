@@ -36,9 +36,9 @@ At runtime, `src/pages/ArticlePage.jsx` reads related-article output, and read-t
 
 ## Build and Deployment
 
-`npm run build` runs both generators first, then `vite-react-ssg build`, and outputs deployable static assets to `dist/`.
+`npm run build` runs both generators first, then prerenders the React Router routes into `dist/client/`.
 
-GitHub Actions publishes `dist/` to GitHub Pages:
+GitHub Actions publishes `dist/client/` to GitHub Pages:
 
 - Production: `https://codingatmyjob.github.io`
 - Preview: `https://codingatmyjob.github.io/preview/`
@@ -99,7 +99,7 @@ Publish with `gh-pages` CLI.
 I intentionally keep the stack close to static-web fundamentals:
 
 - React + React Router for structure and navigation
-- Vite + vite-react-ssg for fast static builds
+- Vite + React Router 7 for static builds and prerendering
 - Plain CSS for styling control
 - Prism.js for syntax highlighting
 

@@ -505,7 +505,10 @@ for level, threshold in enumerate(group["thresholds"], 1):
                         ageInput.value = age;
                     });
                     // This generated snapshot mirrors Tempozone's app/data/fitness_reference.json.
-                    fetch('/data/tempozone-fitness-reference.json')
+                    const appBasePath = window.location.pathname
+                        .replace(/\/+$/, '')
+                        .replace(/\/articles\/[^/]+$/, '');
+                    fetch(new URL(`${appBasePath}/data/tempozone-fitness-reference.json`, window.location.origin))
                         .then(response => {
                             if (!response.ok) throw new Error(`Reference request failed (${response.status}).`);
                             return response.json();
@@ -529,11 +532,11 @@ for level, threshold in enumerate(group["thresholds"], 1):
                 <li>The score serves as a reference point, not a measure of fitness or ability.</li>
             </ul>
 
-            <h2>Resources</h2>
+            <h2>References</h2>
             <ul>
-                <li><a href="https://www.itl.nist.gov/div898/handbook/prc/section2/prc262.htm" target="_blank" rel="noopener noreferrer">NIST/SEMATECH e-Handbook: Percentiles</a> for background on ranks, order statistics, and why different percentile conventions can produce different cutoffs.</li>
-                <li><a href="https://www.kaggle.com/datasets" target="_blank" rel="noopener noreferrer">Kaggle Datasets</a> is a useful catalog for finding large public datasets.</li>
-                <li><a href="https://github.com/AndrewMillerOnline/marathon-results" target="_blank" rel="noopener noreferrer">Marathon results dataset</a> on GitHub contains results gathered from across the web.</li>
+                <li><a class="article-link" href="https://www.itl.nist.gov/div898/handbook/prc/section2/prc262.htm" target="_blank" rel="noopener">NIST/SEMATECH e-Handbook: Percentiles</a></li>
+                <li><a class="article-link" href="https://www.kaggle.com/datasets" target="_blank" rel="noopener">Kaggle Datasets</a></li>
+                <li><a class="article-link" href="https://github.com/AndrewMillerOnline/marathon-results" target="_blank" rel="noopener">Marathon results dataset</a></li>
             </ul>
         </article>
     </main>

@@ -1,7 +1,9 @@
-import React, { useEffect, useMemo, useRef } from 'react'
-import { useLoaderData, useParams } from 'react-router-dom'
-import { Head } from 'vite-react-ssg'
+import React, { useEffect, useRef } from 'react'
+import { useLoaderData } from 'react-router'
+import { createPageMeta } from '../routeMeta'
 import { getSiteUrl } from '../siteUrls'
+
+export { sidebarLoader as loader } from '../loaders/staticPages.js'
 
 const SIDEBAR_META = {
   About: {
@@ -19,6 +21,31 @@ const SIDEBAR_META = {
     description: 'Kibana-style status hub for Tangent project workstreams, backlog flow, and delivery metrics.',
     type: 'website'
   }
+}
+
+function getSidebarMeta(page) {
+  const fallbackTitle = page
+    ? page
+        .replace(/[-_]/g, ' ')
+        .replace(/\b\w/g, (char) => char.toUpperCase())
+    : 'Sidebar'
+  return SIDEBAR_META[page] || {
+    title: fallbackTitle,
+    description: `${fallbackTitle} on Tangent.`,
+    type: 'website'
+  }
+}
+
+export function meta({ params }) {
+  const pageMeta = getSidebarMeta(params.page || '')
+
+  return createPageMeta({
+    title: `${pageMeta.title} | Tangent`,
+    description: pageMeta.description,
+    canonical: getSiteUrl(`sidebar/${params.page || ''}.html`),
+    image: getSiteUrl('images/cover/og-image.png'),
+    type: pageMeta.type
+  })
 }
 
 function extractMainHtml(rawHtml) {
@@ -587,26 +614,11 @@ export default function SidebarPage() {
   const loaderData = useLoaderData() || {}
   const rawHtml = typeof loaderData.rawHtml === 'string' ? loaderData.rawHtml : ''
   const ref = useRef(null)
-  const { page = '' } = useParams()
 
   const rawMain = rawHtml ? extractMainHtml(rawHtml) : ''
   const isStatusHub = /status-hub/.test(rawMain)
   const mainHtml = rawMain
   const headStyles = rawHtml ? extractHeadStyles(rawHtml) : []
-  const pageMeta = useMemo(() => {
-    const fallbackTitle = page
-      ? page
-          .replace(/[-_]/g, ' ')
-          .replace(/\b\w/g, (char) => char.toUpperCase())
-      : 'Sidebar'
-    return SIDEBAR_META[page] || {
-      title: fallbackTitle,
-      description: `${fallbackTitle} on Tangent.`,
-      type: 'website'
-    }
-  }, [page])
-  const canonicalUrl = getSiteUrl(`sidebar/${page}.html`)
-  const ogImageUrl = getSiteUrl('images/cover/og-image.png')
 
   useEffect(() => {
     const statusHubNode = isStatusHub ? ref.current?.querySelector('.status-hub') : null
@@ -633,20 +645,6 @@ export default function SidebarPage() {
 
   return (
     <div id="article-view">
-      <Head>
-        <title>{`${pageMeta.title} | Tangent`}</title>
-        <meta name="description" content={pageMeta.description} />
-        <link rel="canonical" href={canonicalUrl} />
-        <meta property="og:type" content={pageMeta.type} />
-        <meta property="og:title" content={`${pageMeta.title} | Tangent`} />
-        <meta property="og:description" content={pageMeta.description} />
-        <meta property="og:url" content={canonicalUrl} />
-        <meta property="og:image" content={ogImageUrl} />
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content={`${pageMeta.title} | Tangent`} />
-        <meta name="twitter:description" content={pageMeta.description} />
-        <meta name="twitter:image" content={ogImageUrl} />
-      </Head>
       <div className="article-frame" ref={ref}>
         {headStyles.map((css, i) => (
           <style key={i} dangerouslySetInnerHTML={{ __html: css }} />

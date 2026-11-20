@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react'
-import { useLoaderData, useNavigate, useParams } from 'react-router-dom'
-import { Head } from 'vite-react-ssg'
+import { useLoaderData, useNavigate, useParams } from 'react-router'
+import { createPageMeta } from '../routeMeta'
 import { articlesData } from '../data/articles'
 import { RelatedArticlesCarousel } from '../components/articles/RelatedArticlesCarousel'
 import { getSiteUrl } from '../siteUrls'
@@ -18,6 +18,8 @@ import 'prismjs/components/prism-powershell'
 import 'prismjs/components/prism-python'
 import 'prismjs/components/prism-sql'
 import 'prismjs/components/prism-yaml'
+
+export { articleLoader as loader } from '../loaders/staticPages.js'
 
 const LANGUAGE_ALIASES = {
   html: 'markup',
@@ -157,34 +159,51 @@ function extractInlineScripts(rawHtml) {
   })).filter(({ code }) => code.trim())
 }
 
+function getArticleMeta(slug) {
+  const article = articlesData.find((item) => item.id === slug || item.path === `articles/${slug}` || item.path === `articles/${slug}.html`)
+  const fallbackTitle = slug
+    ? slug
+        .replace(/[-_]/g, ' ')
+        .replace(/\b\w/g, (char) => char.toUpperCase())
+    : 'Article'
+  return {
+    title: article?.title || fallbackTitle,
+    description: article?.description || 'Technical notes, project builds, experiments, reviews, and practical writeups from Tangent.',
+    canonical: getSiteUrl(`articles/${slug}.html`),
+    image: article?.imageSrc ? getSiteUrl(article.imageSrc) : getSiteUrl('images/cover/og-image.png')
+  }
+}
+
+export function meta({ params }) {
+  const articleMeta = getArticleMeta(params.slug || '')
+  const title = `${articleMeta.title} | Tangent`
+
+  return createPageMeta({
+    title,
+    description: articleMeta.description,
+    canonical: articleMeta.canonical,
+    image: articleMeta.image,
+    type: 'article'
+  })
+}
+
 export default function ArticlePage() {
   const { rawHtml } = useLoaderData()
   const navigate = useNavigate()
   const { slug = '' } = useParams()
   const ref = useRef(null)
+  const trafficReloadTimer = useRef(null)
   const [relatedSlugs, setRelatedSlugs] = useState(/** @type {{slug:string,score:number,maxScore:number}[]} */ ([]))
 
-  const articleMeta = useMemo(() => {
-    const article = articlesData.find((item) => item.id === slug || item.path === `articles/${slug}` || item.path === `articles/${slug}.html`)
-    const fallbackTitle = slug
-      ? slug
-          .replace(/[-_]/g, ' ')
-          .replace(/\b\w/g, (char) => char.toUpperCase())
-      : 'Article'
-    return {
-      title: article?.title || fallbackTitle,
-      description: article?.description || 'Technical notes, project builds, experiments, reviews, and practical writeups from Tangent.',
-      canonical: getSiteUrl(`articles/${slug}.html`),
-      image: article?.imageSrc ? getSiteUrl(article.imageSrc) : getSiteUrl('images/cover/og-image.png')
-    }
-  }, [slug])
+  const articleMeta = useMemo(() => getArticleMeta(slug), [slug])
 
   const SHARE_ICON_SVG = `<svg class="article-share-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>`
 
   const rawMain = rawHtml ? extractMainHtml(rawHtml) : ''
+  const homePath = import.meta.env.BASE_URL || '/'
   const mainHtml = rawMain.replace(
     /(<main[^>]*>)/i,
-    `$1<div class="article-home-nav"><a class="article-home-btn" href="/" aria-label="Return home"><span class="article-home-btn-icon" aria-hidden="true">&larr;</span><span>Return Home</span></a><button type="button" class="article-share-btn" aria-label="Share article">${SHARE_ICON_SVG}<span class="article-share-btn-text">Share</span></button></div>`
+    `$1<div class="article-home-nav"><a class="article-home-btn" href="${homePath}" aria-label="Return home"><span class="article-home-btn-icon" aria-hidden="true">&larr;</span><span>Return Home</span></a><button type="button" class="article-share-btn" aria-label="Share article">${SHARE_ICON_SVG}<span class="article-share-btn-text">Share</span></button></div>`
   )
   const headStyles = rawHtml ? extractHeadStyles(rawHtml) : []
 
@@ -291,11 +310,18 @@ export default function ArticlePage() {
   // weights don't stay resident in memory for the rest of the session.
   useEffect(() => {
     if (slug !== 'traffic-live-object-detection') return
+    if (trafficReloadTimer.current !== null) {
+      window.clearTimeout(trafficReloadTimer.current)
+      trafficReloadTimer.current = null
+    }
     console.log('[TF article] mounted — TensorFlow.js/COCO-SSD will initialize')
     return () => {
       // Reload whatever page the router already navigated to, instead of forcing the user back to home.
       console.log('[TF article] unmounted — forcing hard reload to clear WASM workers and model weights')
-      window.location.assign(window.location.href)
+      trafficReloadTimer.current = window.setTimeout(() => {
+        window.location.assign(window.location.href)
+        trafficReloadTimer.current = null
+      }, 0)
     }
   }, [slug])
 
@@ -336,20 +362,6 @@ export default function ArticlePage() {
 
   return (
     <div id="article-view">
-      <Head>
-        <title>{`${articleMeta.title} | Tangent`}</title>
-        <meta name="description" content={articleMeta.description} />
-        <link rel="canonical" href={articleMeta.canonical} />
-        <meta property="og:type" content="article" />
-        <meta property="og:title" content={`${articleMeta.title} | Tangent`} />
-        <meta property="og:description" content={articleMeta.description} />
-        <meta property="og:url" content={articleMeta.canonical} />
-        <meta property="og:image" content={articleMeta.image} />
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content={`${articleMeta.title} | Tangent`} />
-        <meta name="twitter:description" content={articleMeta.description} />
-        <meta name="twitter:image" content={articleMeta.image} />
-      </Head>
       <div className="article-frame" ref={ref}>
         {headStyles.map((css, i) => (
           <style key={i} dangerouslySetInnerHTML={{ __html: css }} />
