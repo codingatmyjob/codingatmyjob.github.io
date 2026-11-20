@@ -1,0 +1,113 @@
+---
+import { readFileSync } from 'node:fs'
+import { resolve } from 'node:path'
+import ArticleCard from '../../components/ArticleCard.astro'
+import SiteLayout from '../../layouts/SiteLayout.astro'
+import { articlesData } from '../../data/articles.js'
+import { getSiteUrl } from '../../siteUrls.js'
+import {
+  addBaseToRootPaths,
+  extractBodyScripts,
+  extractHeadStyles,
+  extractJsonLd,
+  extractMainHtml,
+  getHtmlPages,
+  readHtmlPage,
+  removeScripts
+} from '../../lib/staticContent.js'
+
+const articlesDirectory = resolve('public/articles')
+const relatedData = JSON.parse(readFileSync(resolve('public/data/related-articles.json'), 'utf8'))
+const basePath = import.meta.env.BASE_URL || '/'
+
+export function getStaticPaths() {
+  return getHtmlPages(resolve('public/articles')).map((slug) => ({ params: { slug } }))
+}
+
+const { slug = '' } = Astro.params
+const rawHtml = readHtmlPage(articlesDirectory, slug)
+const article = articlesData.find((item) => item.id === slug || item.path === `articles/${slug}`)
+const fallbackTitle = slug.replace(/[-_]/g, ' ').replace(/\b\w/g, (letter) => letter.toUpperCase())
+const title = article?.title || fallbackTitle || 'Article'
+const description = article?.description || 'Technical notes, project builds, experiments, reviews, and practical writeups from Tangent.'
+const canonical = getSiteUrl(`articles/${slug}/`)
+const image = article?.imageSrc
+  ? new URL(article.imageSrc.replace(/^\/+/, ''), getSiteUrl()).href
+  : getSiteUrl('images/cover/og-image.png')
+const rawMain = extractMainHtml(rawHtml)
+const shareNav = `<div class="article-home-nav"><a class="article-home-btn" href="${basePath}" aria-label="Return home"><span class="article-home-btn-icon" aria-hidden="true">&larr;</span><span>Return Home</span></a><button type="button" class="article-share-btn" aria-label="Share article" data-share-title="${title.replace(/"/g, '&quot;')}" data-share-description="${description.replace(/"/g, '&quot;')}" data-share-url="${canonical}"><svg class="article-share-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg><span class="article-share-btn-text">Share</span></button></div>`
+const withNav = rawMain.replace(/<main\b[^>]*>/i, (openingTag) => `${openingTag}${shareNav}`)
+const mainHtml = addBaseToRootPaths(removeScripts(withNav), basePath)
+const scriptsHtml = extractBodyScripts(rawHtml).map((script) => addBaseToRootPaths(script, basePath)).join('\n')
+const headStyles = extractHeadStyles(rawHtml)
+const jsonLd = extractJsonLd(rawHtml)
+const relatedItems = (relatedData.items?.[slug]?.related || [])
+  .filter((entry) => entry.slug && entry.slug !== slug)
+  .map((entry) => {
+    const item = articlesData.find((candidate) => candidate.path.replace(/^articles\//, '') === entry.slug)
+    return item ? { ...item, matchScore: entry.score || 0 } : null
+  })
+  .filter(Boolean)
+  .slice(0, 8)
+const scoreToPercent = (score) => Math.min(99, Math.max(0, Math.round(100 * (1 - Math.exp(-score / 0.35)))))
+const imageStyle = (style) => Object.entries(style || {})
+  .map(([key, value]) => `${key.replace(/[A-Z]/g, (letter) => `-${letter.toLowerCase()}`)}:${value}`)
+  .join(';')
+---
+
+<SiteLayout
+  title={`${title} | Tangent`}
+  description={description}
+  canonical={canonical}
+  image={image}
+  type="article"
+  bodyClass="article-open"
+>
+  {headStyles.map((css) => <style is:inline set:html={css}></style>)}
+  {jsonLd.map((json) => <script slot="head" type="application/ld+json" set:html={json}></script>)}
+  <div id="article-view">
+    <div class="article-frame">
+      <div set:html={mainHtml}></div>
+      {relatedItems.length > 0 && (
+        <section class={`related-carousel count-${Math.min(relatedItems.length, 9)}`} aria-labelledby="related-carousel-title">
+          <div class="related-carousel-header">
+            <h2 id="related-carousel-title">Related Articles</h2>
+          </div>
+          <button type="button" class="related-carousel-arrow related-carousel-arrow-left" aria-label="Scroll related articles left" hidden>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"></polyline></svg>
+          </button>
+          <button type="button" class="related-carousel-arrow related-carousel-arrow-right" aria-label="Scroll related articles right" hidden>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>
+          </button>
+          <div class="related-carousel-track">
+            {relatedItems.map((item) => {
+              const href = `${basePath}articles/${item.path.replace(/^articles\//, '')}/`
+              const imageSrc = item.imageSrc
+                ? item.imageSrc.startsWith('/') || item.imageSrc.startsWith('http') ? item.imageSrc : `${basePath}${item.imageSrc}`
+                : ''
+              return (
+                <a class="related-carousel-card" href={href}>
+                  <div class="related-carousel-image-shell">
+                    {imageSrc
+                      ? <img class:list={['related-carousel-image', item.imageClassName]} src={imageSrc} alt={item.imageAlt || item.title || 'Related article image'} style={imageStyle(item.imageStyle)} loading="lazy" decoding="async" />
+                      : <span class="related-carousel-fallback">{item.imageLabel || item.title}</span>}
+                  </div>
+                  <div class="related-carousel-content">
+                    <div class="related-carousel-meta"><p class="related-carousel-date">{item.date}</p></div>
+                    <h3 class="related-carousel-title">{item.title}</h3>
+                    <p class="related-carousel-description">{item.description}</p>
+                    {item.matchScore > 0 && <span class="related-carousel-match-pill">{scoreToPercent(item.matchScore)}% match</span>}
+                  </div>
+                </a>
+              )
+            })}
+          </div>
+        </section>
+      )}
+      <div class="article-runtime-scripts" set:html={scriptsHtml}></div>
+    </div>
+  </div>
+  <script>
+    import '../../scripts/article.js'
+  </script>
+</SiteLayout>

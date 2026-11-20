@@ -15,15 +15,15 @@ Live site: https://codingatmyjob.github.io/
 
 ## How The Site Is Served
 
-Short version: static content files + React app shell + build-time metadata generation.
+Short version: Astro-generated static pages + build-time metadata generation.
 
-- Routes are defined in `src/routes.jsx` (`/`, `/articles/:slug`, `/sidebar/:page`).
+- Routes are defined by Astro files in `src/pages` (`/`, `/articles/:slug/`, `/sidebar/:page/`).
 - Article files are plain HTML in `public/articles/*.html`.
 - Sidebar pages are plain HTML in `public/sidebar/*.html`.
-- During static generation, loaders read those files from disk.
-- In browser runtime, loaders fetch `articles/<slug>.html` or `sidebar/<page>.html`.
+- Astro reads those files at build time and emits a static page for each one.
+- Browser interactions are small progressive-enhancement scripts; the site shell does not hydrate as one React application.
 
-I keep content authoring simple (HTML files), while React handles navigation, metadata, and UI behavior.
+I keep content authoring simple (HTML files), while Astro handles page generation and metadata.
 
 ## Build-Time Data Products
 
@@ -32,11 +32,11 @@ I generate two JSON artifacts at build time and ship both with the site:
 - `scripts/generate-related-articles.cjs` -> `public/data/related-articles.json`
 - `scripts/generate-read-times.cjs` -> `public/data/read-times.json`
 
-At runtime, `src/pages/ArticlePage.jsx` reads related-article output, and read-time data is merged into article metadata for cards and article UI.
+Astro reads the related-article data when rendering article pages, and read-time data is merged into article metadata for cards.
 
 ## Build and Deployment
 
-`npm run build` runs both generators first, then prerenders the React Router routes into `dist/client/`.
+`npm run build` runs both generators first, then builds the Astro site into `dist/client/`.
 
 GitHub Actions publishes `dist/client/` to GitHub Pages:
 
@@ -98,9 +98,9 @@ Publish with `gh-pages` CLI.
 
 I intentionally keep the stack close to static-web fundamentals:
 
-- React + React Router for structure and navigation
-- Vite + React Router 7 for static builds and prerendering
+- Astro + Vite for static builds and routing
 - Plain CSS for styling control
 - Prism.js for syntax highlighting
+- Small browser scripts for interactive features
 
 No always-on backend needed. Build-time generation + static hosting handles the core experience.

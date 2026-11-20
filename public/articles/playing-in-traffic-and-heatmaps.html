@@ -13,10 +13,29 @@
   box-shadow:0 4px 20px rgba(0,0,0,0.4);
 }
 .timeline-screen{
-  width:100%;overflow:hidden;
+  position:relative;width:100%;overflow:hidden;
 }
-.timeline-screen img{
+.article-container article .timeline-screen img{
   width:100%;height:auto;display:none;vertical-align:top;
+  opacity:0;transition:opacity .3s ease;
+}
+.article-container article .timeline-screen img.is-preloading,
+.article-container article .timeline-screen img.is-active,
+.article-container article .timeline-screen img.is-fading-out{
+  display:block;
+}
+.article-container article .timeline-screen img.is-preloading,
+.article-container article .timeline-screen img.is-fading-out{
+  position:absolute;inset:0;pointer-events:none;
+}
+.article-container article .timeline-screen img.is-active{
+  position:relative;z-index:2;opacity:1;
+}
+.article-container article .timeline-screen img.is-fading-out{
+  z-index:1;opacity:0;
+}
+@media (prefers-reduced-motion:reduce){
+  .article-container article .timeline-screen img{transition:none;}
 }
 
 .timeline-controls-bar{
@@ -57,13 +76,12 @@
 .timeline-range::-webkit-slider-thumb{
   -webkit-appearance:none;appearance:none;
   width:18px;height:18px;border-radius:50%;border:none;
-  background:var(--accent);box-shadow:0 0 6px rgba(0,255,65,0.6);
-  cursor:pointer;transition:transform .1s;
+  background:var(--accent);cursor:pointer;transition:transform .1s;
 }
 .timeline-range::-webkit-slider-thumb:hover{transform:scale(1.2);}
 .timeline-range::-moz-range-thumb{
   width:18px;height:18px;border-radius:50%;border:none;
-  background:var(--accent);box-shadow:0 0 6px rgba(0,255,65,0.6);cursor:pointer;
+  background:var(--accent);cursor:pointer;
 }
 .article-container article img {
   margin: 0px !important; border-radius: 0px !important; box-shadow: none !important; border: none !important;
@@ -455,29 +473,64 @@ ul.api-list {
     const range   = document.getElementById('tl-range');
     const playBtn = document.getElementById('tl-play');
 
-    // Build images (preload all)
+    // Build lazy-loaded frame images.
     const imgs = [];
     for (let h = 0; h < HOURS; h++) {
       const img = document.createElement('img');
-      img.src = `../images/screenshots/hour-${String(h).padStart(2,'0')}.png`;
+      img.src = `../../images/screenshots/hour-${String(h).padStart(2,'0')}.png`;
       img.alt = `Traffic map at ${String(h).padStart(2,'0')}:00`;
-      img.loading = 'eager';
-      img.style.display = 'none';
+      img.loading = 'lazy';
+      img.decoding = 'async';
+      img.setAttribute('aria-hidden', 'true');
       screen.appendChild(img);
       imgs.push(img);
     }
 
     let currentHour = 0;
+    let activeImage = null;
+    let renderRequest = 0;
     let playing = false;
     let playTimer = null;
 
-    function setHour(h) {
+    async function setHour(h) {
       h = ((h % HOURS) + HOURS) % HOURS;
-      imgs[currentHour].style.display = 'none';
       currentHour = h;
-      imgs[currentHour].style.display = 'block';
       range.value = h;
       range.style.setProperty('--fill', `${(h / (HOURS - 1)) * 100}%`);
+
+      const request = ++renderRequest;
+      const nextImage = imgs[h];
+      if (nextImage === activeImage) return;
+
+      nextImage.classList.remove('is-fading-out');
+      nextImage.classList.add('is-preloading');
+      void nextImage.offsetWidth;
+      try {
+        await nextImage.decode();
+      } catch (error) {
+        nextImage.classList.remove('is-preloading');
+        if (request === renderRequest) {
+          console.error(`Unable to decode traffic map frame ${h}`, error);
+        }
+        return;
+      }
+
+      if (request !== renderRequest) {
+        nextImage.classList.remove('is-preloading');
+        return;
+      }
+
+      const previousImage = activeImage;
+      nextImage.classList.remove('is-preloading');
+      nextImage.classList.add('is-active');
+      nextImage.removeAttribute('aria-hidden');
+      if (previousImage) {
+        previousImage.classList.remove('is-active');
+        previousImage.classList.add('is-fading-out');
+        previousImage.setAttribute('aria-hidden', 'true');
+        window.setTimeout(() => previousImage.classList.remove('is-fading-out'), 300);
+      }
+      activeImage = nextImage;
     }
 
     // Initial state

@@ -10,15 +10,10 @@ module.exports = [
   },
   js.configs.recommended,
   {
-    files: ['src/**/*.{js,jsx}'],
+    files: ['src/**/*.js'],
     languageOptions: {
       ecmaVersion: 'latest',
       sourceType: 'module',
-      parserOptions: {
-        ecmaFeatures: {
-          jsx: true,
-        },
-      },
       globals: {
         ...globals.browser,
         ...globals.es2024,
@@ -26,7 +21,7 @@ module.exports = [
     },
   },
   {
-    files: ['*.js', 'scripts/**/*.{js,mjs}'],
+    files: ['*.{js,mjs}', 'scripts/**/*.{js,mjs}'],
     languageOptions: {
       sourceType: 'module',
       globals: {

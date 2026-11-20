@@ -1,0 +1,19 @@
+---
+import SiteLayout from '../layouts/SiteLayout.astro'
+import { getSiteUrl } from '../siteUrls.js'
+---
+
+<SiteLayout
+  title="Page not found | Tangent"
+  description="The page you're looking for could not be found."
+  canonical={getSiteUrl('404.html')}
+  bodyClass="article-open"
+>
+  <div id="article-view">
+    <main class="article-container not-found-container">
+      <div class="not-found-code">404</div>
+      <h1>Page not found</h1>
+      <a class="article-home-btn" href={import.meta.env.BASE_URL || '/'}>Return Home</a>
+    </main>
+  </div>
+</SiteLayout>

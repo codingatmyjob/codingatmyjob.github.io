@@ -1,0 +1,64 @@
+---
+import { Image } from 'astro:assets'
+import discordSpotify from '../assets/covers/discord-spotify-activity-tracker.png'
+import hfLogo from '../assets/covers/hf-logo.svg'
+import hero from '../assets/covers/hero.png'
+import netPlus from '../assets/covers/netplus.png'
+import oci from '../assets/covers/OCI25FNDCFA.png'
+import pokeStock from '../assets/covers/pokestock.png'
+import secPlus from '../assets/covers/secplus.png'
+import virtualBox from '../assets/covers/VirtualBox_logo.png'
+
+const optimizedCovers = {
+  'images/cover/discord-spotify-activity-tracker.png': discordSpotify,
+  'images/cover/hf-logo.svg': hfLogo,
+  'images/cover/hero.png': hero,
+  'images/cover/netplus.png': netPlus,
+  'images/cover/OCI25FNDCFA.png': oci,
+  'images/cover/pokestock.png': pokeStock,
+  'images/cover/secplus.png': secPlus,
+  'images/cover/VirtualBox_logo.png': virtualBox
+}
+
+const { item, basePath = '/', className, priority = false, sizes } = Astro.props
+const cover = optimizedCovers[item.imageSrc]
+const imageStyle = item.imageStyle
+  ? Object.entries(item.imageStyle).map(([key, value]) => `${key.replace(/[A-Z]/g, (letter) => `-${letter.toLowerCase()}`)}:${value}`).join(';')
+  : ''
+const imageSrc = item.imageSrc
+  ? item.imageSrc.startsWith('http')
+    ? item.imageSrc
+    : item.imageSrc.startsWith('/')
+      ? `${basePath}${item.imageSrc.replace(/^\/+/, '')}`
+      : `${basePath}${item.imageSrc}`
+  : ''
+const loading = item.imageLoading || 'eager'
+const widths = cover?.format === 'svg'
+  ? undefined
+  : [...new Set([320, 640, cover?.width].filter((width) => width && width <= cover.width))].sort((a, b) => a - b)
+---
+
+{cover ? (
+  <Image
+    src={cover}
+    alt={item.imageAlt || item.title || 'Article image'}
+    class:list={[className, item.imageClassName]}
+    style={imageStyle}
+    loading={loading}
+    fetchpriority={priority && loading !== 'lazy' ? 'high' : undefined}
+    decoding="async"
+    format={cover.format === 'svg' ? 'svg' : 'webp'}
+    widths={widths}
+    sizes={sizes}
+  />
+) : (
+  <img
+    class:list={[className, item.imageClassName]}
+    src={imageSrc}
+    alt={item.imageAlt || item.title || 'Article image'}
+    style={imageStyle}
+    loading={loading}
+    fetchpriority={priority && loading !== 'lazy' ? 'high' : undefined}
+    decoding="async"
+  />
+)}

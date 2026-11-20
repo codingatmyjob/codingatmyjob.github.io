@@ -11,16 +11,13 @@
 
     <main class="article-container">
         <style>
-            .demo-section {
+            .typeahead-demo-panel {
                 margin: 1.5rem 0;
                 padding: 1.5rem 1.5rem;
-                background: rgba(128,128,128,0.12);
-                border-radius: 4px;
-                color: rgba(255,255,255,0.85);
-            }
-            [data-theme="light"] .demo-section {
-                background: rgba(0,0,0,0.13);
-                color: #222;
+                background: var(--demo-panel-bg, rgba(0, 0, 0, 0.05));
+                border: 1px solid var(--border, #8a95a4);
+                border-radius: 10px;
+                color: var(--demo-text);
             }
             .typeahead-container {
                 position: relative;
@@ -136,29 +133,27 @@
             }
             .employee-table-wrap {
                 /* margin-top: 0.75rem; */
-                border: 1px solid #000;
-                border-radius: 3px;
-            }
-            [data-theme="light"] .employee-table-wrap {
-                border-color: #999;
-                background: #f0f0f0;
+                border: 0;
+                border-radius: 0;
+                background: var(--demo-panel-bg);
             }
             [data-theme="light"] .employee-table thead tr { background: #ddd; }
             [data-theme="light"] .employee-table tbody tr:nth-child(even) { background: #e6e6e6; }
             .employee-table {
                 width: 100%;
+                border: 0;
                 border-collapse: collapse;
                 font-size: 0.85rem;
             }
             .employee-table th,
             .employee-table td {
                 padding: 5px 10px;
-                border: 1px solid #555;
+                border: 1px solid var(--demo-control-border);
                 text-align: left;
                 color: rgba(255,255,255,0.85);
             }
             [data-theme="light"] .employee-table th,
-            [data-theme="light"] .employee-table td { color: #222; border-color: #999; }
+            [data-theme="light"] .employee-table td { color: #222; border-color: var(--demo-control-border); }
             .employee-table thead tr { background: #111; position: sticky; top: 0; z-index: 1; }
             [data-theme="light"] .employee-table thead tr { background: #ccc; }
             .employee-table th { color: var(--text-primary); }
@@ -198,7 +193,7 @@
                 into the dropdown in real time while the result count and the employee table both update to reflect the current matches.
                 Additionally, there is a checkbox to simulate debounce, which delays the input processing to save resources.</p>
 
-            <div class="demo-section">
+            <div class="demo-section typeahead-demo-panel">
                 <div class="typeahead-controls">
                     <div class="typeahead-wrapper">
                         <div class="typeahead-container">
@@ -222,7 +217,7 @@
             <h2>Employee Directory</h2>
             <p>Below is the full directory (a JavaScript array rendered as a table) the typeahead searches through. Matched rows are 
                 highlighted with a thick border as the user types, visually demonstrating how the dropdown results correspond to the underlying dataset, and how the search algorithm works.</p>
-            <div class="demo-section">
+            <div class="demo-section typeahead-demo-panel">
                 <div class="employee-table-wrap">
                     <table class="employee-table">
                         <thead>

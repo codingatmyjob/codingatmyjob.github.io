@@ -1,0 +1,41 @@
+---
+const { item, basePath = '/', priority = false } = Astro.props
+const href = `${basePath}articles/${item.path.replace(/^articles\//, '').replace(/\.html$/, '')}/`
+const imageSrc = item.imageSrc
+  ? item.imageSrc.startsWith('http')
+    ? item.imageSrc
+    : item.imageSrc.startsWith('/')
+      ? `${basePath}${item.imageSrc.replace(/^\/+/, '')}`
+    : `${basePath}${item.imageSrc}`
+  : ''
+const imageStyle = item.imageStyle
+  ? Object.entries(item.imageStyle).map(([key, value]) => `${key.replace(/[A-Z]/g, (letter) => `-${letter.toLowerCase()}`)}:${value}`).join(';')
+  : ''
+---
+
+<a class="article-card" href={href} data-path={item.path}>
+  <div class="article-image">
+    {imageSrc ? (
+      <img
+        class:list={['article-card-image', item.imageClassName]}
+        src={imageSrc}
+        alt={item.imageAlt || item.title || 'Article image'}
+        style={imageStyle}
+        loading="eager"
+        fetchpriority={priority ? 'high' : undefined}
+        decoding="async"
+      />
+    ) : (
+      item.imageLabel || item.title
+    )}
+  </div>
+  <div class="article-content">
+    <div class="article-date">{item.date}</div>
+    {item.readingTime && <div class="reading-time">{item.readingTime} read</div>}
+    <div class="article-title">{item.title}</div>
+    <div class="article-description">{item.description}</div>
+    <div class="article-tags">
+      {item.tags.map((tag) => <span class="tag">{tag}</span>)}
+    </div>
+  </div>
+</a>

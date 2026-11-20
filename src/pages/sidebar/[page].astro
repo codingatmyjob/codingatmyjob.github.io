@@ -1,0 +1,73 @@
+---
+import { resolve } from 'node:path'
+import SiteLayout from '../../layouts/SiteLayout.astro'
+import { getSiteUrl } from '../../siteUrls.js'
+import {
+  addBaseToRootPaths,
+  extractBodyScripts,
+  extractHeadStyles,
+  extractJsonLd,
+  extractMainHtml,
+  getHtmlPages,
+  readHtmlPage,
+  removeScripts
+} from '../../lib/staticContent.js'
+
+const sidebarDirectory = resolve('public/sidebar')
+const basePath = import.meta.env.BASE_URL || '/'
+const metaByPage = {
+  About: {
+    title: 'About Me',
+    description: 'About Connor, a networking and security practitioner who also works in data analytics, and the creator of the Tangent technical blog.',
+    type: 'profile'
+  },
+  'tag-guide': {
+    title: 'Tag Guide',
+    description: 'How tags work on Tangent and what each tag means.',
+    type: 'article'
+  },
+  'status-hub': {
+    title: 'Status Hub',
+    description: 'Kibana-style status hub for Tangent project workstreams, backlog flow, and delivery metrics.',
+    type: 'website'
+  }
+}
+
+export function getStaticPaths() {
+  return getHtmlPages(resolve('public/sidebar')).map((page) => ({ params: { page } }))
+}
+
+const { page = '' } = Astro.params
+const rawHtml = readHtmlPage(sidebarDirectory, page)
+const pageMeta = metaByPage[page] || {
+  title: page.replace(/[-_]/g, ' ').replace(/\b\w/g, (letter) => letter.toUpperCase()),
+  description: `${page} on Tangent.`,
+  type: 'website'
+}
+const canonical = getSiteUrl(`sidebar/${page}/`)
+const rawMain = extractMainHtml(rawHtml)
+const mainHtml = addBaseToRootPaths(removeScripts(rawMain), basePath)
+const scriptsHtml = extractBodyScripts(rawHtml).map((script) => addBaseToRootPaths(script, basePath)).join('\n')
+const headStyles = extractHeadStyles(rawHtml)
+const jsonLd = extractJsonLd(rawHtml)
+---
+
+<SiteLayout
+  title={`${pageMeta.title} | Tangent`}
+  description={pageMeta.description}
+  canonical={canonical}
+  type={pageMeta.type}
+  bodyClass="article-open"
+>
+  {headStyles.map((css) => <style is:inline set:html={css}></style>)}
+  {jsonLd.map((json) => <script slot="head" type="application/ld+json" set:html={json}></script>)}
+  <div id="article-view">
+    <div class="article-frame">
+      <div set:html={mainHtml}></div>
+      <div class="article-runtime-scripts" set:html={scriptsHtml}></div>
+    </div>
+  </div>
+  <script>
+    import '../../scripts/sidebar.js'
+  </script>
+</SiteLayout>

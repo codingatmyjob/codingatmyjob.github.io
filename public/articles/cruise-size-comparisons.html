@@ -9,14 +9,10 @@
         .demo-section {
             margin: 1.5rem 0;
             padding: 1.5rem;
-            background: rgba(128,128,128,0.12);
-            border-radius: 4px;
-            color: rgba(255,255,255,0.85);
-        }
-
-        [data-theme="light"] .demo-section {
-            background: rgba(0,0,0,0.13);
-            color: #222;
+            background: var(--demo-panel-bg);
+            border: 1px solid var(--border, #8a95a4);
+            border-radius: var(--demo-panel-radius);
+            color: var(--demo-text);
         }
 
         .cruise-controls {
@@ -37,7 +33,7 @@
             width: 100%;
             padding: 9px 13px;
             font-size: 0.95rem;
-            border: 1px solid #555;
+            border: 1px solid var(--demo-panel-border);
             border-radius: 3px;
             background: #111;
             color: rgba(255,255,255,0.85);
@@ -49,7 +45,6 @@
         [data-theme="light"] .cruise-input {
             background: #f0f0f0;
             color: #222;
-            border-color: #999;
         }
 
         .cruise-input:focus {
@@ -190,15 +185,18 @@
             margin: 0;
             overflow-x: auto;
             padding: 0.9rem;
-            border-radius: 8px;
-            background: rgba(0,0,0,0.34);
-            border: 1px solid rgba(255,255,255,0.08);
-            color: rgba(236, 244, 248, 0.94);
             font-size: 12px;
             line-height: 1.45;
         }
 
-        [data-theme="light"] .stats-code-block {
+        .stats-code-block:not(.code-block > *) {
+            border-radius: 8px;
+            background: rgba(0,0,0,0.34);
+            border: 1px solid rgba(255,255,255,0.08);
+            color: rgba(236, 244, 248, 0.94);
+        }
+
+        [data-theme="light"] .stats-code-block:not(.code-block > *) {
             background: rgba(255,255,255,0.65);
             border-color: rgba(0,0,0,0.08);
             color: #1d2730;
@@ -236,17 +234,16 @@
         .comparison-stage {
             position: relative;
             height: clamp(220px, 62vw, 300px);
-            border-radius: 12px;
+            border-radius: var(--demo-panel-radius);
             overflow: hidden;
             margin-bottom: 1.2rem;
             background: linear-gradient(180deg, #c7e8f6 0%, #86c9df 44%, #3b93b6 64%, #2c7f9e 82%, #1f6788 100%);
-            border: 1px solid #555;
+            border: 1px solid var(--demo-panel-border);
             isolation: isolate;
         }
 
         [data-theme="light"] .comparison-stage {
             background: linear-gradient(180deg, #e8f5fb 0%, #aed6e7 44%, #78b8d0 64%, #5d9fb9 82%, #4a89a4 100%);
-            border-color: #999;
         }
 
         .ocean-bg {
@@ -476,9 +473,9 @@
 
         .metric-panel {
             padding: 1rem;
-            border-radius: 12px;
-            background: rgba(128,128,128,0.08);
-            border: 1px solid var(--border);
+            border-radius: var(--demo-panel-radius);
+            background: var(--demo-panel-bg);
+            border: 1px solid var(--demo-panel-border);
             margin-bottom: 1rem;
         }
 
@@ -832,7 +829,7 @@ const submergeOffset = shipDraftOffset(scale.belowPx, scale.abovePx, WAVE_LINE_F
                 // Build side-view ship card markup for one vessel.
                 const placeholder = `<div class="ship-placeholder" style="--ship-color:${ship.color};"></div>`;
                 const imageBlock = ship.image
-                    ? `<img class="ship-image" src="${ship.image}" alt="${ship.name}" data-fallback-color="${ship.color}" onerror="var d=document.createElement('div');d.className='ship-placeholder';d.style.setProperty('--ship-color',this.dataset.fallbackColor);this.replaceWith(d);">`
+                    ? `<img class="ship-image" src="${ship.image}" alt="${ship.name}" loading="eager" decoding="async" data-fallback-color="${ship.color}" onerror="var d=document.createElement('div');d.className='ship-placeholder';d.style.setProperty('--ship-color',this.dataset.fallbackColor);this.replaceWith(d);">`
                     : placeholder;
 
                 return `

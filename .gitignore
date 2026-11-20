@@ -1,7 +1,7 @@
 ﻿.vercel
 node_modules/
 dist/
-.react-router/
+.astro/
 .vite/
 .env
 .env.local
