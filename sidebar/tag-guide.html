@@ -1,32 +1,173 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <script>
-    (function () {
-      try {
-        var saved = localStorage.getItem('theme')
-        var systemPrefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
-        document.documentElement.setAttribute('data-theme', saved || (systemPrefersDark ? 'dark' : 'light'))
-      } catch (error) {
-        document.documentElement.setAttribute('data-theme', 'light')
-      }
-    })()
-  </script>
-  <style>
-    html, body { min-height: 100%; margin: 0; background: #090d14; color: #d8dde4; }
-    body { font-family: 'Courier New', monospace; }
-    [data-theme="light"] { background: #c9cbce; color: #2c3646; }
-    [data-theme="light"] body {
-      background: radial-gradient(120% 95% at 50% -25%, rgba(88, 104, 128, 0.12) 0%, rgba(88, 104, 128, 0) 60%), linear-gradient(180deg, #ced2d8 0%, #c9cbce 46%, #bcc1ca 100%);
-    }
-  </style>
-  <meta http-equiv="refresh" content="0;url=/sidebar/tag-guide/">
-  <link rel="canonical" href="/sidebar/tag-guide/">
-  <title>Redirecting</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Tag Guide</title>
+    <link rel="canonical" href="https://codingatmyjob.github.io/sidebar/tag-guide.html">
+    <link rel="stylesheet" href="../style.css">
+    <style>
+        .tag-guide-intro {
+            margin: 0 0 24px 0;
+            padding: 18px 20px;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            background: linear-gradient(135deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+        }
+        .tag-guide-intro p:last-child {
+            margin-bottom: 0;
+        }
+        .tag-guide-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 14px;
+            margin: 16px 0 24px 0;
+        }
+        .tag-guide-card {
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 10px 14px;
+            background: rgba(255,255,255,0.025);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+        }
+        .article-container article .tag-guide-card h3 {
+            margin-top: 0;
+            margin-bottom: 4px;
+        }
+        .tag-guide-chip-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin: 6px 0 8px 0;
+        }
+        .article-container article .tag-guide-card p {
+            margin: 0;
+        }
+        .tag-guide-example {
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 12px 16px;
+            margin: 12px 0;
+            background: rgba(255,255,255,0.02);
+        }
+        .tag-guide-example strong {
+            display: block;
+            margin-bottom: 8px;
+        }
+        .tag-guide-rules {
+            margin-top: 10px;
+            padding: 12px 16px;
+            border-left: 4px solid var(--accent);
+            background: rgba(255,255,255,0.03);
+            border-radius: 10px;
+        }
+        [data-theme="light"] .tag-guide-intro,
+        [data-theme="light"] .tag-guide-card,
+        [data-theme="light"] .tag-guide-example {
+            background: rgba(0,0,0,0.025);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+        }
+        [data-theme="light"] .tag-guide-rules {
+            background: rgba(0,0,0,0.03);
+        }
+        @media (max-width: 700px) {
+            .tag-guide-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
 </head>
 <body>
-  <p><a href="/sidebar/tag-guide/">Continue to the page</a></p>
-  <script>window.location.replace("/sidebar/tag-guide/" + window.location.search + window.location.hash)</script>
+    <div id="binary-bg" aria-hidden="true"></div>
+
+    <main class="article-container">
+        <h1>Tag Guide</h1>
+
+        <article>
+            <h2>How Tags Work</h2>
+            <div class="tag-guide-intro">
+                <p>
+                    Every article gets <strong>one content-type tag</strong> and then a few <strong>topic tags</strong>. 
+                    The first tag tells you the format. The rest tell you the subject. <strong>Notes</strong> is the default for informative posts 
+                    that are not a review or project.
+                </p>
+            </div>
+
+            <h2>Content Type Tags</h2>
+            <div class="tag-guide-grid">
+                <div class="tag-guide-card">
+                    <h3>Build / Show</h3>
+                    <div class="tag-guide-chip-row">
+                        <span class="tag">Project</span>
+                        <span class="tag">Demo</span>
+                    </div>
+                    <p><strong>Project</strong> is for something I built or engineered. <strong>Demo</strong> is for a prototype, example, or interactive showcase.</p>
+                </div>
+                <div class="tag-guide-card">
+                    <h3>Explain / Teach</h3>
+                    <div class="tag-guide-chip-row">
+                        <span class="tag">Notes</span>
+                        <span class="tag">Review</span>
+                    </div>
+                    <p><strong>Notes</strong> covers documentation-style or explanatory posts. <strong>Review</strong> is for an opinionated take after using something.</p>
+                </div>
+                <div class="tag-guide-card">
+                    <h3>Challenge / Exam</h3>
+                    <div class="tag-guide-chip-row">
+                        <span class="tag">Writeup</span>
+                        <span class="tag">Cert</span>
+                    </div>
+                    <p><strong>Writeup</strong> is reserved for HTB, CTF, and challenge walkthroughs. <strong>Cert</strong> is for certification-focused posts and exam experiences.</p>
+                </div>
+                <div class="tag-guide-card">
+                    <h3>Lookup / Utility</h3>
+                    <div class="tag-guide-chip-row">
+                        <span class="tag">Reference</span>
+                    </div>
+                    <p><strong>Reference</strong> is for cheatsheets, lookup pages, and content meant to be revisited quickly.</p>
+                </div>
+            </div>
+
+            <h2>Topic Tags</h2>
+            <p>
+                Topic tags are the technologies, platforms, or domains attached to the post. Common examples include <strong>Python</strong>, <strong>Maps</strong>, <strong>Security</strong>, <strong>HTB</strong>, and <strong>API</strong>.
+            </p>
+
+            <h2>What It Looks Like</h2>
+            <div class="tag-guide-example">
+                <strong>Creating a Pokemon Stock Bot</strong>
+                <div class="tag-guide-chip-row">
+                    <span class="tag">Project</span>
+                    <span class="tag">Python</span>
+                    <span class="tag">Discord</span>
+                    <span class="tag">Automation</span>
+                    <span class="tag">API</span>
+                </div>
+            </div>
+            <div class="tag-guide-example">
+                <strong>Typeahead Demo</strong>
+                <div class="tag-guide-chip-row">
+                    <span class="tag">Demo</span>
+                    <span class="tag">JavaScript</span>
+                    <span class="tag">WebApp</span>
+                </div>
+            </div>
+            <div class="tag-guide-example">
+                <strong>HTB Artificial Writeup</strong>
+                <div class="tag-guide-chip-row">
+                    <span class="tag">Writeup</span>
+                    <span class="tag">HTB</span>
+                    <span class="tag">Machine</span>
+                </div>
+            </div>
+            <div class="tag-guide-example">
+                <strong>Passing OCI Foundations Associate</strong>
+                <div class="tag-guide-chip-row">
+                    <span class="tag">Cert</span>
+                    <span class="tag">Cloud</span>
+                </div>
+            </div>
+        </article>
+    </main>
 </body>
 </html>
