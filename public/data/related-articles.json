@@ -1,22 +1,22 @@
 {
   "version": 2,
-  "generatedAt": "2026-11-20T02:03:25.467Z",
+  "generatedAt": "2026-11-20T02:16:40.264Z",
   "method": "tfidf+kmeans+cosine",
   "minRelatedScore": 0.11,
-  "maxObservedScore": 0.531246,
+  "maxObservedScore": 0.531153,
   "articleCount": 22,
   "k": 3,
   "clusters": [
     {
       "id": 0,
-      "size": 9,
+      "size": 8,
       "tags": [
-        "python",
-        "demo",
         "project",
+        "python",
         "discord",
         "api",
-        "webapp"
+        "htb",
+        "notes"
       ]
     },
     {
@@ -33,14 +33,14 @@
     },
     {
       "id": 2,
-      "size": 7,
+      "size": 8,
       "tags": [
         "javascript",
         "project",
         "webapp",
         "notes",
-        "maps",
-        "api"
+        "python",
+        "maps"
       ]
     }
   ],
@@ -50,15 +50,15 @@
       "related": [
         {
           "slug": "discord-spotify-activity-tracker",
-          "score": 0.281854
+          "score": 0.281911
         },
         {
           "slug": "playing-in-traffic-and-heatmaps",
-          "score": 0.179778
+          "score": 0.179705
         },
         {
           "slug": "how-fit-am-i",
-          "score": 0.124327
+          "score": 0.122595
         }
       ]
     },
@@ -67,19 +67,19 @@
       "related": [
         {
           "slug": "how-i-built-a-related-articles-recommender",
-          "score": 0.193275
+          "score": 0.193283
         },
         {
           "slug": "playing-in-traffic-and-heatmaps",
-          "score": 0.185143
+          "score": 0.185327
         },
         {
           "slug": "typeahead-demo",
-          "score": 0.182534
+          "score": 0.182501
         },
         {
           "slug": "traffic-live-object-detection",
-          "score": 0.130997
+          "score": 0.131125
         }
       ]
     },
@@ -88,7 +88,7 @@
       "related": [
         {
           "slug": "creating-a-pokemon-stock-bot",
-          "score": 0.281854
+          "score": 0.281911
         }
       ]
     },
@@ -97,24 +97,24 @@
       "related": [
         {
           "slug": "playing-in-traffic-and-heatmaps",
-          "score": 0.123453
+          "score": 0.123419
         }
       ]
     },
     "how-fit-am-i": {
-      "cluster": 0,
+      "cluster": 2,
       "related": [
         {
           "slug": "typeahead-demo",
-          "score": 0.205944
-        },
-        {
-          "slug": "creating-a-pokemon-stock-bot",
-          "score": 0.124327
+          "score": 0.206209
         },
         {
           "slug": "playing-in-traffic-and-heatmaps",
-          "score": 0.123733
+          "score": 0.123565
+        },
+        {
+          "slug": "creating-a-pokemon-stock-bot",
+          "score": 0.122595
         }
       ]
     },
@@ -123,19 +123,19 @@
       "related": [
         {
           "slug": "using-prismjs-to-style-code",
-          "score": 0.216176
+          "score": 0.216144
         },
         {
           "slug": "cruise-size-comparisons",
-          "score": 0.193275
+          "score": 0.193283
         },
         {
           "slug": "new-http-query-method",
-          "score": 0.115916
+          "score": 0.115895
         },
         {
           "slug": "typeahead-demo",
-          "score": 0.112961
+          "score": 0.112933
         }
       ]
     },
@@ -144,19 +144,19 @@
       "related": [
         {
           "slug": "how-i-passed-oci-foundations-associate",
-          "score": 0.347944
+          "score": 0.347972
         },
         {
           "slug": "studying-for-dp-800-part-1",
-          "score": 0.283844
+          "score": 0.283957
         },
         {
           "slug": "how-i-passed-network-plus",
-          "score": 0.263607
+          "score": 0.263862
         },
         {
           "slug": "how-i-passed-security-plus",
-          "score": 0.258224
+          "score": 0.258302
         }
       ]
     },
@@ -165,23 +165,23 @@
       "related": [
         {
           "slug": "how-i-passed-security-plus",
-          "score": 0.531246
+          "score": 0.531153
         },
         {
           "slug": "how-i-passed-azure-ai-fundamentals",
-          "score": 0.263607
+          "score": 0.263862
         },
         {
           "slug": "how-i-passed-oci-foundations-associate",
-          "score": 0.263296
+          "score": 0.263289
         },
         {
           "slug": "studying-for-dp-800-part-1",
-          "score": 0.167253
+          "score": 0.167396
         },
         {
           "slug": "VirtualBox-Home-Lab-Setup",
-          "score": 0.153799
+          "score": 0.153765
         }
       ]
     },
@@ -190,19 +190,19 @@
       "related": [
         {
           "slug": "how-i-passed-azure-ai-fundamentals",
-          "score": 0.347944
+          "score": 0.347972
         },
         {
           "slug": "how-i-passed-network-plus",
-          "score": 0.263296
+          "score": 0.263289
         },
         {
           "slug": "how-i-passed-security-plus",
-          "score": 0.257777
+          "score": 0.25788
         },
         {
           "slug": "studying-for-dp-800-part-1",
-          "score": 0.164574
+          "score": 0.164741
         }
       ]
     },
@@ -211,27 +211,27 @@
       "related": [
         {
           "slug": "how-i-passed-network-plus",
-          "score": 0.531246
+          "score": 0.531153
         },
         {
           "slug": "how-i-passed-azure-ai-fundamentals",
-          "score": 0.258224
+          "score": 0.258302
         },
         {
           "slug": "how-i-passed-oci-foundations-associate",
-          "score": 0.257777
+          "score": 0.25788
         },
         {
           "slug": "VirtualBox-Home-Lab-Setup",
-          "score": 0.212795
+          "score": 0.212804
         },
         {
           "slug": "studying-for-dp-800-part-1",
-          "score": 0.129929
+          "score": 0.130296
         },
         {
           "slug": "prompt-injection-demo",
-          "score": 0.111424
+          "score": 0.111415
         }
       ]
     },
@@ -240,7 +240,7 @@
       "related": [
         {
           "slug": "HTB-Command-Cheatsheet",
-          "score": 0.317954
+          "score": 0.31828
         }
       ]
     },
@@ -249,7 +249,7 @@
       "related": [
         {
           "slug": "HTB-Artificial-Writeup",
-          "score": 0.317954
+          "score": 0.31828
         }
       ]
     },
@@ -258,7 +258,7 @@
       "related": [
         {
           "slug": "how-i-built-a-related-articles-recommender",
-          "score": 0.115916
+          "score": 0.115895
         }
       ]
     },
@@ -267,11 +267,11 @@
       "related": [
         {
           "slug": "prompt-injection-demo",
-          "score": 0.149663
+          "score": 0.149654
         },
         {
           "slug": "typeahead-demo",
-          "score": 0.117295
+          "score": 0.117391
         }
       ]
     },
@@ -280,27 +280,27 @@
       "related": [
         {
           "slug": "cruise-size-comparisons",
-          "score": 0.185143
+          "score": 0.185327
         },
         {
           "slug": "creating-a-pokemon-stock-bot",
-          "score": 0.179778
+          "score": 0.179705
         },
         {
           "slug": "traffic-live-object-detection",
-          "score": 0.174468
+          "score": 0.174412
         },
         {
           "slug": "typeahead-demo",
-          "score": 0.152627
+          "score": 0.152601
         },
         {
           "slug": "how-fit-am-i",
-          "score": 0.123733
+          "score": 0.123565
         },
         {
           "slug": "efficient-html-maps-with-pydeck",
-          "score": 0.123453
+          "score": 0.123419
         }
       ]
     },
@@ -309,23 +309,23 @@
       "related": [
         {
           "slug": "use-claude-code-for-free",
-          "score": 0.16848
+          "score": 0.16847
         },
         {
           "slug": "noaa-tides-llm-chatbot-demo",
-          "score": 0.149663
+          "score": 0.149654
         },
         {
           "slug": "traffic-live-object-detection",
-          "score": 0.129011
+          "score": 0.129019
         },
         {
           "slug": "typeahead-demo",
-          "score": 0.117872
+          "score": 0.117867
         },
         {
           "slug": "how-i-passed-security-plus",
-          "score": 0.111424
+          "score": 0.111415
         }
       ]
     },
@@ -334,19 +334,19 @@
       "related": [
         {
           "slug": "how-i-passed-azure-ai-fundamentals",
-          "score": 0.283844
+          "score": 0.283957
         },
         {
           "slug": "how-i-passed-network-plus",
-          "score": 0.167253
+          "score": 0.167396
         },
         {
           "slug": "how-i-passed-oci-foundations-associate",
-          "score": 0.164574
+          "score": 0.164741
         },
         {
           "slug": "how-i-passed-security-plus",
-          "score": 0.129929
+          "score": 0.130296
         }
       ]
     },
@@ -355,23 +355,23 @@
       "related": [
         {
           "slug": "playing-in-traffic-and-heatmaps",
-          "score": 0.174468
+          "score": 0.174412
         },
         {
           "slug": "using-prismjs-to-style-code",
-          "score": 0.135174
+          "score": 0.135162
         },
         {
           "slug": "cruise-size-comparisons",
-          "score": 0.130997
+          "score": 0.131125
         },
         {
           "slug": "prompt-injection-demo",
-          "score": 0.129011
+          "score": 0.129019
         },
         {
           "slug": "use-claude-code-for-free",
-          "score": 0.122608
+          "score": 0.122631
         }
       ]
     },
@@ -380,27 +380,27 @@
       "related": [
         {
           "slug": "how-fit-am-i",
-          "score": 0.205944
+          "score": 0.206209
         },
         {
           "slug": "cruise-size-comparisons",
-          "score": 0.182534
+          "score": 0.182501
         },
         {
           "slug": "playing-in-traffic-and-heatmaps",
-          "score": 0.152627
+          "score": 0.152601
         },
         {
           "slug": "prompt-injection-demo",
-          "score": 0.117872
+          "score": 0.117867
         },
         {
           "slug": "noaa-tides-llm-chatbot-demo",
-          "score": 0.117295
+          "score": 0.117391
         },
         {
           "slug": "how-i-built-a-related-articles-recommender",
-          "score": 0.112961
+          "score": 0.112933
         }
       ]
     },
@@ -409,11 +409,11 @@
       "related": [
         {
           "slug": "prompt-injection-demo",
-          "score": 0.16848
+          "score": 0.16847
         },
         {
           "slug": "traffic-live-object-detection",
-          "score": 0.122608
+          "score": 0.122631
         }
       ]
     },
@@ -422,11 +422,11 @@
       "related": [
         {
           "slug": "how-i-built-a-related-articles-recommender",
-          "score": 0.216176
+          "score": 0.216144
         },
         {
           "slug": "traffic-live-object-detection",
-          "score": 0.135174
+          "score": 0.135162
         }
       ]
     },
@@ -435,11 +435,11 @@
       "related": [
         {
           "slug": "how-i-passed-security-plus",
-          "score": 0.212795
+          "score": 0.212804
         },
         {
           "slug": "how-i-passed-network-plus",
-          "score": 0.153799
+          "score": 0.153765
         }
       ]
     }
