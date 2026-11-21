@@ -55,19 +55,11 @@ if (config && grid) {
     if (!voteCounts) return
     root.querySelectorAll('.article-card[data-path]').forEach((card) => {
       const count = voteCountFor(card.dataset.path)
-      if (count === undefined) return
+      if (count === undefined || count === 0) return
       const tally = document.createElement('span')
       tally.className = 'article-card-vote-count'
-      const label = `${count.toLocaleString()} ${count === 1 ? 'vote' : 'votes'}`
-      const meta = card.querySelector('.article-card-meta')
-      if (meta) {
-        tally.textContent = `+${label}`
-        meta.append(tally)
-      } else {
-        tally.textContent = `${count.toLocaleString()} helpful ${count === 1 ? 'vote' : 'votes'}`
-        const content = card.querySelector('.article-content')
-        content.insertBefore(tally, content.querySelector('.article-tags'))
-      }
+      tally.textContent = `+${count.toLocaleString()} ${count === 1 ? 'vote' : 'votes'}`
+      card.querySelector('.article-card-meta').append(tally)
     })
   }
 
@@ -113,7 +105,7 @@ if (config && grid) {
       : escapeHtml(article.imageLabel || article.title)
     const metadata = `<div class="article-date">${escapeHtml(article.date)}</div>
       ${article.readingTime ? `<div class="reading-time">${escapeHtml(article.readingTime)} read</div>` : ''}`
-    const meta = `<div class="article-card-meta${wide ? ' article-index-meta' : ''}"><div>${metadata}</div></div>`
+    const meta = `<div class="article-card-meta${wide ? ' article-index-meta' : ''}"><div class="article-card-byline">${metadata}</div></div>`
     const title = `<div class="article-title">${escapeHtml(article.title)}</div>`
 
     return `<a class="article-card" href="${escapeHtml(routeFor(article.path))}" data-path="${escapeHtml(article.path)}">

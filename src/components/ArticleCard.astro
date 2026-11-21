@@ -28,8 +28,12 @@ const imageSrc = item.imageSrc
   </div>}
   <div class="article-content">
     {featureCaption && <div class="feature-caption">{featureCaption}<span aria-hidden="true">&#8599;</span></div>}
-    <div class="article-date">{item.date}</div>
-    {item.readingTime && <div class="reading-time">{item.readingTime} read</div>}
+    <div class="article-card-meta">
+      <div class="article-card-byline">
+        <div class="article-date">{item.date}</div>
+        {item.readingTime && <div class="reading-time">{item.readingTime} read</div>}
+      </div>
+    </div>
     {featureCaption ? <h2 class="article-title">{item.title}</h2> : <div class="article-title">{item.title}</div>}
     <div class="article-description">{item.description}</div>
     <div class="article-tags">

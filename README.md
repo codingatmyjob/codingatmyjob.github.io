@@ -27,7 +27,7 @@ Open [localhost:4321](http://localhost:4321). Run `npm run lint` and `npm test` 
 ## Voting
 
 Voting is optional. The static site calls a [Cloudflare Worker](./workers/votes/) that stores votes in D1. Votes are deduplicated by browser ID per article, not by person.
-When vote totals are available, **Sort > Votes** ranks archive articles by vote count, newest first on ties.
+Highlighted Work and archive tiles show nonzero vote totals across from the date and read time as `+1 vote` or `+2 votes`. **Sort > Votes** ranks archive articles by vote count, newest first on ties.
 
 **Production setup**
 
