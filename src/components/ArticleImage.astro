@@ -22,9 +22,6 @@ const optimizedCovers = {
 
 const { item, basePath = '/', className, priority = false, sizes } = Astro.props
 const cover = optimizedCovers[item.imageSrc]
-const imageStyle = item.imageStyle
-  ? Object.entries(item.imageStyle).map(([key, value]) => `${key.replace(/[A-Z]/g, (letter) => `-${letter.toLowerCase()}`)}:${value}`).join(';')
-  : ''
 const imageSrc = item.imageSrc
   ? item.imageSrc.startsWith('http')
     ? item.imageSrc
@@ -43,7 +40,7 @@ const widths = cover?.format === 'svg'
     src={cover}
     alt={item.imageAlt || item.title || 'Article image'}
     class:list={[className, item.imageClassName]}
-    style={imageStyle}
+    data-image-inset={item.imageInset}
     loading={loading}
     fetchpriority={priority && loading !== 'lazy' ? 'high' : undefined}
     decoding="async"
@@ -56,7 +53,7 @@ const widths = cover?.format === 'svg'
     class:list={[className, item.imageClassName]}
     src={imageSrc}
     alt={item.imageAlt || item.title || 'Article image'}
-    style={imageStyle}
+    data-image-inset={item.imageInset}
     loading={loading}
     fetchpriority={priority && loading !== 'lazy' ? 'high' : undefined}
     decoding="async"

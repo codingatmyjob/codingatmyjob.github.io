@@ -1,5 +1,35 @@
 const config = document.getElementById('home-data')
 const grid = document.getElementById('articles-grid')
+const layoutControls = document.getElementById('article-layout-controls')
+
+if (grid && layoutControls) {
+  const buttons = layoutControls.querySelectorAll('button[data-layout]')
+  const setLayout = (layout) => {
+    grid.dataset.layout = layout
+    buttons.forEach((button) => {
+      button.setAttribute('aria-pressed', String(button.dataset.layout === layout))
+    })
+  }
+
+  try {
+    if (localStorage.getItem('tangentArticleLayout') === 'wide') setLayout('wide')
+  } catch (error) {
+    console.warn('Article layout preference could not be read:', error)
+  }
+
+  buttons.forEach((button) => {
+    button.addEventListener('click', () => {
+      const layout = button.dataset.layout
+      setLayout(layout)
+      try {
+        localStorage.setItem('tangentArticleLayout', layout)
+      } catch (error) {
+        console.warn('Article layout preference could not be saved:', error)
+      }
+    })
+  })
+  layoutControls.hidden = false
+}
 
 if (config && grid) {
   const articles = JSON.parse(config.dataset.articles || '[]')
@@ -13,6 +43,9 @@ if (config && grid) {
   const filterPanel = document.getElementById('tag-filter-panel')
   const filterList = document.getElementById('tag-filter-list')
   const filterCount = document.querySelector('.filter-count')
+  const showcase = document.getElementById('portfolio-showcase')
+  const archive = document.getElementById('archive')
+  const archiveCount = document.getElementById('archive-count')
   const pagination = document.querySelector('.pagination-container')
   const pageCurrent = document.querySelector('.pagination-current')
   const pageTotal = document.querySelector('.pagination-total')
@@ -46,14 +79,10 @@ if (config && grid) {
     return `${basePath}${source}`
   }
 
-  const styleFor = (style) => Object.entries(style || {})
-    .map(([key, value]) => `${key.replace(/[A-Z]/g, (letter) => `-${letter.toLowerCase()}`)}:${escapeHtml(value)}`)
-    .join(';')
-
   const createCard = (article, index) => {
     const image = imageFor(article.imageSrc)
     const imageMarkup = image
-      ? `<img class="article-card-image ${escapeHtml(article.imageClassName || '')}" src="${escapeHtml(image)}" alt="${escapeHtml(article.imageAlt || article.title || 'Article image')}" style="${styleFor(article.imageStyle)}" loading="eager"${index === 0 ? ' fetchpriority="high"' : ''} decoding="async">`
+      ? `<img class="article-card-image ${escapeHtml(article.imageClassName || '')}" src="${escapeHtml(image)}" alt="${escapeHtml(article.imageAlt || article.title || 'Article image')}"${article.imageInset ? ` data-image-inset="${escapeHtml(article.imageInset)}"` : ''} loading="${index === 0 ? 'eager' : 'lazy'}" decoding="async">`
       : escapeHtml(article.imageLabel || article.title)
 
     return `<a class="article-card" href="${escapeHtml(routeFor(article.path))}" data-path="${escapeHtml(article.path)}">
@@ -137,6 +166,7 @@ if (config && grid) {
   const render = async () => {
     const requestId = ++renderId
     const term = normalize(query.trim())
+    if (showcase) showcase.hidden = Boolean(term || selectedTags.length || sortOrder !== 'newest')
     searchSpinner.hidden = !term
     let filtered = articles.filter((article) =>
       selectedTags.every((tag) => (article.tags || []).some((articleTag) => articleTag.toLowerCase() === tag.toLowerCase()))
@@ -172,6 +202,10 @@ if (config && grid) {
     updateFilterState()
 
     const pageSize = getItemsPerPage()
+    if (archiveCount) {
+      const count = `${filtered.length} ${filtered.length === 1 ? 'entry' : 'entries'}`
+      if (archiveCount.textContent !== count) archiveCount.textContent = count
+    }
     const totalPages = Math.max(1, Math.ceil(filtered.length / pageSize))
     currentPage = Math.min(currentPage, totalPages)
     const first = (currentPage - 1) * pageSize
@@ -316,7 +350,8 @@ if (config && grid) {
       else if (label === 'Next page') currentPage = Math.min(totalPages, currentPage + 1)
       else if (label === 'Last page') currentPage = totalPages
       render()
-      window.scrollTo({ top: 0, behavior: 'instant' })
+      archive?.focus({ preventScroll: true })
+      archive?.scrollIntoView()
     })
   })
 }

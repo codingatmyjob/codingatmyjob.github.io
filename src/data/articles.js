@@ -1,6 +1,5 @@
 import { readTimesByPath } from './readTimes'
 
-// .js over .json because we're using imageStyle objects and plain JSON would prevent this
 const baseArticlesData = [
   // {
   //   id: 'studying-for-dp-800-part-1',
@@ -11,8 +10,7 @@ const baseArticlesData = [
   //   description: 'Kicking off a DP-800 study series with the overarching plan, and mini-project ideas.',
   //   tags: ['Cert', 'AI', 'Databases', 'SQL'],
   //   imageSrc: 'images/cover/microsoft-certified-associate-badge.svg',
-  //   imageAlt: 'Studying for Microsoft DP-800: Part 1',
-  //   imageStyle: { height: '95%', width: '95%' }
+  //   imageAlt: 'Studying for Microsoft DP-800: Part 1'
   // },
   {
     id: 'how-fit-am-i',
@@ -23,8 +21,7 @@ const baseArticlesData = [
     description: 'Explore your relative fitness with an interactive demo built on 800K+ race results.',
     tags: ['Demo', 'Data Science', 'WebApp', 'Python'],
     imageSrc: 'images/cover/how-fit-am-i.svg',
-    imageAlt: 'Waving black and white checkered flags on crossed gray poles above the 89th percentile text.',
-    imageStyle: { height: '95%', width: '95%' }
+    imageAlt: 'Waving black and white checkered flags on crossed gray poles above the 89th percentile text.'
   },
   {
     id: 'prompt-injection-demo',
@@ -35,8 +32,7 @@ const baseArticlesData = [
     description: 'Demo using Hugging Face to demonstrate a type of Direct Prompt Injection; System Prompt Extraction.',
     tags: ['Demo', 'AI', 'Security'],
     imageSrc: 'images/cover/hf-logo.svg',
-    imageAlt: 'Prompt Injection Demo',
-    imageStyle: { height: '95%', width: '95%' }
+    imageAlt: 'Prompt Injection Demo'
   },
   {
     id: 'how-i-built-a-related-articles-recommender',
@@ -45,10 +41,9 @@ const baseArticlesData = [
     date: 'July 17, 2026',
     title: 'How I built a Related Articles Recommender',
     description: 'Tangent\'s related articles recommender, algorithms, and implementation details.',
-    tags: ['Notes', 'JavaScript'],
+    tags: ['Notes', 'Data Science', 'JavaScript'],
     imageSrc: 'images/cover/tf_idf_cover.svg',
-    imageAlt: 'Related Articles Recommender',
-    imageStyle: { height: '95%', width: '95%' }
+    imageAlt: 'Related Articles Recommender'
   },
   {
     id: 'new-http-query-method',
@@ -60,7 +55,7 @@ const baseArticlesData = [
     tags: ['Notes', 'HTTP', 'API'],
     imageSrc: 'images/cover/HTTP_logo.svg',
     imageAlt: 'HTTP QUERY Method',
-    imageStyle: { height: '95%', width: '95%' }
+    imageInset: 'roomy'
   },
     {
     id: 'how-i-passed-azure-ai-fundamentals',
@@ -71,8 +66,7 @@ const baseArticlesData = [
     description: 'AI-900 review, study resources used, exam-day tips, and upcoming test changes.',
     tags: ['Cert', 'AI'],
     imageSrc: 'images/cover/ai-900.svg',
-    imageAlt: 'How I passed Microsoft Azure AI Fundamentals',
-    imageStyle: { height: '95%', width: '95%' }
+    imageAlt: 'How I passed Microsoft Azure AI Fundamentals'
   },
   {
     id: 'traffic-live-object-detection',
@@ -83,8 +77,7 @@ const baseArticlesData = [
     description: 'Live traffic feed with client-side COCO-SSD detection.',
     tags: ['Project', 'JavaScript', 'TensorFlow.js', 'Library'],
     imageSrc: 'images/cover/TensorFlow_cover.svg',
-    imageAlt: 'Traffic Object Detection',
-    imageStyle: { height: '95%', width: '95%' }
+    imageAlt: 'Traffic Object Detection'
   },
   {
     id: 'using-prismjs-to-style-code',
@@ -96,7 +89,7 @@ const baseArticlesData = [
     tags: ['Notes', 'JavaScript', 'Prism.js', 'Library'],
     imageSrc: 'images/cover/prismjs-logo.svg',
     imageAlt: 'Using Prism.js',
-    imageStyle: { height: '85%', width: '85%' }
+    imageInset: 'roomy'
   },
   {
     id: 'use-claude-code-for-free',
@@ -107,8 +100,7 @@ const baseArticlesData = [
     description: 'Run Claude Code with free/local models. With tool-calling and context limits, is it doable?',
     tags: ['Reference', 'Claude Code', 'AI', 'Windows'],
     imageSrc: 'images/cover/claudecode.png',
-    imageAlt: 'Use Claude Code for Free',
-    imageStyle: {height: '85%', width: '85%'}
+    imageAlt: 'Use Claude Code for Free'
   },
   {
     id: 'discord-spotify-activity-tracker',
@@ -120,7 +112,7 @@ const baseArticlesData = [
     tags: ['Project', 'Python', 'Discord', 'Spotify'],
     imageSrc: 'images/cover/discord-spotify-activity-tracker.png',
     imageAlt: 'Discord Spotify Activity Tracker',
-    imageStyle: {height: '85%', width: '85%'}
+    imageInset: 'roomy'
   },
   {
     id: 'cruise-size-comparisons',
@@ -153,7 +145,7 @@ const baseArticlesData = [
     tags: ['Demo', 'JavaScript', 'WebApp'],
     imageSrc: 'images/cover/typeahead.png',
     imageAlt: 'Typeahead Demo',
-    imageStyle: { height: '85%', width: '85%' }
+    imageInset: 'roomy'
   },
   {
     id: 'playing-in-traffic-and-heatmaps',
@@ -164,8 +156,7 @@ const baseArticlesData = [
     description: 'Building a hex heatmap with Maps, TomTom, OpenStreetMap, and H3.',
     tags: ['Project', 'JavaScript', 'WebApp', 'API', 'Maps'],
     imageSrc: 'images/cover/hero.png',
-    imageAlt: 'Playing in Traffic and Heatmaps',
-    imageStyle: { height: '85%', width: '100%' }
+    imageAlt: 'Playing in Traffic and Heatmaps'
   },
   {
     id: 'creating-a-pokemon-stock-bot',
@@ -176,8 +167,7 @@ const baseArticlesData = [
     description: 'How much work does a scalper put into stock checks for Pokemon products?',
     tags: ['Project', 'Python', 'API', 'Discord', 'Automation'],
     imageSrc: 'images/cover/pokestock.png',
-    imageAlt: 'Creating a Pokemon Stock Bot',
-    imageStyle: { height: '90%', width: '90%' }
+    imageAlt: 'Creating a Pokemon Stock Bot'
   },
   {
     id: 'virtualbox-home-lab-setup',
@@ -189,7 +179,7 @@ const baseArticlesData = [
     tags: ['Project', 'VM', 'SIEM', 'Security', 'Networking'],
     imageSrc: 'images/cover/VirtualBox_logo.png',
     imageAlt: 'VirtualBox Home Lab Setup',
-    imageStyle: { height: '85%', width: '85%' }
+    imageInset: 'roomy'
   },
   {
     id: 'htb-command-cheatsheet',

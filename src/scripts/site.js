@@ -6,7 +6,6 @@ const sidebarOverlay = document.querySelector('.sidebar-overlay')
 const sidebarClose = document.querySelector('.sidebar-close-toggle')
 const sidebarTitle = document.querySelector('.sidebar-header-title')
 const themeToggle = document.querySelector('.theme-toggle')
-const background = document.getElementById('binary-bg')
 const scrollTopButton = document.getElementById('scroll-top')
 
 const setMenuOpen = (open) => {
@@ -17,7 +16,9 @@ const setMenuOpen = (open) => {
   sidebarContent.classList.toggle('sidebar-open', open)
   sidebarOverlay.classList.toggle('sidebar-open', open)
   sidebar.style.pointerEvents = open ? 'auto' : 'none'
-  if (sidebarTitle) sidebarTitle.hidden = !open || window.innerWidth >= 1278
+  if (sidebarTitle) sidebarTitle.hidden = !open
+  if (open) sidebarClose?.focus()
+  else menuToggle.focus()
 }
 
 if (menuToggle) {
@@ -27,6 +28,9 @@ if (menuToggle) {
 }
 sidebarClose?.addEventListener('click', () => setMenuOpen(false))
 sidebarOverlay?.addEventListener('click', () => setMenuOpen(false))
+document.addEventListener('keydown', (event) => {
+  if (event.key === 'Escape' && menuToggle?.getAttribute('aria-expanded') === 'true') setMenuOpen(false)
+})
 document.addEventListener('click', (event) => {
   if (
     menuToggle?.getAttribute('aria-expanded') === 'true' &&
@@ -39,14 +43,8 @@ const setTheme = (theme, save = false) => {
   const next = theme === 'dark' ? 'dark' : 'light'
   html.dataset.theme = next
   if (!themeToggle) return
-  themeToggle.classList.toggle('theme-toggle-dark', next === 'dark')
-  themeToggle.classList.toggle('theme-toggle-light', next === 'light')
-  themeToggle.setAttribute('aria-label', `Switch to ${next === 'dark' ? 'light' : 'dark'} mode`)
   themeToggle.setAttribute('aria-pressed', String(next === 'dark'))
-  themeToggle.querySelector('.theme-toggle-text').textContent = next === 'dark' ? 'Dark' : 'Light'
-  themeToggle.querySelector('.theme-toggle-glyph').innerHTML = next === 'dark'
-    ? '<svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg>'
-    : '<svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2m10-10h-2M4 12H2m17.07 7.07-1.41-1.41M6.34 6.34 4.93 4.93m14.14 0-1.41 1.41M6.34 17.66l-1.41 1.41"/></svg>'
+  themeToggle.title = next === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'
   if (save) {
     try {
       localStorage.setItem('theme', next)
@@ -75,36 +73,9 @@ if (themeToggle && !storedTheme && window.matchMedia) {
   else media.addListener(applySystemTheme)
 }
 
-if (background) {
-  let resizeTimer
-  const buildBackground = () => {
-    background.replaceChildren()
-    const count = Math.min(180, Math.floor(window.innerWidth / 8)) || 100
-    const fragment = document.createDocumentFragment()
-    for (let index = 0; index < count; index += 1) {
-      const bit = document.createElement('div')
-      bit.className = 'bit'
-      bit.textContent = Math.random() < 0.5 ? '0' : '1'
-      bit.style.left = `${Math.random() * 100}vw`
-      const duration = 6 + Math.random() * 12
-      bit.style.fontSize = `${10 + Math.random() * 26}px`
-      bit.style.animationDuration = `${duration}s, ${duration}s`
-      bit.style.animationDelay = `${-Math.random() * duration}s, ${-Math.random() * duration}s`
-      bit.style.transform = `rotate(${(Math.random() - 0.5) * 20}deg)`
-      fragment.appendChild(bit)
-    }
-    background.appendChild(fragment)
-  }
-  const onResize = () => {
-    window.clearTimeout(resizeTimer)
-    resizeTimer = window.setTimeout(buildBackground, 200)
-  }
-  buildBackground()
-  window.addEventListener('resize', onResize)
-}
-
 if (scrollTopButton) {
   const safeRight = 'max(20px, env(safe-area-inset-right, 0px))'
+  const footer = document.querySelector('.site-footer')
   const updateScrollTop = () => {
     const articleContainer = document.querySelector('.article-container')
     const homeContainer = document.querySelector('#articles-view')
@@ -125,13 +96,18 @@ if (scrollTopButton) {
     }
     const scrollPosition = Math.max(window.scrollY, document.documentElement.scrollTop, document.body.scrollTop)
     const isVisible = scrollPosition > 200
+    if (isVisible && footer) {
+      const footerClearance = window.innerHeight - footer.getBoundingClientRect().top + 12
+      scrollTopButton.style.setProperty('--scroll-footer-clearance', `${footerClearance}px`)
+    }
     scrollTopButton.hidden = !isVisible
     scrollTopButton.classList.toggle('is-visible', isVisible)
   }
   window.addEventListener('resize', updateScrollTop)
   window.addEventListener('scroll', updateScrollTop)
   document.body.addEventListener('scroll', updateScrollTop)
-  scrollTopButton.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }))
+  const motion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth'
+  scrollTopButton.addEventListener('click', () => window.scrollTo({ top: 0, behavior: motion() }))
   const observer = new MutationObserver(updateScrollTop)
   observer.observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ['class'] })
   updateScrollTop()
@@ -175,6 +151,7 @@ document.querySelectorAll('.related-carousel').forEach((carousel) => {
   const track = carousel.querySelector('.related-carousel-track')
   const left = carousel.querySelector('.related-carousel-arrow-left')
   const right = carousel.querySelector('.related-carousel-arrow-right')
+  const firstCard = track?.querySelector('.related-carousel-card')
   if (!track) return
 
   const update = () => {
@@ -182,18 +159,24 @@ document.querySelectorAll('.related-carousel').forEach((carousel) => {
     const canLeft = track.scrollLeft > 2
     const canRight = max - track.scrollLeft > 2
     carousel.classList.toggle('has-overflow', canLeft || canRight)
+    if ((canLeft || canRight) && firstCard) {
+      const card = firstCard.getBoundingClientRect()
+      const carouselTop = carousel.getBoundingClientRect().top + carousel.clientTop
+      carousel.style.setProperty('--related-arrow-center', `${card.top + card.height / 2 - carouselTop}px`)
+    }
     if (left) left.hidden = !canLeft
     if (right) right.hidden = !canRight
   }
 
   const scrollByCard = (direction) => {
     const cards = Array.from(track.querySelectorAll('.related-carousel-card'))
-    const offsets = cards.map((card) => Math.round(card.offsetLeft - track.offsetLeft))
+    const trackEdge = track.getBoundingClientRect().left
+    const offsets = cards.map((card) => Math.round(card.getBoundingClientRect().left - trackEdge + track.scrollLeft))
     const current = track.scrollLeft
     const target = direction > 0
       ? offsets.find((offset) => offset > current + 4) ?? track.scrollWidth - track.clientWidth
       : offsets.filter((offset) => offset < current - 4).pop() ?? 0
-    track.scrollTo({ left: target, behavior: 'smooth' })
+    track.scrollTo({ left: target, behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth' })
   }
 
   left?.addEventListener('click', () => scrollByCard(-1))

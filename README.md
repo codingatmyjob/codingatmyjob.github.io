@@ -25,6 +25,13 @@ Short version: Astro-generated static pages + build-time metadata generation.
 
 I keep content authoring simple (HTML files), while Astro handles page generation and metadata.
 
+Use the theme button in the header to switch themes. The icon shows the theme you'll switch to, and the browser remembers your choice.
+The header and footer use a transparent Tangent mark whose T matches the wordmark color in both themes. The favicon keeps its rounded background.
+
+The homepage opens with Highlighted Work, a curated set of projects from the archive. To change the selection, edit `featured` in [index.astro](./src/pages/index.astro). Search, Sort, and Filter work on the full archive. Use the **Grid view** or **Wide view** icon above the archive cards to switch layouts; the browser remembers the selection.
+
+Cover images fit without cropping and get a 12px inset on every side. Set `imageInset: 'roomy'` in [articles.js](./src/data/articles.js) for an 18px inset on a cover that needs more breathing room. At viewport widths of 900px or less, Wide view gives the cover up to half the card width (capped at 320px) and reduces those insets to 8px and 12px.
+
 ## Build-Time Data Products
 
 I generate two JSON artifacts at build time and ship both with the site:

@@ -1,5 +1,5 @@
 ---
-const { item, basePath = '/', priority = false } = Astro.props
+const { item, basePath = '/', priority = false, featureCaption = '' } = Astro.props
 const href = `${basePath}articles/${item.path.replace(/^articles\//, '').replace(/\.html$/, '')}/`
 const imageSrc = item.imageSrc
   ? item.imageSrc.startsWith('http')
@@ -7,9 +7,6 @@ const imageSrc = item.imageSrc
     : item.imageSrc.startsWith('/')
       ? `${basePath}${item.imageSrc.replace(/^\/+/, '')}`
     : `${basePath}${item.imageSrc}`
-  : ''
-const imageStyle = item.imageStyle
-  ? Object.entries(item.imageStyle).map(([key, value]) => `${key.replace(/[A-Z]/g, (letter) => `-${letter.toLowerCase()}`)}:${value}`).join(';')
   : ''
 ---
 
@@ -20,8 +17,8 @@ const imageStyle = item.imageStyle
         class:list={['article-card-image', item.imageClassName]}
         src={imageSrc}
         alt={item.imageAlt || item.title || 'Article image'}
-        style={imageStyle}
-        loading="eager"
+        data-image-inset={item.imageInset}
+        loading={priority ? 'eager' : 'lazy'}
         fetchpriority={priority ? 'high' : undefined}
         decoding="async"
       />
@@ -30,9 +27,10 @@ const imageStyle = item.imageStyle
     )}
   </div>
   <div class="article-content">
+    {featureCaption && <div class="feature-caption">{featureCaption}<span aria-hidden="true">&#8599;</span></div>}
     <div class="article-date">{item.date}</div>
     {item.readingTime && <div class="reading-time">{item.readingTime} read</div>}
-    <div class="article-title">{item.title}</div>
+    {featureCaption ? <h2 class="article-title">{item.title}</h2> : <div class="article-title">{item.title}</div>}
     <div class="article-description">{item.description}</div>
     <div class="article-tags">
       {item.tags.map((tag) => <span class="tag">{tag}</span>)}
