@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#090d14"/>
+  <g transform="translate(348 252.6) scale(3.9)">
+    <path d="M3 5h27Q26 12 21 12h-4v16h-7V12H3Z" fill="#d8dde4"/>
+    <clipPath id="accent-clip">
+      <rect x="17" width="15" height="32"/>
+    </clipPath>
+    <g clip-path="url(#accent-clip)">
+      <path d="M16 22.9Q23 22.9 28.5 13.2M23.9 19.4Q27.9 19.5 29 24.5" transform="translate(2.04 2.748) scale(.88)" fill="none" stroke="#e0882f" stroke-linecap="round" stroke-width="2.5"/>
+    </g>
+  </g>
+  <text x="510" y="345" fill="#d8dde4" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="96" font-weight="800" letter-spacing="-4.8">Tangent</text>
+</svg>
