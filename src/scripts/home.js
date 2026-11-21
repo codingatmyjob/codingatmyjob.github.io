@@ -13,6 +13,7 @@ if (config && grid) {
   const searchClear = document.querySelector('.search-clear')
   const sortToggle = document.getElementById('sort-toggle')
   const sortDropdown = document.querySelector('.sort-dropdown')
+  const sortOptions = new Map(Array.from(sortDropdown.querySelectorAll('[data-sort]'), (button) => [button.dataset.sort, button]))
   const filterToggle = document.getElementById('filter-toggle')
   const filterPanel = document.getElementById('tag-filter-panel')
   const filterList = document.getElementById('tag-filter-list')
@@ -29,7 +30,7 @@ if (config && grid) {
   let query = params.get('q') || ''
   let selectedTags = [...new Set((params.get('tags') || '').split(',').filter(Boolean)
     .map((tag) => tag.toLowerCase() === 'claude code' ? 'Claude' : tag))]
-  let sortOrder = ['newest', 'oldest', 'a-z', 'z-a'].includes(params.get('sort')) ? params.get('sort') : 'newest'
+  let sortOrder = sortOptions.has(params.get('sort')) ? params.get('sort') : 'newest'
   let currentPage = 1
   let searchTimer = null
   let renderId = 0
@@ -45,16 +46,28 @@ if (config && grid) {
   const normalize = (value) => String(value || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase()
   const slugFor = (path) => String(path || '').replace(/^\/?articles\//, '').replace(/\.html$/, '')
   const routeFor = (path) => `${basePath}articles/${slugFor(path)}/`
+  const voteCountFor = (path) => {
+    const count = voteCounts?.get(slugFor(path))
+    return Number.isSafeInteger(count) && count >= 0 ? count : undefined
+  }
 
   const showVoteCounts = (root) => {
     if (!voteCounts) return
     root.querySelectorAll('.article-card[data-path]').forEach((card) => {
-      const count = voteCounts.get(slugFor(card.dataset.path))
-      if (!Number.isSafeInteger(count) || count < 0) return
-      const tally = document.createElement('div')
+      const count = voteCountFor(card.dataset.path)
+      if (count === undefined) return
+      const tally = document.createElement('span')
       tally.className = 'article-card-vote-count'
-      tally.textContent = `${count.toLocaleString()} helpful ${count === 1 ? 'vote' : 'votes'}`
-      card.querySelector('.article-content').append(tally)
+      const label = `${count.toLocaleString()} ${count === 1 ? 'vote' : 'votes'}`
+      const meta = card.querySelector('.article-card-meta')
+      if (meta) {
+        tally.textContent = `+${label}`
+        meta.append(tally)
+      } else {
+        tally.textContent = `${count.toLocaleString()} helpful ${count === 1 ? 'vote' : 'votes'}`
+        const content = card.querySelector('.article-content')
+        content.insertBefore(tally, content.querySelector('.article-tags'))
+      }
     })
   }
 
@@ -68,10 +81,20 @@ if (config && grid) {
       const { counts } = await response.json()
       if (!counts || typeof counts !== 'object' || Array.isArray(counts)) throw new Error('Invalid vote totals.')
       voteCounts = new Map(Object.entries(counts))
-      showVoteCounts(grid)
+      if (sortOrder === 'votes') render()
+      else showVoteCounts(grid)
       if (showcase) showVoteCounts(showcase)
     } catch (error) {
       console.warn('Could not load article vote totals:', error)
+      sortOptions.get('votes')?.remove()
+      sortOptions.delete('votes')
+      if (sortOrder === 'votes') {
+        sortOrder = 'newest'
+        currentPage = 1
+        updateSortLabel()
+        setUrl()
+        render()
+      }
     }
   }
 
@@ -90,13 +113,14 @@ if (config && grid) {
       : escapeHtml(article.imageLabel || article.title)
     const metadata = `<div class="article-date">${escapeHtml(article.date)}</div>
       ${article.readingTime ? `<div class="reading-time">${escapeHtml(article.readingTime)} read</div>` : ''}`
+    const meta = `<div class="article-card-meta${wide ? ' article-index-meta' : ''}"><div>${metadata}</div></div>`
     const title = `<div class="article-title">${escapeHtml(article.title)}</div>`
 
     return `<a class="article-card" href="${escapeHtml(routeFor(article.path))}" data-path="${escapeHtml(article.path)}">
       ${wide ? '' : `<div class="article-image">${imageMarkup}</div>`}
       <div class="article-content">
-        ${wide ? `<div class="article-index-heading">${title}<div class="article-index-meta">${metadata}</div></div>
-          <span class="article-index-arrow" aria-hidden="true">&#8599;</span>` : `${metadata}${title}`}
+        ${wide ? `<div class="article-index-heading">${title}${meta}</div>
+          <span class="article-index-arrow" aria-hidden="true">&#8599;</span>` : `${meta}${title}`}
         <div class="article-description">${escapeHtml(article.description)}</div>
         ${tags.length ? `<div class="article-tags">${tags.map((tag) => `<span class="tag">${escapeHtml(tag)}</span>`).join('')}</div>` : ''}
       </div>
@@ -144,16 +168,15 @@ if (config && grid) {
   }
 
   const updateSortLabel = () => {
-    const labels = { newest: 'Newest', oldest: 'Oldest', 'a-z': 'A-Z', 'z-a': 'Z-A' }
-    const label = labels[sortOrder] || labels.newest
+    const label = sortOptions.get(sortOrder).textContent.trim()
     sortToggle.querySelector('.sort-label').textContent = label
     sortToggle.setAttribute('aria-label', `Sort: ${label}`)
     sortToggle.title = `Sort: ${label}`
     const arrow = sortToggle.querySelector('.dropdown-arrow')
     arrow.classList.toggle('arrow-up', ['oldest', 'z-a'].includes(sortOrder))
     arrow.classList.toggle('arrow-down', !['oldest', 'z-a'].includes(sortOrder))
-    sortDropdown.querySelectorAll('[data-sort]').forEach((button) => {
-      button.classList.toggle('active', button.dataset.sort === sortOrder)
+    sortOptions.forEach((button, value) => {
+      button.classList.toggle('active', value === sortOrder)
     })
   }
 
@@ -196,9 +219,13 @@ if (config && grid) {
         const right = (b.title || '').toLowerCase()
         return sortOrder === 'a-z' ? left.localeCompare(right) : right.localeCompare(left)
       }
+      if (sortOrder === 'votes') {
+        const difference = (voteCountFor(b.path) ?? 0) - (voteCountFor(a.path) ?? 0)
+        if (difference) return difference
+      }
       const left = a.publishedAt ? new Date(a.publishedAt) : new Date('2099-12-31')
       const right = b.publishedAt ? new Date(b.publishedAt) : new Date('2099-12-31')
-      return sortOrder === 'newest' ? right - left : left - right
+      return sortOrder === 'oldest' ? left - right : right - left
     })
 
     const visibleTags = [...new Set(filtered.flatMap((article) => article.tags || []))].sort()

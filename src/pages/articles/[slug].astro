@@ -28,8 +28,8 @@ const { slug = '' } = Astro.params
 const rawHtml = readHtmlPage(articlesDirectory, slug)
 const article = articlesData.find((item) => item.id === slug || item.path === `articles/${slug}`)
 const votesApi = import.meta.env.PUBLIC_VOTES_API_URL?.trim()
-if (votesApi) {
-  const endpoint = new URL(votesApi)
+const endpoint = votesApi ? new URL(votesApi) : null
+if (endpoint) {
   const local = import.meta.env.DEV && ['localhost', '127.0.0.1'].includes(endpoint.hostname)
   if ((endpoint.protocol !== 'https:' && !(local && endpoint.protocol === 'http:'))
       || endpoint.username || endpoint.password || endpoint.pathname !== '/votes' || endpoint.search || endpoint.hash) {
@@ -45,9 +45,15 @@ const image = article?.imageSrc
   : getSiteUrl('images/cover/og-image.png')
 const rawMain = extractMainHtml(rawHtml)
 const readTime = readTimesByPath[`articles/${slug}`]
-const shareNav = `<div class="article-home-nav"><a class="article-home-btn" href="${basePath}" aria-label="Return home"><span class="article-home-btn-icon" aria-hidden="true">&larr;</span><span>Return Home</span></a><button type="button" class="article-share-btn" aria-label="Share article" data-share-title="${title.replace(/"/g, '&quot;')}" data-share-description="${description.replace(/"/g, '&quot;')}" data-share-url="${canonical}"><svg class="article-share-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg><span class="article-share-btn-text">Share</span></button></div>`
+const voteButton = article && endpoint
+  ? `<button type="button" class="article-share-btn article-vote-btn" data-article-vote data-api-url="${endpoint.href}" data-slug="${encodeURIComponent(slug)}" aria-label="Upvote article" title="Upvote article" aria-pressed="false" hidden><svg class="article-share-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 10H3v11h4zM7 10l5-7a3 3 0 0 1 2 4l-1 3h6a2 2 0 0 1 2 2.4l-1.3 7a2 2 0 0 1-2 1.6H7"></path></svg><span class="article-vote-count" aria-hidden="true" hidden></span></button>`
+  : ''
+const shareNav = `<div class="article-home-nav"><a class="article-home-btn" href="${basePath}" aria-label="Return home"><span class="article-home-btn-icon" aria-hidden="true">&larr;</span><span>Return Home</span></a><div class="article-nav-actions">${voteButton}<button type="button" class="article-share-btn" aria-label="Share article" data-share-title="${title.replace(/"/g, '&quot;')}" data-share-description="${description.replace(/"/g, '&quot;')}" data-share-url="${canonical}"><svg class="article-share-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg><span class="article-share-btn-text">Share</span></button></div></div>`
 const mainHtml = addBaseToRootPaths(removeScripts(rawMain), basePath)
   .replace(/<main\b[^>]*>/i, (openingTag) => `${openingTag}${shareNav}`)
+  .replace(/<\/h1>/i, (match) => voteButton
+    ? `${match}<p class="article-vote-message" role="status"></p>`
+    : match)
   .replace(/(<div class="meta">\s*<time\b[^>]*>[^<]*<\/time>)/i, (metadata) =>
     readTime ? `${metadata}<span class="article-byline-time">${readTime} read</span>` : metadata)
 const scriptsHtml = extractBodyScripts(rawHtml).map((script) => addBaseToRootPaths(script, basePath)).join('\n')
@@ -77,13 +83,6 @@ const scoreToPercent = (score) => Math.min(99, Math.max(0, Math.round(100 * (1 -
   <div id="article-view">
     <div class="article-frame">
       <div set:html={mainHtml}></div>
-      {article && votesApi && (
-        <div class="article-vote" data-article-vote data-api-url={votesApi} data-slug={slug} hidden>
-          <button type="button" class="article-share-btn" aria-pressed="false">Helpful</button>
-          <span class="article-vote-count"></span>
-          <span class="article-vote-message" role="status"></span>
-        </div>
-      )}
       {relatedItems.length > 0 && (
         <section class="related-carousel" aria-labelledby="related-carousel-title">
           <div class="related-carousel-header">

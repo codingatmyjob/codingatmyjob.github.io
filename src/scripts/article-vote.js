@@ -1,17 +1,20 @@
-const widget = document.querySelector('[data-article-vote]')
+const button = document.querySelector('[data-article-vote]')
+const tally = button?.querySelector('.article-vote-count')
+const message = document.querySelector('.article-vote-message')
 
-if (widget) {
-  const button = widget.querySelector('button')
-  const tally = widget.querySelector('.article-vote-count')
-  const message = widget.querySelector('.article-vote-message')
-  const endpoint = new URL(widget.dataset.apiUrl)
-  endpoint.searchParams.set('slug', widget.dataset.slug)
-  const storageKey = `tangent:helpful:${widget.dataset.slug}`
+if (button && tally && message) {
+  const slug = decodeURIComponent(button.dataset.slug)
+  const endpoint = new URL(button.dataset.apiUrl)
+  endpoint.searchParams.set('slug', slug)
+  const storageKey = `tangent:helpful:${slug}`
   const votedKey = `${storageKey}:voted`
   let submitted = false
 
   const showCount = (count) => {
-    tally.textContent = `${count.toLocaleString()} ${count === 1 ? 'vote' : 'votes'}`
+    const formatted = count.toLocaleString()
+    tally.textContent = formatted
+    button.setAttribute('aria-description', `${formatted} ${count === 1 ? 'vote' : 'votes'}`)
+    tally.hidden = false
   }
   const showVoted = () => {
     button.setAttribute('aria-pressed', 'true')
@@ -35,7 +38,7 @@ if (widget) {
   } catch (error) {
     console.warn('Could not read the local vote:', error)
   }
-  widget.hidden = false
+  button.hidden = false
   requestCount().then((count) => {
     if (!submitted) showCount(count)
   }).catch((error) => {
@@ -58,13 +61,12 @@ if (widget) {
     }
 
     button.setAttribute('aria-disabled', 'true')
-    message.textContent = 'Saving vote...'
+    message.textContent = ''
     try {
       const count = await requestCount({ method: 'POST', headers: { 'X-Voter-Id': voterId } })
       submitted = true
       showCount(count)
       showVoted()
-      message.textContent = 'Thanks for your feedback.'
       try {
         localStorage.setItem(votedKey, '1')
       } catch (error) {
