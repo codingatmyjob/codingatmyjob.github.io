@@ -28,7 +28,7 @@ const metaByPage = {
   },
   'status-hub': {
     title: 'Status Hub',
-    description: 'Kibana-style status hub for Tangent project workstreams, backlog flow, and delivery metrics.',
+    description: 'Recent commits, deployments, and issues for Tangent.',
     type: 'website'
   }
 }
@@ -61,7 +61,7 @@ const jsonLd = extractJsonLd(rawHtml)
 >
   {headStyles.map((css) => <style is:inline set:html={css}></style>)}
   {jsonLd.map((json) => <script slot="head" type="application/ld+json" set:html={json}></script>)}
-  <div id="article-view">
+  <div id="article-view" class:list={{ 'status-hub-view': page === 'status-hub' }}>
     <div class="article-frame">
       <div set:html={mainHtml}></div>
       <div class="article-runtime-scripts" set:html={scriptsHtml}></div>

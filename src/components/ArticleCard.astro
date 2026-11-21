@@ -1,5 +1,5 @@
 ---
-const { item, basePath = '/', priority = false, featureCaption = '' } = Astro.props
+const { item, basePath = '/', priority = false, featureCaption = '', showCover = true } = Astro.props
 const href = `${basePath}articles/${item.path.replace(/^articles\//, '').replace(/\.html$/, '')}/`
 const imageSrc = item.imageSrc
   ? item.imageSrc.startsWith('http')
@@ -11,7 +11,7 @@ const imageSrc = item.imageSrc
 ---
 
 <a class="article-card" href={href} data-path={item.path}>
-  <div class="article-image">
+  {showCover && <div class="article-image">
     {imageSrc ? (
       <img
         class:list={['article-card-image', item.imageClassName]}
@@ -25,7 +25,7 @@ const imageSrc = item.imageSrc
     ) : (
       item.imageLabel || item.title
     )}
-  </div>
+  </div>}
   <div class="article-content">
     {featureCaption && <div class="feature-caption">{featureCaption}<span aria-hidden="true">&#8599;</span></div>}
     <div class="article-date">{item.date}</div>

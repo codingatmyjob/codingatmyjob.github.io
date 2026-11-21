@@ -114,9 +114,16 @@ const homeSchema = JSON.stringify({
               <a href="#archive">Browse the archive <span aria-hidden="true">&darr;</span></a>
             </div>
             <div class="feature-grid">
-              {featured.map(({ item, caption }, index) => (
-                <ArticleCard item={item} basePath={basePath} priority={index === 0} featureCaption={caption} />
-              ))}
+              <div class="feature-lead">
+                <ArticleCard item={featured[0].item} basePath={basePath} priority featureCaption={featured[0].caption} />
+              </div>
+              {featured.length > 1 && (
+                <div class="feature-picks">
+                  {featured.slice(1).map(({ item, caption }) => (
+                    <ArticleCard item={item} basePath={basePath} featureCaption={caption} showCover={false} />
+                  ))}
+                </div>
+              )}
             </div>
           </section>
         )}
@@ -131,7 +138,7 @@ const homeSchema = JSON.stringify({
           </button>
           <button type="button" data-layout="wide" aria-label="Wide view" title="Wide view" aria-controls="articles-grid" aria-pressed="false">
             <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true">
-              <path d="M3 4h6v7H3zm8 1h10v2H11zm0 3h7v2h-7zM3 13h6v7H3zm8 1h10v2H11zm0 3h7v2h-7z" />
+              <path d="M3 4h18v2H3zm0 7h18v2H3zm0 7h18v2H3z" />
             </svg>
           </button>
         </div>
@@ -152,7 +159,7 @@ const homeSchema = JSON.stringify({
           <button class="pagination-btn pagination-last" type="button" aria-label="Last page" title="Go to last page">⇥</button>
         </div>
       </div>
-      <div id="home-data" data-articles={JSON.stringify(articlesData)} data-base={basePath} hidden></div>
+      <div id="home-data" data-articles={JSON.stringify(articlesData)} data-base={basePath} data-votes-api={import.meta.env.PUBLIC_VOTES_API_URL?.trim()} hidden></div>
     </div>
   </section>
   <script>

@@ -1,35 +1,9 @@
+import { observeCardTags } from './tag-packing.js'
+
 const config = document.getElementById('home-data')
 const grid = document.getElementById('articles-grid')
 const layoutControls = document.getElementById('article-layout-controls')
-
-if (grid && layoutControls) {
-  const buttons = layoutControls.querySelectorAll('button[data-layout]')
-  const setLayout = (layout) => {
-    grid.dataset.layout = layout
-    buttons.forEach((button) => {
-      button.setAttribute('aria-pressed', String(button.dataset.layout === layout))
-    })
-  }
-
-  try {
-    if (localStorage.getItem('tangentArticleLayout') === 'wide') setLayout('wide')
-  } catch (error) {
-    console.warn('Article layout preference could not be read:', error)
-  }
-
-  buttons.forEach((button) => {
-    button.addEventListener('click', () => {
-      const layout = button.dataset.layout
-      setLayout(layout)
-      try {
-        localStorage.setItem('tangentArticleLayout', layout)
-      } catch (error) {
-        console.warn('Article layout preference could not be saved:', error)
-      }
-    })
-  })
-  layoutControls.hidden = false
-}
+const refreshTagPacking = observeCardTags(document)
 
 if (config && grid) {
   const articles = JSON.parse(config.dataset.articles || '[]')
@@ -53,11 +27,13 @@ if (config && grid) {
   const contentCache = new Map()
   const params = new URLSearchParams(window.location.search)
   let query = params.get('q') || ''
-  let selectedTags = (params.get('tags') || '').split(',').filter(Boolean)
+  let selectedTags = [...new Set((params.get('tags') || '').split(',').filter(Boolean)
+    .map((tag) => tag.toLowerCase() === 'claude code' ? 'Claude' : tag))]
   let sortOrder = ['newest', 'oldest', 'a-z', 'z-a'].includes(params.get('sort')) ? params.get('sort') : 'newest'
   let currentPage = 1
   let searchTimer = null
   let renderId = 0
+  let voteCounts
 
   const escapeHtml = (value) => String(value ?? '')
     .replace(/&/g, '&amp;')
@@ -67,10 +43,36 @@ if (config && grid) {
     .replace(/'/g, '&#39;')
 
   const normalize = (value) => String(value || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase()
+  const slugFor = (path) => String(path || '').replace(/^\/?articles\//, '').replace(/\.html$/, '')
+  const routeFor = (path) => `${basePath}articles/${slugFor(path)}/`
 
-  const routeFor = (path) => {
-    const slug = String(path || '').replace(/^\/?articles\//, '').replace(/\.html$/, '')
-    return `${basePath}articles/${slug}/`
+  const showVoteCounts = (root) => {
+    if (!voteCounts) return
+    root.querySelectorAll('.article-card[data-path]').forEach((card) => {
+      const count = voteCounts.get(slugFor(card.dataset.path))
+      if (!Number.isSafeInteger(count) || count < 0) return
+      const tally = document.createElement('div')
+      tally.className = 'article-card-vote-count'
+      tally.textContent = `${count.toLocaleString()} helpful ${count === 1 ? 'vote' : 'votes'}`
+      card.querySelector('.article-content').append(tally)
+    })
+  }
+
+  const loadVoteCounts = async () => {
+    try {
+      const response = await fetch(config.dataset.votesApi, {
+        credentials: 'omit',
+        signal: AbortSignal.timeout(8000)
+      })
+      if (!response.ok) throw new Error(`HTTP ${response.status}`)
+      const { counts } = await response.json()
+      if (!counts || typeof counts !== 'object' || Array.isArray(counts)) throw new Error('Invalid vote totals.')
+      voteCounts = new Map(Object.entries(counts))
+      showVoteCounts(grid)
+      if (showcase) showVoteCounts(showcase)
+    } catch (error) {
+      console.warn('Could not load article vote totals:', error)
+    }
   }
 
   const imageFor = (source) => {
@@ -80,19 +82,23 @@ if (config && grid) {
   }
 
   const createCard = (article, index) => {
+    const wide = grid.dataset.layout === 'wide'
+    const tags = article.tags || []
     const image = imageFor(article.imageSrc)
     const imageMarkup = image
       ? `<img class="article-card-image ${escapeHtml(article.imageClassName || '')}" src="${escapeHtml(image)}" alt="${escapeHtml(article.imageAlt || article.title || 'Article image')}"${article.imageInset ? ` data-image-inset="${escapeHtml(article.imageInset)}"` : ''} loading="${index === 0 ? 'eager' : 'lazy'}" decoding="async">`
       : escapeHtml(article.imageLabel || article.title)
+    const metadata = `<div class="article-date">${escapeHtml(article.date)}</div>
+      ${article.readingTime ? `<div class="reading-time">${escapeHtml(article.readingTime)} read</div>` : ''}`
+    const title = `<div class="article-title">${escapeHtml(article.title)}</div>`
 
     return `<a class="article-card" href="${escapeHtml(routeFor(article.path))}" data-path="${escapeHtml(article.path)}">
-      <div class="article-image">${imageMarkup}</div>
+      ${wide ? '' : `<div class="article-image">${imageMarkup}</div>`}
       <div class="article-content">
-        <div class="article-date">${escapeHtml(article.date)}</div>
-        ${article.readingTime ? `<div class="reading-time">${escapeHtml(article.readingTime)} read</div>` : ''}
-        <div class="article-title">${escapeHtml(article.title)}</div>
+        ${wide ? `<div class="article-index-heading">${title}<div class="article-index-meta">${metadata}</div></div>
+          <span class="article-index-arrow" aria-hidden="true">&#8599;</span>` : `${metadata}${title}`}
         <div class="article-description">${escapeHtml(article.description)}</div>
-        <div class="article-tags">${(article.tags || []).map((tag) => `<span class="tag">${escapeHtml(tag)}</span>`).join('')}</div>
+        ${tags.length ? `<div class="article-tags">${tags.map((tag) => `<span class="tag">${escapeHtml(tag)}</span>`).join('')}</div>` : ''}
       </div>
     </a>`
   }
@@ -218,6 +224,8 @@ if (config && grid) {
           <p class="no-results-message">Try adjusting your search terms or filters to find what you're looking for.</p>
         </div></div>`
 
+    showVoteCounts(grid)
+    refreshTagPacking()
     pagination.hidden = totalPages <= 1
     pageCurrent.textContent = String(currentPage)
     pageTotal.textContent = String(totalPages)
@@ -231,11 +239,43 @@ if (config && grid) {
     searchClear.hidden = !query
   }
 
+  if (layoutControls) {
+    const buttons = layoutControls.querySelectorAll('button[data-layout]')
+    const setLayout = (layout) => {
+      grid.dataset.layout = layout
+      buttons.forEach((button) => {
+        button.setAttribute('aria-pressed', String(button.dataset.layout === layout))
+      })
+    }
+
+    try {
+      if (localStorage.getItem('tangentArticleLayout') === 'wide') setLayout('wide')
+    } catch (error) {
+      console.warn('Article layout preference could not be read:', error)
+    }
+
+    buttons.forEach((button) => {
+      button.addEventListener('click', () => {
+        const layout = button.dataset.layout
+        if (grid.dataset.layout === layout) return
+        setLayout(layout)
+        render()
+        try {
+          localStorage.setItem('tangentArticleLayout', layout)
+        } catch (error) {
+          console.warn('Article layout preference could not be saved:', error)
+        }
+      })
+    })
+    layoutControls.hidden = false
+  }
+
   searchInput.value = query
   updateSortLabel()
   updateFilterState()
   setUrl()
   render()
+  if (config.dataset.votesApi) loadVoteCounts()
 
   searchInput.addEventListener('input', () => {
     query = searchInput.value

@@ -9,7 +9,7 @@
     "build": "astro build",
     "build:ci": "npm run build",
     "preview": "astro preview --host 0.0.0.0",
-    "lint": "eslint scripts tests src/scripts astro.config.mjs eslint.config.cjs --ext .js,.cjs,.mjs",
+    "lint": "eslint scripts tests src/scripts workers astro.config.mjs eslint.config.cjs --ext .js,.cjs,.mjs",
     "test": "vitest run",
     "generate:related": "node scripts/generate-related-articles.cjs",
     "generate:read-times": "node scripts/generate-read-times.cjs",

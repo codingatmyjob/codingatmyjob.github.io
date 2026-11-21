@@ -50,24 +50,6 @@ function extractTypeTags(issue) {
   return [...new Set(typeValues)]
 }
 
-function normalizeGithubLabelColor(value) {
-  if (typeof value !== 'string') return ''
-  const raw = value.trim().replace(/^#/, '')
-  if (!/^[0-9a-fA-F]{6}$/.test(raw)) return ''
-  return `#${raw.toLowerCase()}`
-}
-
-function getIssueLabelColor(issue, pattern) {
-  const labels = Array.isArray(issue?.labels) ? issue.labels : []
-  for (const label of labels) {
-    const name = (typeof label === 'string' ? label : label?.name || '').toLowerCase()
-    if (!pattern.test(name)) continue
-    const color = normalizeGithubLabelColor(typeof label === 'string' ? '' : label?.color)
-    if (color) return color
-  }
-  return ''
-}
-
 function escapeHtml(str) {
   return String(str)
     .replace(/&/g, '&amp;')
@@ -129,19 +111,17 @@ async function fetchGithubJsonCached(url, cacheKey, maxAgeMs = 15 * 60 * 1000) {
   }
 }
 
-function renderFeedItems(root, selector, items, fallbackText, dotClass = '') {
+function renderFeedItems(root, selector, items, fallbackText) {
   const node = root.querySelector(selector)
   if (!node) return
 
   if (!items.length) {
-    node.innerHTML = `<li class="status-item"><span class="status-dot ${dotClass}" aria-hidden="true"></span><p>${escapeHtml(fallbackText)}</p></li>`
+    node.innerHTML = `<li class="status-item-empty">${escapeHtml(fallbackText)}</li>`
     return
   }
 
-  node.innerHTML = items.map(({ title, meta, commitSha, commitUrl, dotColor }) => {
+  node.innerHTML = items.map(({ title, meta, commitSha, commitUrl }) => {
     const safeCommitUrl = sanitizeGithubUrl(commitUrl)
-    const safeDotColor = normalizeGithubLabelColor(dotColor)
-    const dotStyle = safeDotColor ? ` style="background:${escapeHtml(safeDotColor)}"` : ''
     const commitLink = (safeCommitUrl && commitSha)
       ? `<a class="status-item-meta-link" href="${escapeHtml(safeCommitUrl)}" target="_blank" rel="noopener noreferrer">${escapeHtml(commitSha)}</a>`
       : ''
@@ -149,7 +129,7 @@ function renderFeedItems(root, selector, items, fallbackText, dotClass = '') {
       ? `<span class="status-item-meta">${commitLink}${commitLink && meta ? ' • ' : ''}${meta ? escapeHtml(meta) : ''}</span>`
       : ''
 
-    return `<li class="status-item"><span class="status-dot ${dotClass}"${dotStyle} aria-hidden="true"></span><p>${escapeHtml(title)}${metaLine}</p></li>`
+    return `<li>${escapeHtml(title)}${metaLine}</li>`
   }).join('')
 }
 
@@ -413,7 +393,7 @@ export async function hydrateGithubStats(root) {
       onHoldCount: formatNumber(blockedOpen.length),
       commitVelocity: `${avgPerWeek.toFixed(1)}/wk`,
       velocityTrend: trend,
-      velocitySummary: `12-week total: ${formatNumber(total12w)} commits.`
+      velocitySummary: `${formatNumber(total12w)} ${total12w === 1 ? 'commit' : 'commits'} over 12 weeks`
     }
 
     statNodes.forEach((node) => {
@@ -427,9 +407,11 @@ export async function hydrateGithubStats(root) {
     if (barsNode) {
       const max = Math.max(...weeklyBuckets, 1)
       barsNode.innerHTML = weeklyBuckets.map((count, index) => {
-        const height = Math.max(8, Math.round((count / max) * 42))
-        const active = index === weeks - 1 ? 'active' : ''
-        return `<div class="status-spark-item"><span class="status-spark-count">${count}</span><span class="status-spark-bar ${active}" style="height:${height}px" title="${count} commits"></span></div>`
+        const height = Math.round((count / max) * 64)
+        const weeksAgo = weeks - 1 - index
+        const period = weeksAgo === 0 ? 'This week' : `${weeksAgo} ${weeksAgo === 1 ? 'week' : 'weeks'} ago`
+        const label = `${period}: ${count} ${count === 1 ? 'commit' : 'commits'}`
+        return `<div role="img" aria-label="${label}" title="${label}"><span class="status-spark-count">${count}</span><span class="status-spark-bar" style="height:${height}px"></span></div>`
       }).join('')
     }
 
@@ -448,15 +430,10 @@ export async function hydrateGithubStats(root) {
     const commitsFeed = commitFeedSource
       .slice(0, 5)
       .map((commit) => {
-        const lines = (commit?.commit?.message || 'Untitled commit')
-          .split('\n')
-          .map((line) => line.trim())
-          .filter(Boolean)
-        const title = lines[0] || 'Untitled commit'
-        const note = lines.slice(1).join(' ')
+        const title = commit?.commit?.message?.trim().split('\n', 1)[0] || 'Untitled commit'
         return {
           title,
-          meta: `${formatShortDate(commit?.commit?.author?.date)}${note ? ` • Note: ${note}` : ''}`,
+          meta: formatShortDate(commit?.commit?.author?.date),
           commitSha: commit?.sha?.slice(0, 7) || 'unknown',
           commitUrl: commit?.html_url || ''
         }
@@ -467,11 +444,9 @@ export async function hydrateGithubStats(root) {
       .map((issue) => {
         const typeTags = extractTypeTags(issue)
         const typeSuffix = typeTags.length ? ` • ${typeTags.join(', ')}` : ''
-        const dotColor = getIssueLabelColor(issue, ideaLabel)
         return {
           title: issue.title || 'Untitled idea',
-          meta: `opened ${formatShortDate(issue.created_at)}${typeSuffix}`,
-          dotColor
+          meta: `Opened ${formatShortDate(issue.created_at)}${typeSuffix}`
         }
       })
 
@@ -482,11 +457,9 @@ export async function hydrateGithubStats(root) {
       .map((issue) => {
         const typeTags = extractTypeTags(issue)
         const typeSuffix = typeTags.length ? ` • ${typeTags.join(', ')}` : ''
-        const dotColor = getIssueLabelColor(issue, orphanLabel)
         return {
           title: issue.title || 'Untitled orphan',
-          meta: `updated ${formatShortDate(issue.updated_at)}${typeSuffix}`,
-          dotColor
+          meta: `Updated ${formatShortDate(issue.updated_at)}${typeSuffix}`
         }
       })
 
@@ -495,11 +468,9 @@ export async function hydrateGithubStats(root) {
       .map((issue) => {
         const typeTags = extractTypeTags(issue)
         const typeSuffix = typeTags.length ? ` • ${typeTags.join(', ')}` : ''
-        const dotColor = getIssueLabelColor(issue, blockedLabel)
         return {
           title: issue.title || 'Blocked issue',
-          meta: `marked on hold ${formatShortDate(issue.updated_at)}${typeSuffix}`,
-          dotColor
+          meta: `Updated ${formatShortDate(issue.updated_at)}${typeSuffix}`
         }
       })
 
@@ -508,11 +479,9 @@ export async function hydrateGithubStats(root) {
       .map((issue) => {
         const typeTags = extractTypeTags(issue)
         const typeText = typeTags.length ? typeTags.join(', ') : 'shipped'
-        const dotColor = getIssueLabelColor(issue, completedLabel)
         return {
           title: issue.title || 'Completed',
-          meta: `closed ${formatShortDate(issue.closed_at)} • ${typeText}`,
-          dotColor
+          meta: `Closed ${formatShortDate(issue.closed_at)} • ${typeText}`
         }
       })
 
@@ -520,22 +489,23 @@ export async function hydrateGithubStats(root) {
       ? workflowRuns.slice(0, 5).map((run) => {
         const fullSha = run?.head_sha || ''
         return {
-          title: `${(run?.conclusion || run?.status || 'unknown').toUpperCase()} • ${run?.display_title || run?.name || 'Deploy run'}`,
-          meta: `${formatWeekdayDate(run?.created_at)}`,
+          title: run?.display_title || run?.name || 'Deploy run',
+          meta: `${(run?.conclusion || run?.status || 'unknown').replace(/_/g, ' ')} • ${formatWeekdayDate(run?.created_at)}`,
           commitSha: fullSha ? fullSha.slice(0, 7) : '',
           commitUrl: fullSha ? `https://github.com/${owner}/${repo}/commit/${fullSha}` : ''
         }
       })
       : []
 
-    renderFeedItems(root, '[data-gh-feed-commits]', commitsFeed, 'No recent commits found.')
-    renderFeedItems(root, '[data-gh-feed-ideas]', ideasFeed, 'No open ideas found. Add label: idea.')
-    renderFeedItems(root, '[data-gh-feed-orphans]', orphansFeed, 'No open orphans found.', 'warn')
-    renderFeedItems(root, '[data-gh-feed-blocked]', blockedFeed, 'No GitHub on-hold issues are currently open.', 'pause')
-    renderFeedItems(root, '[data-gh-feed-completed]', completedFeed, 'No completed items found.')
-    renderFeedItems(root, '[data-gh-feed-deployments]', deploymentFeed, 'No deployment activity found.')
+    renderFeedItems(root, '[data-gh-feed-commits]', commitsFeed, 'No recent commits.')
+    renderFeedItems(root, '[data-gh-feed-ideas]', ideasFeed, 'No open ideas.')
+    renderFeedItems(root, '[data-gh-feed-orphans]', orphansFeed, 'No orphaned issues.')
+    renderFeedItems(root, '[data-gh-feed-blocked]', blockedFeed, 'No issues on hold.')
+    renderFeedItems(root, '[data-gh-feed-completed]', completedFeed, 'No recently closed issues.')
+    renderFeedItems(root, '[data-gh-feed-deployments]', deploymentFeed, 'No recent deployments.')
+    return true
   } catch (error) {
     console.error('Status Hub hydration failed:', error)
-    // Keep static fallback values if GitHub API is unavailable.
+    return false
   }
 }

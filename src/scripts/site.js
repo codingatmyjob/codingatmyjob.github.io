@@ -113,7 +113,7 @@ if (scrollTopButton) {
   updateScrollTop()
 }
 
-document.querySelectorAll('.article-share-btn').forEach((button) => {
+document.querySelectorAll('.article-share-btn[data-share-url]').forEach((button) => {
   button.addEventListener('click', async () => {
     const title = button.dataset.shareTitle || document.title
     const description = button.dataset.shareDescription || ''

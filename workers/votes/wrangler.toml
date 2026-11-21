@@ -1,0 +1,23 @@
+name = "tangent-votes"
+main = "index.js"
+compatibility_date = "2026-01-01"
+preview_urls = false
+
+[vars]
+ALLOWED_ORIGIN = "https://codingatmyjob.github.io"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "tangent-votes"
+database_id = "4e2adbdc-5d4b-49d1-9ec9-20ced3f7e653"
+migrations_dir = "migrations"
+
+[[ratelimits]]
+name = "READ_LIMIT"
+namespace_id = "10001"
+simple = { limit = 120, period = 60 }
+
+[[ratelimits]]
+name = "WRITE_LIMIT"
+namespace_id = "10002"
+simple = { limit = 10, period = 60 }

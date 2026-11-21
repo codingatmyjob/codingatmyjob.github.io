@@ -98,7 +98,7 @@ const baseArticlesData = [
     date: 'June 12, 2026',
     title: 'Use Claude Code for Free',
     description: 'Run Claude Code with free/local models. With tool-calling and context limits, is it doable?',
-    tags: ['Reference', 'Claude Code', 'AI', 'Windows'],
+    tags: ['Reference', 'Claude', 'AI', 'Windows'],
     imageSrc: 'images/cover/claudecode.png',
     imageAlt: 'Use Claude Code for Free'
   },

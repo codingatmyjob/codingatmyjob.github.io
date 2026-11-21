@@ -10,7 +10,7 @@ module.exports = [
   },
   js.configs.recommended,
   {
-    files: ['src/**/*.js'],
+    files: ['src/**/*.js', 'workers/**/*.js'],
     languageOptions: {
       ecmaVersion: 'latest',
       sourceType: 'module',

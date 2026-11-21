@@ -27,6 +27,15 @@ export function getStaticPaths() {
 const { slug = '' } = Astro.params
 const rawHtml = readHtmlPage(articlesDirectory, slug)
 const article = articlesData.find((item) => item.id === slug || item.path === `articles/${slug}`)
+const votesApi = import.meta.env.PUBLIC_VOTES_API_URL?.trim()
+if (votesApi) {
+  const endpoint = new URL(votesApi)
+  const local = import.meta.env.DEV && ['localhost', '127.0.0.1'].includes(endpoint.hostname)
+  if ((endpoint.protocol !== 'https:' && !(local && endpoint.protocol === 'http:'))
+      || endpoint.username || endpoint.password || endpoint.pathname !== '/votes' || endpoint.search || endpoint.hash) {
+    throw new Error('PUBLIC_VOTES_API_URL must be an HTTPS /votes endpoint with no credentials, query, or fragment.')
+  }
+}
 const fallbackTitle = slug.replace(/[-_]/g, ' ').replace(/\b\w/g, (letter) => letter.toUpperCase())
 const title = article?.title || fallbackTitle || 'Article'
 const description = article?.description || 'Technical notes, project builds, experiments, reviews, and practical writeups from Tangent.'
@@ -68,6 +77,13 @@ const scoreToPercent = (score) => Math.min(99, Math.max(0, Math.round(100 * (1 -
   <div id="article-view">
     <div class="article-frame">
       <div set:html={mainHtml}></div>
+      {article && votesApi && (
+        <div class="article-vote" data-article-vote data-api-url={votesApi} data-slug={slug} hidden>
+          <button type="button" class="article-share-btn" aria-pressed="false">Helpful</button>
+          <span class="article-vote-count"></span>
+          <span class="article-vote-message" role="status"></span>
+        </div>
+      )}
       {relatedItems.length > 0 && (
         <section class="related-carousel" aria-labelledby="related-carousel-title">
           <div class="related-carousel-header">
@@ -112,5 +128,6 @@ const scoreToPercent = (score) => Math.min(99, Math.max(0, Math.round(100 * (1 -
   </div>
   <script>
     import '../../scripts/article.js'
+    import '../../scripts/article-vote.js'
   </script>
 </SiteLayout>
