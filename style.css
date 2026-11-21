@@ -1746,6 +1746,7 @@ header > .title, header .title{position:absolute;top:50%;transform:translateY(-5
   letter-spacing: normal;
   opacity: 0.65;
   text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .feature-grid {
@@ -1817,6 +1818,8 @@ header > .title, header .title{position:absolute;top:50%;transform:translateY(-5
   align-items: center;
   margin: var(--portfolio-section-gap) 20px 16px;
 }
+.gallery-heading:focus { outline: none; }
+.gallery-heading > h2 { align-self: flex-end; }
 .gallery-heading,
 .gallery-anchor {
   scroll-margin-top: 100px;
