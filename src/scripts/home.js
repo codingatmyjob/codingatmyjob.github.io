@@ -127,6 +127,7 @@ if (config && grid) {
     if (window.innerWidth <= 900) return 16
     return 24
   }
+  let pageSize = getItemsPerPage()
 
   const getSearchContent = async (article) => {
     if (contentCache.has(article.path)) return contentCache.get(article.path)
@@ -217,7 +218,6 @@ if (config && grid) {
     ).join('')
     updateFilterState()
 
-    const pageSize = getItemsPerPage()
     if (galleryCount) {
       const count = `${filtered.length} ${filtered.length === 1 ? 'entry' : 'entries'}`
       if (galleryCount.textContent !== count) galleryCount.textContent = count
@@ -387,7 +387,9 @@ if (config && grid) {
   }, { passive: true })
 
   window.addEventListener('resize', () => {
-    currentPage = 1
+    const nextPageSize = getItemsPerPage()
+    if (nextPageSize === pageSize) return
+    pageSize = nextPageSize
     render()
   })
 
