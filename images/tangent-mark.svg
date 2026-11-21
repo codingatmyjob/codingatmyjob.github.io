@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <rect width="32" height="32" rx="8" fill="#151c2b"/>
+  <path d="M3 5h27Q26 12 21 12h-4v16h-7V12H3Z" fill="#d8dde4"/>
+  <clipPath id="accent-clip">
+    <rect x="17" width="15" height="32"/>
+  </clipPath>
+  <g clip-path="url(#accent-clip)">
+    <path d="M16 22.9Q23 22.9 28.5 13.2M23.9 19.4Q27.9 19.5 29 24.5" transform="translate(2.04 2.748) scale(.88)" fill="none" stroke="#e0882f" stroke-linecap="round" stroke-width="2.5"/>
+  </g>
+</svg>
