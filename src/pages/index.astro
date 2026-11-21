@@ -112,8 +112,8 @@ const homeSchema = JSON.stringify({
         {featured.length > 0 && (
           <section aria-labelledby="highlighted-work-heading">
             <div class="portfolio-section-heading">
-              <h1 id="highlighted-work-heading">Highlighted Work</h1>
-              <a href="#archive">Browse the archive <span aria-hidden="true">&darr;</span></a>
+              <h1 id="highlighted-work-heading">Highlights</h1>
+              <a class="gallery-jump" href="#gallery">Gallery <span aria-hidden="true">&darr;</span></a>
             </div>
             <div class="feature-grid">
               <div class="feature-lead">
@@ -130,8 +130,9 @@ const homeSchema = JSON.stringify({
           </section>
         )}
       </div>
-      <div class="portfolio-section-heading archive-heading" id="archive" tabindex="-1">
-        <h2>Archive <span id="archive-count" aria-live="polite">{articlesData.length} entries</span></h2>
+      <div class="portfolio-section-heading gallery-heading" id="gallery" tabindex="-1">
+        <span class="gallery-anchor" id="archive" aria-hidden="true"></span>
+        <h2>Gallery <span id="gallery-count" aria-live="polite">{articlesData.length} entries</span></h2>
         <div class="article-layout-controls" id="article-layout-controls" role="group" aria-label="Article layout" hidden>
           <button type="button" data-layout="grid" aria-label="Grid view" title="Grid view" aria-controls="articles-grid" aria-pressed="true">
             <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true">

@@ -1,3 +1,19 @@
+import { fetchVoteTotals, tileVoteLabel } from './vote-totals.js'
+
+const related = document.querySelector('.related-carousel[data-votes-api]')
+if (related) {
+  fetchVoteTotals(related.dataset.votesApi).then((counts) => {
+    related.querySelectorAll('[data-related-vote-slug]').forEach((tally) => {
+      const count = counts.get(tally.dataset.relatedVoteSlug)
+      if (!count) return
+      tally.textContent = tileVoteLabel(count)
+      tally.hidden = false
+    })
+  }).catch((error) => {
+    console.warn('Could not load related article vote totals:', error)
+  })
+}
+
 const button = document.querySelector('[data-article-vote]')
 const tally = button?.querySelector('.article-vote-count')
 const message = document.querySelector('.article-vote-message')

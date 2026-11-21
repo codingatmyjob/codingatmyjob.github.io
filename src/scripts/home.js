@@ -1,4 +1,5 @@
 import { observeCardTags } from './tag-packing.js'
+import { fetchVoteTotals, tileVoteLabel } from './vote-totals.js'
 
 const config = document.getElementById('home-data')
 const grid = document.getElementById('articles-grid')
@@ -19,8 +20,8 @@ if (config && grid) {
   const filterList = document.getElementById('tag-filter-list')
   const filterCount = document.querySelector('.filter-count')
   const showcase = document.getElementById('portfolio-showcase')
-  const archive = document.getElementById('archive')
-  const archiveCount = document.getElementById('archive-count')
+  const gallery = document.getElementById('gallery')
+  const galleryCount = document.getElementById('gallery-count')
   const pagination = document.querySelector('.pagination-container')
   const pageCurrent = document.querySelector('.pagination-current')
   const pageTotal = document.querySelector('.pagination-total')
@@ -46,10 +47,7 @@ if (config && grid) {
   const normalize = (value) => String(value || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase()
   const slugFor = (path) => String(path || '').replace(/^\/?articles\//, '').replace(/\.html$/, '')
   const routeFor = (path) => `${basePath}articles/${slugFor(path)}/`
-  const voteCountFor = (path) => {
-    const count = voteCounts?.get(slugFor(path))
-    return Number.isSafeInteger(count) && count >= 0 ? count : undefined
-  }
+  const voteCountFor = (path) => voteCounts?.get(slugFor(path))
 
   const showVoteCounts = (root) => {
     if (!voteCounts) return
@@ -58,21 +56,14 @@ if (config && grid) {
       if (count === undefined || count === 0) return
       const tally = document.createElement('span')
       tally.className = 'article-card-vote-count'
-      tally.textContent = `+${count.toLocaleString()} ${count === 1 ? 'vote' : 'votes'}`
+      tally.textContent = tileVoteLabel(count)
       card.querySelector('.article-card-meta').append(tally)
     })
   }
 
   const loadVoteCounts = async () => {
     try {
-      const response = await fetch(config.dataset.votesApi, {
-        credentials: 'omit',
-        signal: AbortSignal.timeout(8000)
-      })
-      if (!response.ok) throw new Error(`HTTP ${response.status}`)
-      const { counts } = await response.json()
-      if (!counts || typeof counts !== 'object' || Array.isArray(counts)) throw new Error('Invalid vote totals.')
-      voteCounts = new Map(Object.entries(counts))
+      voteCounts = await fetchVoteTotals(config.dataset.votesApi)
       if (sortOrder === 'votes') render()
       else showVoteCounts(grid)
       if (showcase) showVoteCounts(showcase)
@@ -227,9 +218,9 @@ if (config && grid) {
     updateFilterState()
 
     const pageSize = getItemsPerPage()
-    if (archiveCount) {
+    if (galleryCount) {
       const count = `${filtered.length} ${filtered.length === 1 ? 'entry' : 'entries'}`
-      if (archiveCount.textContent !== count) archiveCount.textContent = count
+      if (galleryCount.textContent !== count) galleryCount.textContent = count
     }
     const totalPages = Math.max(1, Math.ceil(filtered.length / pageSize))
     currentPage = Math.min(currentPage, totalPages)
@@ -409,8 +400,8 @@ if (config && grid) {
       else if (label === 'Next page') currentPage = Math.min(totalPages, currentPage + 1)
       else if (label === 'Last page') currentPage = totalPages
       render()
-      archive?.focus({ preventScroll: true })
-      archive?.scrollIntoView()
+      gallery?.focus({ preventScroll: true })
+      gallery?.scrollIntoView()
     })
   })
 }

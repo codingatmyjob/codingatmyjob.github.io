@@ -2,6 +2,8 @@
 
 [Tangent](https://codingatmyjob.github.io/) is my blog about cybersecurity, data science, and AI experiments. It’s built with Astro and hosted on GitHub Pages.
 
+The falling binary background follows your device’s reduced-motion setting.
+
 ## Local development
 
 Use Node.js 24.
@@ -15,9 +17,11 @@ Open [localhost:4321](http://localhost:4321). Run `npm run lint` and `npm test` 
 
 ## Editing content
 
-- Articles: [HTML](./public/articles/) and [archive metadata](./src/data/articles.js)
+- Articles: [HTML](./public/articles/) and [Gallery metadata](./src/data/articles.js)
 - Sidebar pages: [HTML](./public/sidebar/)
-- Highlighted Work: the `featured` list in [index.astro](./src/pages/index.astro)
+- Highlights: the `featured` list in [index.astro](./src/pages/index.astro)
+
+The Highlights lead, Gallery Grid, and Related Articles share a radial gradient behind their cover images. Only the Highlights lead adds grid lines. Gallery Wide stays text-only.
 
 ## Deploying
 
@@ -27,7 +31,7 @@ Open [localhost:4321](http://localhost:4321). Run `npm run lint` and `npm test` 
 ## Voting
 
 Voting is optional. The static site calls a [Cloudflare Worker](./workers/votes/) that stores votes in D1. Votes are deduplicated by browser ID per article, not by person.
-Highlighted Work and archive tiles show nonzero vote totals across from the date and read time as `+1 vote` or `+2 votes`. **Sort > Votes** ranks archive articles by vote count, newest first on ties.
+Highlights, Gallery, and Related Articles tiles show nonzero vote totals across from the date and read time as `+1 vote` or `+2 votes`. **Sort > Votes** ranks Gallery articles by vote count, newest first on ties.
 
 **Production setup**
 

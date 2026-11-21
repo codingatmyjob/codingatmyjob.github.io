@@ -1,0 +1,30 @@
+<div id="binary-bg" aria-hidden="true"></div>
+
+<script>
+  const background = document.getElementById('binary-bg')
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)')
+
+  if (background) {
+    const update = () => {
+      const count = reducedMotion.matches ? 0 : Math.min(180, Math.floor(window.innerWidth / 8))
+      while (background.childElementCount > count) background.lastElementChild?.remove()
+
+      const bits = document.createDocumentFragment()
+      for (let i = background.childElementCount; i < count; i++) {
+        const bit = document.createElement('span')
+        const duration = 6 + Math.random() * 12
+        bit.textContent = Math.random() < 0.5 ? '0' : '1'
+        bit.style.left = `${Math.random() * 100}%`
+        bit.style.fontSize = `${9 + Math.random() * 23}px`
+        bit.style.animationDuration = `${duration}s`
+        bit.style.animationDelay = `${-Math.random() * duration}s`
+        bits.append(bit)
+      }
+      background.append(bits)
+    }
+
+    update()
+    window.addEventListener('resize', update)
+    reducedMotion.addEventListener('change', update)
+  }
+</script>

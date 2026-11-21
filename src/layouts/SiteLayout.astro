@@ -1,5 +1,6 @@
 ---
 import '../../style.css'
+import BinaryBackground from '../components/BinaryBackground.astro'
 import TangentMark from '../components/TangentMark.astro'
 import { getSiteUrl } from '../siteUrls.js'
 
@@ -52,6 +53,7 @@ const sitePath = (path) => `${basePath}${String(path).replace(/^\/+/, '')}`
     </script>
   </head>
   <body class={bodyClass}>
+    <BinaryBackground />
     <div class="container">
       <header class="site-header">
         <button class="menu-toggle" type="button" aria-label="Toggle menu" aria-controls="sidebar" aria-expanded="false">

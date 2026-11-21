@@ -63,7 +63,7 @@ const relatedItems = (relatedData.items?.[slug]?.related || [])
   .filter((entry) => entry.slug && entry.slug !== slug)
   .map((entry) => {
     const item = articlesData.find((candidate) => candidate.path.replace(/^articles\//, '') === entry.slug)
-    return item ? { ...item, matchScore: entry.score || 0 } : null
+    return item ? { ...item, slug: entry.slug, matchScore: entry.score || 0 } : null
   })
   .filter(Boolean)
   .slice(0, 8)
@@ -84,7 +84,7 @@ const scoreToPercent = (score) => Math.min(99, Math.max(0, Math.round(100 * (1 -
     <div class="article-frame">
       <div set:html={mainHtml}></div>
       {relatedItems.length > 0 && (
-        <section class="related-carousel" aria-labelledby="related-carousel-title">
+        <section class="related-carousel" aria-labelledby="related-carousel-title" data-votes-api={endpoint?.href}>
           <div class="related-carousel-header">
             <h2 id="related-carousel-title">Related articles</h2>
           </div>
@@ -109,8 +109,11 @@ const scoreToPercent = (score) => Math.min(99, Math.max(0, Math.round(100 * (1 -
                   </div>
                   <div class="related-carousel-content">
                     <div class="related-carousel-meta">
-                      <p class="related-carousel-date">{item.date}</p>
-                      {item.readingTime && <span>{item.readingTime} read</span>}
+                      <span class="related-carousel-byline">
+                        <span class="related-carousel-date">{item.date}</span>
+                        {item.readingTime && <span>{item.readingTime} read</span>}
+                      </span>
+                      {endpoint && <span class="article-card-vote-count" data-related-vote-slug={item.slug} hidden></span>}
                     </div>
                     <h3 class="related-carousel-title">{item.title}</h3>
                     <p class="related-carousel-description">{item.description}</p>
