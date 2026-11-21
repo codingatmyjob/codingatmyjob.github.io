@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generatedAt": "2026-11-21T01:18:37.377Z",
+  "generatedAt": "2026-11-21T06:06:17.192Z",
   "method": "tfidf+kmeans+cosine",
   "minRelatedScore": 0.11,
   "maxObservedScore": 0.528975,
@@ -286,7 +286,7 @@
       "related": [
         {
           "slug": "use-claude-code-for-free",
-          "score": 0.181228
+          "score": 0.180746
         },
         {
           "slug": "traffic-live-object-detection",
@@ -332,7 +332,7 @@
         },
         {
           "slug": "use-claude-code-for-free",
-          "score": 0.135605
+          "score": 0.13615
         },
         {
           "slug": "using-prismjs-to-style-code",
@@ -370,11 +370,11 @@
       "related": [
         {
           "slug": "prompt-injection-demo",
-          "score": 0.181228
+          "score": 0.180746
         },
         {
           "slug": "traffic-live-object-detection",
-          "score": 0.135605
+          "score": 0.13615
         }
       ]
     },
