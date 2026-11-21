@@ -151,15 +151,23 @@ const homeSchema = JSON.stringify({
       </div>
       <div class="pagination-container" hidden>
         <div class="pagination">
-          <button class="pagination-btn pagination-first" type="button" aria-label="First page" title="Go to first page">⇤</button>
-          <button class="pagination-btn" type="button" aria-label="Previous page">←</button>
+          <button class="pagination-btn" type="button" aria-label="First page" title="Go to first page">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6v12m16-6H8m6-5-6 5 6 5" /></svg>
+          </button>
+          <button class="pagination-btn" type="button" aria-label="Previous page">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12H4m6-5-6 5 6 5" /></svg>
+          </button>
           <div class="pagination-info">
             <span class="pagination-current">1</span>
             <span class="pagination-separator">/</span>
             <span class="pagination-total">1</span>
           </div>
-          <button class="pagination-btn" type="button" aria-label="Next page">→</button>
-          <button class="pagination-btn pagination-last" type="button" aria-label="Last page" title="Go to last page">⇥</button>
+          <button class="pagination-btn" type="button" aria-label="Next page">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h16m-6-5 6 5-6 5" /></svg>
+          </button>
+          <button class="pagination-btn" type="button" aria-label="Last page" title="Go to last page">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6v12M4 12h12m-6-5 6 5-6 5" /></svg>
+          </button>
         </div>
       </div>
       <div id="home-data" data-articles={JSON.stringify(articlesData)} data-base={basePath} data-votes-api={votesApi} hidden></div>
