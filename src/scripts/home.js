@@ -91,8 +91,10 @@ if (config && grid) {
     const wide = grid.dataset.layout === 'wide'
     const tags = article.tags || []
     const image = imageFor(article.imageSrc)
+    const preview = article.previewGif ? `<source media="(prefers-reduced-motion: no-preference)" srcset="${escapeHtml(imageFor(article.previewGif))}">` : ''
+    const imageTag = `<img class="article-card-image ${escapeHtml(article.imageClassName || '')}" src="${escapeHtml(image)}" alt="${escapeHtml(article.imageAlt || article.title || 'Article image')}"${article.imageInset ? ` data-image-inset="${escapeHtml(article.imageInset)}"` : ''} loading="${index === 0 ? 'eager' : 'lazy'}" decoding="async">`
     const imageMarkup = image
-      ? `<img class="article-card-image ${escapeHtml(article.imageClassName || '')}" src="${escapeHtml(image)}" alt="${escapeHtml(article.imageAlt || article.title || 'Article image')}"${article.imageInset ? ` data-image-inset="${escapeHtml(article.imageInset)}"` : ''} loading="${index === 0 ? 'eager' : 'lazy'}" decoding="async">`
+      ? preview ? `<picture>${preview}${imageTag}</picture>` : imageTag
       : escapeHtml(article.imageLabel || article.title)
     const metadata = `<div class="article-date">${escapeHtml(article.date)}</div>
       ${article.readingTime ? `<div class="reading-time">${escapeHtml(article.readingTime)} read</div>` : ''}`
@@ -118,6 +120,7 @@ if (config && grid) {
     else next.delete('tags')
     if (sortOrder !== 'newest') next.set('sort', sortOrder)
     else next.delete('sort')
+    if (next.get('view') === 'projects') next.delete('view')
     const search = next.toString()
     window.history.replaceState(null, '', `${window.location.pathname}${search ? `?${search}` : ''}${window.location.hash}`)
   }
@@ -182,7 +185,7 @@ if (config && grid) {
     if (showcase) showcase.hidden = Boolean(term || selectedTags.length || sortOrder !== 'newest')
     searchSpinner.hidden = !term
     let filtered = articles.filter((article) =>
-      selectedTags.every((tag) => (article.tags || []).some((articleTag) => articleTag.toLowerCase() === tag.toLowerCase()))
+      selectedTags.every((tag) => article.tags.some((articleTag) => articleTag.toLowerCase() === tag.toLowerCase()))
     )
 
     if (term) {
@@ -192,6 +195,7 @@ if (config && grid) {
         const searchable = content[index]
         if (!searchable) return normalize(article.title).includes(term) || (article.tags || []).some((tag) => normalize(tag).includes(term))
         return searchable.title.includes(term) ||
+          article.tags.some((tag) => normalize(tag).includes(term)) ||
           searchable.tags.some((tag) => tag.includes(term)) ||
           searchable.content.includes(term)
       })
@@ -212,7 +216,7 @@ if (config && grid) {
       return sortOrder === 'oldest' ? left - right : right - left
     })
 
-    const visibleTags = [...new Set(filtered.flatMap((article) => article.tags || []))].sort()
+    const visibleTags = [...new Set([...selectedTags, ...filtered.flatMap((article) => article.tags)])].sort()
     filterList.innerHTML = visibleTags.map((tag) =>
       `<button class="filter-item" type="button" data-tag="${escapeHtml(tag)}" aria-pressed="${selectedTags.includes(tag)}">${escapeHtml(tag)}</button>`
     ).join('')

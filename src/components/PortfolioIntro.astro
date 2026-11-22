@@ -1,0 +1,37 @@
+---
+import ArticleGraph from './ArticleGraph.astro'
+
+interface Props {
+  pageTitle: string
+}
+
+const { pageTitle } = Astro.props
+const skills = [
+  { name: 'Python', color: '#28577a' },
+  { name: 'JavaScript', color: '#66500d' },
+  { name: 'TypeScript', color: '#1b518a' },
+  { name: 'SQL', color: '#5c427c' },
+  { name: 'PowerShell', color: '#254b8c' },
+  { name: 'Bash', color: '#36543b' },
+  { name: 'HTML5', color: '#993918' },
+  { name: 'CSS3', color: '#235691' },
+  { name: 'React', color: '#245767' },
+  { name: 'Astro', color: '#684177' },
+  { name: 'Node.js', color: '#365e31' },
+  { name: 'GitHub Actions', color: '#284f8c' }
+]
+---
+
+<section class="portfolio-intro" aria-labelledby="portfolio-intro-heading">
+  <div class="intro-copy">
+    <p class="profile-label">{pageTitle}</p>
+    <h1 id="portfolio-intro-heading">Hi, I&rsquo;m Connor.</h1>
+    <p>Welcome to Tangent, a project portfolio where I share interactive demos, technical notes, project builds, experiments, reviews, and writeups.</p>
+    <ul class="intro-stack" role="list" aria-label="Languages, frameworks, and tools">
+      {skills.map(({ name, color }) => (
+        <li style={`--badge-color: ${color}`}>{name}</li>
+      ))}
+    </ul>
+  </div>
+  <ArticleGraph />
+</section>

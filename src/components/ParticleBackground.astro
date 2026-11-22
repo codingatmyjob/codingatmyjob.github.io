@@ -1,0 +1,59 @@
+<div id="particle-background" aria-hidden="true"></div>
+
+<script>
+  import type { Container, ISourceOptions } from '@tsparticles/engine'
+
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)')
+  const options = {
+    fullScreen: { enable: false },
+    fpsLimit: 30,
+    detectRetina: false,
+    pauseOnBlur: true,
+    particles: {
+      number: { value: 22 },
+      color: { value: '#a9bddc' },
+      shape: { type: 'circle' },
+      opacity: { value: { min: 0.12, max: 0.38 } },
+      size: { value: { min: 0.7, max: 1.6 } },
+      move: { enable: true, speed: 0.45, outModes: { default: 'out' } }
+    }
+  } satisfies ISourceOptions
+
+  let animation: Container | undefined
+  let loading = false
+  let registered = false
+
+  async function syncMotion() {
+    if (reducedMotion.matches) {
+      animation?.destroy()
+      animation = undefined
+      return
+    }
+
+    if (animation || loading) return
+    loading = true
+    try {
+      const [{ tsParticles }, { loadBasic }] = await Promise.all([
+        import('@tsparticles/engine'),
+        import('@tsparticles/basic')
+      ])
+      if (!registered) {
+        await loadBasic(tsParticles)
+        registered = true
+      }
+      if (reducedMotion.matches) return
+
+      const instance = await tsParticles.load({ id: 'particle-background', options })
+      if (!instance) throw new Error('tsParticles did not create a background')
+      if (reducedMotion.matches) instance.destroy()
+      else animation = instance
+    } catch (error) {
+      console.warn('Could not start the particle background:', error)
+    } finally {
+      loading = false
+    }
+  }
+
+  reducedMotion.addEventListener('change', syncMotion)
+  void syncMotion()
+</script>

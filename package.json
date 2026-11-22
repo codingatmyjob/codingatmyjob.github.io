@@ -17,6 +17,8 @@
     "deploy": "gh-pages -d dist/client"
   },
   "dependencies": {
+    "@tsparticles/basic": "^4.6.0",
+    "@tsparticles/engine": "^4.6.0",
     "prismjs": "^1.30.0"
   },
   "devDependencies": {

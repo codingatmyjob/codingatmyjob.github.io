@@ -110,6 +110,7 @@ const baseArticlesData = [
     title: 'Discord Spotify Activity Tracker',
     description: 'Critique and rewrite of an old Discord bot command, writing it how I\'d do it today.',
     tags: ['Project', 'Python', 'Discord', 'Spotify'],
+    repoUrl: 'https://github.com/codingatmyjob/Discord-Spotify-Activity-Tracker',
     imageSrc: 'images/cover/discord-spotify-activity-tracker.png',
     imageAlt: 'Discord Spotify Activity Tracker',
     imageInset: 'roomy'
@@ -120,8 +121,8 @@ const baseArticlesData = [
     publishedAt: '2026-06-02',
     date: 'June 02, 2026',
     title: 'Cruise Size Comparisons',
-    description: 'An interactive ship size comparison project with a searchable dataset, and ship view with tooltips.',
-    tags: ['Project', 'JavaScript', 'WebApp'],
+    description: 'Compare ships interactively and see how their lengths stack up across a 64-entry dataset.',
+    tags: ['Project', 'JavaScript', 'WebApp', 'Data Science'],
     imageLabel: 'Cruise Size Comparisons'
   },
   {
@@ -143,9 +144,9 @@ const baseArticlesData = [
     title: 'Typeahead Demo',
     description: 'An interactive typeahead/search suggestion demo with real-time data filtering and visual highlights.',
     tags: ['Demo', 'JavaScript', 'WebApp'],
+    previewGif: 'images/cover/typeahead-preview.gif',
     imageSrc: 'images/cover/typeahead.png',
-    imageAlt: 'Typeahead Demo',
-    imageInset: 'roomy'
+    imageAlt: 'Typeahead search fills in a name when a matching suggestion is selected'
   },
   {
     id: 'playing-in-traffic-and-heatmaps',
@@ -166,6 +167,7 @@ const baseArticlesData = [
     title: 'Creating a Pokemon Stock Bot',
     description: 'How much work does a scalper put into stock checks for Pokemon products?',
     tags: ['Project', 'Python', 'API', 'Discord', 'Automation'],
+    repoUrl: 'https://github.com/codingatmyjob/pokestock-bot',
     imageSrc: 'images/cover/pokestock.png',
     imageAlt: 'Creating a Pokemon Stock Bot'
   },
@@ -229,5 +231,6 @@ const baseArticlesData = [
 
 export const articlesData = baseArticlesData.map(article => ({
   ...article,
+  tags: article.repoUrl ? [...article.tags, 'Repo'] : article.tags,
   readingTime: article.path ? (readTimesByPath[article.path] ?? null) : null
 }))

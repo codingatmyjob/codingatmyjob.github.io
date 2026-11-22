@@ -718,14 +718,11 @@
                   max_tokens: 260,
                 });
 
-                const assistant = normalizeContent(
-                  result && result.choices && result.choices[0] && result.choices[0].message
-                    ? result.choices[0].message.content
-                    : ""
-                );
+                const choice = result?.choices?.[0];
+                const assistant = normalizeContent(choice?.message?.content);
 
                 chatMessages.push({ role: "assistant", content: assistant });
-                self.postMessage({ type: "reply", requestId: data.requestId, text: assistant });
+                self.postMessage({ type: "reply", requestId: data.requestId, text: assistant, truncated: choice?.finish_reason === "length" });
                 return;
               }
             } catch (error) {
@@ -774,7 +771,7 @@
             const pendingItem = pending.get(data.requestId);
             if (!pendingItem) return;
             pending.delete(data.requestId);
-            pendingItem.resolve(data.text || "");
+            pendingItem.resolve({ text: data.text, truncated: data.truncated });
             return;
           }
 
@@ -880,8 +877,9 @@
         const bubble = appendMessage("assistant", "Thinking...");
 
         try {
-          const answer = await postToWorker({ type: "ask", userText: text, temperature: Number(temperatureSlider?.value ?? 0.2) });
+          const { text: answer, truncated } = await postToWorker({ type: "ask", userText: text, temperature: Number(temperatureSlider?.value ?? 0.2) });
           bubble.textContent = answer || "(No response returned)";
+          if (truncated) bubble.append("\n\n[Reply stopped at the token limit.]");
 
           if (containsSecret(answer || "")) {
             revealSuccessBanner();

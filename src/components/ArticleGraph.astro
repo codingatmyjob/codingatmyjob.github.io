@@ -1,0 +1,186 @@
+---
+import relatedData from '../../public/data/related-articles.json'
+import { articlesData } from '../data/articles.js'
+import { getBasePath } from '../siteUrls.js'
+import ParticleBackground from './ParticleBackground.astro'
+
+const basePath = getBasePath()
+const articles = new Map(articlesData.map((article) => [article.path.replace(/^articles\//, ''), article]))
+const recommendations: Record<string, { related: { slug: string }[] }> = relatedData.items
+const connections = new Map([...articles.keys()].map((slug) => [slug, new Set<string>()]))
+for (const [slug, neighbors] of connections) {
+  for (const { slug: relatedSlug } of recommendations[slug]?.related ?? []) {
+    const relatedNeighbors = connections.get(relatedSlug)
+    if (!relatedNeighbors || relatedSlug === slug) continue
+    neighbors.add(relatedSlug)
+    relatedNeighbors.add(slug)
+  }
+}
+
+const degree = (slug: string) => connections.get(slug)?.size ?? 0
+const tierFor = (count: number) => count >= 5 ? 'high' : count >= 2 ? 'medium' : 'low'
+const byDegree = [...articles.keys()].sort((a, b) => degree(b) - degree(a) || a.localeCompare(b))
+const ordered: string[] = []
+const visited = new Set<string>()
+
+// Keep connected components together around the ring.
+function visit(slug: string) {
+  if (visited.has(slug)) return
+  visited.add(slug)
+  ordered.push(slug)
+  for (const neighbor of connections.get(slug) ?? []) visit(neighbor)
+}
+for (const slug of byDegree) visit(slug)
+
+const center = 'how-fit-am-i'
+const centerIndex = ordered.indexOf(center)
+const originalCenter = ordered[0]
+if (originalCenter && centerIndex > 0) {
+  ordered[0] = center
+  ordered[centerIndex] = originalCenter
+}
+
+const positions = new Map(ordered.map((slug, i) => [slug, i]))
+const nodes = [...articles].map(([slug, article]) => {
+  const i = positions.get(slug)!
+  const angle = 2 * Math.PI * (i - 1) / Math.max(1, articles.size - 1) - Math.PI / 2
+  const x = 190 + (i === 0 ? 0 : Math.cos(angle) * 165)
+  const y = 130 + (i === 0 ? 0 : Math.sin(angle) * 108)
+  const count = degree(slug)
+  const tier = tierFor(count)
+  const radius = tier === 'high' ? 6 : tier === 'medium' ? 4.75 : 3.5
+  return { slug, article, x, y, radius, count, isCenter: i === 0, tier, href: `${basePath}${article.path}/` }
+})
+
+const edges = nodes.flatMap((from, i) => nodes.slice(i + 1)
+  .filter((to) => connections.get(from.slug)?.has(to.slug))
+  .map((to) => ({ from, to })))
+---
+
+<figure class="intro-ego" data-article-graph aria-label="Related articles graph">
+  <ParticleBackground />
+  <svg viewBox="0 0 380 260" role="group" aria-label="Select an article. White dots have zero or one direct link, slate dots have two to four, and orange dots have five or more.">
+    <g class="intro-ego-edges" aria-hidden="true">
+      {edges.map(({ from, to }) => (
+        <g data-edge-from={from.slug} data-edge-to={to.slug}>
+          <line class="intro-ego-edge" x1={from.x} y1={from.y} x2={to.x} y2={to.y} />
+          <line class="intro-ego-trace" pathLength="1" x1={from.x} y1={from.y} x2={to.x} y2={to.y} />
+        </g>
+      ))}
+    </g>
+    {nodes.map(({ slug, article, href, x, y, radius, count, isCenter, tier }) => (
+      <a class="intro-ego-link" href={href} data-graph-node={slug} aria-label={article.title}
+        aria-description={`${isCenter ? 'Center node. ' : ''}${count} direct ${count === 1 ? 'connection' : 'connections'}.`}>
+        <circle class="intro-ego-hit" aria-hidden="true" cx={x} cy={y} r="18" />
+        <circle class={`intro-ego-node intro-ego-node--${tier}`} aria-hidden="true" cx={x} cy={y} r={radius} />
+      </a>
+    ))}
+  </svg>
+  <div class="intro-ego-previews">
+    {nodes.map(({ slug, article, href }) => (
+      <a class="intro-ego-preview" href={href} data-graph-preview={slug} tabindex="-1" hidden>
+        <strong>{article.title}</strong>
+        <span class="intro-ego-preview-arrow" aria-hidden="true">&nearr;</span>
+        <time datetime={article.publishedAt}>{article.date}</time>
+        <span class="intro-ego-preview-description">{article.description}</span>
+      </a>
+    ))}
+  </div>
+</figure>
+
+<script>
+  const graph = document.querySelector<HTMLElement>('[data-article-graph]')
+
+  if (graph) {
+    const nodes = [...graph.querySelectorAll<SVGAElement>('[data-graph-node]')]
+    const edges = [...graph.querySelectorAll<SVGGElement>('[data-edge-from]')]
+    const previews = [...graph.querySelectorAll<HTMLElement>('[data-graph-preview]')]
+    let active: string | undefined
+    let touched: string | undefined
+
+    const positionPreview = () => {
+      const preview = previews.find((item) => !item.hidden)
+      const dot = nodes.find((node) => node.dataset.graphNode === active)?.querySelector('.intro-ego-node')
+      if (!preview || !dot) return
+
+      const frame = graph.getBoundingClientRect()
+      const point = dot.getBoundingClientRect()
+      const { width, height } = preview.getBoundingClientRect()
+      const x = (point.left + point.right) / 2 - frame.left
+      const gap = 5
+      const above = point.top - height - gap
+      const below = point.bottom + gap
+      const fitsAbove = above >= gap
+      const fitsBelow = below + height <= window.innerHeight - gap
+      const preferAbove = point.top + point.height / 2 < frame.top + frame.height / 2
+      const top = fitsAbove && (preferAbove || !fitsBelow) ? above : below
+
+      preview.style.left = `${Math.max(0, Math.min(x - width / 2, frame.width - width))}px`
+      preview.style.top = `${top - frame.top}px`
+    }
+
+    function show(slug?: string) {
+      if (active === slug) return
+      active = slug
+      const adjacent = new Set<string>()
+      for (const edge of edges) {
+        const { edgeFrom, edgeTo } = edge.dataset
+        if (slug && edgeFrom === slug && edgeTo) {
+          edge.dataset.trace = 'forward'
+          adjacent.add(edgeTo)
+        } else if (slug && edgeTo === slug && edgeFrom) {
+          edge.dataset.trace = 'backward'
+          adjacent.add(edgeFrom)
+        } else {
+          delete edge.dataset.trace
+        }
+      }
+      for (const node of nodes) {
+        const id = node.dataset.graphNode
+        node.classList.toggle('is-active', !!slug && id === slug)
+        node.classList.toggle('is-neighbor', !!id && adjacent.has(id))
+      }
+      for (const preview of previews) preview.hidden = preview.dataset.graphPreview !== slug
+      positionPreview()
+    }
+
+    window.addEventListener('resize', positionPreview)
+
+    for (const node of nodes) {
+      const slug = node.dataset.graphNode
+      node.addEventListener('pointerenter', (event) => {
+        if (event.pointerType !== 'touch') show(slug)
+      })
+      node.addEventListener('focus', () => show(slug))
+      node.addEventListener('click', (event) => {
+        if (!(event instanceof PointerEvent) || event.pointerType !== 'touch') return
+        if (touched === slug && active === slug) return
+        event.preventDefault()
+        touched = slug
+        show(slug)
+      })
+    }
+
+    graph.addEventListener('pointerleave', (event) => {
+      if (event.pointerType === 'touch') return
+      show(graph.querySelector<SVGAElement>('[data-graph-node]:focus-visible')?.dataset.graphNode)
+    })
+    graph.addEventListener('focusout', (event) => {
+      if (event.relatedTarget instanceof Node && graph.contains(event.relatedTarget)) return
+      touched = undefined
+      show()
+    })
+    document.addEventListener('pointerdown', (event) => {
+      if (event.target instanceof Node && !graph.contains(event.target)) {
+        touched = undefined
+        show()
+      }
+    })
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') {
+        touched = undefined
+        show()
+      }
+    })
+  }
+</script>

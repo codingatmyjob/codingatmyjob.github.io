@@ -2,7 +2,7 @@
 
 [Tangent](https://codingatmyjob.github.io/) is my blog about cybersecurity, data science, and AI experiments. It’s built with Astro and hosted on GitHub Pages.
 
-The falling binary background follows your device’s reduced-motion setting.
+The shared layout uses the falling binary background. The homepage's note graph has a separate [tsParticles](https://particles.js.org/) layer behind it. Both animations respect reduced motion.
 
 ## Local development
 
@@ -20,10 +20,17 @@ Open [localhost:4321](http://localhost:4321). Run `npm run lint` and `npm test` 
 - Articles: [HTML](./public/articles/) and [Gallery metadata](./src/data/articles.js)
 - Sidebar pages: [HTML](./public/sidebar/)
 - Highlights: the `featured` list in [index.astro](./src/pages/index.astro)
+- Landing intro and tech badges: [PortfolioIntro.astro](./src/components/PortfolioIntro.astro). [ArticleGraph.astro](./src/components/ArticleGraph.astro) arranges the Gallery articles in one ring around How Fit Am I?. It uses the same data as Related Articles and draws a line if either article recommends the other. Dot size and color show the number of direct links: white for 0–1, the theme’s slate accent for 2–4, and orange for 5+. Hover or focus a node to show its title, publication date, and summary and highlight only its direct connections; tap a node on touch to see the preview first. Reduced motion keeps the highlights but skips the animation. The intro label shares the browser tab title set in [index.astro](./src/pages/index.astro). About copy: [About.html](./public/sidebar/About.html).
+- Repo tags: set `repoUrl` in [article metadata](./src/data/articles.js) to add a `Repo` tag to the article.
+- Unpublished articles: keep drafts in [drafts](./drafts/) and outside the Gallery metadata until ready to publish.
 
-The Highlights lead, Gallery Grid, and Related Articles share a radial gradient behind their cover images. Only the Highlights lead adds grid lines. Gallery Wide stays text-only.
+The Highlights lead, Gallery Grid, and Related Articles share a radial gradient behind their cover images. Only the Highlights lead adds grid lines. Gallery Wide stays text-only. Set `previewGif` in article metadata to add an animated card cover while keeping the static cover for reduced-motion users. For Gallery Grid previews, use the cover box's 16:8.5 aspect ratio. Encode the GIF with looping enabled if it should replay automatically.
 
 ## Deploying
+
+### Optional site analytics
+
+To add [Cloudflare Web Analytics](https://developers.cloudflare.com/web-analytics/get-started/) without moving off GitHub Pages, add the production hostname in its dashboard and choose manual JavaScript snippet installation. Put the provided beacon in [SiteLayout.astro](./src/layouts/SiteLayout.astro) just before `</body>`, gate it to production deployments so previews are excluded, and verify data in the dashboard after visiting the deployed site. No analytics beacon is enabled by default.
 
 - [Production](https://codingatmyjob.github.io/): run [Deploy Production](./.github/workflows/deploy-production.yml) from GitHub Actions.
 - [Preview](https://codingatmyjob.github.io/preview/): push to the `preview` branch or run [Deploy Preview](./.github/workflows/deploy-preview.yml). Voting is disabled in preview builds.

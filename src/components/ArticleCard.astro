@@ -1,6 +1,7 @@
 ---
 const { item, basePath = '/', priority = false, featureCaption = '', showCover = true } = Astro.props
 const href = `${basePath}articles/${item.path.replace(/^articles\//, '').replace(/\.html$/, '')}/`
+const previewGif = item.previewGif ? `${basePath}${item.previewGif}` : ''
 const imageSrc = item.imageSrc
   ? item.imageSrc.startsWith('http')
     ? item.imageSrc
@@ -13,15 +14,18 @@ const imageSrc = item.imageSrc
 <a class="article-card" href={href} data-path={item.path}>
   {showCover && <div class="article-image">
     {imageSrc ? (
-      <img
-        class:list={['article-card-image', item.imageClassName]}
-        src={imageSrc}
-        alt={item.imageAlt || item.title || 'Article image'}
-        data-image-inset={item.imageInset}
-        loading={priority ? 'eager' : 'lazy'}
-        fetchpriority={priority ? 'high' : undefined}
-        decoding="async"
-      />
+      <picture>
+        {previewGif && <source media="(prefers-reduced-motion: no-preference)" srcset={previewGif} />}
+        <img
+          class:list={['article-card-image', item.imageClassName]}
+          src={imageSrc}
+          alt={item.imageAlt || item.title || 'Article image'}
+          data-image-inset={item.imageInset}
+          loading={priority ? 'eager' : 'lazy'}
+          fetchpriority={priority ? 'high' : undefined}
+          decoding="async"
+        />
+      </picture>
     ) : (
       item.imageLabel || item.title
     )}
