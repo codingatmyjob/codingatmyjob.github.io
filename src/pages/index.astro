@@ -11,9 +11,9 @@ const votesApi = import.meta.env.PUBLIC_VOTES_API_URL?.trim()
 const tags = [...new Set(articlesData.flatMap((article) => article.tags))].sort()
 const canonical = getSiteUrl()
 const featured = [
-  { id: 'how-fit-am-i', caption: '01 | Running analytics' },
-  { id: 'traffic-live-object-detection', caption: '02 | Computer vision' },
-  { id: 'prompt-injection-demo', caption: '03 | AI security' }
+  { id: 'how-fit-am-i', caption: '01 | Running Analytics' },
+  { id: 'traffic-live-object-detection', caption: '02 | Computer Vision' },
+  { id: 'prompt-injection-demo', caption: '03 | AI Security' }
 ].flatMap(({ id, caption }) => {
   const item = articlesData.find((article) => article.id === id)
   return item ? [{ item, caption }] : []
