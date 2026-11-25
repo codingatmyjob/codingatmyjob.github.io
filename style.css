@@ -1687,14 +1687,34 @@ header > .title, header .title{position:absolute;top:50%;transform:translateY(-5
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
-  font-size: 1.75rem;
-  color: var(--text-primary);
   text-decoration: none;
 }
 
-.brand-mark {
+.site-brand-logo {
   display: block;
+  height: auto;
+}
+
+.site-brand .site-brand-logo {
+  width: 168px;
+}
+
+.footer-icon {
+  display: block;
+  width: 38px;
+  height: 38px;
   flex: none;
+}
+
+.footer-signoff {
+  gap: 3px;
+}
+
+html[data-theme="dark"] .site-brand-logo-light,
+html[data-theme="light"] .site-brand-logo-dark,
+html[data-theme="dark"] .footer-icon-light,
+html[data-theme="light"] .footer-icon-dark {
+  display: none;
 }
 
 .site-footer {
@@ -1712,7 +1732,7 @@ header > .title, header .title{position:absolute;top:50%;transform:translateY(-5
 }
 
 .site-footer .copyright {
-  margin: 6px 0 0;
+  margin: 1px 0 0;
   color: var(--muted-ink);
   font: .78rem / 1.4 var(--display-font);
   letter-spacing: 0;

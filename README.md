@@ -17,6 +17,7 @@ Open [localhost:4321](http://localhost:4321). Run `npm run lint` and `npm test` 
 
 - Publish in [public/articles](./public/articles/) and add an entry to [articles.js](./src/data/articles.js). Keep unpublished work in [drafts](./drafts/).
 - Edit homepage highlights in [index.astro](./src/pages/index.astro), the intro in [PortfolioIntro.astro](./src/components/PortfolioIntro.astro), and sidebar pages in [public/sidebar](./public/sidebar/).
+- Browser-tab, Apple touch, and Android install icons switch to light or dark assets according to `prefers-color-scheme`, independently of the site theme toggle. A custom browser toolbar theme may not change that preference. Home-screen icons may remain on the variant selected when the site was installed; launchers do not consistently refresh installed icons when the system theme changes.
 
 ## Deploying
 
@@ -25,7 +26,7 @@ Open [localhost:4321](http://localhost:4321). Run `npm run lint` and `npm test` 
 
 ## Voting
 
-Voting uses a [Cloudflare Worker](./workers/votes/) and D1. Production deploys the Worker before publishing the site when voting is enabled. New articles need no database setup. Preview builds disable voting.
+Voting uses a [Cloudflare Worker](./workers/votes/) and D1. When voting is enabled, production deploys the Worker and applies pending D1 migrations before publishing the site. New articles need no database setup. Preview builds disable voting.
 
 **Production setup**
 

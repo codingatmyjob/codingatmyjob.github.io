@@ -78,4 +78,24 @@ describe('Helpful votes', () => {
     expect((await call('POST')).status).toBe(429)
     expect(await (await call('GET')).json()).toEqual({ count: 0 })
   })
+
+  it('moves old votes without duplicating them and rejects the retired slug', async () => {
+    const oldSlug = 'cloudflare-worker-sql-article-upvotes'
+    const newSlug = 'how-i-built-an-article-upvote-system'
+    const secondVoter = '6bdf7265-57ef-430a-9b99-33925e2eb27a'
+    const insert = database.prepare('INSERT INTO helpful_votes VALUES (?, ?)')
+    insert.run(oldSlug, voter)
+    insert.run(oldSlug, secondVoter)
+    insert.run(newSlug, voter)
+    database.exec(readFileSync(new URL('../workers/votes/migrations/0002_rename_article_upvote_system.sql', import.meta.url), 'utf8'))
+
+    expect((await call('POST', { article: oldSlug })).status).toBe(404)
+    expect(await (await call('POST', { article: newSlug })).json()).toEqual({ count: 2 })
+    expect(await (await call('GET', { article: newSlug })).json()).toEqual({ count: 2 })
+    expect(database.prepare('SELECT DISTINCT slug FROM helpful_votes').all()).toEqual([{ slug: newSlug }])
+    const response = await worker.fetch(new globalThis.Request('https://votes.example/votes'), env)
+    const { counts } = await response.json()
+    expect(counts).not.toHaveProperty(oldSlug)
+    expect(counts[newSlug]).toBe(2)
+  })
 })

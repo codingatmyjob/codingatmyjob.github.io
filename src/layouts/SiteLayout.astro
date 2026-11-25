@@ -1,7 +1,6 @@
 ---
 import '../../style.css'
 import BinaryBackground from '../components/BinaryBackground.astro'
-import TangentMark from '../components/TangentMark.astro'
 import { getSiteUrl } from '../siteUrls.js'
 
 const {
@@ -26,12 +25,27 @@ const sitePath = (path) => `${basePath}${String(path).replace(/^\/+/, '')}`
     <title>{brandedTitle}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
-    <link rel="icon" type="image/x-icon" href={sitePath('favicon/favicon.ico')} />
-    <link rel="icon" type="image/png" sizes="16x16" href={sitePath('favicon/favicon-16x16.png')} />
-    <link rel="icon" type="image/png" sizes="32x32" href={sitePath('favicon/favicon-32x32.png')} />
-    <link rel="icon" type="image/svg+xml" sizes="any" href={sitePath('images/tangent-mark.svg')} />
-    <link rel="apple-touch-icon" sizes="180x180" href={sitePath('favicon/apple-touch-icon.png')} />
-    <link rel="manifest" href={sitePath('favicon/site.webmanifest')} />
+    <link
+      id="tab-icon"
+      rel="icon"
+      type="image/png"
+      sizes="48x48"
+      href={sitePath('favicon/favicon-48x48.png')}
+      data-dark-src={sitePath('favicon/favicon-48x48-dark.png')}
+    />
+    <link
+      id="apple-touch-icon"
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href={sitePath('favicon/apple-touch-icon.png')}
+      data-dark-src={sitePath('favicon/apple-touch-icon-dark.png')}
+    />
+    <link
+      id="app-manifest"
+      rel="manifest"
+      href={sitePath('favicon/site.webmanifest')}
+      data-dark-src={sitePath('favicon/site-dark.webmanifest')}
+    />
     <meta property="og:type" content={type} />
     <meta property="og:title" content={brandedTitle} />
     <meta property="og:description" content={description} />
@@ -44,10 +58,24 @@ const sitePath = (path) => `${basePath}${String(path).replace(/^\/+/, '')}`
     <meta name="twitter:image" content={image} />
     <slot name="head" />
     <script is:inline>
+      const colorScheme = window.matchMedia('(prefers-color-scheme: dark)')
+      const tabIcon = document.getElementById('tab-icon')
+      const appleTouchIcon = document.getElementById('apple-touch-icon')
+      const appManifest = document.getElementById('app-manifest')
+      const lightAssets = [tabIcon.href, appleTouchIcon.href, appManifest.href]
+      const updateThemeAssets = () => {
+        const useDarkAssets = colorScheme.matches
+        tabIcon.href = useDarkAssets ? tabIcon.dataset.darkSrc : lightAssets[0]
+        appleTouchIcon.href = useDarkAssets ? appleTouchIcon.dataset.darkSrc : lightAssets[1]
+        appManifest.href = useDarkAssets ? appManifest.dataset.darkSrc : lightAssets[2]
+      }
+      updateThemeAssets()
+      if (typeof colorScheme.addEventListener === 'function') colorScheme.addEventListener('change', updateThemeAssets)
+      else colorScheme.addListener(updateThemeAssets)
+
       try {
         const savedTheme = localStorage.getItem('theme')
-        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
-        document.documentElement.dataset.theme = savedTheme || (prefersDark ? 'dark' : 'light')
+        document.documentElement.dataset.theme = savedTheme || (colorScheme.matches ? 'dark' : 'light')
       } catch {
         document.documentElement.dataset.theme = 'light'
       }
@@ -63,8 +91,8 @@ const sitePath = (path) => `${basePath}${String(path).replace(/^\/+/, '')}`
           </svg>
         </button>
         <a class="site-brand" href={sitePath('')} aria-label="Tangent home">
-          <TangentMark size={36} clipId="header-mark-clip" />
-          <span>Tangent</span>
+          <img class="site-brand-logo site-brand-logo-dark" src={sitePath('images/tangent-logo-color-on-navy.svg')} alt="" aria-hidden="true" />
+          <img class="site-brand-logo site-brand-logo-light" src={sitePath('images/tangent-logo-color.svg')} alt="" aria-hidden="true" />
         </a>
         <div class="header-controls">
           <button class="theme-toggle" type="button" aria-label="Dark mode" aria-pressed="false">
@@ -120,7 +148,8 @@ const sitePath = (path) => `${basePath}${String(path).replace(/^\/+/, '')}`
       </div>
       <footer class="site-footer">
         <div class="footer-signoff">
-          <TangentMark size={28} clipId="footer-mark-clip" />
+          <img class="footer-icon footer-icon-dark" src={sitePath('images/tangent-mark-dark.svg')} alt="" aria-hidden="true" />
+          <img class="footer-icon footer-icon-light" src={sitePath('images/tangent-mark.svg')} alt="" aria-hidden="true" />
           <div><strong>Tangent</strong><div class="copyright">© 2026</div></div>
         </div>
         <div class="social-links">

@@ -83,7 +83,7 @@ const scoreToPercent = (score) => Math.min(99, Math.max(0, Math.round(100 * (1 -
 >
   {headStyles.map((css) => <style is:inline set:html={css}></style>)}
   {jsonLd.map((json) => <script slot="head" type="application/ld+json" set:html={json}></script>)}
-  <div id="article-view">
+  <div id="article-view" data-legacy-vote-slug={article?.legacySlug}>
     <div class="article-frame">
       <div set:html={mainHtml}></div>
       {relatedItems.length > 0 && (

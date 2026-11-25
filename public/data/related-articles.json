@@ -45,7 +45,7 @@
     }
   ],
   "items": {
-    "cloudflare-worker-sql-article-upvotes": {
+    "how-i-built-an-article-upvote-system": {
       "cluster": 0,
       "related": [
         {
@@ -86,7 +86,7 @@
           "score": 0.126179
         },
         {
-          "slug": "cloudflare-worker-sql-article-upvotes",
+          "slug": "how-i-built-an-article-upvote-system",
           "score": 0.117925
         }
       ]
@@ -146,7 +146,7 @@
       "cluster": 0,
       "related": [
         {
-          "slug": "cloudflare-worker-sql-article-upvotes",
+          "slug": "how-i-built-an-article-upvote-system",
           "score": 0.234641
         },
         {
@@ -285,7 +285,7 @@
       "cluster": 0,
       "related": [
         {
-          "slug": "cloudflare-worker-sql-article-upvotes",
+          "slug": "how-i-built-an-article-upvote-system",
           "score": 0.139515
         }
       ]
@@ -323,7 +323,7 @@
           "score": 0.151849
         },
         {
-          "slug": "cloudflare-worker-sql-article-upvotes",
+          "slug": "how-i-built-an-article-upvote-system",
           "score": 0.124876
         },
         {
@@ -445,7 +445,7 @@
           "score": 0.134339
         },
         {
-          "slug": "cloudflare-worker-sql-article-upvotes",
+          "slug": "how-i-built-an-article-upvote-system",
           "score": 0.115002
         }
       ]

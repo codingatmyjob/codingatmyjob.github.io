@@ -36,7 +36,7 @@ jobs:
         env:
           PUBLIC_VOTES_API_URL: ${{ vars.PUBLIC_VOTES_API_URL }}
 
-      - name: Deploy voting Worker
+      - name: Deploy voting Worker and migrate D1
         if: ${{ vars.PUBLIC_VOTES_API_URL != '' }}
         working-directory: workers/votes
         env:
@@ -48,9 +48,26 @@ jobs:
             exit 1
           fi
           npx --yes wrangler@4 deploy
+          npx --yes wrangler@4 d1 migrations apply tangent-votes --remote
 
       - uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./dist/client
           keep_files: true
+
+      - name: Check out published site for retired article cleanup
+        uses: actions/checkout@v4
+        with:
+          ref: gh-pages
+          path: published-site
+
+      - name: Remove retired upvote article URLs
+        working-directory: published-site
+        run: |
+          git rm --ignore-unmatch -- articles/cloudflare-worker-sql-article-upvotes.html articles/cloudflare-worker-sql-article-upvotes/index.html
+          if git diff --cached --quiet; then
+            exit 0
+          fi
+          git -c user.name='github-actions[bot]' -c user.email='41898282+github-actions[bot]@users.noreply.github.com' commit -m 'Remove retired upvote article URLs'
+          git push origin HEAD:gh-pages

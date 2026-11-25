@@ -48,8 +48,9 @@ const baseArticlesData = [
     imageAlt: 'Related Articles Recommender'
   },
   {
-    id: 'cloudflare-worker-sql-article-upvotes',
-    path: 'articles/cloudflare-worker-sql-article-upvotes',
+    id: 'how-i-built-an-article-upvote-system',
+    path: 'articles/how-i-built-an-article-upvote-system',
+    legacySlug: 'cloudflare-worker-sql-article-upvotes',
     publishedAt: '2026-11-25',
     date: 'November 25, 2026',
     title: 'How I Built an Article Upvote System',

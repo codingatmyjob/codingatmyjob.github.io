@@ -22,7 +22,9 @@ if (button && tally && message) {
   const slug = decodeURIComponent(button.dataset.slug)
   const endpoint = new URL(button.dataset.apiUrl)
   endpoint.searchParams.set('slug', slug)
-  const storageKey = `tangent:helpful:${slug}`
+  // Keep the original browser voter ID and submitted flag when the article moves.
+  const legacySlug = button.closest('[data-legacy-vote-slug]')?.dataset.legacyVoteSlug
+  const storageKey = `tangent:helpful:${legacySlug || slug}`
   const votedKey = `${storageKey}:voted`
   let submitted = false
 
