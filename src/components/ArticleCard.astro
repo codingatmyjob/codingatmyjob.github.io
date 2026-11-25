@@ -1,5 +1,5 @@
 ---
-const { item, basePath = '/', priority = false, featureCaption = '', showCover = true } = Astro.props
+const { item, basePath = '/', priority = false, isFeatured = false, featureCaption = '', showCover = true } = Astro.props
 const href = `${basePath}articles/${item.path.replace(/^articles\//, '').replace(/\.html$/, '')}/`
 const previewGif = item.previewGif ? `${basePath}${item.previewGif}` : ''
 const imageSrc = item.imageSrc
@@ -31,14 +31,15 @@ const imageSrc = item.imageSrc
     )}
   </div>}
   <div class="article-content">
-    {featureCaption && <div class="feature-caption">{featureCaption}<span aria-hidden="true">&#8599;</span></div>}
+    {featureCaption && <div class="profile-label feature-caption">{featureCaption}</div>}
     <div class="article-card-meta">
       <div class="article-card-byline">
-        <div class="article-date">{item.date}</div>
-        {item.readingTime && <div class="reading-time">{item.readingTime} read</div>}
+        <span class="article-date">{item.date}</span>
+        {item.readingTime && <span class="article-byline-separator" aria-hidden="true"> &#183; </span>}
+        {item.readingTime && <span class="reading-time">{item.readingTime} read</span>}
       </div>
     </div>
-    {featureCaption ? <h2 class="article-title">{item.title}</h2> : <div class="article-title">{item.title}</div>}
+    {isFeatured ? <h2 class="article-title">{item.title}</h2> : <div class="article-title">{item.title}</div>}
     <div class="article-description">{item.description}</div>
     <div class="article-tags">
       {item.tags.map((tag) => <span class="tag">{tag}</span>)}

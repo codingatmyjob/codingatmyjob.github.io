@@ -56,7 +56,7 @@ const mainHtml = addBaseToRootPaths(removeScripts(rawMain), basePath)
     ? `${match}<p class="article-vote-message" role="status"></p>`
     : match)
   .replace(/(<div class="meta">\s*<time\b[^>]*>[^<]*<\/time>)/i, (metadata) =>
-    readTime ? `${metadata}<span class="article-byline-time">${readTime} read</span>` : metadata)
+      `${metadata}${readTime ? `<span class="article-byline-separator" aria-hidden="true"> &#183; </span><span class="article-byline-time">${readTime} read</span>` : ''}${article?.updatedDate ? `<span class="article-updated-note">Updated: ${article.updatedDate}</span>` : ''}`)
   .replace(/(<div class="tags">[\s\S]*?)(<\/div>)/i, (match, tags, closing) =>
     repoUrl ? `${tags}<span class="tag">Repo</span>${closing}` : match)
 const scriptsHtml = extractBodyScripts(rawHtml).map((script) => addBaseToRootPaths(script, basePath)).join('\n')
@@ -114,6 +114,7 @@ const scoreToPercent = (score) => Math.min(99, Math.max(0, Math.round(100 * (1 -
                     <div class="related-carousel-meta">
                       <span class="related-carousel-byline">
                         <span class="related-carousel-date">{item.date}</span>
+                        {item.readingTime && <span class="article-byline-separator" aria-hidden="true"> &#183; </span>}
                         {item.readingTime && <span>{item.readingTime} read</span>}
                       </span>
                       {endpoint && <span class="article-card-vote-count" data-related-vote-slug={item.slug} hidden></span>}

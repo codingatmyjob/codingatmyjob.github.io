@@ -96,8 +96,9 @@ if (config && grid) {
     const imageMarkup = image
       ? preview ? `<picture>${preview}${imageTag}</picture>` : imageTag
       : escapeHtml(article.imageLabel || article.title)
-    const metadata = `<div class="article-date">${escapeHtml(article.date)}</div>
-      ${article.readingTime ? `<div class="reading-time">${escapeHtml(article.readingTime)} read</div>` : ''}`
+    const metadata = `<span class="article-date">${escapeHtml(article.date)}</span>${article.readingTime
+      ? `<span class="article-byline-separator" aria-hidden="true"> &#183; </span><span class="reading-time">${escapeHtml(article.readingTime)} read</span>`
+      : ''}`
     const meta = `<div class="article-card-meta${wide ? ' article-index-meta' : ''}"><div class="article-card-byline">${metadata}</div></div>`
     const title = `<div class="article-title">${escapeHtml(article.title)}</div>`
 

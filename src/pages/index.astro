@@ -11,9 +11,9 @@ const votesApi = import.meta.env.PUBLIC_VOTES_API_URL?.trim()
 const tags = [...new Set(articlesData.flatMap((article) => article.tags))].sort()
 const canonical = getSiteUrl()
 const featured = [
-  { id: 'how-fit-am-i', caption: '01 / Running analytics' },
-  { id: 'traffic-live-object-detection', caption: '02 / Computer vision' },
-  { id: 'prompt-injection-demo', caption: '03 / AI security' }
+  { id: 'how-fit-am-i', caption: '01 | Running analytics' },
+  { id: 'traffic-live-object-detection', caption: '02 | Computer vision' },
+  { id: 'prompt-injection-demo', caption: '03 | AI security' }
 ].flatMap(({ id, caption }) => {
   const item = articlesData.find((article) => article.id === id)
   return item ? [{ item, caption }] : []
@@ -120,12 +120,12 @@ const homeSchema = JSON.stringify({
             </div>
             <div class="feature-grid">
               <div class="feature-lead">
-                <ArticleCard item={featured[0].item} basePath={basePath} priority featureCaption={featured[0].caption} />
+                <ArticleCard item={featured[0].item} basePath={basePath} priority isFeatured featureCaption={featured[0].caption} />
               </div>
               {featured.length > 1 && (
                 <div class="feature-picks">
                   {featured.slice(1).map(({ item, caption }) => (
-                    <ArticleCard item={item} basePath={basePath} featureCaption={caption} showCover={false} />
+                    <ArticleCard item={item} basePath={basePath} isFeatured featureCaption={caption} showCover={false} />
                   ))}
                 </div>
               )}

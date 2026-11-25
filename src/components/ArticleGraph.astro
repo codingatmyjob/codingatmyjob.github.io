@@ -79,9 +79,9 @@ const edges = nodes.flatMap((from, i) => nodes.slice(i + 1)
   <div class="intro-ego-previews">
     {nodes.map(({ slug, article, href }) => (
       <a class="intro-ego-preview" href={href} data-graph-preview={slug} tabindex="-1" hidden>
+        <time datetime={article.publishedAt}>{article.date}</time>
         <strong>{article.title}</strong>
         <span class="intro-ego-preview-arrow" aria-hidden="true">&nearr;</span>
-        <time datetime={article.publishedAt}>{article.date}</time>
         <span class="intro-ego-preview-description">{article.description}</span>
       </a>
     ))}

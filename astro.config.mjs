@@ -5,5 +5,5 @@ export default defineConfig({
   base: process.env.VITE_BASE_PATH || '/',
   outDir: './dist/client',
   output: 'static',
-  trailingSlash: 'always'
+  trailingSlash: 'ignore'
 })

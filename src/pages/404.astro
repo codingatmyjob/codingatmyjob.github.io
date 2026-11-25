@@ -14,7 +14,10 @@ import { getSiteUrl } from '../siteUrls.js'
       <div class="not-found-code">404</div>
       <h1>Page not found</h1>
       <p>This page may have moved. You can find projects and articles in the Gallery.</p>
-      <a class="article-home-btn" href={import.meta.env.BASE_URL || '/'}>Return Home</a>
+      <a class="article-home-btn" href={import.meta.env.BASE_URL || '/'}>
+        <span class="article-home-btn-icon" aria-hidden="true">&larr;</span>
+        <span>Return Home</span>
+      </a>
     </main>
   </div>
 </SiteLayout>

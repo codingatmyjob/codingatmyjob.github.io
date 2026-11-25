@@ -1,4 +1,5 @@
 import { readTimesByPath } from './readTimes'
+import { getUpdatedDate } from './articleDates'
 
 const baseArticlesData = [
   // {
@@ -38,12 +39,24 @@ const baseArticlesData = [
     id: 'how-i-built-a-related-articles-recommender',
     path: 'articles/how-i-built-a-related-articles-recommender',
     publishedAt: '2026-07-17',
+    updatedAt: '2026-11-25',
     date: 'July 17, 2026',
     title: 'How I built a Related Articles Recommender',
     description: 'Tangent\'s related articles recommender, algorithms, and implementation details.',
     tags: ['Notes', 'Data Science', 'JavaScript'],
     imageSrc: 'images/cover/tf_idf_cover.svg',
     imageAlt: 'Related Articles Recommender'
+  },
+  {
+    id: 'cloudflare-worker-sql-article-upvotes',
+    path: 'articles/cloudflare-worker-sql-article-upvotes',
+    publishedAt: '2026-11-25',
+    date: 'November 25, 2026',
+    title: 'How I Built an Article Upvote System',
+    description: 'An overview of Tangent\’s upvote system, built with Cloudflare Workers and D1.',
+    tags: ['Notes', 'Cloudflare', 'SQL', 'JavaScript', 'API'],
+    imageSrc: 'images/cover/Cloudflare.svg',
+    imageAlt: 'Cloudflare logo'
   },
   {
     id: 'new-http-query-method',
@@ -232,5 +245,6 @@ const baseArticlesData = [
 export const articlesData = baseArticlesData.map(article => ({
   ...article,
   tags: article.repoUrl ? [...article.tags, 'Repo'] : article.tags,
+  updatedDate: getUpdatedDate(article),
   readingTime: article.path ? (readTimesByPath[article.path] ?? null) : null
 }))
