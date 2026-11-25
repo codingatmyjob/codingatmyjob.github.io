@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generatedAt": "2026-11-25T07:50:06.150Z",
+  "generatedAt": "2026-11-25T16:04:34.586Z",
   "method": "tfidf+kmeans+cosine",
   "minRelatedScore": 0.11,
   "maxObservedScore": 0.541077,
@@ -9,26 +9,26 @@
   "clusters": [
     {
       "id": 0,
-      "size": 6,
+      "size": 8,
       "tags": [
+        "project",
+        "ai",
         "htb",
         "reference",
-        "ai",
-        "javascript",
-        "library",
-        "writeup"
+        "python",
+        "discord"
       ]
     },
     {
       "id": 1,
-      "size": 13,
+      "size": 11,
       "tags": [
         "javascript",
-        "api",
-        "project",
         "webapp",
+        "notes",
+        "api",
         "cert",
-        "notes"
+        "project"
       ]
     },
     {
@@ -80,33 +80,8 @@
         }
       ]
     },
-    "cloudflare-worker-sql-article-upvotes": {
-      "cluster": 1,
-      "related": [
-        {
-          "slug": "how-i-built-a-related-articles-recommender",
-          "score": 0.234891
-        },
-        {
-          "slug": "new-http-query-method",
-          "score": 0.139623
-        },
-        {
-          "slug": "playing-in-traffic-and-heatmaps",
-          "score": 0.124987
-        },
-        {
-          "slug": "creating-a-pokemon-stock-bot",
-          "score": 0.118068
-        },
-        {
-          "slug": "using-prismjs-to-style-code",
-          "score": 0.115074
-        }
-      ]
-    },
     "creating-a-pokemon-stock-bot": {
-      "cluster": 1,
+      "cluster": 0,
       "related": [
         {
           "slug": "discord-spotify-activity-tracker",
@@ -121,7 +96,7 @@
           "score": 0.126179
         },
         {
-          "slug": "cloudflare-worker-sql-article-upvotes",
+          "slug": "how-i-built-an-article-upvote-system",
           "score": 0.118068
         }
       ]
@@ -148,7 +123,7 @@
       ]
     },
     "discord-spotify-activity-tracker": {
-      "cluster": 1,
+      "cluster": 0,
       "related": [
         {
           "slug": "creating-a-pokemon-stock-bot",
@@ -181,7 +156,7 @@
       "cluster": 1,
       "related": [
         {
-          "slug": "cloudflare-worker-sql-article-upvotes",
+          "slug": "how-i-built-an-article-upvote-system",
           "score": 0.234891
         },
         {
@@ -202,8 +177,33 @@
         }
       ]
     },
-    "how-i-passed-azure-ai-fundamentals": {
+    "how-i-built-an-article-upvote-system": {
       "cluster": 1,
+      "related": [
+        {
+          "slug": "how-i-built-a-related-articles-recommender",
+          "score": 0.234891
+        },
+        {
+          "slug": "new-http-query-method",
+          "score": 0.139623
+        },
+        {
+          "slug": "playing-in-traffic-and-heatmaps",
+          "score": 0.124987
+        },
+        {
+          "slug": "creating-a-pokemon-stock-bot",
+          "score": 0.118068
+        },
+        {
+          "slug": "using-prismjs-to-style-code",
+          "score": 0.115074
+        }
+      ]
+    },
+    "how-i-passed-azure-ai-fundamentals": {
+      "cluster": 0,
       "related": [
         {
           "slug": "how-i-passed-oci-foundations-associate",
@@ -302,7 +302,7 @@
       "cluster": 1,
       "related": [
         {
-          "slug": "cloudflare-worker-sql-article-upvotes",
+          "slug": "how-i-built-an-article-upvote-system",
           "score": 0.139623
         }
       ]
@@ -340,7 +340,7 @@
           "score": 0.151849
         },
         {
-          "slug": "cloudflare-worker-sql-article-upvotes",
+          "slug": "how-i-built-an-article-upvote-system",
           "score": 0.124987
         },
         {
@@ -451,7 +451,7 @@
       ]
     },
     "using-prismjs-to-style-code": {
-      "cluster": 0,
+      "cluster": 1,
       "related": [
         {
           "slug": "how-i-built-a-related-articles-recommender",
@@ -462,7 +462,7 @@
           "score": 0.134339
         },
         {
-          "slug": "cloudflare-worker-sql-article-upvotes",
+          "slug": "how-i-built-an-article-upvote-system",
           "score": 0.115074
         }
       ]
