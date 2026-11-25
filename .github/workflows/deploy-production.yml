@@ -6,6 +6,10 @@ on:
 permissions:
   contents: write
 
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -31,6 +35,19 @@ jobs:
       - run: npm run build
         env:
           PUBLIC_VOTES_API_URL: ${{ vars.PUBLIC_VOTES_API_URL }}
+
+      - name: Deploy voting Worker
+        if: ${{ vars.PUBLIC_VOTES_API_URL != '' }}
+        working-directory: workers/votes
+        env:
+          CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+        run: |
+          if [[ -z "$CLOUDFLARE_ACCOUNT_ID" || -z "$CLOUDFLARE_API_TOKEN" ]]; then
+            echo "::error::Voting is enabled. Set CLOUDFLARE_ACCOUNT_ID and CLOUDFLARE_API_TOKEN in the production environment."
+            exit 1
+          fi
+          npx --yes wrangler@4 deploy
 
       - uses: peaceiris/actions-gh-pages@v4
         with:

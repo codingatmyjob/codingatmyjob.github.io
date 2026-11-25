@@ -10,7 +10,7 @@ const skills = [
   { name: 'Python', icon: 'python', color: '#1f4764' },
   { name: 'JavaScript', icon: 'javascript', color: '#4f3d0a' },
   { name: 'TypeScript', icon: 'typescript', color: '#153e6b' },
-  { name: 'SQL', color: '#000000' },
+  { name: 'SQL', icon: 'database', color: '#000000' },
   { name: 'PowerShell', icon: 'powershell', color: '#1b3a68' },
   { name: 'Bash', icon: 'bash', color: '#9db793', textColor: '#17212b' },
   { name: 'HTML5', icon: 'html5', color: '#732b12' },
@@ -30,7 +30,14 @@ const skills = [
     <ul class="intro-stack" role="list" aria-label="Languages, frameworks, and tools">
       {skills.map(({ name, icon, color, textColor }) => (
         <li style={`--badge-color: ${color}; --badge-text-color: ${textColor ?? '#fff'}`}>
-          {icon && <img src={`https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/${icon}/${icon}-original.svg`} alt="" aria-hidden="true" decoding="async" />}
+          {icon === 'database' ? (
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <ellipse cx="12" cy="5" rx="8" ry="3" />
+              <path d="M4 5v14a8 3 0 0 0 16 0V5M4 12a8 3 0 0 0 16 0" />
+            </svg>
+          ) : (
+            <img src={`https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/${icon}/${icon}-original.svg`} alt="" aria-hidden="true" decoding="async" />
+          )}
           <span>{name}</span>
         </li>
       ))}

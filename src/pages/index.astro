@@ -6,7 +6,8 @@ import { articlesData } from '../data/articles.js'
 import { getSiteUrl } from '../siteUrls.js'
 
 const basePath = import.meta.env.BASE_URL || '/'
-const pageTitle = 'Tangent | Cybersecurity & Data Science Blog'
+const pageTitle = 'Cybersecurity & Data Science Portfolio'
+const description = 'Explore cybersecurity and data science projects, interactive demos, technical notes, and experiments on Tangent.'
 const votesApi = import.meta.env.PUBLIC_VOTES_API_URL?.trim()
 const tags = [...new Set(articlesData.flatMap((article) => article.tags))].sort()
 const canonical = getSiteUrl()
@@ -26,13 +27,13 @@ const homeSchema = JSON.stringify({
       '@id': canonical,
       url: canonical,
       name: 'Tangent',
-      description: 'A cybersecurity and data science blog with technical notes, project builds, experiments, reviews, and practical writeups.',
+      description,
       inLanguage: 'en'
     },
     {
-      '@type': 'Blog',
+      '@type': 'CollectionPage',
       name: 'Tangent',
-      description: 'A cybersecurity and data science blog with technical notes, project builds, experiments, reviews, and practical writeups.',
+      description,
       inLanguage: 'en',
       isPartOf: { '@id': canonical }
     }
@@ -42,7 +43,7 @@ const homeSchema = JSON.stringify({
 
 <SiteLayout
   title={pageTitle}
-  description="A cybersecurity and data science blog with technical notes, project builds, experiments, reviews, and practical writeups, that together form a practical project portfolio."
+  description={description}
   canonical={canonical}
 >
   <script slot="head" type="application/ld+json" set:html={homeSchema}></script>
@@ -111,7 +112,7 @@ const homeSchema = JSON.stringify({
         </div>
       </div>
       <div class="portfolio-showcase" id="portfolio-showcase">
-        <PortfolioIntro pageTitle={pageTitle} />
+        <PortfolioIntro pageTitle={`Tangent | ${pageTitle}`} />
         {featured.length > 0 && (
           <section aria-labelledby="highlighted-work-heading">
             <div class="portfolio-section-heading">

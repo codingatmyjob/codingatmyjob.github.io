@@ -5,14 +5,15 @@ import TangentMark from '../components/TangentMark.astro'
 import { getSiteUrl } from '../siteUrls.js'
 
 const {
-  title = 'Tangent | Cybersecurity & Data Science Blog',
-  description = 'A cybersecurity and data science blog with technical notes, project builds, experiments, reviews, and practical writeups.',
+  title = 'Cybersecurity & Data Science Portfolio',
+  description = 'Explore cybersecurity and data science projects, interactive demos, technical notes, and experiments on Tangent.',
   canonical = getSiteUrl(),
   image = getSiteUrl('images/cover/og-image.png'),
-  imageAlt = 'Tangent technical blog preview image',
+  imageAlt = 'Tangent site preview',
   type = 'website',
   bodyClass = ''
 } = Astro.props
+const brandedTitle = `Tangent | ${title}`
 const basePath = import.meta.env.BASE_URL || '/'
 const sitePath = (path) => `${basePath}${String(path).replace(/^\/+/, '')}`
 ---
@@ -22,7 +23,7 @@ const sitePath = (path) => `${basePath}${String(path).replace(/^\/+/, '')}`
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{title}</title>
+    <title>{brandedTitle}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
     <link rel="icon" type="image/x-icon" href={sitePath('favicon/favicon.ico')} />
@@ -32,13 +33,13 @@ const sitePath = (path) => `${basePath}${String(path).replace(/^\/+/, '')}`
     <link rel="apple-touch-icon" sizes="180x180" href={sitePath('favicon/apple-touch-icon.png')} />
     <link rel="manifest" href={sitePath('favicon/site.webmanifest')} />
     <meta property="og:type" content={type} />
-    <meta property="og:title" content={title} />
+    <meta property="og:title" content={brandedTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
     <meta property="og:image" content={image} />
     <meta property="og:image:alt" content={imageAlt} />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content={title} />
+    <meta name="twitter:title" content={brandedTitle} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={image} />
     <slot name="head" />

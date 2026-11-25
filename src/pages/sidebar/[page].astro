@@ -18,7 +18,7 @@ const basePath = import.meta.env.BASE_URL || '/'
 const metaByPage = {
   About: {
     title: 'About Me',
-    description: 'About Connor, a networking and security practitioner who also works in data analytics, and the creator of the Tangent technical blog.',
+    description: 'Meet Connor, the creator of Tangent, who works in networking, cybersecurity, and data analytics.',
     type: 'profile'
   },
   'status-hub': {
@@ -48,7 +48,7 @@ const jsonLd = extractJsonLd(rawHtml)
 ---
 
 <SiteLayout
-  title={`${pageMeta.title} | Tangent`}
+  title={pageMeta.title}
   description={pageMeta.description}
   canonical={canonical}
   type={pageMeta.type}
