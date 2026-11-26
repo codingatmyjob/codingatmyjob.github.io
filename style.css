@@ -2353,3 +2353,17 @@ html[data-theme="light"] .footer-icon-dark {
   :is(.feature-grid, #articles-grid) .article-card { transition: none; }
   :is(.feature-grid, #articles-grid) .article-card:hover { transform: none; }
 }
+
+.menu-toggle,
+.sidebar-close-toggle {
+  -webkit-tap-highlight-color: transparent;
+}
+
+@media (pointer: coarse) {
+  .menu-toggle:focus,
+  .menu-toggle:focus-visible,
+  .sidebar-close-toggle:focus,
+  .sidebar-close-toggle:focus-visible {
+    outline: none;
+  }
+}
