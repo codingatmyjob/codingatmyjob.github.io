@@ -25,6 +25,7 @@ const sitePath = (path) => `${basePath}${String(path).replace(/^\/+/, '')}`
     <title>{brandedTitle}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
+    {basePath === '/preview/' && <meta name="robots" content="noindex, nofollow" />}
     <link
       id="tab-icon"
       rel="icon"
