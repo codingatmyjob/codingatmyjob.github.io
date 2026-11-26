@@ -17,8 +17,10 @@ const setMenuOpen = (open) => {
   sidebarOverlay.classList.toggle('sidebar-open', open)
   sidebar.style.pointerEvents = open ? 'auto' : 'none'
   if (sidebarTitle) sidebarTitle.hidden = !open
-  if (open) sidebarClose?.focus()
-  else menuToggle.focus()
+  if (!window.matchMedia('(pointer: coarse)').matches) {
+    if (open) sidebarClose?.focus()
+    else menuToggle.focus()
+  }
 }
 
 if (menuToggle) {
