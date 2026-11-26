@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generatedAt": "2026-11-25T16:31:55.502Z",
+  "generatedAt": "2026-11-26T01:30:52.791Z",
   "method": "tfidf+kmeans+cosine",
   "minRelatedScore": 0.11,
   "maxObservedScore": 0.541077,
